@@ -208,7 +208,9 @@ class DirectBackend:
                 text = msg.get("content") or ""
                 u = resp.get("usage", {}) or {}
                 return text, {"in": u.get("prompt_tokens", 0) or 0,
-                              "out": u.get("completion_tokens", 0) or 0}
+                              "out": u.get("completion_tokens", 0) or 0,
+                              "reasoning_chars": len(msg.get("reasoning") or ""),
+                              "finish": resp["choices"][0].get("finish_reason")}
             except urllib.error.HTTPError as e:
                 last = f"HTTP {e.code}: {e.read().decode(errors='replace')[:300]}"
                 if e.code in (400, 401, 403, 404, 413):

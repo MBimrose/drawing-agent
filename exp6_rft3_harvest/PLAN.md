@@ -77,6 +77,10 @@ defensively). Nothing from the frozen 96 / eval_cache_v15 enters the batch.
 - [x] direct endpoint verified: serv-07:8000/v1 serves moonshotai/Kimi-K3, accepts
       image_url data URIs, auth via ~/.claude-hub/serv08.key (SERVER7_API_KEY value);
       reasoning arrives in a separate `reasoning` field, content is clean
-- [ ] smoke 5 parts (router vs direct endpoint)
+- [x] smoke_direct done (5 parts, 4 workers): 1 gate pass (00015daa gen 0.0 → **0.883**),
+      1 near-miss 0.793, mean 2.9 calls, mean 291 s/part, longest 469 s; one no_code
+      failure (61k-char runaway deliberation in the content channel × 3 — exp4's known
+      failure class, correctly not FINAL'd). Endpoint answered 4-way concurrency cleanly.
+- [ ] smoke_router same 5 parts (in flight) → pick faster path
 - [ ] N/300 harvested
 - [ ] packed + RESULTS.md

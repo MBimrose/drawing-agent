@@ -40,17 +40,30 @@ def extract_code(text):
     return blocks[-1].strip() + "\n" if blocks else None
 
 
+_REVISION_RE = re.compile(
+    r"^\s*(reading (is )?unchanged|unchanged|fix\b|the (only )?(defect|failure|error|fix)"
+    r"|same reading|no change)", re.IGNORECASE)
+
+
+def _is_revision_voiced(plan: str) -> bool:
+    return bool(_REVISION_RE.search(plan[:120])) or "previous" in plan[:120].lower()
+
+
 def distill_think(record: dict, final_cand: int, min_full: int) -> str:
+    """Base = last FULL reading (>= min_full chars, not revision-voiced) among
+    candidate turns up to the accepted candidate; later plans appended as
+    'Revision:' paragraphs so fixes that changed the reading are kept."""
     cand_turns = [e for e in record["turns"]
                   if e.get("action") == "candidate" and e.get("cand", 0) <= final_cand]
     plans = [(e["cand"], (e.get("plan") or "").strip()) for e in cand_turns]
     plans = [(c, p) for c, p in plans if p]
     if not plans:
         return ""
-    full = [(c, p) for c, p in plans if len(p) >= min_full]
+    full = [(c, p) for c, p in plans
+            if len(p) >= min_full and not _is_revision_voiced(p)]
     if full:
         base_c, base = full[-1]
-    else:
+    else:  # fall back: longest plan, whatever its voice
         base_c, base = max(plans, key=lambda t: len(t[1]))
     parts = [base]
     for c, p in plans:
