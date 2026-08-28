@@ -81,6 +81,12 @@ defensively). Nothing from the frozen 96 / eval_cache_v15 enters the batch.
       1 near-miss 0.793, mean 2.9 calls, mean 291 s/part, longest 469 s; one no_code
       failure (61k-char runaway deliberation in the content channel × 3 — exp4's known
       failure class, correctly not FINAL'd). Endpoint answered 4-way concurrency cleanly.
-- [ ] smoke_router same 5 parts (in flight) → pick faster path
+- [x] smoke_router same 5 parts: **router loses decisively** — 2/5 parts DIED on
+      HTTP 502 "upstream unreachable" after 4 retries (the exp3/exp4 router flakiness),
+      completed parts mean 1161 s vs 228 s direct on the same keys (~5×), quality paired
+      n=3: router 0.465 vs direct 0.452 (noise). → MAIN RUN ON THE DIRECT ENDPOINT.
+- [ ] main harvest: 299 parts, 6 workers, direct endpoint — launched detached (setsid,
+      log /srv/scratch/bimrose2/drawing_agent_exp6/logs/main_run.log), resume-safe;
+      smoke-based projection ~291 part-serial s → ~4–6 h wall at 6 workers
 - [ ] N/300 harvested
 - [ ] packed + RESULTS.md
