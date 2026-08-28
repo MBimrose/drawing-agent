@@ -88,4 +88,18 @@ and the drawing.
   Not usable as-is → excluded per plan. (2 probe calls, both fail; router itself fine.)
 - Kimi K3 critic harness written (1 call/sample, drawing + ≤4 labeled renders in
   key-seeded shuffled order, thinking-aware max_tokens 6000, JSON verdict
-  scores/best/gross). Smoke on 3 samples in flight; ~2–6 min/call observed.
+  scores/best/gross). Smoke 3/3 parsed; 90–343 s/call, 10–18k output tokens (thinking).
+- Shape-space consensus added (`pairwise_iou.py`, 549 candidate-pair mesh IoUs in 25 s,
+  GT-free): alone +0.014 (beats bbox-consensus alone +0.009), but bbox+aspect combined
+  stays the best no-model policy (+0.0222); triple-stacking adds breaks, not gains.
+  Root cause identified: ALL 10 unfixed gross-error samples have identical bboxes
+  across draws and majority-shared wrong shape — consensus (of any kind) cannot see
+  a minority-correct draw; needs the drawing (aspect can't see internal features).
+- **Ops lessons (full Kimi run):** (i) harness background tasks were killed ~23 min in
+  — run long jobs via `setsid nohup … &` detached, with per-sample checkpoint
+  (`vlm_kimi.jsonl`) + `--resume` (now implemented); (ii) the hub Kimi backend degrades
+  badly above ~3–4 concurrent vision calls (10 workers → 900 s timeouts + retry churn,
+  1 sample/37 min; the one that landed took 57 s of service time). Restarted detached
+  at 4 workers, 01:30.
+- `claude-qwen36-27b-build123d-critic` probe: router lists it, backend 404s (qwen3.6
+  server on serv-06:8000 stopped) — not usable as-is, excluded.

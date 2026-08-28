@@ -186,6 +186,8 @@ def main():
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--tag", default="kimi")
     ap.add_argument("--keys", default=None)
+    ap.add_argument("--fresh", action="store_true",
+                    help="ignore existing per-sample checkpoint jsonl")
     args = ap.parse_args()
 
     recs = bo4data.load_records()
@@ -195,23 +197,44 @@ def main():
     with open(CACHE, "rb") as f:
         samples = pickle.load(f)["samples"]
 
-    t0 = time.time()
+    os.makedirs(os.path.join(HERE, "artifacts"), exist_ok=True)
+    ckpt = os.path.join(HERE, "artifacts", f"vlm_{args.tag}.jsonl")
     results = {}
+    if os.path.exists(ckpt) and not args.fresh:
+        with open(ckpt) as f:
+            for line in f:
+                try:
+                    res = json.loads(line)
+                    if res.get("verdict") or res.get("skipped"):
+                        results[res["key"]] = res
+                except Exception:  # noqa: BLE001
+                    pass
+        print(f"resume: {len(results)} samples from {ckpt}", flush=True)
+    todo = [r for r in recs if r["key"] not in results]
+
+    import threading
+    lock = threading.Lock()
+    t0 = time.time()
     n_calls = 0
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futs = {pool.submit(judge_sample, r, samples[r["key"]]["png"], args.model):
-                r["key"] for r in recs}
+                r["key"] for r in todo}
+        n_done = 0
         for fut in as_completed(futs):
             key = futs[fut]
             try:
                 res = fut.result()
             except Exception as e:  # noqa: BLE001
                 res = {"key": key, "error": repr(e)[:300]}
-            results[key] = res
+            with lock:
+                results[key] = res
+                n_done += 1
+                with open(ckpt, "a") as f:
+                    f.write(json.dumps(res) + "\n")
             if "usage" in res:
                 n_calls += 1
             ok = "ok" if res.get("verdict") else res.get("skipped") or res.get("error", "PARSE-FAIL")
-            print(f"[{len(results)}/{len(recs)}] {key[:8]} {ok if ok != 'ok' else 'ok'}",
+            print(f"[{n_done}/{len(todo)}] {key[:8]} {ok if ok != 'ok' else 'ok'}",
                   flush=True)
     wall = time.time() - t0
 
