@@ -26,6 +26,6 @@ source "$ROOT/train_v14/env.sh"
 
 python "$EXP/bo4_oracle_eval.py" \
   --run e24-rft \
-  --ckpt "$ROOT/runs/e24-rft/checkpoint-3250" \
+  --ckpt "$ROOT/runs/e24-rft/geom_eval/consolidated-checkpoint-3250" \
   --n 96 --k 4 --temperature 0.7 --batch 8 \
   --out "$EXP/out_bo4_oracle"
