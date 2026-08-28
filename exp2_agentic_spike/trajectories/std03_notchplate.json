@@ -1,0 +1,103 @@
+{
+ "uid": "std03_notchplate",
+ "split": "std",
+ "family": "notchplate",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 48.4,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 8302
+   },
+   "plan": "**Views read:**\n- **Top (XY):** Outer rectangle. X-axis chain: 22 + 30 + 49 = **101** overall (matches printed 101). Y overall = **54**. A rectangular notch opens on the front (\u2212Y) edge: 30 wide (x = 22\u219252), 18 deep (dimension \"18\" between front edge and notch back wall). Callout \"2X \u23006 THRU\" with two circles sitting near the back edge, symmetric about X center: hole centers \u224816 mm from each side edge (16 and 85, centered on 50.5) and \u224818 mm from the back edge (y = 54\u221218 = 36).\n- **Front (XZ):** 101 \u00d7 14 rectangle (Z overall = **14**). Solid vertical lines at x = 22 and x = 52 confirm the notch is on the front face and passes through the full thickness; faint dashed line pairs near x \u2248 16 and x \u2248 85 are the hidden hole edges.\n- **Right (YZ):** 54 \u00d7 14 rectangle with two hidden vertical lines at y \u2248 18 (notch back wall) and y \u2248 36 (hole axis) \u2014 confirms notch depth 18 and hole Y position 36 from front.\n- **ISO:** Flat plate with a through-thickness rectangular notch on one long edge and two through holes \u2014 consistent.\n\n**Feature list:**\n1. Base plate: 101 (X) \u00d7 54 (Y) \u00d7 14 (Z).\n2. Through notch at front edge: 30 \u00d7 18, x from 22 to 52, full Z.\n3. 2\u00d7 \u23006 through holes (Z) at (16, 36) and (85, 36) from the front-left corner.",
+   "text": "<plan>\n**Views read:**\n- **Top (XY):** Outer rectangle. X-axis chain: 22 + 30 + 49 = **101** overall (matches printed 101). Y overall = **54**. A rectangular notch opens on the front (\u2212Y) edge: 30 wide (x = 22\u219252), 18 deep (dimension \"18\" between front edge and notch back wall). Callout \"2X \u23006 THRU\" with two circles sitting near the back edge, symmetric about X center: hole centers \u224816 mm from each side edge (16 and 85, centered on 50.5) and \u224818 mm from the back edge (y = 54\u221218 = 36).\n- **Front (XZ):** 101 \u00d7 14 rectangle (Z overall = **14**). Solid vertical lines at x = 22 and x = 52 confirm the notch is on the front face and passes through the full thickness; faint dashed line pairs near x \u2248 16 and x \u2248 85 are the hidden hole edges.\n- **Right (YZ):** 54 \u00d7 14 rectangle with two hidden vertical lines at y \u2248 18 (notch back wall) and y \u2248 36 (hole axis) \u2014 confirms notch depth 18 and hole Y position 36 from front.\n- **ISO:** Flat plate with a through-thickness rectangular notch on one long edge and two through holes \u2014 consistent.\n\n**Feature list:**\n1. Base plate: 101 (X) \u00d7 54 (Y) \u00d7 14 (Z).\n2. Through notch at front edge: 30 \u00d7 18, x from 22 to 52, full Z.\n3. 2\u00d7 \u23006 through holes (Z) at (16, 36) and (85, 36) from the front-left corner.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nseg_left  = 22.0   # mm  left segment of X chain\nnotch_w   = 30.0   # mm  middle segment of X chain (notch width)\nseg_right = 49.0   # mm  right segment of X chain\nL = seg_left + notch_w + seg_right   # mm  overall X = 22 + 30 + 49 = 101\nW = 54.0           # mm  overall depth (Y)\nT = 14.0           # mm  thickness (Z)\nnotch_d = 18.0     # mm  notch depth from the front (-Y) edge\nhole_d  = 6.0      # mm  2X \u00d86 THRU\nhole_x  = 16.0     # mm  hole center from each side edge (symmetric about L/2)\nhole_y  = 18.0     # mm  hole center from the back (+Y) edge\n\nwith BuildPart() as bp:\n    # base plate, min corner at origin\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # rectangular notch open at the front edge, through full thickness\n    with Locations((seg_left, 0, 0)):\n        Box(notch_w, notch_d, T,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # two through holes\n    with Locations((hole_x, W - hole_y, 0),\n                   (L - hole_x, W - hole_y, 0)):\n        Cylinder(radius=hole_d / 2, height=T, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     101.0,
+     54.0,
+     14.0
+    ],
+    "volume_mm3": 68401.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 12,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 32.4,
+   "usage": {
+    "input_tokens": 7681,
+    "output_tokens": 5586
+   },
+   "plan": "**Verification found one real defect.** Comparing measurements to the drawing:\n\n- Extents 101 \u00d7 54 \u00d7 14 \u2713 (chain 22+30+49 = 101; depth 54; thickness 14).\n- Notch 30 \u00d7 18 at x = 22\u219252 on the front edge \u2713 (Front render shows solid lines at 22 and 52; Right render shows hidden line at y = 18).\n- Hole positions \u2713 (Top circles at x \u2248 16 and 85, y = 36 from front; Right hidden rectangle at y \u2248 36).\n- **Hole depth \u2717.** The callout is \"2X \u23006 THRU\", but the volume gives it away: expected through-hole volume = 101\u00b754\u00b714 \u2212 30\u00b718\u00b714 \u2212 2\u00b7(\u03c0\u00b73\u00b2\u00b714) = 68004.3 mm\u00b3, yet measured = 68401.2 mm\u00b3 \u2014 a difference of \u2248397 mm\u00b3 \u2248 one half-depth hole pair (2\u00b7\u03c0\u00b73\u00b2\u00b77 = 395.9). Also 12 planar faces instead of the expected 10: the two extra planar faces are the floors of blind holes. Cause: build123d's `Cylinder` defaults to `align=CENTER` in Z, so at z = 0 the cylinders spanned z = \u22127\u2026+7 and only cut the lower half. The Front/Right renders confirm this \u2014 the hidden hole rectangles occupy only the lower half of the 14 mm strip instead of its full height.\n\n**Fix:** give the cylinders `align=(Align.CENTER, Align.CENTER, Align.MIN)` with base at z = 0 and height = T, producing true through holes. All other geometry is unchanged.",
+   "text": "<plan>\n**Verification found one real defect.** Comparing measurements to the drawing:\n\n- Extents 101 \u00d7 54 \u00d7 14 \u2713 (chain 22+30+49 = 101; depth 54; thickness 14).\n- Notch 30 \u00d7 18 at x = 22\u219252 on the front edge \u2713 (Front render shows solid lines at 22 and 52; Right render shows hidden line at y = 18).\n- Hole positions \u2713 (Top circles at x \u2248 16 and 85, y = 36 from front; Right hidden rectangle at y \u2248 36).\n- **Hole depth \u2717.** The callout is \"2X \u23006 THRU\", but the volume gives it away: expected through-hole volume = 101\u00b754\u00b714 \u2212 30\u00b718\u00b714 \u2212 2\u00b7(\u03c0\u00b73\u00b2\u00b714) = 68004.3 mm\u00b3, yet measured = 68401.2 mm\u00b3 \u2014 a difference of \u2248397 mm\u00b3 \u2248 one half-depth hole pair (2\u00b7\u03c0\u00b73\u00b2\u00b77 = 395.9). Also 12 planar faces instead of the expected 10: the two extra planar faces are the floors of blind holes. Cause: build123d's `Cylinder` defaults to `align=CENTER` in Z, so at z = 0 the cylinders spanned z = \u22127\u2026+7 and only cut the lower half. The Front/Right renders confirm this \u2014 the hidden hole rectangles occupy only the lower half of the 14 mm strip instead of its full height.\n\n**Fix:** give the cylinders `align=(Align.CENTER, Align.CENTER, Align.MIN)` with base at z = 0 and height = T, producing true through holes. All other geometry is unchanged.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nseg_left  = 22.0   # mm  left segment of X chain\nnotch_w   = 30.0   # mm  middle segment of X chain (notch width)\nseg_right = 49.0   # mm  right segment of X chain\nL = seg_left + notch_w + seg_right   # mm  overall X = 22 + 30 + 49 = 101\nW = 54.0           # mm  overall depth (Y)\nT = 14.0           # mm  thickness (Z)\nnotch_d = 18.0     # mm  notch depth from the front (-Y) edge\nhole_d  = 6.0      # mm  2X \u00d86 THRU\nhole_x  = 16.0     # mm  hole center from each side edge (symmetric about L/2)\nhole_y  = 18.0     # mm  hole center from the back (+Y) edge\n\nwith BuildPart() as bp:\n    # base plate, min corner at origin\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # rectangular notch open at the front edge, through full thickness\n    with Locations((seg_left, 0, 0)):\n        Box(notch_w, notch_d, T,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # two through holes (base at z=0, full thickness -> THRU)\n    with Locations((hole_x, W - hole_y, 0),\n                   (L - hole_x, W - hole_y, 0)):\n        Cylinder(radius=hole_d / 2, height=T,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     101.0,
+     54.0,
+     14.0
+    ],
+    "volume_mm3": 68006.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 2.0,
+   "usage": {
+    "input_tokens": 8692,
+    "output_tokens": 290
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std03_notchplate",
+  "split": "std",
+  "family": "notchplate",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9646,
+  "ag_exec_ok": true,
+  "ag_iou": 0.97,
+  "ag_final_cand": 2,
+  "best_iou": 0.97,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 51.0,
+  "t_agentic_s": 95.0
+ },
+ "per_candidate_iou": {
+  "1": 0.9646,
+  "2": 0.97
+ }
+}

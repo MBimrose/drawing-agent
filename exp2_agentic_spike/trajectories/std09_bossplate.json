@@ -1,0 +1,71 @@
+{
+ "uid": "std09_bossplate",
+ "split": "std",
+ "family": "bossplate",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 23.8,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 3740
+   },
+   "plan": "**Views read:**\n- **Top (XY):** Base plate outline with overall width 95 (X) and overall depth 50 (Y). A centered rectangular boss 35 (X) \u00d7 29 (Y) sits on it, with a \"\u00d812 THRU\" hole callout; the circle is centered in the boss (no position dims \u2192 symmetry).\n- **Front (XZ):** Overall width 95, boss width 35, boss height 20 above the base, overall height 31. Hidden vertical lines show the \u00d812 hole continuing through the base plate.\n- **Right (YZ):** Overall depth 50, boss depth 29, boss height 20, overall height 31 \u2014 fully consistent with Front/Top. Hidden lines confirm the hole passes through the whole part.\n- **ISO:** Confirms a flat rectangular base with a centered raised block and a vertical through-hole.\n\n**Dimension chains:**\n- X: overall = 95 (given); boss = 35, centered \u2192 30 mm margin each side.\n- Y: overall = 50 (given); boss = 29, centered \u2192 10.5 mm margin each side.\n- Z: overall 31 = base thickness + boss height 20 \u2192 base thickness = 31 \u2212 20 = **11**.\n\n**Features:**\n1. Base plate: 95 \u00d7 50 \u00d7 11.\n2. Boss: 35 \u00d7 29 \u00d7 20, centered on base top.\n3. Hole: \u00d812 through boss + base (total 31 deep), centered.\nNo fillets/chamfers dimensioned \u2192 omitted.",
+   "text": "<plan>\n**Views read:**\n- **Top (XY):** Base plate outline with overall width 95 (X) and overall depth 50 (Y). A centered rectangular boss 35 (X) \u00d7 29 (Y) sits on it, with a \"\u00d812 THRU\" hole callout; the circle is centered in the boss (no position dims \u2192 symmetry).\n- **Front (XZ):** Overall width 95, boss width 35, boss height 20 above the base, overall height 31. Hidden vertical lines show the \u00d812 hole continuing through the base plate.\n- **Right (YZ):** Overall depth 50, boss depth 29, boss height 20, overall height 31 \u2014 fully consistent with Front/Top. Hidden lines confirm the hole passes through the whole part.\n- **ISO:** Confirms a flat rectangular base with a centered raised block and a vertical through-hole.\n\n**Dimension chains:**\n- X: overall = 95 (given); boss = 35, centered \u2192 30 mm margin each side.\n- Y: overall = 50 (given); boss = 29, centered \u2192 10.5 mm margin each side.\n- Z: overall 31 = base thickness + boss height 20 \u2192 base thickness = 31 \u2212 20 = **11**.\n\n**Features:**\n1. Base plate: 95 \u00d7 50 \u00d7 11.\n2. Boss: 35 \u00d7 29 \u00d7 20, centered on base top.\n3. Hole: \u00d812 through boss + base (total 31 deep), centered.\nNo fillets/chamfers dimensioned \u2192 omitted.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nbase_w = 95      # mm  overall base width  (X)  [Top, Front]\nbase_d = 50      # mm  overall base depth  (Y)  [Top, Right]\ntotal_h = 31     # mm  overall part height (Z)  [Front, Right]\nboss_h = 20      # mm  boss height above base   [Front, Right]\nboss_w = 35      # mm  boss width  (X)          [Top, Front]\nboss_d = 29      # mm  boss depth  (Y)          [Top, Right]\nhole_d = 12      # mm  through-hole diameter    [Top: \u00d812 THRU]\n\n# --- Derived values ---\nbase_h = total_h - boss_h   # mm  base plate thickness = 31 - 20 = 11\n\nwith BuildPart() as bp:\n    # Base plate: centered in X/Y, bottom face at Z = 0\n    Box(base_w, base_d, base_h,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # Boss: centered in X/Y, standing on top of the base\n    with Locations((0, 0, base_h)):\n        Box(boss_w, boss_d, boss_h,\n            align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # \u00d812 through-hole: centered, passing through boss and base\n    Cylinder(radius=hole_d / 2, height=total_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN),\n             mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     95.0,
+     50.0,
+     31.0
+    ],
+    "volume_mm3": 69053.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     6.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.3,
+   "usage": {
+    "input_tokens": 7848,
+    "output_tokens": 298
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std09_bossplate",
+  "split": "std",
+  "family": "bossplate",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 27.1,
+  "t_agentic_s": 32.9
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

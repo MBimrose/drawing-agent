@@ -1,0 +1,69 @@
+{
+ "uid": "std00_steps3",
+ "split": "std",
+ "family": "steps3",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 107.3,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 16362
+   },
+   "plan": "**View reading:**\n- **Top (XY from +Z):** Rectangle, overall X = 85, Y = 31. Two internal vertical lines split X into a chain: 19 + 37 + 29 = 85 \u2713 (matches printed overall 85). These lines are the step edges.\n- **Front (XZ from \u2212Y):** Three-step staircase descending along +X. Widths 19 / 37 / 29 (overall 85 \u2713). Heights: overall Z = 34 (left/tall segment); right (low) segment = 11; dimension 15 = drop from middle-step top to right-step top \u2192 middle height = 11 + 15 = 26; remaining drop 34 \u2212 26 = 8 is derived (undimensioned).\n- **Right (YZ from +X):** Rectangle 31 (Y) \u00d7 34 (Z) with two internal horizontal lines (projected step tops). Component chain: 15 (between the 26 and 11 levels) + 11 (lowest level) with 34 overall \u2713 \u2014 fully consistent with the Front view (8 + 15 + 11 = 34).\n- **ISO:** Confirms a 3-level staircase along the long (X) axis, small top step (8) and larger lower step (15), constant depth.\n\n**Dimension chains:**\n- X: 19 + 37 + 29 = 85 (overall)\n- Y: 31 (overall)\n- Z: 34 overall; levels at 34 / 26 (= 11 + 15) / 11\n\n**Features:** Three fused rectangular steps, full 31 mm depth, no holes, no fillets/chamfers:\n- Step 1: X 0\u201319, Z 0\u201334\n- Step 2: X 19\u201356, Z 0\u201326\n- Step 3: X 56\u201385, Z 0\u201311",
+   "text": "<plan>\n**View reading:**\n- **Top (XY from +Z):** Rectangle, overall X = 85, Y = 31. Two internal vertical lines split X into a chain: 19 + 37 + 29 = 85 \u2713 (matches printed overall 85). These lines are the step edges.\n- **Front (XZ from \u2212Y):** Three-step staircase descending along +X. Widths 19 / 37 / 29 (overall 85 \u2713). Heights: overall Z = 34 (left/tall segment); right (low) segment = 11; dimension 15 = drop from middle-step top to right-step top \u2192 middle height = 11 + 15 = 26; remaining drop 34 \u2212 26 = 8 is derived (undimensioned).\n- **Right (YZ from +X):** Rectangle 31 (Y) \u00d7 34 (Z) with two internal horizontal lines (projected step tops). Component chain: 15 (between the 26 and 11 levels) + 11 (lowest level) with 34 overall \u2713 \u2014 fully consistent with the Front view (8 + 15 + 11 = 34).\n- **ISO:** Confirms a 3-level staircase along the long (X) axis, small top step (8) and larger lower step (15), constant depth.\n\n**Dimension chains:**\n- X: 19 + 37 + 29 = 85 (overall)\n- Y: 31 (overall)\n- Z: 34 overall; levels at 34 / 26 (= 11 + 15) / 11\n\n**Features:** Three fused rectangular steps, full 31 mm depth, no holes, no fillets/chamfers:\n- Step 1: X 0\u201319, Z 0\u201334\n- Step 2: X 19\u201356, Z 0\u201326\n- Step 3: X 56\u201385, Z 0\u201311\n</plan>\n\n```python\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nseg1_w = 19        # mm - left (tallest) step length along X\nseg2_w = 37        # mm - middle step length along X\nseg3_w = 29        # mm - right (lowest) step length along X\ndepth  = 31        # mm - part depth along Y (Top / Right views)\nh1     = 34        # mm - overall height = left step height (Front / Right views)\ndrop23 = 15        # mm - drop from middle step top to right step top\nh3     = 11        # mm - right (lowest) step height\n\n# --- Derived values ---\nh2 = h3 + drop23               # 26 mm - middle step height\nW  = seg1_w + seg2_w + seg3_w  # 85 mm - overall length along X\n\nwith BuildPart() as bp:\n    with Locations((0, 0, 0)):\n        Box(seg1_w, depth, h1, align=(Align.MIN, Align.MIN, Align.MIN))\n    with Locations((seg1_w, 0, 0)):\n        Box(seg2_w, depth, h2, align=(Align.MIN, Align.MIN, Align.MIN))\n    with Locations((seg1_w + seg2_w, 0, 0)):\n        Box(seg3_w, depth, h3, align=(Align.MIN, Align.MIN, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     85.0,
+     31.0,
+     34.0
+    ],
+    "volume_mm3": 59737.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.9,
+   "usage": {
+    "input_tokens": 7993,
+    "output_tokens": 194
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std00_steps3",
+  "split": "std",
+  "family": "steps3",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 110.2,
+  "t_agentic_s": 115.4
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

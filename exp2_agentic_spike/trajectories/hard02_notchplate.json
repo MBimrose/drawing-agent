@@ -1,0 +1,71 @@
+{
+ "uid": "hard02_notchplate",
+ "split": "hard",
+ "family": "notchplate",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 137.8,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 18254
+   },
+   "plan": "Views: Top (XY), Front (XZ), Right (YZ), ISO (form only).\n\nX axis (Top & Front share it): only a component chain is given along the front edge \u2192 27 + 20 + 31 = 78 mm overall. The middle segment (20) is a rectangular notch cut in from the front edge; the side segments (27 left, 31 right) remain full depth.\nY axis: overall = 53 mm (Top left vertical, confirmed by the Right view's 53 horizontal). A separate \"16\" in the Top view is the notch depth measured from the front edge (Y=0) inward \u2192 notch spans Y 0..16 over X 27..47.\nZ axis (thickness): 15 mm (Right view 53\u00d715 side profile; the Front rectangle scales to the same 15). Uniform flat plate.\nHoles: \"2X \u230010 THRU\". From the Top view the two circles sit 16 mm in from the left/right outer edges and 16 mm in from the back edge \u2192 centers (16, 37) and (78\u221216=62, 37), through the 15 mm thickness. Both lie in solid material (well behind the Y=16 notch).\n\nFeatures: rectangular plate 78\u00d753\u00d715; front rectangular cutout 20 (X) \u00d7 16 (Y) through full thickness at X 27..47; two \u00d810 through-holes at (16,37) and (62,37).",
+   "text": "<plan>\nViews: Top (XY), Front (XZ), Right (YZ), ISO (form only).\n\nX axis (Top & Front share it): only a component chain is given along the front edge \u2192 27 + 20 + 31 = 78 mm overall. The middle segment (20) is a rectangular notch cut in from the front edge; the side segments (27 left, 31 right) remain full depth.\nY axis: overall = 53 mm (Top left vertical, confirmed by the Right view's 53 horizontal). A separate \"16\" in the Top view is the notch depth measured from the front edge (Y=0) inward \u2192 notch spans Y 0..16 over X 27..47.\nZ axis (thickness): 15 mm (Right view 53\u00d715 side profile; the Front rectangle scales to the same 15). Uniform flat plate.\nHoles: \"2X \u230010 THRU\". From the Top view the two circles sit 16 mm in from the left/right outer edges and 16 mm in from the back edge \u2192 centers (16, 37) and (78\u221216=62, 37), through the 15 mm thickness. Both lie in solid material (well behind the Y=16 notch).\n\nFeatures: rectangular plate 78\u00d753\u00d715; front rectangular cutout 20 (X) \u00d7 16 (Y) through full thickness at X 27..47; two \u00d810 through-holes at (16,37) and (62,37).\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nseg_left   = 27   # mm  X chain segment 1 (full-depth left part)\nnotch_w    = 20   # mm  X chain segment 2 (front notch width)\nseg_right  = 31   # mm  X chain segment 3 (full-depth right part)\nW = seg_left + notch_w + seg_right   # mm  overall X = 27 + 20 + 31 = 78\n\nD          = 53   # mm  overall Y (Top left dim = Right view length)\nT          = 15   # mm  plate thickness Z (Right view 53 x 15)\nnotch_d    = 16   # mm  notch depth in from the front edge (Top view \"16\")\n\nhole_d     = 10   # mm  2X \u00d810 THRU\nhole_r     = hole_d / 2\nhole_margin = 16  # mm  hole centers are 16 in from side edges and back edge (Top view)\nhole_y     = D - hole_margin        # = 37\nhole_x1    = hole_margin            # = 16\nhole_x2    = W - hole_margin        # = 62\n\nwith BuildPart() as bp:\n    # base plate: X[0..78], Y[0..53], Z[0..15]\n    Box(W, D, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # front notch: X[27..47], Y[0..16], through full thickness\n    # (tool protrudes 1 mm past the open front face for a clean cut; effective depth = notch_d)\n    with Locations((seg_left, -1, 0)):\n        Box(notch_w, notch_d + 1, T,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # two through holes\n    with Locations((hole_x1, hole_y, 0), (hole_x2, hole_y, 0)):\n        Cylinder(radius=hole_r, height=T,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     78.0,
+     53.0,
+     15.0
+    ],
+    "volume_mm3": 54860.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.4,
+   "usage": {
+    "input_tokens": 7909,
+    "output_tokens": 335
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard02_notchplate",
+  "split": "hard",
+  "family": "notchplate",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9892,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9892,
+  "ag_final_cand": 1,
+  "best_iou": 0.9892,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 140.2,
+  "t_agentic_s": 146.9
+ },
+ "per_candidate_iou": {
+  "1": 0.9892
+ }
+}

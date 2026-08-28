@@ -1,0 +1,69 @@
+{
+ "uid": "std08_uchannel",
+ "split": "std",
+ "family": "uchannel",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 116.7,
+   "usage": {
+    "input_tokens": 5445,
+    "output_tokens": 16590
+   },
+   "plan": "Views identified by label (third\u2011angle layout): Top above Front, Right to the right of Front, ISO for form only.\n\n- Top (XY, seen from +Z): overall depth Y = 79 (given directly). Along X there are two internal lengthwise lines (the inner edges of two side walls). X chain: wall 9 + clear channel 26 + wall 9 = 44 (overall). Check: (44 \u2212 26)/2 = 9 = the dimensioned wall, confirming a symmetric channel.\n- Front (XZ, seen from \u2212Y): overall X = 44, overall height Z = 63. A horizontal edge at Z = 30 is the channel floor (bottom slab = 30). Horizontal dims repeat 44 / 26 / 9 (same X features as Top). Z chain: floor 30 + upstand (63 \u2212 30 = 33) = 63.\n- Right (YZ, seen from +X): plain rectangle 79 (Y) \u00d7 63 (Z) = the near full\u2011height side wall hiding the rest; the faint horizontal hidden line at Z = 30 is the channel floor. Confirms the +X side is a solid full\u2011height wall and the channel runs the full 79 length.\n- ISO: an open trough \u2014 bottom slab (30 high) with two side walls rising to 63, length 79.\n\nFeature list: solid block 44 (X) \u00d7 79 (Y) \u00d7 63 (Z); cut a through top channel 26 wide (X, centered) \u00d7 33 deep (from Z=30 to Z=63) running the full 79 length. Result: two 9\u2011thick side walls and a 30\u2011thick floor. No holes, no dimensioned fillets/chamfers.",
+   "text": "<plan>\nViews identified by label (third\u2011angle layout): Top above Front, Right to the right of Front, ISO for form only.\n\n- Top (XY, seen from +Z): overall depth Y = 79 (given directly). Along X there are two internal lengthwise lines (the inner edges of two side walls). X chain: wall 9 + clear channel 26 + wall 9 = 44 (overall). Check: (44 \u2212 26)/2 = 9 = the dimensioned wall, confirming a symmetric channel.\n- Front (XZ, seen from \u2212Y): overall X = 44, overall height Z = 63. A horizontal edge at Z = 30 is the channel floor (bottom slab = 30). Horizontal dims repeat 44 / 26 / 9 (same X features as Top). Z chain: floor 30 + upstand (63 \u2212 30 = 33) = 63.\n- Right (YZ, seen from +X): plain rectangle 79 (Y) \u00d7 63 (Z) = the near full\u2011height side wall hiding the rest; the faint horizontal hidden line at Z = 30 is the channel floor. Confirms the +X side is a solid full\u2011height wall and the channel runs the full 79 length.\n- ISO: an open trough \u2014 bottom slab (30 high) with two side walls rising to 63, length 79.\n\nFeature list: solid block 44 (X) \u00d7 79 (Y) \u00d7 63 (Z); cut a through top channel 26 wide (X, centered) \u00d7 33 deep (from Z=30 to Z=63) running the full 79 length. Result: two 9\u2011thick side walls and a 30\u2011thick floor. No holes, no dimensioned fillets/chamfers.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\noverall_w = 44.0   # mm  overall width  (X) \u2014 Front & Top\noverall_l = 79.0   # mm  overall length (Y) \u2014 Top & Right\noverall_h = 63.0   # mm  overall height (Z) \u2014 Front & Right\nwall_t    = 9.0    # mm  side-wall thickness \u2014 Front & Top (\"9\")\ninner_w   = 26.0   # mm  clear channel width between walls \u2014 Front & Top (\"26\")\nfloor_h   = 30.0   # mm  channel floor / bottom-slab height \u2014 Front (\"30\")\n\n# ---- derived ----\n# symmetry check: (overall_w - inner_w) / 2 = (44 - 26)/2 = 9 = wall_t\nchannel_depth = overall_h - floor_h   # mm = 33, depth of the open top channel\n\nwith BuildPart() as bp:\n    # solid block: bottom on Z=0, centered in X and Y\n    Box(overall_w, overall_l, overall_h,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # through top channel: centered in X, full length in Y, from floor up to the top face\n    with Locations((0, 0, floor_h)):\n        Box(inner_w, overall_l, channel_depth,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     44.0,
+     79.0,
+     63.0
+    ],
+    "volume_mm3": 151206.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.3,
+   "usage": {
+    "input_tokens": 9330,
+    "output_tokens": 251
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std08_uchannel",
+  "split": "std",
+  "family": "uchannel",
+  "ss_exec_ok": true,
+  "ss_iou": 0.489,
+  "ag_exec_ok": true,
+  "ag_iou": 0.489,
+  "ag_final_cand": 1,
+  "best_iou": 0.489,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 119.1,
+  "t_agentic_s": 124.9
+ },
+ "per_candidate_iou": {
+  "1": 0.489
+ }
+}

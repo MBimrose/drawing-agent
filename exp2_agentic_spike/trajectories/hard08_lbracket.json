@@ -1,0 +1,103 @@
+{
+ "uid": "hard08_lbracket",
+ "split": "hard",
+ "family": "lbracket",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 52.4,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 9332
+   },
+   "plan": "**View reading:**\n- **Top (XY, from +Z):** Rectangle 68 (X) \u00d7 46 (Y) with a \u23007 circle (through-hole in the base). The 68 dimension runs from the wall's inner face to the free end; the wall strip (12) sits to its left, so the full footprint is 12 + 68 = 80 in X. The hole is centered in Y (46/2 = 23) and sits \u224819 mm from the free end (X = 80 \u2212 19 = 61 from the wall's outer face).\n- **Front (XZ, from \u2212Y):** L-profile. Vertical leg at left: thickness 12, rising 51 above the base. Base: 68 long, 12 thick. Z chain: 12 + 51 = 63 total height. X chain: 12 + 68 = 80 total length. Dashed hidden lines in the base confirm the \u23007 vertical hole at X \u2248 61.\n- **Right (YZ, from +X):** Rectangle 46 (Y) \u00d7 63 (Z) with a horizontal edge line at Z = 12 (top of base), confirming the wall spans the full 46 width and the 51 + 12 height chain.\n- **ISO:** Confirms L-bracket: full-width vertical plate at one end of a flat base, hole through the base.\n\n**Dimension chains:**\n- X (overall): 12 (wall) + 68 (base) = **80**\n- Y (overall, given): **46**\n- Z (overall): 12 (base) + 51 (wall) = **63**\n\n**Features:**\n1. Base plate: 80 \u00d7 46 \u00d7 12\n2. Vertical wall: 12 thick \u00d7 46 wide \u00d7 51 tall, on top of base at the X = 0 end\n3. Through-hole \u23007 (vertical, through base) at (X=61, Y=23) \u2014 i.e., 19 mm from the free end, centered across the width",
+   "text": "<plan>\n**View reading:**\n- **Top (XY, from +Z):** Rectangle 68 (X) \u00d7 46 (Y) with a \u23007 circle (through-hole in the base). The 68 dimension runs from the wall's inner face to the free end; the wall strip (12) sits to its left, so the full footprint is 12 + 68 = 80 in X. The hole is centered in Y (46/2 = 23) and sits \u224819 mm from the free end (X = 80 \u2212 19 = 61 from the wall's outer face).\n- **Front (XZ, from \u2212Y):** L-profile. Vertical leg at left: thickness 12, rising 51 above the base. Base: 68 long, 12 thick. Z chain: 12 + 51 = 63 total height. X chain: 12 + 68 = 80 total length. Dashed hidden lines in the base confirm the \u23007 vertical hole at X \u2248 61.\n- **Right (YZ, from +X):** Rectangle 46 (Y) \u00d7 63 (Z) with a horizontal edge line at Z = 12 (top of base), confirming the wall spans the full 46 width and the 51 + 12 height chain.\n- **ISO:** Confirms L-bracket: full-width vertical plate at one end of a flat base, hole through the base.\n\n**Dimension chains:**\n- X (overall): 12 (wall) + 68 (base) = **80**\n- Y (overall, given): **46**\n- Z (overall): 12 (base) + 51 (wall) = **63**\n\n**Features:**\n1. Base plate: 80 \u00d7 46 \u00d7 12\n2. Vertical wall: 12 thick \u00d7 46 wide \u00d7 51 tall, on top of base at the X = 0 end\n3. Through-hole \u23007 (vertical, through base) at (X=61, Y=23) \u2014 i.e., 19 mm from the free end, centered across the width\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from drawing (mm) ----\nwall_thk = 12          # mm, vertical wall thickness (Front: \"12\")\nbase_len = 68          # mm, base length from wall inner face to free end (Top/Front: \"68\")\nwidth = 46             # mm, part width in Y (Top/Right: \"46\")\nbase_thk = 12          # mm, base plate thickness (Front/Right: \"12\")\nwall_ht = 51           # mm, wall height above top of base (Front/Right: \"51\")\nhole_dia = 7           # mm, through-hole diameter in base (Top: \"\u23007\")\nhole_from_end = 19     # mm, hole center from free end of base (read from Top/Front views)\n\n# ---- Derived values ----\ntotal_len = wall_thk + base_len        # 12 + 68 = 80 mm overall X\ntotal_ht = base_thk + wall_ht          # 12 + 51 = 63 mm overall Z\nhole_x = total_len - hole_from_end     # 61 mm from wall outer face\nhole_y = width / 2                     # 23 mm, centered across width\n\nwith BuildPart() as bp:\n    # Base plate: full footprint, 12 thick\n    Box(total_len, width, base_thk, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Vertical wall at the X=0 end, full width, rising 51 above the base\n    with Locations((0, 0, base_thk)):\n        Box(wall_thk, width, wall_ht, align=(Align.MIN, Align.MIN, Align.MIN))\n    # \u23007 through-hole vertically through the base\n    with Locations((hole_x, hole_y, 0)):\n        Cylinder(radius=hole_dia / 2, height=base_thk, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     46.0,
+     63.0
+    ],
+    "volume_mm3": 72081.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 7.5,
+   "usage": {
+    "input_tokens": 8674,
+    "output_tokens": 1603
+   },
+   "plan": "**Comparison of renders vs. drawing:**\n- Extents: X = 12 + 68 = 80 \u2713, Y = 46 \u2713, Z = 12 + 51 = 63 \u2713 \u2014 all match.\n- L-profile in Front, full-width wall line at Z=12 in Right, wall strip in Top \u2014 all match.\n- **Defect found:** the \u23007 hole. In the drawing it is a THRU hole (solid visible circle in Top, hidden lines spanning the full 12 mm base thickness in Front). In my render the Top circle is shown as hidden (dotted) and the Front hidden lines only reach halfway up the base: build123d's `Cylinder` defaults to `align=Align.CENTER` on Z, so the 12 mm cylinder at z=0 spanned \u22126\u2026+6 and only cut the lower half of the base (confirmed by volume: 72312 \u2212 \u03c0\u00b73.5\u00b2\u00b76 \u2248 72082, not the full-through 71850).\n- Fix: cut the hole with `align=(Align.CENTER, Align.CENTER, Align.MIN)` at z=0 so it passes through the entire base thickness. Position unchanged: X = 80 \u2212 19 = 61, Y = 46/2 = 23.",
+   "text": "<plan>\n**Comparison of renders vs. drawing:**\n- Extents: X = 12 + 68 = 80 \u2713, Y = 46 \u2713, Z = 12 + 51 = 63 \u2713 \u2014 all match.\n- L-profile in Front, full-width wall line at Z=12 in Right, wall strip in Top \u2014 all match.\n- **Defect found:** the \u23007 hole. In the drawing it is a THRU hole (solid visible circle in Top, hidden lines spanning the full 12 mm base thickness in Front). In my render the Top circle is shown as hidden (dotted) and the Front hidden lines only reach halfway up the base: build123d's `Cylinder` defaults to `align=Align.CENTER` on Z, so the 12 mm cylinder at z=0 spanned \u22126\u2026+6 and only cut the lower half of the base (confirmed by volume: 72312 \u2212 \u03c0\u00b73.5\u00b2\u00b76 \u2248 72082, not the full-through 71850).\n- Fix: cut the hole with `align=(Align.CENTER, Align.CENTER, Align.MIN)` at z=0 so it passes through the entire base thickness. Position unchanged: X = 80 \u2212 19 = 61, Y = 46/2 = 23.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from drawing (mm) ----\nwall_thk = 12          # mm, vertical wall thickness (Front: \"12\")\nbase_len = 68          # mm, base length from wall inner face to free end (Top/Front: \"68\")\nwidth = 46             # mm, part width in Y (Top/Right: \"46\")\nbase_thk = 12          # mm, base plate thickness (Front/Right: \"12\")\nwall_ht = 51           # mm, wall height above top of base (Front/Right: \"51\")\nhole_dia = 7           # mm, through-hole diameter in base (Top: \"\u23007\")\nhole_from_end = 19     # mm, hole center from free end of base (read from Top/Front views)\n\n# ---- Derived values ----\ntotal_len = wall_thk + base_len        # 12 + 68 = 80 mm overall X\ntotal_ht = base_thk + wall_ht          # 12 + 51 = 63 mm overall Z\nhole_x = total_len - hole_from_end     # 61 mm from wall outer face\nhole_y = width / 2                     # 23 mm, centered across width\n\nwith BuildPart() as bp:\n    # Base plate: full footprint, 12 thick\n    Box(total_len, width, base_thk, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Vertical wall at the X=0 end, full width, rising 51 above the base\n    with Locations((0, 0, base_thk)):\n        Box(wall_thk, width, wall_ht, align=(Align.MIN, Align.MIN, Align.MIN))\n    # \u23007 through-hole vertically through the full base thickness\n    with Locations((hole_x, hole_y, 0)):\n        Cylinder(radius=hole_dia / 2, height=base_thk,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     46.0,
+     63.0
+    ],
+    "volume_mm3": 71851.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 9,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 1.3,
+   "usage": {
+    "input_tokens": 9614,
+    "output_tokens": 142
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard08_lbracket",
+  "split": "hard",
+  "family": "lbracket",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9968,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 2,
+  "best_iou": 1.0,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 55.0,
+  "t_agentic_s": 73.0
+ },
+ "per_candidate_iou": {
+  "1": 0.9968,
+  "2": 1.0
+ }
+}

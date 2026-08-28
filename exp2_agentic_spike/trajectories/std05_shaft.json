@@ -1,0 +1,73 @@
+{
+ "uid": "std05_shaft",
+ "split": "std",
+ "family": "shaft",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 300.7,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 15639
+   },
+   "plan": "Views: The circular view (concentric circles) is the Top view (XY). It shows three concentric circles = three coaxial step diameters: outer \u230038, middle \u230024, inner \u230016. The ISO confirms three solid stepped cylinders stacked on a common vertical (Z) axis \u2014 a large base flange, a medium boss, a small top boss (only three circles exist, so the three \u2300 callouts are the three tier ODs; no separate bore is shown).\n\nAxis chains:\n- X extent: Front view base width = 38 (component = overall, equals \u230038). Right view base width (Y) = 38. So footprint is the \u230038 circle (X = Y = 38). \u2713 cross\u2011check.\n- Z (height) chain (no single overall given; sum the segments read on the Front/Right side views): base 26 + middle 22 + top 22 = 70 mm total. The 26 is the height of the 38\u2011wide base rectangle (Front view 38 \u00d7 26; Right view base 38 \u00d7 26 \u2713). The two \"22\" dimensions are the middle and top boss heights. (The \"\u230038 / \u230024\" notes written vertically are diameter callouts, not height segments.)\n\nFeatures (all coaxial on the Z axis, centered in XY):\n- Base flange: \u230038 \u00d7 26 high (z 0\u219226).\n- Middle boss: \u230024 \u00d7 22 high (z 26\u219248).\n- Top boss: \u230016 \u00d7 22 high (z 48\u219270).\nNo fillets/chamfers are dimensioned; none added.",
+   "text": "<plan>\nViews: The circular view (concentric circles) is the Top view (XY). It shows three concentric circles = three coaxial step diameters: outer \u230038, middle \u230024, inner \u230016. The ISO confirms three solid stepped cylinders stacked on a common vertical (Z) axis \u2014 a large base flange, a medium boss, a small top boss (only three circles exist, so the three \u2300 callouts are the three tier ODs; no separate bore is shown).\n\nAxis chains:\n- X extent: Front view base width = 38 (component = overall, equals \u230038). Right view base width (Y) = 38. So footprint is the \u230038 circle (X = Y = 38). \u2713 cross\u2011check.\n- Z (height) chain (no single overall given; sum the segments read on the Front/Right side views): base 26 + middle 22 + top 22 = 70 mm total. The 26 is the height of the 38\u2011wide base rectangle (Front view 38 \u00d7 26; Right view base 38 \u00d7 26 \u2713). The two \"22\" dimensions are the middle and top boss heights. (The \"\u230038 / \u230024\" notes written vertically are diameter callouts, not height segments.)\n\nFeatures (all coaxial on the Z axis, centered in XY):\n- Base flange: \u230038 \u00d7 26 high (z 0\u219226).\n- Middle boss: \u230024 \u00d7 22 high (z 26\u219248).\n- Top boss: \u230016 \u00d7 22 high (z 48\u219270).\nNo fillets/chamfers are dimensioned; none added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named parameters (all dimensions read from the drawing) ----\nd_base = 38   # mm  base flange OD   (Top view \"\u230038\"; Front/Right base width 38)\nh_base = 26   # mm  base flange height (Front view 38x26 rectangle; Right view \"26\")\nd_mid  = 24   # mm  middle boss OD   (Top view \"\u230024\")\nh_mid  = 22   # mm  middle boss height (side-view chain \"22\")\nd_top  = 16   # mm  top boss OD      (Top view \"\u230016\")\nh_top  = 22   # mm  top boss height    (side-view chain \"22\")\n# Z chain check: overall height = h_base + h_mid + h_top = 26 + 22 + 22 = 70 mm\n\n# ---- derived values ----\nr_base = d_base / 2\nr_mid  = d_mid / 2\nr_top  = d_top / 2\nz_mid  = h_base            # top face of base flange\nz_top  = h_base + h_mid    # top face of middle boss\n\nwith BuildPart() as bp:\n    # base flange (axis = Z, bottom at z=0, centered in XY)\n    Cylinder(radius=r_base, height=h_base,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # middle boss, coaxial, sitting on the base\n    with Locations((0, 0, z_mid)):\n        Cylinder(radius=r_mid, height=h_mid,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # top boss, coaxial, sitting on the middle boss\n    with Locations((0, 0, z_top)):\n        Cylinder(radius=r_top, height=h_top,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     38.0,
+     37.97,
+     70.0
+    ],
+    "volume_mm3": 43797.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0,
+     12.0,
+     19.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.1,
+   "usage": {
+    "input_tokens": 9592,
+    "output_tokens": 100
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std05_shaft",
+  "split": "std",
+  "family": "shaft",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8388,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8388,
+  "ag_final_cand": 1,
+  "best_iou": 0.8388,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 303.9,
+  "t_agentic_s": 309.6
+ },
+ "per_candidate_iou": {
+  "1": 0.8388
+ }
+}

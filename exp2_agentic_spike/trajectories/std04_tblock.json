@@ -1,0 +1,95 @@
+{
+ "uid": "std04_tblock",
+ "split": "std",
+ "family": "tblock",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 393.7,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 5864
+   },
+   "plan": "**View reading:**\n- **Top (XY):** T-shaped outline. Overall X = 70 (given). Y axis is a chain: stem 35 + cross-bar 24 = 59, which matches the printed overall 59. The stem starts 28 from the left edge; the stem is drawn centered (Front view confirms symmetry), so stem width = 70 \u2212 28 \u2212 28 = 14.\n- **Front (XZ):** Plain rectangle 70 \u00d7 17 with two visible vertical edges at x = 28 and x = 42 \u2014 the front edges of the narrow stem standing in front of the full-width cross-bar. Overall height Z = 17.\n- **Right (YZ):** Plain rectangle 59 \u00d7 17 with one visible vertical edge at 35 from the front \u2014 the front face of the cross-bar. Chain check: 35 + 24 = 59. \u2714\n- **ISO:** Confirms a uniform-height (17 mm) T-shaped prism: full-width bar at the back, centered 14 mm stem running forward.\n\n**Dimension chains:**\n- X: 28 + 14 + 28 = 70 (overall given; stem width derived by symmetry)\n- Y: 35 + 24 = 59 (overall given, matches)\n- Z: 17 (overall given in Front and Right)\n\n**Features:** single T-plan prism extruded 17 mm in Z; no holes, no fillets/chamfers.",
+   "text": "<plan>\n**View reading:**\n- **Top (XY):** T-shaped outline. Overall X = 70 (given). Y axis is a chain: stem 35 + cross-bar 24 = 59, which matches the printed overall 59. The stem starts 28 from the left edge; the stem is drawn centered (Front view confirms symmetry), so stem width = 70 \u2212 28 \u2212 28 = 14.\n- **Front (XZ):** Plain rectangle 70 \u00d7 17 with two visible vertical edges at x = 28 and x = 42 \u2014 the front edges of the narrow stem standing in front of the full-width cross-bar. Overall height Z = 17.\n- **Right (YZ):** Plain rectangle 59 \u00d7 17 with one visible vertical edge at 35 from the front \u2014 the front face of the cross-bar. Chain check: 35 + 24 = 59. \u2714\n- **ISO:** Confirms a uniform-height (17 mm) T-shaped prism: full-width bar at the back, centered 14 mm stem running forward.\n\n**Dimension chains:**\n- X: 28 + 14 + 28 = 70 (overall given; stem width derived by symmetry)\n- Y: 35 + 24 = 59 (overall given, matches)\n- Z: 17 (overall given in Front and Right)\n\n**Features:** single T-plan prism extruded 17 mm in Z; no holes, no fillets/chamfers.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\noverall_width = 70.0      # mm  X overall (Top & Front views)\ncrossbar_depth = 24.0     # mm  Y depth of the cross bar (Top & Right views)\nstem_length = 35.0        # mm  Y length of the stem (Top & Right views)\nstem_side_margin = 28.0   # mm  X distance from each side edge to the stem (Top & Front views)\npart_height = 17.0        # mm  Z overall height (Front & Right views)\n\n# ---- Derived values ----\noverall_depth = crossbar_depth + stem_length          # 59 mm, matches printed overall\nstem_width = overall_width - 2 * stem_side_margin     # 14 mm, stem centered in X\n\nwith BuildPart() as part:\n    # Cross bar: full 70 mm width, 24 mm deep, at the back (+Y) end of the plan\n    with Pos((0, stem_length, 0)):\n        Box(overall_width, crossbar_depth, part_height,\n            align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Stem: 14 mm wide, centered in X, running from the front (-Y) end to the cross bar\n    Box(stem_width, stem_length, part_height,\n        align=(Align.CENTER, Align.MIN, Align.MIN))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.6,
+   "usage": {
+    "input_tokens": 5910,
+    "output_tokens": 544
+   },
+   "plan": "Reading is unchanged (T-shaped prism: 70 \u00d7 59 \u00d7 17; cross-bar 24 deep at back, centered 14-wide stem 35 long in front). The failure was purely API usage: `Pos` cannot be used as a context manager in build123d 0.10 \u2014 replaced with `Locations(...)`, which shifts the local coordinate system inside `BuildPart`.",
+   "text": "<plan>\nReading is unchanged (T-shaped prism: 70 \u00d7 59 \u00d7 17; cross-bar 24 deep at back, centered 14-wide stem 35 long in front). The failure was purely API usage: `Pos` cannot be used as a context manager in build123d 0.10 \u2014 replaced with `Locations(...)`, which shifts the local coordinate system inside `BuildPart`.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\noverall_width = 70.0      # mm  X overall (Top & Front views)\ncrossbar_depth = 24.0     # mm  Y depth of the cross bar (Top & Right views)\nstem_length = 35.0        # mm  Y length of the stem (Top & Right views)\nstem_side_margin = 28.0   # mm  X distance from each side edge to the stem (Top & Front views)\npart_height = 17.0        # mm  Z overall height (Front & Right views)\n\n# ---- Derived values ----\noverall_depth = crossbar_depth + stem_length          # 59 mm, matches printed overall\nstem_width = overall_width - 2 * stem_side_margin     # 14 mm, stem centered in X\n\nwith BuildPart() as part:\n    # Cross bar: full 70 mm width, 24 mm deep, at the back (+Y) end of the plan\n    with Locations((0, stem_length, 0)):\n        Box(overall_width, crossbar_depth, part_height,\n            align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Stem: 14 mm wide, centered in X, running from the front (-Y) end to the cross bar\n    Box(stem_width, stem_length, part_height,\n        align=(Align.CENTER, Align.MIN, Align.MIN))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 2.7,
+   "usage": {
+    "input_tokens": 6625,
+    "output_tokens": 577
+   },
+   "plan": "Reading is unchanged (T-shaped prism: 70 \u00d7 59 \u00d7 17; cross-bar 24 deep at back, centered 14-wide stem 35 long in front). The failure was a binding issue: `with BuildPart() as part:` binds the builder, not the solid \u2014 the finished solid must be extracted via `.part` before exporting.",
+   "text": "<plan>\nReading is unchanged (T-shaped prism: 70 \u00d7 59 \u00d7 17; cross-bar 24 deep at back, centered 14-wide stem 35 long in front). The failure was a binding issue: `with BuildPart() as part:` binds the builder, not the solid \u2014 the finished solid must be extracted via `.part` before exporting.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\noverall_width = 70.0      # mm  X overall (Top & Front views)\ncrossbar_depth = 24.0     # mm  Y depth of the cross bar (Top & Right views)\nstem_length = 35.0        # mm  Y length of the stem (Top & Right views)\nstem_side_margin = 28.0   # mm  X distance from each side edge to the stem (Top & Front views)\npart_height = 17.0        # mm  Z overall height (Front & Right views)\n\n# ---- Derived values ----\noverall_depth = crossbar_depth + stem_length          # 59 mm, matches printed overall\nstem_width = overall_width - 2 * stem_side_margin     # 14 mm, stem centered in X\n\nwith BuildPart() as bp:\n    # Cross bar: full 70 mm width, 24 mm deep, at the back (+Y) end of the plan\n    with Locations((0, stem_length, 0)):\n        Box(overall_width, crossbar_depth, part_height,\n            align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Stem: 14 mm wide, centered in X, running from the front (-Y) end to the cross bar\n    Box(stem_width, stem_length, part_height,\n        align=(Align.CENTER, Align.MIN, Align.MIN))\n\n# Extract the finished solid from the builder\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     59.0,
+     17.0
+    ],
+    "volume_mm3": 36890.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 2.1,
+   "usage": {
+    "input_tokens": 9144,
+    "output_tokens": 244
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std04_tblock",
+  "split": "std",
+  "family": "tblock",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8597,
+  "ag_final_cand": 3,
+  "best_iou": 0.8597,
+  "best_cand": 3,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 396.6,
+  "t_agentic_s": 412.2
+ },
+ "per_candidate_iou": {
+  "3": 0.8597
+ }
+}

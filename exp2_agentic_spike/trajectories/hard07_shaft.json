@@ -1,0 +1,73 @@
+{
+ "uid": "hard07_shaft",
+ "split": "hard",
+ "family": "shaft",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 90.3,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 13044
+   },
+   "plan": "Views: Top (XY, from +Z) shows three concentric circles \u2014 the part is a surface of revolution about Z. Front (XZ) and Right (YZ) both show the same centered three\u2011step \"wedding\u2011cake\" silhouette with the vertical dimension chain 28 + 18 + 13 = 59 mm (no single overall height is printed, so the chain is summed). The ISO confirms three coaxial solid cylinders stacked largest\u2011at\u2011bottom.\n\nDiameter\u2194height pairing (decreasing upward, per ISO): base tier \u230042 \u00d7 h28; middle tier \u230022 \u00d7 h18; top tier \u230016 \u00d7 h13. The three printed diameters are exactly consumed by the three silhouette steps (Front/Right widths = 42/22/16), so they are taken as the three tier ODs; no separate bore diameter is given, and a \u230016 hole would remove the entire \u230016 top tier, so the part is modeled as the solid stepped cylinder shown in the ISO.\n\nFeature list: cylinder r21 h28 (z 0\u219228); cylinder r11 h18 (z 28\u219246); cylinder r8 h13 (z 46\u219259). All coaxial on Z. No fillets/chamfers dimensioned.",
+   "text": "<plan>\nViews: Top (XY, from +Z) shows three concentric circles \u2014 the part is a surface of revolution about Z. Front (XZ) and Right (YZ) both show the same centered three\u2011step \"wedding\u2011cake\" silhouette with the vertical dimension chain 28 + 18 + 13 = 59 mm (no single overall height is printed, so the chain is summed). The ISO confirms three coaxial solid cylinders stacked largest\u2011at\u2011bottom.\n\nDiameter\u2194height pairing (decreasing upward, per ISO): base tier \u230042 \u00d7 h28; middle tier \u230022 \u00d7 h18; top tier \u230016 \u00d7 h13. The three printed diameters are exactly consumed by the three silhouette steps (Front/Right widths = 42/22/16), so they are taken as the three tier ODs; no separate bore diameter is given, and a \u230016 hole would remove the entire \u230016 top tier, so the part is modeled as the solid stepped cylinder shown in the ISO.\n\nFeature list: cylinder r21 h28 (z 0\u219228); cylinder r11 h18 (z 28\u219246); cylinder r8 h13 (z 46\u219259). All coaxial on Z. No fillets/chamfers dimensioned.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nd_base = 42.0   # mm  base tier diameter (Top outer circle / Front & Right bottom width)\nd_mid  = 22.0   # mm  middle tier diameter (Top middle circle)\nd_top  = 16.0   # mm  top tier diameter (Top inner circle)\nh_base = 28.0   # mm  bottom segment of vertical chain (Front & Right)\nh_mid  = 18.0   # mm  middle segment of vertical chain\nh_top  = 13.0   # mm  top segment of vertical chain\n\n# derived overall height: 28 + 18 + 13 = 59\nH_total = h_base + h_mid + h_top  # mm\n\nwith BuildPart() as bp:\n    # base tier, z = 0 .. h_base\n    with Locations((0, 0, 0)):\n        Cylinder(radius=d_base / 2, height=h_base,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # middle tier, z = h_base .. h_base+h_mid\n    with Locations((0, 0, h_base)):\n        Cylinder(radius=d_mid / 2, height=h_mid,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # top tier, z = h_base+h_mid .. H_total\n    with Locations((0, 0, h_base + h_mid)):\n        Cylinder(radius=d_top / 2, height=h_top,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     42.0,
+     42.0,
+     59.0
+    ],
+    "volume_mm3": 48194.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0,
+     11.0,
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.8,
+   "usage": {
+    "input_tokens": 9039,
+    "output_tokens": 157
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard07_shaft",
+  "split": "hard",
+  "family": "shaft",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9421,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9421,
+  "ag_final_cand": 1,
+  "best_iou": 0.9421,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 92.9,
+  "t_agentic_s": 98.1
+ },
+ "per_candidate_iou": {
+  "1": 0.9421
+ }
+}

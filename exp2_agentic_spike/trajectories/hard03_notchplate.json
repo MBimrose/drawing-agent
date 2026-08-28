@@ -1,0 +1,71 @@
+{
+ "uid": "hard03_notchplate",
+ "split": "hard",
+ "family": "notchplate",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 165.7,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 22363
+   },
+   "plan": "Views: Top (XY) above Front (XZ); Right (YZ) is the small view beside the ISO.\n\n- X axis (Top bottom chain = Front chain): 24 + 20 + 28 = 72 mm overall. The middle 20 mm segment is a rectangular notch cut into the FRONT edge; the 24 mm (left) and 28 mm (right) segments remain full depth. Notch depth in Y = 16 mm (Top view), through the full thickness.\n- Y axis: overall = 54 mm (Top left dim; repeated as the Right view length).\n- Z axis: overall thickness = 14 mm (Front and Right views). Front and Right silhouettes are flat 72\u00d714 and 54\u00d714 rectangles, so the part is a uniform 14 mm plate (no raised boss); the notch shows as solid vertical edges at x=24 and x=44 in Front and as hidden lines in Right.\n- Holes: \"2X \u23008 THRU\" \u2014 two \u00d88 through-holes on a common line near the back edge, one in the left region and one in the right region (positions not dimensioned; placed symmetrically, 14 mm from each side edge, at y\u224844).\n\nFeatures: base plate 72\u00d754\u00d714; front notch 20 (X) \u00d7 16 (Y) through, located at x=24..44; two \u00d88 through-holes.",
+   "text": "<plan>\nViews: Top (XY) above Front (XZ); Right (YZ) is the small view beside the ISO.\n\n- X axis (Top bottom chain = Front chain): 24 + 20 + 28 = 72 mm overall. The middle 20 mm segment is a rectangular notch cut into the FRONT edge; the 24 mm (left) and 28 mm (right) segments remain full depth. Notch depth in Y = 16 mm (Top view), through the full thickness.\n- Y axis: overall = 54 mm (Top left dim; repeated as the Right view length).\n- Z axis: overall thickness = 14 mm (Front and Right views). Front and Right silhouettes are flat 72\u00d714 and 54\u00d714 rectangles, so the part is a uniform 14 mm plate (no raised boss); the notch shows as solid vertical edges at x=24 and x=44 in Front and as hidden lines in Right.\n- Holes: \"2X \u23008 THRU\" \u2014 two \u00d88 through-holes on a common line near the back edge, one in the left region and one in the right region (positions not dimensioned; placed symmetrically, 14 mm from each side edge, at y\u224844).\n\nFeatures: base plate 72\u00d754\u00d714; front notch 20 (X) \u00d7 16 (Y) through, located at x=24..44; two \u00d88 through-holes.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nseg_left  = 24   # mm  X: left edge -> notch left side\nseg_notch = 20   # mm  X: notch width (middle segment)\nseg_right = 28   # mm  X: notch right side -> right edge\ndepth     = 54   # mm  overall Y (Top left dim = Right view length)\nthick     = 14   # mm  overall Z (Front and Right views)\nnotch_dep = 16   # mm  Y depth of the front notch (through full thickness)\nhole_dia  = 8    # mm  2X \u00d88 THRU\nhole_x_in = 14   # mm  hole centre inset from left/right side edges (symmetric)\nhole_y    = 44   # mm  hole centre Y (both holes on one line near the back edge)\n\nwidth = seg_left + seg_notch + seg_right   # 24 + 20 + 28 = 72 mm overall X\n\nwith BuildPart() as builder:\n    # base plate, min corner at origin\n    Box(width, depth, thick, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # front notch: middle X segment (x = seg_left .. seg_left+seg_notch),\n    # from the front edge (y=0) back by notch_dep, through the full thickness\n    with Locations((seg_left, 0, 0)):\n        Box(seg_notch, notch_dep, thick,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 2X \u00d88 through holes (symmetric about the X centreline)\n    with Locations((hole_x_in, hole_y, thick / 2),\n                   (width - hole_x_in, hole_y, thick / 2)):\n        Cylinder(radius=hole_dia / 2, height=thick, mode=Mode.SUBTRACT)\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     72.0,
+     54.0,
+     14.0
+    ],
+    "volume_mm3": 48548.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.2,
+   "usage": {
+    "input_tokens": 7892,
+    "output_tokens": 521
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard03_notchplate",
+  "split": "hard",
+  "family": "notchplate",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9748,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9748,
+  "ag_final_cand": 1,
+  "best_iou": 0.9748,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 168.3,
+  "t_agentic_s": 175.8
+ },
+ "per_candidate_iou": {
+  "1": 0.9748
+ }
+}

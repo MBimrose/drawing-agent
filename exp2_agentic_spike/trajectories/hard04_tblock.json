@@ -1,0 +1,69 @@
+{
+ "uid": "hard04_tblock",
+ "split": "hard",
+ "family": "tblock",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 121.4,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 17928
+   },
+   "plan": "Views read: Top = XY (X right, Y up), Front = XZ (X right, Z up), Right = YZ (Y right, Z up). The part is a flat T\u2011shaped plate of uniform height; the apparent \"step\" in the ISO is just isometric foreshortening of the front leg (only one Z dimension exists).\n\nAxis chains:\n- Z (height): single overall dimension 12 (Front \"12\" = Right \"12\"). No other vertical size \u2192 uniform thickness 12.\n- Y (depth): Top gives 34 (front leg) + 17 (rear arm) = 51. Cross\u2011check Right view: 34 + 17 = 51, with the internal edge at the 34/17 boundary. \u2714\n- X (width): Top and Front both dimension left margin = 23 (arm end \u2192 leg side) and leg width = 25. In both views the arm continues past the leg on the right by the same amount as the left (the leg centreline coincides with the arm centreline), so by evident symmetry the right margin = 23. Chain: 23 + 25 + 23 = 71.\n\nFootprint (XY), thickness 12: rear arm rectangle X[0,71] \u00d7 Y[34,51] union front leg rectangle X[23,48] \u00d7 Y[0,34]. No holes, no fillets/chamfers dimensioned.\n\nFeature list: T\u2011plate only \u2014 rear arm 71\u00d717, front leg 25\u00d734 (centred: 23 mm margin each side), all 12 thick.",
+   "text": "<plan>\nViews read: Top = XY (X right, Y up), Front = XZ (X right, Z up), Right = YZ (Y right, Z up). The part is a flat T\u2011shaped plate of uniform height; the apparent \"step\" in the ISO is just isometric foreshortening of the front leg (only one Z dimension exists).\n\nAxis chains:\n- Z (height): single overall dimension 12 (Front \"12\" = Right \"12\"). No other vertical size \u2192 uniform thickness 12.\n- Y (depth): Top gives 34 (front leg) + 17 (rear arm) = 51. Cross\u2011check Right view: 34 + 17 = 51, with the internal edge at the 34/17 boundary. \u2714\n- X (width): Top and Front both dimension left margin = 23 (arm end \u2192 leg side) and leg width = 25. In both views the arm continues past the leg on the right by the same amount as the left (the leg centreline coincides with the arm centreline), so by evident symmetry the right margin = 23. Chain: 23 + 25 + 23 = 71.\n\nFootprint (XY), thickness 12: rear arm rectangle X[0,71] \u00d7 Y[34,51] union front leg rectangle X[23,48] \u00d7 Y[0,34]. No holes, no fillets/chamfers dimensioned.\n\nFeature list: T\u2011plate only \u2014 rear arm 71\u00d717, front leg 25\u00d734 (centred: 23 mm margin each side), all 12 thick.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named parameters (dimensions read from the drawing) ----\nthickness = 12   # mm  part height (Z): Front \"12\" = Right \"12\" (only vertical size)\nleg_y     = 34   # mm  front-leg length (Y): Top \"34\" = Right \"34\"\narm_y     = 17   # mm  rear-arm depth (Y):  Top \"17\" = Right \"17\"\noverhang  = 23   # mm  arm margin beside leg (X): Top/Front \"23\" (left; right equal by symmetry)\nleg_x     = 25   # mm  front-leg width (X):  Top/Front \"25\"\n\n# ---- derived overall extents (explicit dimension chains) ----\ntotal_x = overhang + leg_x + overhang   # X: 23 + 25 + 23 = 71 mm (leg centred on arm)\ntotal_y = leg_y + arm_y                 # Y: 34 + 17 = 51 mm\n\n# key coordinates of the T footprint\nx0 = 0.0\nx1 = overhang            # 23  left side of leg\nx2 = overhang + leg_x    # 48  right side of leg\nx3 = total_x             # 71  right end of arm\ny0 = 0.0                 # front face of leg\ny1 = leg_y               # 34  front face of arm / rear of leg\ny2 = total_y             # 51  rear face of arm\n\npts = [\n    (x0, y1), (x1, y1),   # front edge of left arm overhang\n    (x1, y0), (x2, y0),   # left side then front face of the leg\n    (x2, y1), (x3, y1),   # right side of leg then front edge of right overhang\n    (x3, y2), (x0, y2),   # right end then rear edge of the arm\n]\n\nwith BuildPart() as bp:\n    with BuildSketch():                 # XY plane -> Top view\n        with BuildLine():\n            Polyline(*pts, close=True)\n        make_face()\n    extrude(amount=thickness)           # +Z, height 12\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     71.0,
+     51.0,
+     12.0
+    ],
+    "volume_mm3": 24684.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.6,
+   "usage": {
+    "input_tokens": 8005,
+    "output_tokens": 440
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard04_tblock",
+  "split": "hard",
+  "family": "tblock",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 123.8,
+  "t_agentic_s": 130.6
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

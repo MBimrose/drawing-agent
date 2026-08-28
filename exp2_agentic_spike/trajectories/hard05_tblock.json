@@ -1,0 +1,69 @@
+{
+ "uid": "hard05_tblock",
+ "split": "hard",
+ "family": "tblock",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 39.4,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 6789
+   },
+   "plan": "**Top view (XY):** L-shaped outline. Y-axis chain: 22 (rear arm depth) + 33 (front extension of left leg) = **55 overall depth**. X-axis chain: 29 (left leg width) + 17 (right leg width) = **46 overall width**. The right leg (17 wide) exists only over the rear 22 of depth; the missing corner is the front-right rectangle 17 (X) \u00d7 33 (Y). The left leg (29 wide) runs the full 55 depth.\n\n**Front view (XZ):** Rectangle 46 wide \u00d7 11 high, with a vertical visible edge at X = 29 \u2014 this is the set-back front face of the right leg (it starts 33 mm behind the front face). Confirms the X chain (29 + 17) and gives the thickness **11**.\n\n**Right view (YZ):** Rectangle 55 deep \u00d7 11 high, with a vertical edge at the 33/22 boundary \u2014 the front face of the right leg. Confirms the Y chain (33 + 22) and the thickness 11.\n\n**ISO:** Flat L-shaped plate of uniform thickness \u2014 matches the orthographic views (no height step, no holes, no fillets).\n\n**Feature list:** L-plate 46 \u00d7 55 \u00d7 11 mm; corner cutout 17 \u00d7 33 mm through full thickness. No holes or rounds dimensioned.",
+   "text": "<plan>\n**Top view (XY):** L-shaped outline. Y-axis chain: 22 (rear arm depth) + 33 (front extension of left leg) = **55 overall depth**. X-axis chain: 29 (left leg width) + 17 (right leg width) = **46 overall width**. The right leg (17 wide) exists only over the rear 22 of depth; the missing corner is the front-right rectangle 17 (X) \u00d7 33 (Y). The left leg (29 wide) runs the full 55 depth.\n\n**Front view (XZ):** Rectangle 46 wide \u00d7 11 high, with a vertical visible edge at X = 29 \u2014 this is the set-back front face of the right leg (it starts 33 mm behind the front face). Confirms the X chain (29 + 17) and gives the thickness **11**.\n\n**Right view (YZ):** Rectangle 55 deep \u00d7 11 high, with a vertical edge at the 33/22 boundary \u2014 the front face of the right leg. Confirms the Y chain (33 + 22) and the thickness 11.\n\n**ISO:** Flat L-shaped plate of uniform thickness \u2014 matches the orthographic views (no height step, no holes, no fillets).\n\n**Feature list:** L-plate 46 \u00d7 55 \u00d7 11 mm; corner cutout 17 \u00d7 33 mm through full thickness. No holes or rounds dimensioned.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- Dimensions read from the drawing (all mm) ---\nleft_leg_w = 29    # mm - X width of left leg (Top view, repeated in Front view)\nright_leg_w = 17   # mm - X width of right leg (Top view, repeated in Front view)\nback_arm_d = 22    # mm - Y depth of rear arm (Top view, repeated in Right view)\nfront_leg_d = 33   # mm - Y depth of front-only portion of left leg (Top view, repeated in Right view)\nthickness = 11     # mm - Z thickness of the plate (Front view and Right view)\n\n# --- Derived overall extents from the dimension chains ---\noverall_w = left_leg_w + right_leg_w   # 29 + 17 = 46 mm (X)\noverall_d = back_arm_d + front_leg_d   # 22 + 33 = 55 mm (Y)\n\nwith BuildPart() as bp:\n    with BuildSketch(Plane.XY):\n        # Full bounding rectangle 46 x 55\n        Rectangle(overall_w, overall_d, align=(Align.MIN, Align.MIN))\n        # Remove the missing front-right corner: 17 (X) x 33 (Y)\n        with Locations((left_leg_w, 0)):\n            Rectangle(right_leg_w, front_leg_d,\n                      align=(Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n    extrude(amount=thickness)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     46.0,
+     55.0,
+     11.0
+    ],
+    "volume_mm3": 21659.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.6,
+   "usage": {
+    "input_tokens": 8084,
+    "output_tokens": 152
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard05_tblock",
+  "split": "hard",
+  "family": "tblock",
+  "ss_exec_ok": true,
+  "ss_iou": 0.6436,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6436,
+  "ag_final_cand": 1,
+  "best_iou": 0.6436,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 42.0,
+  "t_agentic_s": 47.6
+ },
+ "per_candidate_iou": {
+  "1": 0.6436
+ }
+}

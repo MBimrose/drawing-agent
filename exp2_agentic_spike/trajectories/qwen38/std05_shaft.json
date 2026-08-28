@@ -1,0 +1,84 @@
+{
+ "uid": "std05_shaft",
+ "split": "std",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 117.3,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 56.5,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 3533
+   },
+   "plan": "Reading the drawing (title: FLANGE PLATE, material DELRIN):\n\n- **Top view**: three concentric circles \u2192 \u230038 (outer), \u230024 (middle), \u230016 (inner). These are the diameters of three coaxial cylindrical steps.\n- **Right view**: three stacked rectangles giving the step heights. Chain from bottom to top: 26 (bottom/widest step) + 19 (middle step) + 22 (top/narrowest step) = 67 mm overall height.\n- **Front view**: confirms the top step height = 22 and its width = \u230016.\n- **ISO view**: confirms a 3\u2011step coaxial cylinder (wide base, medium middle, narrow top), solid (no hidden hole lines in any view).\n\nAxis classification:\n- Z (height): component chain 26 + 19 + 22 = 67 overall.\n- X/Y (diameters): 38, 24, 16 (each an overall extent of one step, consistent across Top/Right/Front).\n\nFeature list (all coaxial about Z, base at Z=0):\n1. Base cylinder: \u230038, height 26 (Z 0\u219226).\n2. Middle cylinder: \u230024, height 19 (Z 26\u219245).\n3. Top cylinder: \u230016, height 22 (Z 45\u219267).\n\nNo fillets/chamfers are dimensioned, so none are added.",
+   "text": "\n\n<plan>\nReading the drawing (title: FLANGE PLATE, material DELRIN):\n\n- **Top view**: three concentric circles \u2192 \u230038 (outer), \u230024 (middle), \u230016 (inner). These are the diameters of three coaxial cylindrical steps.\n- **Right view**: three stacked rectangles giving the step heights. Chain from bottom to top: 26 (bottom/widest step) + 19 (middle step) + 22 (top/narrowest step) = 67 mm overall height.\n- **Front view**: confirms the top step height = 22 and its width = \u230016.\n- **ISO view**: confirms a 3\u2011step coaxial cylinder (wide base, medium middle, narrow top), solid (no hidden hole lines in any view).\n\nAxis classification:\n- Z (height): component chain 26 + 19 + 22 = 67 overall.\n- X/Y (diameters): 38, 24, 16 (each an overall extent of one step, consistent across Top/Right/Front).\n\nFeature list (all coaxial about Z, base at Z=0):\n1. Base cylinder: \u230038, height 26 (Z 0\u219226).\n2. Middle cylinder: \u230024, height 19 (Z 26\u219245).\n3. Top cylinder: \u230016, height 22 (Z 45\u219267).\n\nNo fillets/chamfers are dimensioned, so none are added.\n</plan>\n\n```python\n# Flange plate - three coaxial cylindrical steps\n# All dimensions in mm, read from the drawing\n\n# Diameters (Top view)\nd_flange = 38.0   # mm  outer (base) step\nd_mid    = 24.0   # mm  middle step\nd_top    = 16.0   # mm  top step\n\n# Heights (Right view chain)\nh_flange = 26.0   # mm  base step\nh_mid    = 19.0   # mm  middle step\nh_top    = 22.0   # mm  top step\n\n# Derived radii and Z offsets (stacked from base at Z=0)\nr_flange = d_flange / 2.0\nr_mid    = d_mid / 2.0\nr_top    = d_top / 2.0\n\nz_mid = h_flange                 # 26\nz_top = h_flange + h_mid         # 45\nh_total = h_flange + h_mid + h_top  # 67\n\nfrom build123d import *\n\nwith BuildPart() as bp:\n    # Base step\n    Cylinder(r_flange, h_flange, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Middle step\n    with Locations((0, 0, z_mid)):\n        Cylinder(r_mid, h_mid, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Top step\n    with Locations((0, 0, z_top)):\n        Cylinder(r_top, h_top, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     37.98,
+     37.99,
+     67.0
+    ],
+    "volume_mm3": 42443.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0,
+     12.0,
+     19.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 20.6,
+   "usage": {
+    "input_tokens": 7595,
+    "output_tokens": 1359
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std05_shaft",
+  "split": "std",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7745,
+  "ag_final_cand": 1,
+  "best_iou": 0.7745,
+  "best_cand": 1,
+  "n_calls": 3,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 117.3,
+  "t_agentic_s": 200.4
+ },
+ "per_candidate_iou": {
+  "1": 0.7745
+ }
+}

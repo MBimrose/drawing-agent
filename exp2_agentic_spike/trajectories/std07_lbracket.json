@@ -1,0 +1,71 @@
+{
+ "uid": "std07_lbracket",
+ "split": "std",
+ "family": "lbracket",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 130.7,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 21436
+   },
+   "plan": "**Views identified:** Top (XY, from +Z), Front (XZ, from \u2212Y), Right (YZ, from +X), ISO (form only).\n\n**Dimension chains per axis:**\n- **X (length):** Front view gives overall 83 with a chain 11 + 72 = 83. The 11 is the wall thickness at the left end; 72 is the exposed base length from the wall face to the free end. Top view confirms: 83-wide rectangle with a vertical line at x = 11 (wall face).\n- **Y (depth):** overall 40 (Top view right side and Right view bottom). Wall spans the full depth (Right view is a plain 40\u00d760 rectangle, so material reaches z = 60 for all Y).\n- **Z (height):** overall 60 (Front & Right); 46 from base top to wall top (Front & Right). Base thickness = 60 \u2212 46 = **14**.\n\n**Feature list:**\n- Base slab: 83 (X) \u00d7 40 (Y) \u00d7 14 (Z).\n- Vertical wall: 11 (X) \u00d7 40 (Y) \u00d7 46 (Z), standing on the base at the X = 0 end (thin upstanding leg of the L, as shown in the ISO \u2014 long open base, thin wall across the short width at one end).\n- Hole: \u23008 THRU (vertical, through the 14 mm base). Centered in Y (20 mm, confirmed by the hidden lines in the Right view); X position is not dimensioned \u2014 read from the Top view circle at \u2248 64 mm from the wall end (clearly right of center, in the open base area, matching the ISO).",
+   "text": "<plan>\n**Views identified:** Top (XY, from +Z), Front (XZ, from \u2212Y), Right (YZ, from +X), ISO (form only).\n\n**Dimension chains per axis:**\n- **X (length):** Front view gives overall 83 with a chain 11 + 72 = 83. The 11 is the wall thickness at the left end; 72 is the exposed base length from the wall face to the free end. Top view confirms: 83-wide rectangle with a vertical line at x = 11 (wall face).\n- **Y (depth):** overall 40 (Top view right side and Right view bottom). Wall spans the full depth (Right view is a plain 40\u00d760 rectangle, so material reaches z = 60 for all Y).\n- **Z (height):** overall 60 (Front & Right); 46 from base top to wall top (Front & Right). Base thickness = 60 \u2212 46 = **14**.\n\n**Feature list:**\n- Base slab: 83 (X) \u00d7 40 (Y) \u00d7 14 (Z).\n- Vertical wall: 11 (X) \u00d7 40 (Y) \u00d7 46 (Z), standing on the base at the X = 0 end (thin upstanding leg of the L, as shown in the ISO \u2014 long open base, thin wall across the short width at one end).\n- Hole: \u23008 THRU (vertical, through the 14 mm base). Centered in Y (20 mm, confirmed by the hidden lines in the Right view); X position is not dimensioned \u2014 read from the Top view circle at \u2248 64 mm from the wall end (clearly right of center, in the open base area, matching the ISO).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nbase_len  = 83.0   # mm  overall length in X (Top / Front)\nbase_wid  = 40.0   # mm  overall depth in Y (Top / Right)\ntotal_h   = 60.0   # mm  overall height in Z (Front / Right)\nwall_h    = 46.0   # mm  wall height above base top (Front / Right)\nwall_thk  = 11.0   # mm  wall thickness in X (Front chain: 83 - 72)\nhole_d    = 8.0    # mm  through-hole diameter (Top callout \u00d88)\nhole_x    = 64.0   # mm  hole centre from the wall end (read from Top view)\nhole_y    = 20.0   # mm  hole centre, centred in the 40 mm depth\n\n# ---------- derived values ----------\nbase_thk  = total_h - wall_h      # 14 mm base thickness (60 - 46)\nexposed   = base_len - wall_thk   # 72 mm, matches the drawing chain 11 + 72 = 83\n\nwith BuildPart() as bp:\n    # base slab, corner at origin\n    Box(base_len, base_wid, base_thk, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # vertical wall at the X = 0 end, full depth, on top of the base\n    with Locations((0, 0, base_thk)):\n        Box(wall_thk, base_wid, wall_h, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # \u00d88 through hole in the base plate\n    with Locations((hole_x, hole_y, -1)):\n        Cylinder(radius=hole_d / 2, height=base_thk + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     40.0,
+     60.0
+    ],
+    "volume_mm3": 66018.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 9,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.9,
+   "usage": {
+    "input_tokens": 8505,
+    "output_tokens": 375
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std07_lbracket",
+  "split": "std",
+  "family": "lbracket",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8692,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8692,
+  "ag_final_cand": 1,
+  "best_iou": 0.8692,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 133.1,
+  "t_agentic_s": 139.3
+ },
+ "per_candidate_iou": {
+  "1": 0.8692
+ }
+}

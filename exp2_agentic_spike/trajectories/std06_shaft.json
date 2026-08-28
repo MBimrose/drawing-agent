@@ -1,0 +1,73 @@
+{
+ "uid": "std06_shaft",
+ "split": "std",
+ "family": "shaft",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 300.4,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 16607
+   },
+   "plan": "Views: Top = concentric circles (axisymmetric part about Z). Front (below Top) and Right (to the right of Front, third\u2011angle) are stepped rectangles; ISO confirms a 3\u2011tier \"wedding\u2011cake\" stepped cylinder.\n\nDimension chains:\n- X overall (Front/Top): base is round \u00d846 \u2192 X extent = 46 (single overall, no chain).\n- Y overall (Right): bottom dim 46 \u2192 Y extent = 46 (same base diameter). Cross\u2011checks with Top \u00d846 circle.\n- Z overall: no single overall only \u2014 chain is base 17 + middle 28 + top (derived) = total 56. So top tier height = 56 \u2212 17 \u2212 28 = 11. (17 + 28 + 11 = 56 exact.)\n\nDiameters (Top view circles, confirmed by Right\u2011view \u00d8 labels and ISO proportions 46:24:14 \u2248 1.92:1.71):\n- Tier 1 (base flange): \u00d846, height 17 (z 0\u219217).\n- Tier 2 (middle boss): \u00d824, height 28 (z 17\u219245).\n- Tier 3 (top pin): \u00d814, height 11 derived (z 45\u219256).\n\nFeatures: three coaxial solid cylinders stacked. No slots/notches, no separate mounting\u2011hole callouts, no dimensioned fillets/chamfers (omitted). The \u00d814 is the solid top pin (a \u00d814 hole would equal the pin OD and cap height at 45, contradicting the exact 17+28+11=56 chain and the ISO), so the part is modeled solid.",
+   "text": "<plan>\nViews: Top = concentric circles (axisymmetric part about Z). Front (below Top) and Right (to the right of Front, third\u2011angle) are stepped rectangles; ISO confirms a 3\u2011tier \"wedding\u2011cake\" stepped cylinder.\n\nDimension chains:\n- X overall (Front/Top): base is round \u00d846 \u2192 X extent = 46 (single overall, no chain).\n- Y overall (Right): bottom dim 46 \u2192 Y extent = 46 (same base diameter). Cross\u2011checks with Top \u00d846 circle.\n- Z overall: no single overall only \u2014 chain is base 17 + middle 28 + top (derived) = total 56. So top tier height = 56 \u2212 17 \u2212 28 = 11. (17 + 28 + 11 = 56 exact.)\n\nDiameters (Top view circles, confirmed by Right\u2011view \u00d8 labels and ISO proportions 46:24:14 \u2248 1.92:1.71):\n- Tier 1 (base flange): \u00d846, height 17 (z 0\u219217).\n- Tier 2 (middle boss): \u00d824, height 28 (z 17\u219245).\n- Tier 3 (top pin): \u00d814, height 11 derived (z 45\u219256).\n\nFeatures: three coaxial solid cylinders stacked. No slots/notches, no separate mounting\u2011hole callouts, no dimensioned fillets/chamfers (omitted). The \u00d814 is the solid top pin (a \u00d814 hole would equal the pin OD and cap height at 45, contradicting the exact 17+28+11=56 chain and the ISO), so the part is modeled solid.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Named parameters (all mm, read from the drawing) ----\nbase_dia = 46.0   # mm  base flange OD  (Top \u00d846 circle; Front & Right bottom width 46)\nbase_h   = 17.0   # mm  base flange thickness (Front/Right dim 17)\nmid_dia  = 24.0   # mm  middle boss OD  (Top \u00d824 circle; Right \u00d824)\nmid_h    = 28.0   # mm  middle boss height above base (Front/Right dim 28)\ntotal_h  = 56.0   # mm  overall height (Front/Right dim 56)\npin_dia  = 14.0   # mm  top pin OD (Top \u00d814 circle; Right \u00d814)\n\n# Derived: top pin height closes the chain 17 + 28 + pin_h = 56\npin_h = total_h - base_h - mid_h   # mm  = 56 - 17 - 28 = 11\n\nbase_r = base_dia / 2.0\nmid_r  = mid_dia  / 2.0\npin_r  = pin_dia  / 2.0\n\nwith BuildPart() as builder:\n    # Tier 1: base flange, z = 0 .. 17\n    with Locations((0, 0, 0)):\n        Cylinder(radius=base_r, height=base_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Tier 2: middle boss, z = 17 .. 45\n    with Locations((0, 0, base_h)):\n        Cylinder(radius=mid_r, height=mid_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Tier 3: top pin, z = 45 .. 56\n    with Locations((0, 0, base_h + mid_h)):\n        Cylinder(radius=pin_r, height=pin_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     45.99,
+     45.99,
+     56.0
+    ],
+    "volume_mm3": 42566.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     7.0,
+     12.0,
+     23.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.7,
+   "usage": {
+    "input_tokens": 9074,
+    "output_tokens": 115
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std06_shaft",
+  "split": "std",
+  "family": "shaft",
+  "ss_exec_ok": true,
+  "ss_iou": 0.993,
+  "ag_exec_ok": true,
+  "ag_iou": 0.993,
+  "ag_final_cand": 1,
+  "best_iou": 0.993,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 303.0,
+  "t_agentic_s": 308.3
+ },
+ "per_candidate_iou": {
+  "1": 0.993
+ }
+}

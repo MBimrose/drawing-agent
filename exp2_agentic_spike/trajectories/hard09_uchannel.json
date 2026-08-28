@@ -1,0 +1,69 @@
+{
+ "uid": "hard09_uchannel",
+ "split": "hard",
+ "family": "uchannel",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 79.9,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 12939
+   },
+   "plan": "Views read:\n- Top (XY, from +Z): outer rectangle. Vertical sheet dim = depth Y = 54 (OVERALL). Horizontal chain along X: 9 + 42 = 51 (OVERALL X = 51). One internal vertical line at x = 9 running the full depth \u2192 a step edge in plan.\n- Front (XZ, from \u2212Y): same X chain (9 left segment, 42 right segment = 51). Vertical dims: small 9 over the left segment (its height) and 38 over the right/main segment (its height). So the XZ cross\u2011section is a single step: low strip (x 0\u20139) of height 9, tall body (x 9\u201351) of height 38.\n- Right (YZ, from +X): solid rectangle 54 (Y) \u00d7 38 (Z) with one horizontal DASHED line at z = 9 across the full depth. Viewing from +X, the tall body (high\u2011X face at x = 51) occludes the lower strip behind it, so the strip's top edge (z = 9) is hidden \u2192 dashed. This confirms the tall part is on the high\u2011X side and the low strip on the low\u2011X side.\n\nDimension chains:\n- X: 9 + 42 = 51 (overall). Y: 54 (overall, agrees Top\u2194Right). Z: tall = 38, low step = 9 (the dashed line in Right sits at z = 9).\n\nFeature list: a single L/step cross\u2011section extruded through depth 54 \u2014 tall block 42(X) \u00d7 54(Y) \u00d7 38(Z) for x\u2208[9,51], plus low strip 9(X) \u00d7 54(Y) \u00d7 9(Z) for x\u2208[0,9]. No holes. Rev table notes \"ADDED CHAMFER\" but no chamfer is dimensioned in any view \u2192 omitted.",
+   "text": "<plan>\nViews read:\n- Top (XY, from +Z): outer rectangle. Vertical sheet dim = depth Y = 54 (OVERALL). Horizontal chain along X: 9 + 42 = 51 (OVERALL X = 51). One internal vertical line at x = 9 running the full depth \u2192 a step edge in plan.\n- Front (XZ, from \u2212Y): same X chain (9 left segment, 42 right segment = 51). Vertical dims: small 9 over the left segment (its height) and 38 over the right/main segment (its height). So the XZ cross\u2011section is a single step: low strip (x 0\u20139) of height 9, tall body (x 9\u201351) of height 38.\n- Right (YZ, from +X): solid rectangle 54 (Y) \u00d7 38 (Z) with one horizontal DASHED line at z = 9 across the full depth. Viewing from +X, the tall body (high\u2011X face at x = 51) occludes the lower strip behind it, so the strip's top edge (z = 9) is hidden \u2192 dashed. This confirms the tall part is on the high\u2011X side and the low strip on the low\u2011X side.\n\nDimension chains:\n- X: 9 + 42 = 51 (overall). Y: 54 (overall, agrees Top\u2194Right). Z: tall = 38, low step = 9 (the dashed line in Right sits at z = 9).\n\nFeature list: a single L/step cross\u2011section extruded through depth 54 \u2014 tall block 42(X) \u00d7 54(Y) \u00d7 38(Z) for x\u2208[9,51], plus low strip 9(X) \u00d7 54(Y) \u00d7 9(Z) for x\u2208[0,9]. No holes. Rev table notes \"ADDED CHAMFER\" but no chamfer is dimensioned in any view \u2192 omitted.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nstrip_w = 9    # mm  low strip width along X (left segment)\nbody_w  = 42   # mm  tall body width along X (right segment)\ndepth   = 54   # mm  overall depth along Y (Top and Right views)\nbody_h  = 38   # mm  tall body height along Z (Front view)\nstrip_h = 9    # mm  low strip height along Z (Front view; hidden line in Right view)\n\n# ---- derived ----\ntotal_w = strip_w + body_w   # mm  overall X extent = 9 + 42 = 51\n\nwith BuildPart() as _bp:\n    # tall body: occupies x in [strip_w, total_w], full depth, full height\n    with Locations((strip_w, 0, 0)):\n        Box(body_w, depth, body_h,\n            align=(Align.MIN, Align.MIN, Align.MIN))\n    # low strip: occupies x in [0, strip_w], full depth, low height\n    with Locations((0, 0, 0)):\n        Box(strip_w, depth, strip_h,\n            align=(Align.MIN, Align.MIN, Align.MIN))\n\npart = _bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     51.0,
+     54.0,
+     38.0
+    ],
+    "volume_mm3": 90558.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.5,
+   "usage": {
+    "input_tokens": 8551,
+    "output_tokens": 242
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard09_uchannel",
+  "split": "hard",
+  "family": "uchannel",
+  "ss_exec_ok": true,
+  "ss_iou": 0.1494,
+  "ag_exec_ok": true,
+  "ag_iou": 0.1494,
+  "ag_final_cand": 1,
+  "best_iou": 0.1494,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 82.9,
+  "t_agentic_s": 87.9
+ },
+ "per_candidate_iou": {
+  "1": 0.1494
+ }
+}
