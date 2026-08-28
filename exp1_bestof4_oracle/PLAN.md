@@ -56,12 +56,28 @@ The rerun is *better* anyway: all three policies computed on the SAME 4 draws pe
   (wpk/wpk, ccc0442, 4×L40S, 500G); one-shot, 24h cap, logs + outputs under
   `/projects/illinois/eng/ece/wpk/bimrose2/drawing_agent_exp1/` (fresh dir, ours).
 
-**Once `ssh cc-login` works:**
-1. Verify remote layout: `runs/e24-rft/checkpoint-3250` kind (hf vs dcp+consolidated),
-   `eval_cache_v15.pkl`, `gt_meshes_v15/`, `.venv`, and locate the original bestofn out
-   JSON (per-sample deployed records, for cross-checking our rerun against 0.876).
-2. `mkdir -p /projects/.../drawing_agent_exp1/logs`, scp `bo4_oracle_eval.py` +
-   `exp1_bo4_oracle.sbatch` up, `sbatch` it, poll `squeue`/log tail.
-3. Pull `out_bo4_oracle/bo4_oracle.json` back into `artifacts/` (gitignored), run
-   `analyze_bo4.py`, write RESULTS.md (three means, per-sample table, histogram,
-   go/no-go vs the ±0.03–0.05 bar), commit.
+**Once `ssh cc-login` works:** (superseded — see pivot below)
+
+## Pivot 2026-08-27: cluster compute barred → run on serv-05 + serv-06
+
+Duo opened and slurm job 10195292 was submitted to ccc0442, but the user then directed
+that NO compute run on the campus cluster (production jobs only) and cancelled the job
+(`scancel 10195292`). Cluster is now a data source only.
+
+What happened instead:
+- Raw `checkpoint-3250` was rotated away on the cluster; the surviving
+  `runs/e24-rft/geom_eval/consolidated-checkpoint-3250` is the exact dir the original
+  bestof4 eval ran on (its JSON's `ckpt` field confirms). Pulled it (51G, byte-size
+  verified) plus `eval_cache_v15.pkl`, `gt_meshes_v15/` (2103 STLs), base-model
+  processor/tokenizer configs, and the original per-sample bestof4 records
+  (→ `artifacts/original_bestof4-checkpoint-3250.json`) to
+  `/srv/scratch/bimrose2/drawing_agent_exp1/` on wpk-serv-06.
+- Self-contained tree there: copied `train_v14/` code + pinned uv venv mirroring the
+  cluster `.venv` (torch 2.13.0+cu130, transformers 5.15.1, accelerate 1.14.0,
+  torchvision 0.28.0, numpy 2.5.2, trimesh 5.0.0, build123d 0.11.1, manifold3d,
+  qwen-vl-utils, webdataset 1.0.2) — keeps HF `generate` parity with the original run.
+- `bo4_oracle_eval.py` gained `--worker/--stride` (shards `keys[worker::stride]`) and
+  `--model-base` (points cfg model_id at the local processor copy; vendor code untouched).
+- `run_node.sh`: 8 single-GPU workers per node (54GB bf16 fits one H200).
+  serv-06 = workers 0–7, serv-05 = workers 8–15, stride 16 (6 samples each).
+  Tree rsynced to serv-05 at the same path. Per-worker JSONs merged by `analyze_bo4.py`.

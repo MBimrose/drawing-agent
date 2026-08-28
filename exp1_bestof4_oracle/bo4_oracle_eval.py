@@ -72,6 +72,12 @@ def main():
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--max-new-tokens", type=int, default=2400)
     ap.add_argument("--out", required=True, help="fresh output dir")
+    ap.add_argument("--worker", type=int, default=0,
+                    help="shard id: takes keys[worker::stride] of the pool")
+    ap.add_argument("--stride", type=int, default=1)
+    ap.add_argument("--model-base", default=None,
+                    help="override cfg model_id (processor source) with a "
+                         "local copy of the base model dir")
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
@@ -93,11 +99,14 @@ def main():
         cache = pickle.load(f)
     keys = [k for k in cache["pools"][pool]
             if os.path.exists(os.path.join(gt_dir, f"{k}.stl"))][: args.n]
+    keys = keys[args.worker::args.stride]     # this worker's shard
     samples = [{"uuid": k, "image": _decode_png(cache["samples"][k]["png"])}
                for k in keys]
-    print(f"[exp1] {len(samples)} samples, pool={pool}, T={args.temperature}, "
-          f"k={args.k}", flush=True)
+    print(f"[exp1] w{args.worker}/{args.stride}: {len(samples)} samples, "
+          f"pool={pool}, T={args.temperature}, k={args.k}", flush=True)
 
+    if args.model_base:
+        cfg["model_id"] = args.model_base
     ckpt_path, kind = resolve_ckpt(args.ckpt)
     print(f"[exp1] loading {ckpt_path} ({kind})", flush=True)
     model, processor = load_model(ckpt_path, kind, cfg)
@@ -243,6 +252,7 @@ def policies(rec: dict) -> dict:
 def _dump(args, recs, partial: bool):
     out = {"config": {"ckpt": args.ckpt, "run": args.run, "n": args.n,
                       "k": args.k, "temperature": args.temperature,
+                      "worker": args.worker, "stride": args.stride,
                       "partial": partial},
            "records": recs}
     if not partial:
@@ -261,7 +271,9 @@ def _dump(args, recs, partial: bool):
                 str(p["oracle_draw"]) for p in pols).items())},
         }
         print(json.dumps(out["metrics"], indent=1), flush=True)
-    path = os.path.join(args.out, "bo4_oracle.json")
+    name = ("bo4_oracle.json" if args.stride == 1
+            else f"bo4_oracle_w{args.worker:02d}.json")
+    path = os.path.join(args.out, name)
     with open(path + ".tmp", "w") as f:
         json.dump(out, f, indent=1)
     os.replace(path + ".tmp", path)

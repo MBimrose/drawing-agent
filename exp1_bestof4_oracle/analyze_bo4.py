@@ -1,10 +1,11 @@
-"""Exp 1 analysis: three-policy comparison from bo4_oracle.json (CPU, stdlib).
+"""Exp 1 analysis: three-policy comparison from bo4_oracle JSON(s) (CPU, stdlib).
 
-    python3 analyze_bo4.py <bo4_oracle.json> [--md results_draft.md]
+    python3 analyze_bo4.py <bo4_oracle.json | bo4_oracle_w*.json ...> [--md draft.md]
 
-Computes deployed / oracle / greedy means, paired gaps with bootstrap 95% CIs,
-which-draw-wins histograms, and a per-sample table; optionally writes a
-RESULTS.md draft.
+Accepts one merged JSON or many per-worker shard JSONs (records concatenated;
+duplicate keys and partial dumps rejected). Computes deployed / oracle / greedy
+means, paired gaps with bootstrap 95% CIs, which-draw-wins histograms, and a
+per-sample table; optionally writes a RESULTS.md draft.
 """
 from __future__ import annotations
 
@@ -46,14 +47,23 @@ def boot_ci(diffs: list[float], iters: int = 20000, seed: int = 0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("json_path")
+    ap.add_argument("json_paths", nargs="+")
     ap.add_argument("--md", default=None, help="write a RESULTS.md draft here")
     args = ap.parse_args()
 
-    data = json.load(open(args.json_path))
-    if data["config"].get("partial"):
-        sys.exit("[analyze] JSON is a partial (mid-run) dump — refusing")
-    recs = data["records"]
+    recs, ckpts = [], set()
+    for p in args.json_paths:
+        d = json.load(open(p))
+        if d["config"].get("partial"):
+            sys.exit(f"[analyze] {p} is a partial (mid-run) dump — refusing")
+        recs.extend(d["records"])
+        ckpts.add(d["config"]["ckpt"])
+    if len(ckpts) != 1:
+        sys.exit(f"[analyze] mixed checkpoints: {ckpts}")
+    keys = [r["key"] for r in recs]
+    if len(set(keys)) != len(keys):
+        sys.exit("[analyze] duplicate sample keys across shards — refusing")
+    data = {"config": {"ckpt": ckpts.pop()}}
     pols = [{"key": r["key"], **policies(r)} for r in recs]
     n = len(pols)
 
