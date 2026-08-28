@@ -73,3 +73,40 @@ read-only; run artifacts under `/srv/scratch/bimrose2/drawing_agent_exp5/`.
 
 - 2026-08-27: dir created, infra verified (both nodes idle, exp1 trees present on both,
   sw-python with cairosvg on both). PLAN written.
+- 2026-08-28 smoke 1 (exp1 worker-0's exact shard, 6 samples, renders on, greedy rounds):
+  * **Turn-1 parity: bit-exact** on all 4 executing samples (0.982221/1.000/0.991644/
+    0.970626 = exp1 d0 to 6 decimals); both exec failures match too.
+  * **Multi-image works mechanically**: chat template + processor accept a render PNG in
+    a mid-conversation user turn, batch generation fine, replies coherent. Renders clean.
+  * Model understands FINAL: all 4 executing samples compared measurements+render and
+    replied FINAL in round 1 (all are 0.97+ — reasonable).
+  * **Pure greedy loops are degenerate**: both exec-failure samples regenerated
+    byte-identical broken code from the stderr feedback (diff r0 r1 = identical).
+    Consistent with exp1 (deployed repair almost never rescues; temperature draws do).
+  * Decision: rounds ≥1 sample at **T=0.7/top-p 0.95** — exactly the deployed best-of-4
+    draw settings, so loop rounds and bo4 draws spend the same kind of compute. Turn 1
+    stays greedy (paired baseline intact). `--loop-temperature` added.
+- Smoke 2 (8 hand-picked samples: 6 mediocre-greedy 0.17–0.63 + the 2 exec failures,
+  max-rounds 4, T=0.7 rounds, renders on; 165 s after load):
+  * **All 6 executing samples replied FINAL after ONE feedback round** — even at IoU
+    0.166. The champion re-asserts its own reading (think-tails re-verify its beliefs,
+    not the drawing) and stops. The soft "if a revision would help…" invitation is a
+    free exit for an RFT-trained single-shot model.
+  * T=0.7 repair DOES rescue what greedy cannot: 0cb7362e 0 → 0.970 (2 rounds);
+    02c2c534 exec-rescued but geometry 0.0 (= its exp1 deployed outcome), then converged.
+  * greedy 0.324 → final 0.445 on this set, entirely from the one rescue.
+  * Change for smoke 3: FEEDBACK_OK rewritten as a re-derivation checklist (re-read
+    every dimension from scratch, per-axis chain arithmetic for the TARGET, compare
+    against measured bbox / hole radii / face counts, outline-vs-outline render compare)
+    — still measurements-only, no verdicts. FINAL only if every check passes.
+- Smoke 3 (same 8 keys, checklist feedback, 172 s): the checklist closes the soft FINAL
+  exit (5 of the 6 mediocre parts now re-emit code instead of FINAL) — but the re-emitted
+  code is **byte-identical to their previous candidate, at T=0.7** (stop=converged).
+  Conditioned on its own answer + measurements, the champion's posterior collapses onto
+  its previous script; only a hard exec error (stderr) forces an actual change
+  (0cb7362e again 0 → 0.970 in 2 repair rounds). Refinement is structurally dead for
+  this RFT-sharpened model regardless of elicitation; the loop's value on it is
+  exec-failure repair. Full run proceeds to quantify exactly that (plus any rare
+  revisions on the other 88 samples).
+- Full-run config: checklist feedback, T_loop=0.7/top-p 0.95, renders ON (multi-image is
+  clean), max-rounds 8, 16 workers stride 16, convergence/FINAL/no-code/budget stops.

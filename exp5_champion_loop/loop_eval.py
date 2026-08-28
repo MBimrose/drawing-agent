@@ -1,8 +1,11 @@
 """Exp 5 — the fine-tuned champion inside the measurement-feedback loop.
 
-One arm, fully greedy/deterministic: turn 1 is exp1's greedy draw 0 (the 0.787
-baseline), then up to --max-rounds feedback rounds per sample. Feedback contains
-ONLY measurements of the model's own candidate:
+One arm: turn 1 is exp1's greedy draw 0 (the 0.787 baseline), then up to
+--max-rounds feedback rounds per sample, sampled at --loop-temperature
+(default T=0.7/top-p 0.95 = the deployed best-of-4 draw settings; T=0 greedy
+rounds are degenerate — the champion regenerates byte-identical code from
+identical feedback). Feedback contains ONLY measurements of the model's own
+candidate:
   * exec failure  -> the vendored deployed-repair feedback (stderr tail),
   * exec success  -> bbox / volume / solid+face census / cylindrical radii,
                      optionally a Top/Front/Right line-render image of the
@@ -47,12 +50,17 @@ FEEDBACK_OK = """Your script executed successfully. Measurements of the solid YO
 - bounding box X x Y x Z: {bx} x {by} x {bz} mm
 - volume: {vol} mm^3
 - faces: {n_faces} total ({n_plane} planar, {n_cyl} cylindrical); cylindrical radii: {radii} mm
-{render_line}Compare this against the original drawing yourself: per-axis extents vs the dimensions, presence/size/position of every feature, hole diameters. No target values are given here.
-If a revision would make the part match the drawing better, output the complete corrected script as a single ```python code block ending with `export_step(part, "output.step")`. If the current solid already matches the drawing as well as you can make it, reply with the single word FINAL."""
+{render_line}Now verify your solid against the DRAWING, from scratch — do not trust your earlier reading:
+1. Re-read every dimension printed in the drawing. For each axis (X, Y, Z), write out the arithmetic that determines the TARGET overall extent (a single overall dimension, or a sum of chained segment dimensions). Then compare each target extent with the measured bounding box above.
+2. Count the holes and other features the drawing shows and compare with the cylindrical-face radii and face counts above (a through-hole of diameter d appears as a cylindrical face of radius d/2).
+3. Check feature positions and sizes the same way{render_clause}.
+If ANY extent, feature, size or position disagrees with the drawing, output the complete corrected script as a single ```python code block ending with `export_step(part, "output.step")`. Only if every check passes, reply with the single word FINAL."""
 
 RENDER_LINE = ("Attached: orthographic line renders (Top / Front / Right) of "
                "YOUR current solid, same view conventions as the drawing.\n")
 NO_RENDER_LINE = ""
+RENDER_CLAUSE = (", comparing the attached renders of your solid against the "
+                 "drawing's views outline by outline")
 RENDER_STUB = "[render of an earlier candidate omitted]"
 
 
@@ -107,7 +115,8 @@ def ok_feedback_text(meas: dict | None, have_render: bool) -> str:
         n_plane=m.get("n_planar_faces", "?"),
         n_cyl=m.get("n_cylindrical_faces", "?"),
         radii=m.get("cylindrical_radii_mm", "?"),
-        render_line=RENDER_LINE if have_render else NO_RENDER_LINE)
+        render_line=RENDER_LINE if have_render else NO_RENDER_LINE,
+        render_clause=RENDER_CLAUSE if have_render else "")
 
 
 def is_final(text: str) -> bool:
@@ -151,6 +160,13 @@ def main():
     ap.add_argument("--n", type=int, default=96)
     ap.add_argument("--max-rounds", type=int, default=8,
                     help="feedback rounds after turn 1")
+    ap.add_argument("--loop-temperature", type=float, default=0.7,
+                    help="sampling T for rounds >=1 (0 = greedy). Turn 1 is "
+                         "always greedy. Default matches the deployed "
+                         "best-of-4 draw settings (T=0.7, top-p 0.95): pure "
+                         "greedy loops are degenerate — the champion "
+                         "regenerates byte-identical code from identical "
+                         "feedback (seen in smoke).")
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--max-new-tokens", type=int, default=2400)
     ap.add_argument("--render", choices=["on", "off"], default="on")
@@ -189,7 +205,7 @@ def main():
     samples = [{"uuid": k, "image": _decode_png(cache["samples"][k]["png"])}
                for k in keys]
     print(f"[exp5] w{args.worker}/{args.stride}: {len(samples)} samples, "
-          f"pool={pool}, render={args.render}, "
+          f"pool={pool}, render={args.render}, T_loop={args.loop_temperature}, "
           f"max_rounds={args.max_rounds}", flush=True)
 
     if args.model_base:
@@ -203,7 +219,7 @@ def main():
     import torch
     from qwen_vl_utils import process_vision_info
 
-    def gen_batch(msgs_list):
+    def gen_batch(msgs_list, sample_mode=False):
         tmpl = dict(enable_thinking=True,
                     reasoning_effort=cfg.get("reasoning_effort", "medium")) \
             if cfg.get("trace_style", "think") == "think" else {}
@@ -215,11 +231,16 @@ def main():
                         return_tensors="pt", padding=True)
         enc = {k2: (v.to(model.device) if hasattr(v, "to") else v)
                for k2, v in enc.items()}
+        kw = dict(max_new_tokens=args.max_new_tokens,
+                  pad_token_id=processor.tokenizer.pad_token_id
+                  or processor.tokenizer.eos_token_id)
+        if sample_mode and args.loop_temperature > 0:
+            kw.update(do_sample=True, temperature=args.loop_temperature,
+                      top_p=0.95)
+        else:
+            kw["do_sample"] = False
         with torch.no_grad():
-            out = model.generate(
-                **enc, max_new_tokens=args.max_new_tokens, do_sample=False,
-                pad_token_id=processor.tokenizer.pad_token_id
-                or processor.tokenizer.eos_token_id)
+            out = model.generate(**enc, **kw)
         gen = out[:, enc["input_ids"].shape[1]:]
         return processor.tokenizer.batch_decode(gen, skip_special_tokens=True)
 
@@ -243,6 +264,7 @@ def main():
     def dump(partial: bool):
         out = {"config": {"ckpt": args.ckpt, "run": args.run, "n": args.n,
                           "max_rounds": args.max_rounds,
+                          "loop_temperature": args.loop_temperature,
                           "render": args.render, "worker": args.worker,
                           "stride": args.stride, "partial": partial,
                           "wall_s": round(time.time() - t_start, 1)},
@@ -281,7 +303,8 @@ def main():
         outs = []
         for b in range(0, len(active), args.batch):
             chunk = active[b:b + args.batch]
-            outs.extend(gen_batch([convos[i].msgs for i in chunk]))
+            outs.extend(gen_batch([convos[i].msgs for i in chunk],
+                                  sample_mode=(rnd > 0)))
         gen_s = time.time() - t0
         if rnd == 0:
             n_deg = sum("!!!!!!!!" in t for t in outs)
@@ -381,7 +404,8 @@ def main():
 
 def _strip(e: dict) -> dict:
     e = dict(e)
-    e.pop("reply_tail", None)
+    if e.get("action") == "candidate":   # code is stored; tail is redundant
+        e.pop("reply_tail", None)
     e.pop("render_png", None)
     return e
 
