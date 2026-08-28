@@ -1,0 +1,189 @@
+{
+ "uid": "hard05_tblock",
+ "split": "hard",
+ "family": "tblock",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 117.9,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7533
+   },
+   "plan": "Reading the drawing:\n- **Top view** (only dimensioned orthographic view): a T\u2011shaped plan. Vertical chain: 22 (top crossbar depth) + 33 (stem depth) = 55 overall depth (Y). Horizontal: 17 is the right overhang between the stem side and the right edge; the left overhang is symmetric (17). Stem width is not separately dimensioned; from the view proportions and symmetry it is 30, giving overall width = 17 + 30 + 17 = 64 (X).\n- **Right view**: label present but no visible geometry/dimensions, so the plate thickness is taken from the ISO proportions as a uniform 10 mm (Z).\n- **ISO view**: confirms a uniform-thickness T\u2011shaped plate (crossbar at the back, stem projecting forward), no holes or other features.\n\nFeature list:\n- Solid T\u2011plate: overall 64 (X) \u00d7 55 (Y) \u00d7 10 (Z).\n- Through notch (slot) between the arms: 30 wide (X) \u00d7 33 deep (Y), located at the stem side, full thickness.\n- No holes, fillets, or chamfers dimensioned.\n\nConstruction: full 64\u00d755\u00d710 box, subtract a 30\u00d733\u00d710 notch box centered in X at the -Y end.",
+   "text": "\n\n<plan>\nReading the drawing:\n- **Top view** (only dimensioned orthographic view): a T\u2011shaped plan. Vertical chain: 22 (top crossbar depth) + 33 (stem depth) = 55 overall depth (Y). Horizontal: 17 is the right overhang between the stem side and the right edge; the left overhang is symmetric (17). Stem width is not separately dimensioned; from the view proportions and symmetry it is 30, giving overall width = 17 + 30 + 17 = 64 (X).\n- **Right view**: label present but no visible geometry/dimensions, so the plate thickness is taken from the ISO proportions as a uniform 10 mm (Z).\n- **ISO view**: confirms a uniform-thickness T\u2011shaped plate (crossbar at the back, stem projecting forward), no holes or other features.\n\nFeature list:\n- Solid T\u2011plate: overall 64 (X) \u00d7 55 (Y) \u00d7 10 (Z).\n- Through notch (slot) between the arms: 30 wide (X) \u00d7 33 deep (Y), located at the stem side, full thickness.\n- No holes, fillets, or chamfers dimensioned.\n\nConstruction: full 64\u00d755\u00d710 box, subtract a 30\u00d733\u00d710 notch box centered in X at the -Y end.\n</plan>\n```python\n# Hub Adapter - build123d reconstruction\nfrom build123d import *\n\n# --- Dimensions read from the drawing (Top view) ---\nband_depth = 22.0    # mm, Top: crossbar depth (Y)\nstem_depth = 33.0    # mm, Top: stem depth (Y)\noverhang   = 17.0    # mm, Top: side overhang (X), right side; left symmetric\nstem_width = 30.0    # mm, Top: stem width (X), inferred from view/symmetry\nthickness  = 10.0    # mm, plate thickness (Z), from ISO (Right view not dimensioned)\n\n# --- Derived values ---\noverall_depth = band_depth + stem_depth          # 55 mm (Y)\noverall_width = 2 * overhang + stem_width        # 64 mm (X)\n\nwith BuildPart() as hub:\n    # Full plate\n    Box(overall_width, overall_depth, thickness,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Notch between the arms (through the thickness)\n    Box(stem_width, stem_depth, thickness,\n        align=(Align.CENTER, Align.MIN, Align.CENTER),\n        mode=Mode.SUBTRACT)\n\npart = hub.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     64.0,
+     55.0,
+     10.0
+    ],
+    "volume_mm3": 31075.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 526.6,
+   "usage": {
+    "input_tokens": 6289,
+    "output_tokens": 14290
+   },
+   "plan": "Comparison of the provided solid vs the original HUB\u2011ADAPTER drawing:\n- Provided solid: bbox 64 \u00d7 55 \u00d7 10, volume 31075 mm\u00b3, and its renders show a full rectangular plate with a hidden internal pocket (dashed lines in all three views). That is **not** the T\u2011shaped plate in the drawing.\n- Drawing requires a T\u2011plate (through notch between the arms), with:\n  - Top: stem width = 29, right overhang = 17 (left symmetric = 17) \u2192 overall X = 29 + 2\u00b717 = 63; crossbar depth = 22, stem depth = 33 \u2192 overall Y = 22 + 33 = 55.\n  - Right: horizontal chain 33 + 22 = 55 (Y), vertical = 11 \u2192 thickness Z = 11.\n  - Front: 29 (stem) + 17 (overhang) consistent with X.\n- Correct volume = 63\u00b722\u00b711 + 29\u00b733\u00b711 = 15246 + 10533 = 25779 mm\u00b3 (\u2260 31075). So a revision is required.\n\nRevised construction: union of two boxes (crossbar + stem) placed by explicit center coordinates, avoiding subtract/align ambiguity. Crossbar 63\u00d722\u00d711 at Y 33\u202655; stem 29\u00d733\u00d711 at Y 0\u202633; both Z 0\u202611, centered in X. This yields the T\u2011plate with bbox 63 \u00d7 55 \u00d7 11.",
+   "text": "\n\n<plan>\nComparison of the provided solid vs the original HUB\u2011ADAPTER drawing:\n- Provided solid: bbox 64 \u00d7 55 \u00d7 10, volume 31075 mm\u00b3, and its renders show a full rectangular plate with a hidden internal pocket (dashed lines in all three views). That is **not** the T\u2011shaped plate in the drawing.\n- Drawing requires a T\u2011plate (through notch between the arms), with:\n  - Top: stem width = 29, right overhang = 17 (left symmetric = 17) \u2192 overall X = 29 + 2\u00b717 = 63; crossbar depth = 22, stem depth = 33 \u2192 overall Y = 22 + 33 = 55.\n  - Right: horizontal chain 33 + 22 = 55 (Y), vertical = 11 \u2192 thickness Z = 11.\n  - Front: 29 (stem) + 17 (overhang) consistent with X.\n- Correct volume = 63\u00b722\u00b711 + 29\u00b733\u00b711 = 15246 + 10533 = 25779 mm\u00b3 (\u2260 31075). So a revision is required.\n\nRevised construction: union of two boxes (crossbar + stem) placed by explicit center coordinates, avoiding subtract/align ambiguity. Crossbar 63\u00d722\u00d711 at Y 33\u202655; stem 29\u00d733\u00d711 at Y 0\u202633; both Z 0\u202611, centered in X. This yields the T\u2011plate with bbox 63 \u00d7 55 \u00d7 11.\n</plan>\n```python\n# Hub Adapter (T-plate) - build123d reconstruction\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nstem_width   = 29.0   # mm, Top/Front: stem width (X)\noverhang     = 17.0   # mm, Top/Front: side overhang (X), right; left symmetric\ncrossbar_dep = 22.0   # mm, Top/Right: crossbar depth (Y)\nstem_dep     = 33.0   # mm, Top/Right: stem depth (Y)\nthickness    = 11.0   # mm, Right: plate thickness (Z)\n\n# --- Derived values ---\noverall_width = stem_width + 2 * overhang      # 63 mm (X)\noverall_depth = crossbar_dep + stem_dep        # 55 mm (Y)\n\n# Centers of the two boxes (Y measured from the stem tip at Y=0)\nstem_c_y     = stem_dep / 2.0                  # 16.5\ncross_c_y    = stem_dep + crossbar_dep / 2.0   # 44.0\nc_z          = thickness / 2.0                 # 5.5\n\nwith BuildPart() as hub:\n    # Crossbar (back, full width)\n    Box(overall_width, crossbar_dep, thickness).translate((0.0, cross_c_y, c_z))\n    # Stem (front, narrow)\n    Box(stem_width, stem_dep, thickness).translate((0.0, stem_c_y, c_z))\n\npart = hub.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     63.0,
+     33.0,
+     11.0
+    ],
+    "volume_mm3": 18755.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 19.9,
+   "usage": {
+    "input_tokens": 7182,
+    "output_tokens": 1854
+   },
+   "plan": "Diagnosis of the bad render: the solid is a plus/cross shape (bbox 63\u00d733\u00d711, vol 18755), not the T\u2011plate. Cause: inside `BuildPart`, `Box(...)` is auto\u2011added at its default CENTER alignment, and the chained `.translate(...)` returned a *new* solid that was never added \u2014 so both boxes were centered at the origin and unioned into a cross. The drawing needs a T\u2011plate (bbox 63\u00d755\u00d711, vol \u224825779).\n\nCorrect construction (robust, no translate): full plate 63\u00d755\u00d711 centered, subtract a through\u2011notch of width (63\u221229)=34 \u00d7 depth 33 at the \u2212Y end, centered in X. This leaves the crossbar (depth 22, full width 63) at the back and the stem (depth 33, width 29) at the front \u2014 matching Top (22+33=55; 17+29+17=63), Right (33+22=55, 11), Front (29, 17).",
+   "text": "\n\n<plan>\nDiagnosis of the bad render: the solid is a plus/cross shape (bbox 63\u00d733\u00d711, vol 18755), not the T\u2011plate. Cause: inside `BuildPart`, `Box(...)` is auto\u2011added at its default CENTER alignment, and the chained `.translate(...)` returned a *new* solid that was never added \u2014 so both boxes were centered at the origin and unioned into a cross. The drawing needs a T\u2011plate (bbox 63\u00d755\u00d711, vol \u224825779).\n\nCorrect construction (robust, no translate): full plate 63\u00d755\u00d711 centered, subtract a through\u2011notch of width (63\u221229)=34 \u00d7 depth 33 at the \u2212Y end, centered in X. This leaves the crossbar (depth 22, full width 63) at the back and the stem (depth 33, width 29) at the front \u2014 matching Top (22+33=55; 17+29+17=63), Right (33+22=55, 11), Front (29, 17).\n</plan>\n```python\n# Hub Adapter (T-plate) - build123d reconstruction\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nstem_width   = 29.0   # mm, Top/Front: stem width (X)\noverhang     = 17.0   # mm, Top/Front: side overhang (X), right; left symmetric\ncrossbar_dep = 22.0   # mm, Top/Right: crossbar depth (Y)\nstem_dep     = 33.0   # mm, Top/Right: stem depth (Y)\nthickness    = 11.0   # mm, Right: plate thickness (Z)\n\n# --- Derived values ---\noverall_width = stem_width + 2 * overhang      # 63 mm (X)\noverall_depth = crossbar_dep + stem_dep        # 55 mm (Y)\nnotch_width   = overall_width - stem_width     # 34 mm (X), removed between arms\n\nwith BuildPart() as hub:\n    # Full plate\n    Box(overall_width, overall_depth, thickness,\n        align=(Align.CENTER, Align.CENTER, Align.CENTER))\n    # Through notch between the arms (front / -Y end), centered in X\n    Box(notch_width, stem_dep, thickness,\n        align=(Align.CENTER, Align.MIN, Align.CENTER),\n        mode=Mode.SUBTRACT)\n\npart = hub.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     63.0,
+     55.0,
+     11.0
+    ],
+    "volume_mm3": 27830.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 33.4,
+   "usage": {
+    "input_tokens": 8079,
+    "output_tokens": 3204
+   },
+   "plan": "Diagnosis: the current solid is a **U\u2011shape** (render Top shows two side arms with a centered notch), not the T\u2011plate. Cause: I subtracted a single *centered* 34\u2011wide notch, which removed the center strip (where the stem belongs) and left the two outer arms. The T\u2011plate's empty region is on the *sides* of the stem, not the center.\n\nCorrect construction (union of two boxes, no translate, using `align`):\n- Crossbar: 63 \u00d7 22 \u00d7 11 at the +Y end (Align.MAX) \u2192 occupies Y 33\u202655, full width.\n- Stem: 29 \u00d7 33 \u00d7 11 at the \u2212Y end (Align.MIN), centered in X \u2192 occupies Y 0\u202633.\n- They tile the 55 depth exactly (22 + 33 = 55) and meet at Y = 33, giving a T with the crossbar at the top of the Top view (matching the drawing's 22\u2011at\u2011top / 33\u2011below layout).\n\nExpected: bbox 63 \u00d7 55 \u00d7 11, volume = 63\u00b722\u00b711 + 29\u00b733\u00b711 = 15246 + 10533 = 25779 mm\u00b3. Matches Top (17+29+17=63; 22+33=55), Right (33+22=55, 11), Front (29, 17).",
+   "text": "\n\n<plan>\nDiagnosis: the current solid is a **U\u2011shape** (render Top shows two side arms with a centered notch), not the T\u2011plate. Cause: I subtracted a single *centered* 34\u2011wide notch, which removed the center strip (where the stem belongs) and left the two outer arms. The T\u2011plate's empty region is on the *sides* of the stem, not the center.\n\nCorrect construction (union of two boxes, no translate, using `align`):\n- Crossbar: 63 \u00d7 22 \u00d7 11 at the +Y end (Align.MAX) \u2192 occupies Y 33\u202655, full width.\n- Stem: 29 \u00d7 33 \u00d7 11 at the \u2212Y end (Align.MIN), centered in X \u2192 occupies Y 0\u202633.\n- They tile the 55 depth exactly (22 + 33 = 55) and meet at Y = 33, giving a T with the crossbar at the top of the Top view (matching the drawing's 22\u2011at\u2011top / 33\u2011below layout).\n\nExpected: bbox 63 \u00d7 55 \u00d7 11, volume = 63\u00b722\u00b711 + 29\u00b733\u00b711 = 15246 + 10533 = 25779 mm\u00b3. Matches Top (17+29+17=63; 22+33=55), Right (33+22=55, 11), Front (29, 17).\n</plan>\n```python\n# Hub Adapter (T-plate) - build123d reconstruction\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nstem_width   = 29.0   # mm, Top/Front: stem width (X)\noverhang     = 17.0   # mm, Top/Front: side overhang (X), right; left symmetric\ncrossbar_dep = 22.0   # mm, Top/Right: crossbar depth (Y)\nstem_dep     = 33.0   # mm, Top/Right: stem depth (Y)\nthickness    = 11.0   # mm, Right: plate thickness (Z)\n\n# --- Derived values ---\noverall_width = stem_width + 2 * overhang      # 63 mm (X)\noverall_depth = crossbar_dep + stem_dep        # 55 mm (Y)\n\nwith BuildPart() as hub:\n    # Crossbar: full width, at the +Y end (top of Top view)\n    Box(overall_width, crossbar_dep, thickness,\n        align=(Align.CENTER, Align.MAX, Align.CENTER))\n    # Stem: narrow, centered in X, at the -Y end (bottom of Top view)\n    Box(stem_width, stem_dep, thickness,\n        align=(Align.CENTER, Align.MIN, Align.CENTER))\n\npart = hub.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 4,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     63.0,
+     55.0,
+     11.0
+    ],
+    "volume_mm3": 25773.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 50.7,
+   "usage": {
+    "input_tokens": 8968,
+    "output_tokens": 4589
+   },
+   "plan": "Comparison vs drawing (same view conventions):\n- **Top view:** drawing has the wide crossbar (22 deep) at the **top** of the sheet and the 29\u2011wide stem (33 deep) projecting downward. My current render shows the crossbar at the **bottom** \u2192 the T is rotated 180\u00b0 in\u2011plane (crossbar on the wrong end).\n- **Right view:** drawing shows 33 on the left, 22 on the right; my render shows the reverse \u2192 same 180\u00b0 flip.\n- Front view, extents (63 \u00d7 55 \u00d7 11), and thickness all match; only the in\u2011plane orientation is wrong.\n\nFix: move the crossbar to the opposite end (swap the Y aligns). The part is symmetric in X, so this 180\u00b0 in\u2011plane rotation only re\u2011positions the crossbar to the correct end, correcting both the Top and Right views.\n\nFeature set (unchanged): crossbar 63 \u00d7 22 \u00d7 11, stem 29 \u00d7 33 \u00d7 11, tiling the 55 depth (22 + 33 = 55); overall 63 \u00d7 55 \u00d7 11; no holes/fillets.",
+   "text": "\n\n<plan>\nComparison vs drawing (same view conventions):\n- **Top view:** drawing has the wide crossbar (22 deep) at the **top** of the sheet and the 29\u2011wide stem (33 deep) projecting downward. My current render shows the crossbar at the **bottom** \u2192 the T is rotated 180\u00b0 in\u2011plane (crossbar on the wrong end).\n- **Right view:** drawing shows 33 on the left, 22 on the right; my render shows the reverse \u2192 same 180\u00b0 flip.\n- Front view, extents (63 \u00d7 55 \u00d7 11), and thickness all match; only the in\u2011plane orientation is wrong.\n\nFix: move the crossbar to the opposite end (swap the Y aligns). The part is symmetric in X, so this 180\u00b0 in\u2011plane rotation only re\u2011positions the crossbar to the correct end, correcting both the Top and Right views.\n\nFeature set (unchanged): crossbar 63 \u00d7 22 \u00d7 11, stem 29 \u00d7 33 \u00d7 11, tiling the 55 depth (22 + 33 = 55); overall 63 \u00d7 55 \u00d7 11; no holes/fillets.\n</plan>\n```python\n# Hub Adapter (T-plate) - build123d reconstruction\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nstem_width   = 29.0   # mm, Top/Front: stem width (X)\noverhang     = 17.0   # mm, Top/Front: side overhang (X), right; left symmetric\ncrossbar_dep = 22.0   # mm, Top/Right: crossbar depth (Y)\nstem_dep     = 33.0   # mm, Top/Right: stem depth (Y)\nthickness    = 11.0   # mm, Right: plate thickness (Z)\n\n# --- Derived values ---\noverall_width = stem_width + 2 * overhang      # 63 mm (X)\noverall_depth = crossbar_dep + stem_dep        # 55 mm (Y)\n\nwith BuildPart() as hub:\n    # Crossbar: full width, at the back end (top of the Top view)\n    Box(overall_width, crossbar_dep, thickness,\n        align=(Align.CENTER, Align.MIN, Align.CENTER))\n    # Stem: narrow, centered in X, projecting to the front end\n    Box(stem_width, stem_dep, thickness,\n        align=(Align.CENTER, Align.MAX, Align.CENTER))\n\npart = hub.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 5,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     63.0,
+     55.0,
+     11.0
+    ],
+    "volume_mm3": 25773.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 6,
+   "t_call_s": 13.5,
+   "usage": {
+    "input_tokens": 9774,
+    "output_tokens": 1149
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard05_tblock",
+  "split": "hard",
+  "family": "tblock",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5153,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 5,
+  "best_iou": 1.0,
+  "best_cand": 5,
+  "n_calls": 6,
+  "n_candidates": 5,
+  "stop_reason": "final",
+  "t_singleshot_s": 120.4,
+  "t_agentic_s": 792.9
+ },
+ "per_candidate_iou": {
+  "1": 0.5153,
+  "2": 0.3939,
+  "3": 0.4176,
+  "4": 0.516,
+  "5": 1.0
+ }
+}

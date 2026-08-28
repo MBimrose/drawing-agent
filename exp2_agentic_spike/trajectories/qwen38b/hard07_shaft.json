@@ -1,0 +1,86 @@
+{
+ "uid": "hard07_shaft",
+ "split": "hard",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 113.0,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7619
+   },
+   "plan": "Reading the views:\n- **Top view:** three concentric circles, labeled \u230042 (outer), \u230022 (middle), \u230016 (inner). These are the outlines of three coaxial cylindrical steps. No hidden circles/holes are shown.\n- **Right view:** three stacked rectangles (a stepped cylinder seen from the side). Height chain from the bottom: 26 (widest step) + 18 (middle step) + 13 (top step) = 57 mm overall height. Widths of the steps correspond to the diameters 42 / 22 / 16 (pixel ratios \u2248 1 : 0.55 : 0.38 match 42 : 22 : 16). No hidden lines \u2192 solid, no through holes.\n- **ISO view:** confirms the form: large base disc, smaller middle cylinder, smallest top cylinder, all coaxial.\n\nDimension chains:\n- X/Y extents: 42 (base), 22 (middle), 16 (top) \u2014 all diameters, coaxial.\n- Z extent: 26 + 18 + 13 = 57 mm overall.\n\nFeature list:\n1. Base cylinder: \u230042 \u00d7 26 high, z = 0\u202626.\n2. Middle cylinder: \u230022 \u00d7 18 high, z = 26\u202644.\n3. Top cylinder: \u230016 \u00d7 13 high, z = 44\u202657.\nAll solid, no holes, no fillets/chamfers dimensioned.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view:** three concentric circles, labeled \u230042 (outer), \u230022 (middle), \u230016 (inner). These are the outlines of three coaxial cylindrical steps. No hidden circles/holes are shown.\n- **Right view:** three stacked rectangles (a stepped cylinder seen from the side). Height chain from the bottom: 26 (widest step) + 18 (middle step) + 13 (top step) = 57 mm overall height. Widths of the steps correspond to the diameters 42 / 22 / 16 (pixel ratios \u2248 1 : 0.55 : 0.38 match 42 : 22 : 16). No hidden lines \u2192 solid, no through holes.\n- **ISO view:** confirms the form: large base disc, smaller middle cylinder, smallest top cylinder, all coaxial.\n\nDimension chains:\n- X/Y extents: 42 (base), 22 (middle), 16 (top) \u2014 all diameters, coaxial.\n- Z extent: 26 + 18 + 13 = 57 mm overall.\n\nFeature list:\n1. Base cylinder: \u230042 \u00d7 26 high, z = 0\u202626.\n2. Middle cylinder: \u230022 \u00d7 18 high, z = 26\u202644.\n3. Top cylinder: \u230016 \u00d7 13 high, z = 44\u202657.\nAll solid, no holes, no fillets/chamfers dimensioned.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nd_base = 42.0   # mm, base cylinder diameter (Top view outer circle)\nh_base = 26.0   # mm, base step height (Right view, bottom segment)\nd_mid  = 22.0   # mm, middle cylinder diameter (Top view middle circle)\nh_mid  = 18.0   # mm, middle step height (Right view, middle segment)\nd_top  = 16.0   # mm, top cylinder diameter (Top view inner circle)\nh_top  = 13.0   # mm, top step height (Right view, top segment)\n\n# Derived\nh_total = h_base + h_mid + h_top   # 26 + 18 + 13 = 57 mm overall height\n\n# ---- Build the stepped solid cylinder ----\nwith BuildPart() as p:\n    # Base step, bottom face at z = 0\n    Cylinder(d_base / 2, h_base, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Middle step, sitting on the base\n    with Locations((0, 0, h_base)):\n        Cylinder(d_mid / 2, h_mid, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Top step, sitting on the middle step\n    with Locations((0, 0, h_base + h_mid)):\n        Cylinder(d_top / 2, h_top, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = p.obj()\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 20.8,
+   "usage": {
+    "input_tokens": 4992,
+    "output_tokens": 1580
+   },
+   "plan": "Reading the views (unchanged from before):\n- **Top view:** three concentric circles \u230042 (outer), \u230022 (middle), \u230016 (inner) \u2192 three coaxial cylindrical steps. No hidden circles \u2192 no holes.\n- **Right view:** three stacked rectangles; height chain 26 + 18 + 13 = 57 mm overall. Step widths match diameters 42 / 22 / 16.\n- **ISO view:** confirms stepped solid cylinder (large base disc, middle cylinder, small top cylinder), all coaxial, solid.\n\nDimension chains:\n- X/Y: 42 / 22 / 16 (coaxial diameters).\n- Z: 26 + 18 + 13 = 57 mm overall.\n\nFeature list:\n1. Base cylinder \u230042 \u00d7 26, z = 0\u202626.\n2. Middle cylinder \u230022 \u00d7 18, z = 26\u202644.\n3. Top cylinder \u230016 \u00d7 13, z = 44\u202657.\nSolid, no holes, no fillets/chamfers.\n\nAPI fix: in build123d 0.10 the finished solid is exposed as `p.part` (not `p.obj()`). Bind `part = p.part` before export.",
+   "text": "\n\n<plan>\nReading the views (unchanged from before):\n- **Top view:** three concentric circles \u230042 (outer), \u230022 (middle), \u230016 (inner) \u2192 three coaxial cylindrical steps. No hidden circles \u2192 no holes.\n- **Right view:** three stacked rectangles; height chain 26 + 18 + 13 = 57 mm overall. Step widths match diameters 42 / 22 / 16.\n- **ISO view:** confirms stepped solid cylinder (large base disc, middle cylinder, small top cylinder), all coaxial, solid.\n\nDimension chains:\n- X/Y: 42 / 22 / 16 (coaxial diameters).\n- Z: 26 + 18 + 13 = 57 mm overall.\n\nFeature list:\n1. Base cylinder \u230042 \u00d7 26, z = 0\u202626.\n2. Middle cylinder \u230022 \u00d7 18, z = 26\u202644.\n3. Top cylinder \u230016 \u00d7 13, z = 44\u202657.\nSolid, no holes, no fillets/chamfers.\n\nAPI fix: in build123d 0.10 the finished solid is exposed as `p.part` (not `p.obj()`). Bind `part = p.part` before export.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nd_base = 42.0   # mm, base cylinder diameter (Top view outer circle)\nh_base = 26.0   # mm, base step height (Right view, bottom segment)\nd_mid  = 22.0   # mm, middle cylinder diameter (Top view middle circle)\nh_mid  = 18.0   # mm, middle step height (Right view, middle segment)\nd_top  = 16.0   # mm, top cylinder diameter (Top view inner circle)\nh_top  = 13.0   # mm, top step height (Right view, top segment)\n\n# Derived\nh_total = h_base + h_mid + h_top   # 26 + 18 + 13 = 57 mm overall height\n\n# ---- Build the stepped solid cylinder ----\nwith BuildPart() as p:\n    # Base step, bottom face at z = 0\n    Cylinder(d_base / 2, h_base, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Middle step, sitting on the base\n    with Locations((0, 0, h_base)):\n        Cylinder(d_mid / 2, h_mid, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Top step, sitting on the middle step\n    with Locations((0, 0, h_base + h_mid)):\n        Cylinder(d_top / 2, h_top, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = p.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     42.0,
+     41.97,
+     57.0
+    ],
+    "volume_mm3": 45427.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0,
+     11.0,
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 38.2,
+   "usage": {
+    "input_tokens": 8217,
+    "output_tokens": 2567
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard07_shaft",
+  "split": "hard",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 2,
+  "best_iou": 1.0,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 115.9,
+  "t_agentic_s": 180.9
+ },
+ "per_candidate_iou": {
+  "2": 1.0
+ }
+}

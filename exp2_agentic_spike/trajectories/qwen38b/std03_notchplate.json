@@ -1,0 +1,97 @@
+{
+ "uid": "std03_notchplate",
+ "split": "std",
+ "family": "notchplate",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 672.1,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 9444
+   },
+   "plan": "**Views:** Top (plan, XY), Right (side, YZ), ISO (form only). The part is a flat plate with a rectangular notch cut into one long edge and two through-holes.\n\n**Top view dimensions (X horizontal, Y vertical on sheet):**\n- Overall width (X): 101 (OVERALL).\n- Overall depth (Y): 54 (OVERALL).\n- Notch: width 30 (COMPONENT), depth 17 (COMPONENT, from bottom edge up), located 49 from the right edge. Left remainder = 101 \u2212 30 \u2212 49 = 22.\n- \"2X \u23006 THRU\": two 6 mm through-holes, at the same height, symmetric about the X center; read from the view they sit ~16 mm from each side edge and 17 mm below the top edge.\n\n**Right view:** plain rectangle \u2192 uniform plate thickness (no steps), depth = 54 consistent with Top; thickness \u2248 6 mm (no explicit dimension; taken from view proportion).\n\n**Feature list:**\n1. Base plate 101 \u00d7 54 \u00d7 6.\n2. Notch 30 (X) \u00d7 17 (Y) through, on the \u2212Y edge, from X = 22 to 52.\n3. Two \u23006 through-holes at (16, 37) and (85, 37).",
+   "text": "\n\n<plan>\n**Views:** Top (plan, XY), Right (side, YZ), ISO (form only). The part is a flat plate with a rectangular notch cut into one long edge and two through-holes.\n\n**Top view dimensions (X horizontal, Y vertical on sheet):**\n- Overall width (X): 101 (OVERALL).\n- Overall depth (Y): 54 (OVERALL).\n- Notch: width 30 (COMPONENT), depth 17 (COMPONENT, from bottom edge up), located 49 from the right edge. Left remainder = 101 \u2212 30 \u2212 49 = 22.\n- \"2X \u23006 THRU\": two 6 mm through-holes, at the same height, symmetric about the X center; read from the view they sit ~16 mm from each side edge and 17 mm below the top edge.\n\n**Right view:** plain rectangle \u2192 uniform plate thickness (no steps), depth = 54 consistent with Top; thickness \u2248 6 mm (no explicit dimension; taken from view proportion).\n\n**Feature list:**\n1. Base plate 101 \u00d7 54 \u00d7 6.\n2. Notch 30 (X) \u00d7 17 (Y) through, on the \u2212Y edge, from X = 22 to 52.\n3. Two \u23006 through-holes at (16, 37) and (85, 37).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 101.0          # overall width, X (Top view)\nD = 54.0           # overall depth, Y (Top view)\nT = 6.0            # plate thickness, Z (Right view proportion)\nNOTCH_W = 30.0     # notch width, X (Top view)\nNOTCH_D = 17.0     # notch depth, Y (Top view)\nNOTCH_R = 49.0     # notch right face to part right edge\nNOTCH_L = W - NOTCH_W - NOTCH_R   # = 22.0, left edge to notch left face\nHOLE_D = 6.0       # \"2X dia 6 THRU\"\nHOLE_X = 16.0      # hole centers, symmetric from left/right edges\nHOLE_Y = D - 17.0  # hole centers 17 below the top edge (= 37)\n\nwith BuildPart() as bp:\n    # base plate, origin at min corner\n    Box(W, D, T, align=(Align.MIN, Align.MIN, Align.MIN)).val()\n\n    # rectangular notch cut into the -Y edge (through)\n    Box(NOTCH_W, NOTCH_D, T + 2,\n        align=(Align.MIN, Align.MIN, Align.MIN),\n        mode=Mode.SUBTRACT).translate((NOTCH_L, 0, -1))\n\n    # two through holes\n    with Locations(f\"{HOLE_X} {HOLE_Y} 0\", f\"{W - HOLE_X} {HOLE_Y} 0\"):\n        Cylinder(HOLE_D / 2, T + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT).translate((0, 0, -1))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 55.8,
+   "usage": {
+    "input_tokens": 4983,
+    "output_tokens": 4387
+   },
+   "plan": "**Reading (unchanged):** Top view gives overall X = 101, overall Y = 54, notch 30 wide \u00d7 17 deep on the \u2212Y edge with 49 to the right edge (left remainder = 101 \u2212 30 \u2212 49 = 22), and \"2X \u23006 THRU\" holes symmetric about the X center at ~16 from each side edge and 17 below the top edge (Y = 37). Right view is a plain rectangle \u2192 uniform plate, thickness \u2248 6 (no explicit dim; from proportion).\n\n**Fix for the crash:** In build123d 0.10 a `Box`/`Cylinder` created outside a `BuildPart` context returns a `Part` that supports boolean operators (`-`, `+`, `&`) and `.translate(...)`. The previous script wrongly called `.val()` (a `BuildLine`/component accessor, not a `Part` method) and relied on `BuildPart` auto-assembly. I now build each primitive, position it with `.translate`, and combine with explicit boolean subtraction, binding the result to `part`. No context manager, no `.val()`.\n\n**Feature list:**\n1. Base plate 101 \u00d7 54 \u00d7 6 at origin.\n2. Notch 30 (X) \u00d7 17 (Y) through, \u2212Y edge, X = 22\u219252.\n3. Two \u23006 through-holes at (16, 37) and (85, 37).",
+   "text": "\n\n<plan>\n**Reading (unchanged):** Top view gives overall X = 101, overall Y = 54, notch 30 wide \u00d7 17 deep on the \u2212Y edge with 49 to the right edge (left remainder = 101 \u2212 30 \u2212 49 = 22), and \"2X \u23006 THRU\" holes symmetric about the X center at ~16 from each side edge and 17 below the top edge (Y = 37). Right view is a plain rectangle \u2192 uniform plate, thickness \u2248 6 (no explicit dim; from proportion).\n\n**Fix for the crash:** In build123d 0.10 a `Box`/`Cylinder` created outside a `BuildPart` context returns a `Part` that supports boolean operators (`-`, `+`, `&`) and `.translate(...)`. The previous script wrongly called `.val()` (a `BuildLine`/component accessor, not a `Part` method) and relied on `BuildPart` auto-assembly. I now build each primitive, position it with `.translate`, and combine with explicit boolean subtraction, binding the result to `part`. No context manager, no `.val()`.\n\n**Feature list:**\n1. Base plate 101 \u00d7 54 \u00d7 6 at origin.\n2. Notch 30 (X) \u00d7 17 (Y) through, \u2212Y edge, X = 22\u219252.\n3. Two \u23006 through-holes at (16, 37) and (85, 37).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 101.0          # overall width, X (Top view)\nD = 54.0           # overall depth, Y (Top view)\nT = 6.0            # plate thickness, Z (Right view proportion)\nNOTCH_W = 30.0     # notch width, X (Top view)\nNOTCH_D = 17.0     # notch depth, Y (Top view)\nNOTCH_R = 49.0     # notch right face to part right edge\nNOTCH_L = W - NOTCH_W - NOTCH_R   # = 22.0, left edge to notch left face\nHOLE_D = 6.0       # \"2X dia 6 THRU\"\nHOLE_X = 16.0      # hole centers, symmetric from left/right edges\nHOLE_Y = D - 17.0  # hole centers 17 below the top edge (= 37)\n\n# ---- primitives (each returns a Part; positioned via translate) ----\nbase = Box(W, D, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\nnotch = Box(NOTCH_W, NOTCH_D, T + 2, align=(Align.MIN, Align.MIN, Align.MIN))\nnotch = notch.translate(NOTCH_L, 0.0, -1.0)\n\nhole1 = Cylinder(HOLE_D / 2.0, T + 2, align=(Align.CENTER, Align.CENTER, Align.MIN))\nhole1 = hole1.translate(HOLE_X, HOLE_Y, -1.0)\n\nhole2 = Cylinder(HOLE_D / 2.0, T + 2, align=(Align.CENTER, Align.CENTER, Align.MIN))\nhole2 = hole2.translate(W - HOLE_X, HOLE_Y, -1.0)\n\n# ---- combine ----\npart = base - notch - hole1 - hole2\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 55.5,
+   "usage": {
+    "input_tokens": 5945,
+    "output_tokens": 4439
+   },
+   "plan": "**Reading (unchanged):** Top view \u2192 overall X = 101, overall Y = 54; notch 30 (X) \u00d7 17 (Y) on the \u2212Y edge with 49 to the right edge (left remainder = 101 \u2212 30 \u2212 49 = 22); \"2X \u23006 THRU\" holes symmetric about the X center at 16 from each side edge and 17 below the top edge (Y = 37). Right view \u2192 uniform plate, thickness \u2248 6 (proportion).\n\n**Fix for the crash:** In build123d 0.10 the bound method `Shape.translate` accepts a **single** argument (a `Vector`), not three numbers \u2014 calling `translate(x, y, z)` raised \"takes 2 positional arguments but 4 were given\". I now position each primitive with `.translate(Vector(x, y, z))`. Primitives are built outside any context (they return `Part` objects that support boolean `-`), and the result is bound to `part`. No `.val()`, no context manager.\n\n**Feature list:**\n1. Base plate 101 \u00d7 54 \u00d7 6 at origin.\n2. Notch 30 (X) \u00d7 17 (Y) through, \u2212Y edge, X = 22\u219252.\n3. Two \u23006 through-holes at (16, 37) and (85, 37).",
+   "text": "\n\n<plan>\n**Reading (unchanged):** Top view \u2192 overall X = 101, overall Y = 54; notch 30 (X) \u00d7 17 (Y) on the \u2212Y edge with 49 to the right edge (left remainder = 101 \u2212 30 \u2212 49 = 22); \"2X \u23006 THRU\" holes symmetric about the X center at 16 from each side edge and 17 below the top edge (Y = 37). Right view \u2192 uniform plate, thickness \u2248 6 (proportion).\n\n**Fix for the crash:** In build123d 0.10 the bound method `Shape.translate` accepts a **single** argument (a `Vector`), not three numbers \u2014 calling `translate(x, y, z)` raised \"takes 2 positional arguments but 4 were given\". I now position each primitive with `.translate(Vector(x, y, z))`. Primitives are built outside any context (they return `Part` objects that support boolean `-`), and the result is bound to `part`. No `.val()`, no context manager.\n\n**Feature list:**\n1. Base plate 101 \u00d7 54 \u00d7 6 at origin.\n2. Notch 30 (X) \u00d7 17 (Y) through, \u2212Y edge, X = 22\u219252.\n3. Two \u23006 through-holes at (16, 37) and (85, 37).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 101.0          # overall width, X (Top view)\nD = 54.0           # overall depth, Y (Top view)\nT = 6.0            # plate thickness, Z (Right view proportion)\nNOTCH_W = 30.0     # notch width, X (Top view)\nNOTCH_D = 17.0     # notch depth, Y (Top view)\nNOTCH_R = 49.0     # notch right face to part right edge\nNOTCH_L = W - NOTCH_W - NOTCH_R   # = 22.0, left edge to notch left face\nHOLE_D = 6.0       # \"2X dia 6 THRU\"\nHOLE_X = 16.0      # hole centers, symmetric from left/right edges\nHOLE_Y = D - 17.0  # hole centers 17 below the top edge (= 37)\n\n# ---- primitives (each returns a Part; positioned via translate(Vector)) ----\nbase = Box(W, D, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\nnotch = Box(NOTCH_W, NOTCH_D, T + 2, align=(Align.MIN, Align.MIN, Align.MIN))\nnotch = notch.translate(Vector(NOTCH_L, 0.0, -1.0))\n\nhole1 = Cylinder(HOLE_D / 2.0, T + 2, align=(Align.CENTER, Align.CENTER, Align.MIN))\nhole1 = hole1.translate(Vector(HOLE_X, HOLE_Y, -1.0))\n\nhole2 = Cylinder(HOLE_D / 2.0, T + 2, align=(Align.CENTER, Align.CENTER, Align.MIN))\nhole2 = hole2.translate(Vector(W - HOLE_X, HOLE_Y, -1.0))\n\n# ---- combine ----\npart = base - notch - hole1 - hole2\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     101.0,
+     54.0,
+     6.0
+    ],
+    "volume_mm3": 29325.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 24.7,
+   "usage": {
+    "input_tokens": 8041,
+    "output_tokens": 1821
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std03_notchplate",
+  "split": "std",
+  "family": "notchplate",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4169,
+  "ag_final_cand": 3,
+  "best_iou": 0.4169,
+  "best_cand": 3,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 674.5,
+  "t_agentic_s": 819.8
+ },
+ "per_candidate_iou": {
+  "3": 0.4169
+ }
+}

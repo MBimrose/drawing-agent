@@ -1,0 +1,129 @@
+{
+ "uid": "hard02_notchplate",
+ "split": "hard",
+ "family": "notchplate",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 174.8,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 11505
+   },
+   "plan": "**Views and reading:**\n- **Top (XY):** Overall plan is a 78 \u00d7 53 rectangle with a rectangular slot cut into the front (Y=0) edge. X chain: 27 + 20 + 31 = 78 (overall X). Y overall = 53. Slot is 20 wide (the middle segment) and 16 deep from the front edge. Callout \"2X \u230010 THRU\" with two circles: one in the left block, one over the right plate, both near the back edge (\u224840 from front).\n- **Front (XZ):** Left segment (0\u201327) is a tall block, height 15 (overall Z, confirmed by Right view). Right portion (27\u201378) is a lower plate; its step height reads \u22489 mm from the view (not separately dimensioned). Vertical edge at x=47 marks the slot's far side.\n- **Right (YZ):** 53 \u00d7 15 rectangle (overall depth \u00d7 overall height), dashed lines = hidden hole edges.\n- **ISO:** Confirms form: flat plate with front slot, raised block at left end, two through-holes in the flat top.\n\n**Feature list:**\n- Tall block: 27 (X) \u00d7 53 (Y) \u00d7 15 (Z) at left end.\n- Plate: 51 (X) \u00d7 53 (Y) \u00d7 9 (Z) attached to right of block.\n- Slot: 20 (X) \u00d7 16 (Y) cut from front edge of plate, through plate thickness.\n- 2 holes \u230010 through: centers at x = 13.5 (mid of 27 block) and x = 62.5 (mid of 31 segment), y = 40 (inferred from view).\n\nOverall: 78 \u00d7 53 \u00d7 15 mm.",
+   "text": "\n\n<plan>\n**Views and reading:**\n- **Top (XY):** Overall plan is a 78 \u00d7 53 rectangle with a rectangular slot cut into the front (Y=0) edge. X chain: 27 + 20 + 31 = 78 (overall X). Y overall = 53. Slot is 20 wide (the middle segment) and 16 deep from the front edge. Callout \"2X \u230010 THRU\" with two circles: one in the left block, one over the right plate, both near the back edge (\u224840 from front).\n- **Front (XZ):** Left segment (0\u201327) is a tall block, height 15 (overall Z, confirmed by Right view). Right portion (27\u201378) is a lower plate; its step height reads \u22489 mm from the view (not separately dimensioned). Vertical edge at x=47 marks the slot's far side.\n- **Right (YZ):** 53 \u00d7 15 rectangle (overall depth \u00d7 overall height), dashed lines = hidden hole edges.\n- **ISO:** Confirms form: flat plate with front slot, raised block at left end, two through-holes in the flat top.\n\n**Feature list:**\n- Tall block: 27 (X) \u00d7 53 (Y) \u00d7 15 (Z) at left end.\n- Plate: 51 (X) \u00d7 53 (Y) \u00d7 9 (Z) attached to right of block.\n- Slot: 20 (X) \u00d7 16 (Y) cut from front edge of plate, through plate thickness.\n- 2 holes \u230010 through: centers at x = 13.5 (mid of 27 block) and x = 62.5 (mid of 31 segment), y = 40 (inferred from view).\n\nOverall: 78 \u00d7 53 \u00d7 15 mm.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing (mm) ----\nseg1 = 27.0        # left tall block width (X)\nseg2 = 20.0        # slot width (X)\nseg3 = 31.0        # right plate length (X)\nW = 53.0           # overall depth (Y)\nH = 15.0           # overall height (Z)\nslot_depth = 16.0  # slot cut-in from front edge (Y)\nt_plate = 9.0      # plate thickness (step height in Front view)\nd_hole = 10.0      # 2X dia 10 THRU\n\n# derived\nL_total = seg1 + seg2 + seg3          # 78 overall X\nx_hole1 = seg1 / 2.0                  # 13.5, mid of left block\nx_hole2 = seg1 + seg2 + seg3 / 2.0    # 62.5, mid of right segment\ny_hole = 40.0                         # hole centers from front edge (from Top view)\n\nwith BuildPart() as bp:\n    # tall left block\n    Box(seg1, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # right plate\n    Box(seg2 + seg3, W, t_plate, align=(Align.MIN, Align.MIN, Align.MIN),\n        location=(seg1, 0, 0))\n    # slot cut from front edge of plate\n    Box(seg2, slot_depth, t_plate + 2, align=(Align.MIN, Align.MIN, Align.MIN),\n        location=(seg1, 0, -1), mode=Mode.SUBTRACT)\n    # two through holes\n    with Locations(f\"({x_hole1},{y_hole},0) ({x_hole2},{y_hole},0)\"):\n        Cylinder(d_hole / 2, H + 2, align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 location=(0, 0, H / 2), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 93.5,
+   "usage": {
+    "input_tokens": 5147,
+    "output_tokens": 6203
+   },
+   "plan": "Reading unchanged; only the API call was wrong (`location` is not a valid keyword in build123d 0.10 \u2014 positioning must be done via `Locations` context managers / `pos`). Re-issuing the same model built with `Locations`.\n\n**Views and reading:**\n- **Top (XY):** 78 \u00d7 53 rectangle with a front-edge slot. X chain: 27 + 20 + 31 = 78. Y overall = 53. Slot 20 wide \u00d7 16 deep from front edge. \"2X \u230010 THRU\": one hole in left block (x\u224813.5), one in right plate (x\u224862.5), both near back (y\u224840).\n- **Front (XZ):** left block height 15 (overall Z); right plate step height 9; vertical edge at x=47 = slot far wall.\n- **Right (YZ):** 53 \u00d7 15, dashed lines = hidden holes.\n- **ISO:** flat plate + front slot + raised left block + 2 through holes.\n\n**Features:** tall block 27\u00d753\u00d715 at left; plate 51\u00d753\u00d79 to its right; slot 20\u00d716 cut from front of plate; 2\u00d7 \u230010 through holes at (13.5,40) and (62.5,40). Overall 78\u00d753\u00d715.",
+   "text": "\n\n<plan>\nReading unchanged; only the API call was wrong (`location` is not a valid keyword in build123d 0.10 \u2014 positioning must be done via `Locations` context managers / `pos`). Re-issuing the same model built with `Locations`.\n\n**Views and reading:**\n- **Top (XY):** 78 \u00d7 53 rectangle with a front-edge slot. X chain: 27 + 20 + 31 = 78. Y overall = 53. Slot 20 wide \u00d7 16 deep from front edge. \"2X \u230010 THRU\": one hole in left block (x\u224813.5), one in right plate (x\u224862.5), both near back (y\u224840).\n- **Front (XZ):** left block height 15 (overall Z); right plate step height 9; vertical edge at x=47 = slot far wall.\n- **Right (YZ):** 53 \u00d7 15, dashed lines = hidden holes.\n- **ISO:** flat plate + front slot + raised left block + 2 through holes.\n\n**Features:** tall block 27\u00d753\u00d715 at left; plate 51\u00d753\u00d79 to its right; slot 20\u00d716 cut from front of plate; 2\u00d7 \u230010 through holes at (13.5,40) and (62.5,40). Overall 78\u00d753\u00d715.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing (mm) ----\nseg1 = 27.0        # left tall block width (X)\nseg2 = 20.0        # slot width (X)\nseg3 = 31.0        # right plate length (X)\nW = 53.0           # overall depth (Y)\nH = 15.0           # overall height (Z)\nslot_depth = 16.0  # slot cut-in from front edge (Y)\nt_plate = 9.0      # plate thickness (step height in Front view)\nd_hole = 10.0      # 2X dia 10 THRU\n\n# derived\nL_total = seg1 + seg2 + seg3          # 78 overall X\nx_hole1 = seg1 / 2.0                  # 13.5, mid of left block\nx_hole2 = seg1 + seg2 + seg3 / 2.0    # 62.5, mid of right segment\ny_hole = 40.0                         # hole centers from front edge (Top view)\n\nwith BuildPart() as bp:\n    # tall left block (min corner at origin)\n    with Locations((0, 0, 0)):\n        Box(seg1, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # right plate attached to the block\n    with Locations((seg1, 0, 0)):\n        Box(seg2 + seg3, W, t_plate, align=(Align.MIN, Align.MIN, Align.MIN))\n    # slot cut from the front edge of the plate\n    with Locations((seg1, 0, -1)):\n        Box(seg2, slot_depth, t_plate + 2,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n    # two through holes (axis Z, centered at z=0, tall enough to clear top & bottom)\n    with Locations(f\"({x_hole1},{y_hole},0) ({x_hole2},{y_hole},0)\"):\n        Cylinder(d_hole / 2, H + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 12.2,
+   "usage": {
+    "input_tokens": 6227,
+    "output_tokens": 946
+   },
+   "plan": "Reading unchanged. The only fix needed: `Locations` in build123d 0.10 does not accept an f-string \u2014 it must receive tuple arguments directly. Replacing the f-string with two explicit tuple arguments.",
+   "text": "\n\n<plan>\nReading unchanged. The only fix needed: `Locations` in build123d 0.10 does not accept an f-string \u2014 it must receive tuple arguments directly. Replacing the f-string with two explicit tuple arguments.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing (mm) ----\nseg1 = 27.0        # left tall block width (X)\nseg2 = 20.0        # slot width (X)\nseg3 = 31.0        # right plate length (X)\nW = 53.0           # overall depth (Y)\nH = 15.0           # overall height (Z)\nslot_depth = 16.0  # slot cut-in from front edge (Y)\nt_plate = 9.0      # plate thickness (step height in Front view)\nd_hole = 10.0      # 2X dia 10 THRU\n\n# derived\nL_total = seg1 + seg2 + seg3          # 78 overall X\nx_hole1 = seg1 / 2.0                  # 13.5, mid of left block\nx_hole2 = seg1 + seg2 + seg3 / 2.0    # 62.5, mid of right segment\ny_hole = 40.0                         # hole centers from front edge (Top view)\n\nwith BuildPart() as bp:\n    # tall left block (min corner at origin)\n    with Locations((0, 0, 0)):\n        Box(seg1, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # right plate attached to the block\n    with Locations((seg1, 0, 0)):\n        Box(seg2 + seg3, W, t_plate, align=(Align.MIN, Align.MIN, Align.MIN))\n    # slot cut from the front edge of the plate\n    with Locations((seg1, 0, -1)):\n        Box(seg2, slot_depth, t_plate + 2,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n    # two through holes (axis Z, centered at z=0, tall enough to clear top & bottom)\n    with Locations((x_hole1, y_hole, 0), (x_hole2, y_hole, 0)):\n        Cylinder(d_hole / 2, H + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     78.0,
+     53.0,
+     15.0
+    ],
+    "volume_mm3": 41580.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 15,
+    "n_planar_faces": 13,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 95.0,
+   "usage": {
+    "input_tokens": 8339,
+    "output_tokens": 6473
+   },
+   "plan": "Comparing my rendered solid to the drawing, the extents (78 \u00d7 53 \u00d7 15), the front slot (20 \u00d7 16), the step (block 15 / plate 9), and the two \u230010 holes all match in position and size. However, the reported volume (41580 mm\u00b3) is ~523 mm\u00b3 too high versus the hand-computed 41057 mm\u00b3. Tracing the cause: the hole cylinders were centered at z=0 with height 17, so they only spanned z = \u22128.5\u2026+8.5. The left hole therefore did **not** pass through the 15 mm block (it stopped at 8.5 mm), and the right hole left a 0.5 mm web in the 9 mm plate \u2014 contradicting the \"2X \u230010 THRU\" callout. Fix: center the hole cylinders at z = H/2 so they span \u22121\u202616 mm, clearing both the block and the plate fully. All other features unchanged.",
+   "text": "\n\n<plan>\nComparing my rendered solid to the drawing, the extents (78 \u00d7 53 \u00d7 15), the front slot (20 \u00d7 16), the step (block 15 / plate 9), and the two \u230010 holes all match in position and size. However, the reported volume (41580 mm\u00b3) is ~523 mm\u00b3 too high versus the hand-computed 41057 mm\u00b3. Tracing the cause: the hole cylinders were centered at z=0 with height 17, so they only spanned z = \u22128.5\u2026+8.5. The left hole therefore did **not** pass through the 15 mm block (it stopped at 8.5 mm), and the right hole left a 0.5 mm web in the 9 mm plate \u2014 contradicting the \"2X \u230010 THRU\" callout. Fix: center the hole cylinders at z = H/2 so they span \u22121\u202616 mm, clearing both the block and the plate fully. All other features unchanged.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing (mm) ----\nseg1 = 27.0        # left tall block width (X)\nseg2 = 20.0        # slot width (X)\nseg3 = 31.0        # right plate length (X)\nW = 53.0           # overall depth (Y)\nH = 15.0           # overall height (Z)\nslot_depth = 16.0  # slot cut-in from front edge (Y)\nt_plate = 9.0      # plate thickness (step height in Front view)\nd_hole = 10.0      # 2X dia 10 THRU\n\n# derived\nL_total = seg1 + seg2 + seg3          # 78 overall X\nx_hole1 = seg1 / 2.0                  # 13.5, mid of left block\nx_hole2 = seg1 + seg2 + seg3 / 2.0    # 62.5, mid of right segment\ny_hole = 40.0                         # hole centers from front edge (Top view)\n\nwith BuildPart() as bp:\n    # tall left block (min corner at origin)\n    with Locations((0, 0, 0)):\n        Box(seg1, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # right plate attached to the block\n    with Locations((seg1, 0, 0)):\n        Box(seg2 + seg3, W, t_plate, align=(Align.MIN, Align.MIN, Align.MIN))\n    # slot cut from the front edge of the plate\n    with Locations((seg1, 0, -1)):\n        Box(seg2, slot_depth, t_plate + 2,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n    # two through holes (axis Z, centered at mid-height so they clear top & bottom)\n    with Locations((x_hole1, y_hole, H / 2), (x_hole2, y_hole, H / 2)):\n        Cylinder(d_hole / 2, H + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 4,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     78.0,
+     53.0,
+     15.0
+    ],
+    "volume_mm3": 41032.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 13,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 55.1,
+   "usage": {
+    "input_tokens": 9323,
+    "output_tokens": 3932
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard02_notchplate",
+  "split": "hard",
+  "family": "notchplate",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7273,
+  "ag_final_cand": 4,
+  "best_iou": 0.7273,
+  "best_cand": 4,
+  "n_calls": 5,
+  "n_candidates": 4,
+  "stop_reason": "final",
+  "t_singleshot_s": 177.1,
+  "t_agentic_s": 447.6
+ },
+ "per_candidate_iou": {
+  "3": 0.7268,
+  "4": 0.7273
+ }
+}

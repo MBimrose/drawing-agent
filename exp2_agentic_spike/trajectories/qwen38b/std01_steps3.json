@@ -1,0 +1,112 @@
+{
+ "uid": "std01_steps3",
+ "split": "std",
+ "family": "steps3",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 127.8,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 8235
+   },
+   "plan": "**View reading**\n- **Top view:** rectangle 68 (X, overall) \u00d7 40 (Y, overall). Two solid lines at constant X split the width into three bands; the middle band is dimensioned 33. The two side bands are not separately dimensioned; from the ISO proportions (low step visibly wider than the tall step) the remainder 68 \u2212 33 = 35 is taken as 20 (low step) + 15 (tall step).\n- **Right view:** stepped profile. Height chain: 11 (base) + 12 (middle step) + 15 (top step) = 38 overall height. The step edges project as full-width horizontal lines at z = 11, 23, 38, confirming the steps run across the full 40 depth and vary along X.\n- **ISO:** confirms a three-step \"staircase\" block: low base, middle step, tall back block; no holes, bosses, fillets or chamfers.\n\n**Dimension chains**\n- X: 20 + 33 + 15 = 68 (overall)\n- Y: 40 (overall)\n- Z: 11 + 12 + 15 = 38 (overall)\n\n**Feature list**\n1. Base slab: 68 \u00d7 40 \u00d7 11.\n2. Middle step: 33 (X) \u00d7 40 \u00d7 23 (cumulative), sitting on the base, centered in the middle band.\n3. Tall step: 15 (X) \u00d7 40 \u00d7 38 (cumulative), on the right end.\nUnion of the three boxes = final solid.",
+   "text": "\n\n<plan>\n**View reading**\n- **Top view:** rectangle 68 (X, overall) \u00d7 40 (Y, overall). Two solid lines at constant X split the width into three bands; the middle band is dimensioned 33. The two side bands are not separately dimensioned; from the ISO proportions (low step visibly wider than the tall step) the remainder 68 \u2212 33 = 35 is taken as 20 (low step) + 15 (tall step).\n- **Right view:** stepped profile. Height chain: 11 (base) + 12 (middle step) + 15 (top step) = 38 overall height. The step edges project as full-width horizontal lines at z = 11, 23, 38, confirming the steps run across the full 40 depth and vary along X.\n- **ISO:** confirms a three-step \"staircase\" block: low base, middle step, tall back block; no holes, bosses, fillets or chamfers.\n\n**Dimension chains**\n- X: 20 + 33 + 15 = 68 (overall)\n- Y: 40 (overall)\n- Z: 11 + 12 + 15 = 38 (overall)\n\n**Feature list**\n1. Base slab: 68 \u00d7 40 \u00d7 11.\n2. Middle step: 33 (X) \u00d7 40 \u00d7 23 (cumulative), sitting on the base, centered in the middle band.\n3. Tall step: 15 (X) \u00d7 40 \u00d7 38 (cumulative), on the right end.\nUnion of the three boxes = final solid.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nW_total = 68.0    # mm, overall width (Top view, X)\nD = 40.0          # mm, overall depth (Top view, Y)\n\nw_low  = 20.0     # mm, low-step width (X)  [68-33=35 split per ISO proportions]\nw_mid  = 33.0     # mm, middle-step width (X, Top view)\nw_tall = 15.0     # mm, tall-step width (X)\nassert abs(w_low + w_mid + w_tall - W_total) < 1e-9\n\nh_base  = 11.0    # mm, base slab height (Right view)\nh_step2 = 12.0    # mm, middle step rise (Right view)\nh_step3 = 15.0    # mm, top step rise (Right view)\nH_total = h_base + h_step2 + h_step3   # = 38 mm overall height\n\n# ---- Step positions (part centered on X, Y) ----\nx_mid  = -W_total/2 + w_low + w_mid/2      # center of middle step\nx_tall = -W_total/2 + w_low + w_mid + w_tall/2  # center of tall step\n\nwith BuildPart() as bp:\n    # Base slab, full footprint\n    with Locations((0.0, 0.0, 0.0)):\n        Box(W_total, D, h_base, align=(Align.CENTER, Align.CENTER, Align.MINIMUM))\n    # Middle step\n    with Locations((x_mid, 0.0, 0.0)):\n        Box(w_mid, D, h_base + h_step2, align=(Align.CENTER, Align.CENTER, Align.MINIMUM))\n    # Tall step\n    with Locations((x_tall, 0.0, 0.0)):\n        Box(w_tall, D, H_total, align=(Align.CENTER, Align.CENTER, Align.MINIMUM))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.6,
+   "usage": {
+    "input_tokens": 5122,
+    "output_tokens": 849
+   },
+   "plan": "Reading unchanged (three-step block; X: 20+33+15=68, Y: 40, Z: 11+12+15=38). The only problem was a wrong enum member: build123d's `Align` enum uses `MIN`, not `MINIMUM`. Corrected all `Align.MINIMUM` \u2192 `Align.MIN`.",
+   "text": "\n\n<plan>\nReading unchanged (three-step block; X: 20+33+15=68, Y: 40, Z: 11+12+15=38). The only problem was a wrong enum member: build123d's `Align` enum uses `MIN`, not `MINIMUM`. Corrected all `Align.MINIMUM` \u2192 `Align.MIN`.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nW_total = 68.0    # mm, overall width (Top view, X)\nD = 40.0          # mm, overall depth (Top view, Y)\n\nw_low  = 20.0     # mm, low-step width (X)  [68-33=35 split per ISO proportions]\nw_mid  = 33.0     # mm, middle-step width (X, Top view)\nw_tall = 15.0     # mm, tall-step width (X)\nassert abs(w_low + w_mid + w_tall - W_total) < 1e-9\n\nh_base  = 11.0    # mm, base slab height (Right view)\nh_step2 = 12.0    # mm, middle step rise (Right view)\nh_step3 = 15.0    # mm, top step rise (Right view)\nH_total = h_base + h_step2 + h_step3   # = 38 mm overall height\n\n# ---- Step positions (part centered on X, Y) ----\nx_mid  = -W_total/2 + w_low + w_mid/2          # center of middle step\nx_tall = -W_total/2 + w_low + w_mid + w_tall/2 # center of tall step\n\nwith BuildPart() as bp:\n    # Base slab, full footprint\n    with Locations((0.0, 0.0, 0.0)):\n        Box(W_total, D, h_base, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Middle step\n    with Locations((x_mid, 0.0, 0.0)):\n        Box(w_mid, D, h_base + h_step2, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Tall step\n    with Locations((x_tall, 0.0, 0.0)):\n        Box(w_tall, D, H_total, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     68.0,
+     40.0,
+     38.0
+    ],
+    "volume_mm3": 61960.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 57.0,
+   "usage": {
+    "input_tokens": 7570,
+    "output_tokens": 3748
+   },
+   "plan": "**Correction to my reading:** I previously misread the two side bands of the X\u2011chain as 20 and 15 (guessed from the ISO). The drawing actually dimensioned them explicitly: the **Top** view shows `21 | 33 | 14` (with `68` overall) and the **Front** view repeats `21 | 33 | 14`. So the exact X chain is **21 + 33 + 14 = 68**, not 20 + 33 + 15.\n\nRe\u2011verified other axes (unchanged):\n- Y (depth): 40 overall (Top & Right).\n- Z (height): 11 (base) + 12 (middle rise) + 15 (top rise) = 38 overall (Right & Front).\n\n**Feature set (prism extruded along Y, staircase profile in XZ):**\n- Low step: X\u2011band width 21, height 11 (left).\n- Middle step: X\u2011band width 33, cumulative height 23.\n- Tall step: X\u2011band width 14, cumulative height 38 (right).\n- No holes, bosses, fillets or chamfers.\n\nExpected corrected volume = 21\u00b740\u00b711 + 33\u00b740\u00b723 + 14\u00b740\u00b738 = 9240 + 30360 + 21280 = **60880 mm\u00b3** (my wrong solid gave 61960). Bounding box stays 68 \u00d7 40 \u00d7 38, 10 planar faces. Only the two band widths change.",
+   "text": "\n\n<plan>\n**Correction to my reading:** I previously misread the two side bands of the X\u2011chain as 20 and 15 (guessed from the ISO). The drawing actually dimensioned them explicitly: the **Top** view shows `21 | 33 | 14` (with `68` overall) and the **Front** view repeats `21 | 33 | 14`. So the exact X chain is **21 + 33 + 14 = 68**, not 20 + 33 + 15.\n\nRe\u2011verified other axes (unchanged):\n- Y (depth): 40 overall (Top & Right).\n- Z (height): 11 (base) + 12 (middle rise) + 15 (top rise) = 38 overall (Right & Front).\n\n**Feature set (prism extruded along Y, staircase profile in XZ):**\n- Low step: X\u2011band width 21, height 11 (left).\n- Middle step: X\u2011band width 33, cumulative height 23.\n- Tall step: X\u2011band width 14, cumulative height 38 (right).\n- No holes, bosses, fillets or chamfers.\n\nExpected corrected volume = 21\u00b740\u00b711 + 33\u00b740\u00b723 + 14\u00b740\u00b738 = 9240 + 30360 + 21280 = **60880 mm\u00b3** (my wrong solid gave 61960). Bounding box stays 68 \u00d7 40 \u00d7 38, 10 planar faces. Only the two band widths change.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nW_total = 68.0    # mm, overall width (Top view, X)\nD = 40.0          # mm, overall depth (Top view, Y)\n\nw_low  = 21.0     # mm, low-step width (X, Top & Front views)\nw_mid  = 33.0     # mm, middle-step width (X, Top & Front views)\nw_tall = 14.0     # mm, tall-step width (X, Top & Front views)\nassert abs(w_low + w_mid + w_tall - W_total) < 1e-9\n\nh_base  = 11.0    # mm, base slab height (Right view)\nh_step2 = 12.0    # mm, middle step rise (Right view)\nh_step3 = 15.0    # mm, top step rise (Right view)\nH_total = h_base + h_step2 + h_step3   # = 38 mm overall height\n\n# ---- Step positions (part centered on X, Y) ----\nx_mid  = -W_total/2 + w_low + w_mid/2          # center of middle step\nx_tall = -W_total/2 + w_low + w_mid + w_tall/2 # center of tall step\n\nwith BuildPart() as bp:\n    # Base slab, full footprint\n    with Locations((0.0, 0.0, 0.0)):\n        Box(W_total, D, h_base, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Middle step\n    with Locations((x_mid, 0.0, 0.0)):\n        Box(w_mid, D, h_base + h_step2, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Tall step\n    with Locations((x_tall, 0.0, 0.0)):\n        Box(w_tall, D, H_total, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     68.0,
+     40.0,
+     38.0
+    ],
+    "volume_mm3": 60880.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 3.7,
+   "usage": {
+    "input_tokens": 8647,
+    "output_tokens": 197
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std01_steps3",
+  "split": "std",
+  "family": "steps3",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5476,
+  "ag_final_cand": 3,
+  "best_iou": 0.5494,
+  "best_cand": 2,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 131.4,
+  "t_agentic_s": 215.3
+ },
+ "per_candidate_iou": {
+  "2": 0.5494,
+  "3": 0.5476
+ }
+}

@@ -57,3 +57,15 @@ the experiment ends. Execute generated scripts in temp dirs outside the repo.
   measurement over framework; noted for RESULTS).
 - Arm design: turn-1 completion is scored as the single-shot arm AND seeds the agentic
   loop (same sample → the delta isolates the loop, no sampling noise between arms).
+- **Arms complete (Kimi K3 primary): ALL 0.738 → 0.856 (+0.118); std +0.087,
+  hard +0.149; exec 17/20 → 20/20; mean 2.3 calls.** Lift = repair of failed
+  turn-1 attempts + small refinements; the loop never regressed a part; residual
+  misses are confident dimension misreads the self-render compare cannot flag.
+- Secondary runs, qwen3.8-27b (drawing-vlm base) via same router/prompts (user
+  directed the qwen arm be dropped mid-flight, then reinstated it): 8k-token run =
+  budget-starved (ss 0.026 → ag 0.420, exec 1/20 → 12/20; each call truncated at
+  7600 output tokens mid-think); fair-budget 24k rerun (tag qwen38b):
+  **ss 0.128 → ag 0.728 (+0.600), exec 5/20 → 20/20, STaR-gate yield 0/20 → 9/20.**
+- Scoring inline with the runs (centered IoU); results in artifacts/results*.json.
+- **DONE 2026-08-28: RESULTS.md written (verdict: agentic data engine justified);
+  16 Kimi + 9 qwen accepted plan+code trajectories under trajectories/.**

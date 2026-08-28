@@ -1,0 +1,69 @@
+{
+ "uid": "hard04_tblock",
+ "split": "hard",
+ "family": "tblock",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 111.3,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7036
+   },
+   "plan": "Reading the views:\n- **Top view** (XY, X right, Y up): a flat T-shaped plate. The top bar runs the full width in X; a stem projects downward (\u2212Y) from its middle. Dimensions: 17 = bar depth (Y, top edge to notch line); 34 = stem length (Y, notch line to stem end); 23 = X distance from left part edge to stem edge. The T is symmetric about the vertical centerline, so the right margin is also 23. Stem width from the view proportions is 24, giving overall X = 23 + 24 + 23 = 70.\n- **Right view** (YZ, seen from +X): a plain rectangle \u2192 the part has uniform thickness in Z (no steps/holes). Height \u2248 8 mm at the drawing scale.\n- **ISO view**: confirms a single flat T-plate, no holes, bosses, or fillets.\n\nDimension chains:\n- Y (overall depth) = 17 + 34 = 51 mm.\n- X (overall width) = 23 + 24 + 23 = 70 mm.\n- Z (thickness) = 8 mm (from Right view, the only view showing Z).\n\nFeature list:\n- Top bar: 70 (X) \u00d7 17 (Y) \u00d7 8 (Z).\n- Stem: 24 (X) \u00d7 34 (Y) \u00d7 8 (Z), centered in X, attached to the bar's lower face.\n- No holes, notches, fillets, or chamfers.\n\nConstruction: union of two boxes inside one BuildPart.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (XY, X right, Y up): a flat T-shaped plate. The top bar runs the full width in X; a stem projects downward (\u2212Y) from its middle. Dimensions: 17 = bar depth (Y, top edge to notch line); 34 = stem length (Y, notch line to stem end); 23 = X distance from left part edge to stem edge. The T is symmetric about the vertical centerline, so the right margin is also 23. Stem width from the view proportions is 24, giving overall X = 23 + 24 + 23 = 70.\n- **Right view** (YZ, seen from +X): a plain rectangle \u2192 the part has uniform thickness in Z (no steps/holes). Height \u2248 8 mm at the drawing scale.\n- **ISO view**: confirms a single flat T-plate, no holes, bosses, or fillets.\n\nDimension chains:\n- Y (overall depth) = 17 + 34 = 51 mm.\n- X (overall width) = 23 + 24 + 23 = 70 mm.\n- Z (thickness) = 8 mm (from Right view, the only view showing Z).\n\nFeature list:\n- Top bar: 70 (X) \u00d7 17 (Y) \u00d7 8 (Z).\n- Stem: 24 (X) \u00d7 34 (Y) \u00d7 8 (Z), centered in X, attached to the bar's lower face.\n- No holes, notches, fillets, or chamfers.\n\nConstruction: union of two boxes inside one BuildPart.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nbar_depth   = 17.0    # Top: depth of the top bar (Y)\nstem_len    = 34.0    # Top: length of the stem below the bar (Y)\nside_margin = 23.0    # Top: left edge to stem edge (X); symmetric on the right\nstem_width  = 24.0    # Top: stem width (X)\nthickness   = 8.0     # Right: uniform plate thickness (Z)\n\n# ---- Derived values ----\noverall_x = 2.0 * side_margin + stem_width   # 23 + 24 + 23 = 70\noverall_y = bar_depth + stem_len             # 17 + 34 = 51\n\nwith BuildPart() as bp:\n    # Top bar: centered in X, Y from 0 to 17, Z from 0 to 8\n    Box(overall_x, bar_depth, thickness,\n        align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Stem: centered in X, Y from -34 to 0, Z from 0 to 8\n    Box(stem_width, stem_len, thickness,\n        align=(Align.CENTER, Align.MAX, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     51.0,
+     8.0
+    ],
+    "volume_mm3": 16048.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 52.3,
+   "usage": {
+    "input_tokens": 6271,
+    "output_tokens": 3032
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard04_tblock",
+  "split": "hard",
+  "family": "tblock",
+  "ss_exec_ok": true,
+  "ss_iou": 0.6501,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6501,
+  "ag_final_cand": 1,
+  "best_iou": 0.6501,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 113.8,
+  "t_agentic_s": 169.6
+ },
+ "per_candidate_iou": {
+  "1": 0.6501
+ }
+}

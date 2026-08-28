@@ -1,0 +1,95 @@
+{
+ "uid": "hard00_steps3",
+ "split": "hard",
+ "family": "steps3",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 77.8,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 4786
+   },
+   "plan": "View reading:\n- Top view: rectangle 66 (X, from chain 28+21+17) \u00d7 35 (Y). Two internal lines parallel to Y at X=28 and X=49 mark the step boundaries.\n- Right view: rectangle 35 (Y) \u00d7 38 (Z, from chain 15+13+10). Two horizontal lines at Z=10 and Z=23 are the step top edges.\n- ISO: confirms a three-step staircase rising along X (low step longest, high block shortest), steps run full depth (35).\n\nDimension chains:\n- X: 28 + 21 + 17 = 66 overall width.\n- Y: 35 overall depth (single dimension, cross-checked with Right view width).\n- Z: 10 + 13 + 15 = 38 overall height; step tops at 10, 23, 38.\n\nFeatures (no holes, no fillets/chamfers):\n- Step 1: X 0\u201328, full depth 35, height 10.\n- Step 2: X 28\u201349, full depth 35, height 23.\n- Step 3: X 49\u201366, full depth 35, height 38.",
+   "text": "\n\n<plan>\nView reading:\n- Top view: rectangle 66 (X, from chain 28+21+17) \u00d7 35 (Y). Two internal lines parallel to Y at X=28 and X=49 mark the step boundaries.\n- Right view: rectangle 35 (Y) \u00d7 38 (Z, from chain 15+13+10). Two horizontal lines at Z=10 and Z=23 are the step top edges.\n- ISO: confirms a three-step staircase rising along X (low step longest, high block shortest), steps run full depth (35).\n\nDimension chains:\n- X: 28 + 21 + 17 = 66 overall width.\n- Y: 35 overall depth (single dimension, cross-checked with Right view width).\n- Z: 10 + 13 + 15 = 38 overall height; step tops at 10, 23, 38.\n\nFeatures (no holes, no fillets/chamfers):\n- Step 1: X 0\u201328, full depth 35, height 10.\n- Step 2: X 28\u201349, full depth 35, height 23.\n- Step 3: X 49\u201366, full depth 35, height 38.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nx1 = 28.0   # mm, width of lowest step (Top view chain)\nx2 = 21.0   # mm, width of middle step (Top view chain)\nx3 = 17.0   # mm, width of top step (Top view chain)\nW = x1 + x2 + x3          # 66 mm overall width\nD = 35.0                  # mm overall depth (Top view)\n\nh1 = 10.0                 # mm, lowest step height (Right view chain)\nh2 = h1 + 13.0            # 23 mm, middle step height\nh3 = h2 + 15.0            # 38 mm, top step height (overall)\n\n# --- build the three-step staircase ---\nwith BuildPart() as p:\n    Box(x1, D, h1,\n        align=(Align.MINIMUM, Align.MINIMUM, Align.MINIMUM),\n        location=(0, 0, 0))\n    Box(x2, D, h2,\n        align=(Align.MINIMUM, Align.MINIMUM, Align.MINIMUM),\n        location=(x1, 0, 0))\n    Box(x3, D, h3,\n        align=(Align.MINIMUM, Align.MINIMUM, Align.MINIMUM),\n        location=(x1 + x2, 0, 0))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 9.1,
+   "usage": {
+    "input_tokens": 4908,
+    "output_tokens": 709
+   },
+   "plan": "View reading (unchanged):\n- Top view: rectangle 66 (X, chain 28+21+17) \u00d7 35 (Y). Step boundaries at X=28 and X=49.\n- Right view: 35 (Y) \u00d7 38 (Z, chain 10+13+15). Step tops at Z=10, 23, 38.\n- ISO: three-step staircase rising along X, full depth.\n\nDimension chains:\n- X: 28 + 21 + 17 = 66\n- Y: 35\n- Z: 10 + 13 + 15 = 38\n\nFeatures:\n- Step 1: X 0\u201328, depth 35, height 10\n- Step 2: X 28\u201349, depth 35, height 23\n- Step 3: X 49\u201366, depth 35, height 38\n\nFix: use `Align.MIN` (not `Align.MINIMUM`) per build123d 0.10 enum.",
+   "text": "\n\n<plan>\nView reading (unchanged):\n- Top view: rectangle 66 (X, chain 28+21+17) \u00d7 35 (Y). Step boundaries at X=28 and X=49.\n- Right view: 35 (Y) \u00d7 38 (Z, chain 10+13+15). Step tops at Z=10, 23, 38.\n- ISO: three-step staircase rising along X, full depth.\n\nDimension chains:\n- X: 28 + 21 + 17 = 66\n- Y: 35\n- Z: 10 + 13 + 15 = 38\n\nFeatures:\n- Step 1: X 0\u201328, depth 35, height 10\n- Step 2: X 28\u201349, depth 35, height 23\n- Step 3: X 49\u201366, depth 35, height 38\n\nFix: use `Align.MIN` (not `Align.MINIMUM`) per build123d 0.10 enum.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nx1 = 28.0   # mm, width of lowest step (Top view chain)\nx2 = 21.0   # mm, width of middle step (Top view chain)\nx3 = 17.0   # mm, width of top step (Top view chain)\nW = x1 + x2 + x3          # 66 mm overall width\nD = 35.0                  # mm overall depth (Top view)\n\nh1 = 10.0                 # mm, lowest step height (Right view chain)\nh2 = h1 + 13.0            # 23 mm, middle step height\nh3 = h2 + 15.0            # 38 mm, top step height (overall)\n\n# --- build the three-step staircase ---\nwith BuildPart() as p:\n    Box(x1, D, h1,\n        align=(Align.MIN, Align.MIN, Align.MIN),\n        location=(0, 0, 0))\n    Box(x2, D, h2,\n        align=(Align.MIN, Align.MIN, Align.MIN),\n        location=(x1, 0, 0))\n    Box(x3, D, h3,\n        align=(Align.MIN, Align.MIN, Align.MIN),\n        location=(x1 + x2, 0, 0))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 15.3,
+   "usage": {
+    "input_tokens": 5670,
+    "output_tokens": 1197
+   },
+   "plan": "View reading (unchanged):\n- Top view: rectangle 66 (X, chain 28+21+17) \u00d7 35 (Y). Step boundaries at X=28 and X=49.\n- Right view: 35 (Y) \u00d7 38 (Z, chain 10+13+15). Step tops at Z=10, 23, 38.\n- ISO: three-step staircase rising along X, full depth.\n\nDimension chains:\n- X: 28 + 21 + 17 = 66\n- Y: 35\n- Z: 10 + 13 + 15 = 38\n\nFeatures:\n- Step 1: X 0\u201328, depth 35, height 10\n- Step 2: X 28\u201349, depth 35, height 23\n- Step 3: X 49\u201366, depth 35, height 38\n\nFix: `Box` has no `location` kwarg in build123d 0.10. Use `Locations((x,0,0))` context to position each box, with `align=(Align.MIN, Align.MIN, Align.MIN)` so the min corner sits at the location point.",
+   "text": "\n\n<plan>\nView reading (unchanged):\n- Top view: rectangle 66 (X, chain 28+21+17) \u00d7 35 (Y). Step boundaries at X=28 and X=49.\n- Right view: 35 (Y) \u00d7 38 (Z, chain 10+13+15). Step tops at Z=10, 23, 38.\n- ISO: three-step staircase rising along X, full depth.\n\nDimension chains:\n- X: 28 + 21 + 17 = 66\n- Y: 35\n- Z: 10 + 13 + 15 = 38\n\nFeatures:\n- Step 1: X 0\u201328, depth 35, height 10\n- Step 2: X 28\u201349, depth 35, height 23\n- Step 3: X 49\u201366, depth 35, height 38\n\nFix: `Box` has no `location` kwarg in build123d 0.10. Use `Locations((x,0,0))` context to position each box, with `align=(Align.MIN, Align.MIN, Align.MIN)` so the min corner sits at the location point.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nx1 = 28.0   # mm, width of lowest step (Top view chain)\nx2 = 21.0   # mm, width of middle step (Top view chain)\nx3 = 17.0   # mm, width of top step (Top view chain)\nW = x1 + x2 + x3          # 66 mm overall width\nD = 35.0                  # mm overall depth (Top view)\n\nh1 = 10.0                 # mm, lowest step height (Right view chain)\nh2 = h1 + 13.0            # 23 mm, middle step height\nh3 = h2 + 15.0            # 38 mm, top step height (overall)\n\n# --- build the three-step staircase ---\nwith BuildPart() as p:\n    with Locations((0, 0, 0)):\n        Box(x1, D, h1, align=(Align.MIN, Align.MIN, Align.MIN))\n    with Locations((x1, 0, 0)):\n        Box(x2, D, h2, align=(Align.MIN, Align.MIN, Align.MIN))\n    with Locations((x1 + x2, 0, 0)):\n        Box(x3, D, h3, align=(Align.MIN, Align.MIN, Align.MIN))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     66.0,
+     35.0,
+     38.0
+    ],
+    "volume_mm3": 49315.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 8.8,
+   "usage": {
+    "input_tokens": 8182,
+    "output_tokens": 591
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard00_steps3",
+  "split": "hard",
+  "family": "steps3",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4161,
+  "ag_final_cand": 3,
+  "best_iou": 0.4161,
+  "best_cand": 3,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 80.3,
+  "t_agentic_s": 122.5
+ },
+ "per_candidate_iou": {
+  "3": 0.4161
+ }
+}

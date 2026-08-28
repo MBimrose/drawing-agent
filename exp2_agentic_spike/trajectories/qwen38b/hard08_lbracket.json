@@ -1,0 +1,116 @@
+{
+ "uid": "hard08_lbracket",
+ "split": "hard",
+ "family": "lbracket",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 171.7,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 11459
+   },
+   "plan": "Reading the views:\n- **Top view** (XY): rectangle 80 mm (X) \u00d7 45 mm (Y). X is given as a chain: 12 (left segment, the vertical plate thickness) + 68 (plate face to right edge) = 80 overall. A \u23007 circle sits centered in Y, ~19 mm from the right edge.\n- **Right view** (YZ, seen from +X): rectangle 45 wide (Y, matches Top) \u00d7 51 tall (Z, overall height). A single horizontal line near the bottom = top face of the base plate (plate thickness \u2248 12, same as the vertical plate). No vertical line \u2192 the vertical plate spans the full 45 depth, so it must be at the X-end, not the Y-end.\n- **ISO**: L-bracket \u2014 horizontal base plate with a vertical plate at one end, and a small raised cylindrical boss (the \"hub\") on the base plate away from the vertical plate.\n\nDimension chains:\n- X: 12 + 68 = 80 (overall width)\n- Y: 45 (overall depth, Top and Right agree)\n- Z: 51 (overall height, Right view); base strip \u2248 12.\n\nFeature list:\n1. Base plate: 80 \u00d7 45 \u00d7 12, Z 0\u201312.\n2. Vertical plate: 12 (X) \u00d7 45 (Y) \u00d7 51 (Z), at X 0\u201312, full depth.\n3. Boss: \u23007 cylinder on top of base, centered in Y (22.5), 19 mm from right edge (X = 61), height 12 (not dimensioned; taken from ISO proportion, assumed equal to plate thickness).",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (XY): rectangle 80 mm (X) \u00d7 45 mm (Y). X is given as a chain: 12 (left segment, the vertical plate thickness) + 68 (plate face to right edge) = 80 overall. A \u23007 circle sits centered in Y, ~19 mm from the right edge.\n- **Right view** (YZ, seen from +X): rectangle 45 wide (Y, matches Top) \u00d7 51 tall (Z, overall height). A single horizontal line near the bottom = top face of the base plate (plate thickness \u2248 12, same as the vertical plate). No vertical line \u2192 the vertical plate spans the full 45 depth, so it must be at the X-end, not the Y-end.\n- **ISO**: L-bracket \u2014 horizontal base plate with a vertical plate at one end, and a small raised cylindrical boss (the \"hub\") on the base plate away from the vertical plate.\n\nDimension chains:\n- X: 12 + 68 = 80 (overall width)\n- Y: 45 (overall depth, Top and Right agree)\n- Z: 51 (overall height, Right view); base strip \u2248 12.\n\nFeature list:\n1. Base plate: 80 \u00d7 45 \u00d7 12, Z 0\u201312.\n2. Vertical plate: 12 (X) \u00d7 45 (Y) \u00d7 51 (Z), at X 0\u201312, full depth.\n3. Boss: \u23007 cylinder on top of base, centered in Y (22.5), 19 mm from right edge (X = 61), height 12 (not dimensioned; taken from ISO proportion, assumed equal to plate thickness).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nt_vert = 12.0            # mm  vertical plate thickness (Top view left segment)\nseg    = 68.0            # mm  Top view: vertical-plate face to right edge\nW      = t_vert + seg    # mm  overall X = 12 + 68 = 80\nD      = 45.0            # mm  overall depth Y (Top view, confirmed by Right view width)\nH      = 51.0            # mm  overall height Z (Right view)\nt_base = 12.0            # mm  base plate thickness (Right view bottom strip)\nd_boss = 7.0             # mm  boss diameter (Top view circle callout)\nboss_h = 12.0            # mm  boss height (ISO only, not dimensioned -> assumed)\nboss_x = W - 19.0        # mm  boss center, 19 mm from right edge (Top view)\nboss_y = D / 2.0         # mm  boss centered in depth\n\nwith BuildPart() as ctx:\n    # horizontal base plate\n    Box(W, D, t_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # vertical plate at the left end, full depth\n    Box(t_vert, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # cylindrical hub boss on the base plate\n    Cylinder(d_boss / 2.0, boss_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN),\n             pos=(boss_x, boss_y, t_base))\n\npart = ctx.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 17.6,
+   "usage": {
+    "input_tokens": 5013,
+    "output_tokens": 1271
+   },
+   "plan": "Reading unchanged (L-bracket: base plate 80\u00d745\u00d712, vertical plate 12\u00d745\u00d751 at left end, \u23007 boss on base at X=61, Y=22.5). The only problem was API: build123d 0.10 primitives do not accept a `pos` keyword \u2014 positioning must be done with a `Locations(...)` context. I therefore wrap the boss cylinder in `Locations((boss_x, boss_y, t_base))` and use `align=(CENTER, CENTER, MIN)` so its axis is centered in XY at that point and its base sits on the top of the base plate. The two `Box` calls already used only the valid `align` argument.",
+   "text": "\n\n<plan>\nReading unchanged (L-bracket: base plate 80\u00d745\u00d712, vertical plate 12\u00d745\u00d751 at left end, \u23007 boss on base at X=61, Y=22.5). The only problem was API: build123d 0.10 primitives do not accept a `pos` keyword \u2014 positioning must be done with a `Locations(...)` context. I therefore wrap the boss cylinder in `Locations((boss_x, boss_y, t_base))` and use `align=(CENTER, CENTER, MIN)` so its axis is centered in XY at that point and its base sits on the top of the base plate. The two `Box` calls already used only the valid `align` argument.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nt_vert = 12.0            # mm  vertical plate thickness (Top view left segment)\nseg    = 68.0            # mm  Top view: vertical-plate face to right edge\nW      = t_vert + seg    # mm  overall X = 12 + 68 = 80\nD      = 45.0            # mm  overall depth Y (Top view, confirmed by Right view width)\nH      = 51.0            # mm  overall height Z (Right view)\nt_base = 12.0            # mm  base plate thickness (Right view bottom strip)\nd_boss = 7.0             # mm  boss diameter (Top view circle callout)\nboss_h = 12.0            # mm  boss height (ISO only, not dimensioned -> assumed)\nboss_x = W - 19.0        # mm  boss center, 19 mm from right edge (Top view)\nboss_y = D / 2.0         # mm  boss centered in depth\n\nwith BuildPart() as ctx:\n    # horizontal base plate\n    Box(W, D, t_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # vertical plate at the left end, full depth\n    Box(t_vert, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # cylindrical hub boss on the base plate (positioned via Locations)\n    with Locations((boss_x, boss_y, t_base)):\n        Cylinder(d_boss / 2.0, boss_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = ctx.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     45.0,
+     51.0
+    ],
+    "volume_mm3": 64720.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 100.1,
+   "usage": {
+    "input_tokens": 7496,
+    "output_tokens": 7835
+   },
+   "plan": "Re\u2011reading the height chain (the only error in my first model):\n- **Right view**: the rectangle is split by a horizontal line near the bottom. The \"51\" dimension spans the *upper* region (top edge \u2192 base\u2011top line) and the \"12\" dimension spans the *lower* strip (base\u2011top line \u2192 bottom edge). So 51 is the vertical plate height **above** the base, and the base thickness is 12. Overall height = 51 + 12 = **63**.\n- **Front view** confirms this: the \"51\" arrow runs from the top edge down to the inner corner (base\u2011top line), and \"68\" runs from the inner vertical line to the right edge, \"12\" is the vertical\u2011plate thickness.\n- **Top view**: 12 (left strip) + 68 = 80 overall X; 45 overall Y; \u23007 boss circle, undimensioned in X (placed \u224819 mm from the right edge to match the drawing), centered in Y.\n\nSo my previous solid was too short (overall 51 instead of 63). Corrected extents: X = 12 + 68 = 80, Y = 45, Z = 51 + 12 = 63.\n\nFeature list (corrected):\n1. Base plate: 80 \u00d7 45 \u00d7 12 (Z 0\u201312).\n2. Vertical plate: 12 \u00d7 45 \u00d7 63 (Z 0\u201363) at X 0\u201312, full depth (51 above the base top).\n3. Boss: \u23007 cylinder, height 12 (undimensioned, matched to ISO/Front proportion), centered in Y (22.5), X = 61, sitting on the base top (Z 12\u201324).",
+   "text": "\n\n<plan>\nRe\u2011reading the height chain (the only error in my first model):\n- **Right view**: the rectangle is split by a horizontal line near the bottom. The \"51\" dimension spans the *upper* region (top edge \u2192 base\u2011top line) and the \"12\" dimension spans the *lower* strip (base\u2011top line \u2192 bottom edge). So 51 is the vertical plate height **above** the base, and the base thickness is 12. Overall height = 51 + 12 = **63**.\n- **Front view** confirms this: the \"51\" arrow runs from the top edge down to the inner corner (base\u2011top line), and \"68\" runs from the inner vertical line to the right edge, \"12\" is the vertical\u2011plate thickness.\n- **Top view**: 12 (left strip) + 68 = 80 overall X; 45 overall Y; \u23007 boss circle, undimensioned in X (placed \u224819 mm from the right edge to match the drawing), centered in Y.\n\nSo my previous solid was too short (overall 51 instead of 63). Corrected extents: X = 12 + 68 = 80, Y = 45, Z = 51 + 12 = 63.\n\nFeature list (corrected):\n1. Base plate: 80 \u00d7 45 \u00d7 12 (Z 0\u201312).\n2. Vertical plate: 12 \u00d7 45 \u00d7 63 (Z 0\u201363) at X 0\u201312, full depth (51 above the base top).\n3. Boss: \u23007 cylinder, height 12 (undimensioned, matched to ISO/Front proportion), centered in Y (22.5), X = 61, sitting on the base top (Z 12\u201324).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nt_vert  = 12.0           # mm  vertical plate thickness (Top view left strip)\nseg     = 68.0           # mm  Top/Front view: vertical-plate face to right edge\nW       = t_vert + seg   # mm  overall X = 12 + 68 = 80\nD       = 45.0           # mm  overall depth Y (Top view, confirmed by Right view width)\nh_above = 51.0           # mm  vertical plate height ABOVE the base top (Front & Right views)\nt_base  = 12.0           # mm  base plate thickness (Right view bottom strip)\nH       = h_above + t_base  # mm  overall Z = 51 + 12 = 63\nd_boss  = 7.0            # mm  boss diameter (Top view circle callout)\nboss_h  = 12.0           # mm  boss height (not dimensioned -> matched to drawing proportion)\nboss_x  = W - 19.0       # mm  boss center, ~19 mm from right edge (undimensioned, from Top view)\nboss_y  = D / 2.0        # mm  boss centered in depth (symmetry, Right view)\n\nwith BuildPart() as ctx:\n    # horizontal base plate\n    Box(W, D, t_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # vertical plate at the left end, full depth, full overall height\n    Box(t_vert, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # cylindrical hub boss on the base plate (positioned via Locations)\n    with Locations((boss_x, boss_y, t_base)):\n        Cylinder(d_boss / 2.0, boss_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = ctx.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     45.0,
+     63.0
+    ],
+    "volume_mm3": 71200.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 67.2,
+   "usage": {
+    "input_tokens": 8718,
+    "output_tokens": 5288
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard08_lbracket",
+  "split": "hard",
+  "family": "lbracket",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9657,
+  "ag_final_cand": 3,
+  "best_iou": 0.9657,
+  "best_cand": 3,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 174.5,
+  "t_agentic_s": 371.8
+ },
+ "per_candidate_iou": {
+  "2": 0.5024,
+  "3": 0.9657
+ }
+}

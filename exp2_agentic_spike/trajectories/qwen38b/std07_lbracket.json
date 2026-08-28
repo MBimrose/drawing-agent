@@ -1,0 +1,84 @@
+{
+ "uid": "std07_lbracket",
+ "split": "std",
+ "family": "lbracket",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 156.5,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 10141
+   },
+   "plan": "Reading the views:\n- **Top view (left):** overall rectangle 83 (X) \u00d7 40 (Y). A vertical line 11 mm from the left end (83 \u2212 72) marks the near face of the vertical wall; the wall occupies the left end. A \u23008 circle (boss) sits centered in Y (20) and 63 mm from the left end (\u224820 from the right end, read from the view).\n- **Right view (middle):** overall height 60 (Z). A horizontal line 49 mm below the top = top of the base plate \u2192 plate thickness = 60 \u2212 49 = 11. A small 8 mm dimension = height of the cylindrical boss above the plate.\n- **ISO:** confirms L-shaped bracket: horizontal base plate with a small cylindrical boss on top, and a vertical wall at one end.\n\nDimension chains:\n- X: overall 83 = wall thickness (83 \u2212 72 = 11) + base length 72.\n- Z: overall 60 = 49 (wall top \u2192 plate top) + 11 (plate thickness).\n- Y: overall 40 (depth), boss centered at 20.\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Vertical wall 11 (X) \u00d7 40 (Y) \u00d7 60 (Z) at the left end.\n3. Cylindrical boss \u23008 \u00d7 8 high on the plate top at (63, 20).",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view (left):** overall rectangle 83 (X) \u00d7 40 (Y). A vertical line 11 mm from the left end (83 \u2212 72) marks the near face of the vertical wall; the wall occupies the left end. A \u23008 circle (boss) sits centered in Y (20) and 63 mm from the left end (\u224820 from the right end, read from the view).\n- **Right view (middle):** overall height 60 (Z). A horizontal line 49 mm below the top = top of the base plate \u2192 plate thickness = 60 \u2212 49 = 11. A small 8 mm dimension = height of the cylindrical boss above the plate.\n- **ISO:** confirms L-shaped bracket: horizontal base plate with a small cylindrical boss on top, and a vertical wall at one end.\n\nDimension chains:\n- X: overall 83 = wall thickness (83 \u2212 72 = 11) + base length 72.\n- Z: overall 60 = 49 (wall top \u2192 plate top) + 11 (plate thickness).\n- Y: overall 40 (depth), boss centered at 20.\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Vertical wall 11 (X) \u00d7 40 (Y) \u00d7 60 (Z) at the left end.\n3. Cylindrical boss \u23008 \u00d7 8 high on the plate top at (63, 20).\n</plan>\n\n```python\n# one complete runnable script\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 83          # mm, overall length (Top view)\nD = 40          # mm, overall depth (Top view)\nH = 60          # mm, overall height (Right view)\nbase_len = 72   # mm, base plate length from wall face (Top view)\nh_to_plate = 49 # mm, wall top to plate top (Right view)\nboss_d = 8      # mm, boss diameter (Top view callout)\nboss_h = 8      # mm, boss height above plate (Right view)\nboss_x = 63     # mm, boss center from left end (read in Top view, 20 from right)\n\n# ---- derived values ----\nwall_t = L - base_len        # 11 mm, wall thickness\nplate_t = H - h_to_plate     # 11 mm, base plate thickness\nboss_y = D / 2               # 20 mm, boss centered in depth\n\nwith BuildPart() as m:\n    # base plate\n    Box(L, D, plate_t, align=(Align.MIN, Align.MIN, Align.MIN))\n    # vertical wall at left end\n    Box(wall_t, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # cylindrical boss on plate top\n    with Locations(f\"{boss_x}, {boss_y}, {plate_t}\"):\n        Cylinder(boss_d / 2, boss_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = m.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 13.1,
+   "usage": {
+    "input_tokens": 4998,
+    "output_tokens": 975
+   },
+   "plan": "Reading the views (unchanged):\n- **Top view (left):** overall rectangle 83 (X) \u00d7 40 (Y). A vertical line 11 mm from the left end (83 \u2212 72) marks the near face of the vertical wall; the wall occupies the left end. A \u23008 circle (boss) sits centered in Y (20) and 63 mm from the left end.\n- **Right view (middle):** overall height 60 (Z). A horizontal line 49 mm below the top = top of the base plate \u2192 plate thickness = 60 \u2212 49 = 11. A small 8 mm dimension = height of the cylindrical boss above the plate.\n- **ISO:** confirms L-shaped bracket: horizontal base plate with a small cylindrical boss on top, and a vertical wall at one end.\n\nDimension chains:\n- X: overall 83 = wall thickness (83 \u2212 72 = 11) + base length 72.\n- Z: overall 60 = 49 (wall top \u2192 plate top) + 11 (plate thickness).\n- Y: overall 40 (depth), boss centered at 20.\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Vertical wall 11 (X) \u00d7 40 (Y) \u00d7 60 (Z) at the left end.\n3. Cylindrical boss \u23008 \u00d7 8 high on the plate top at (63, 20).\n\nFix: `Locations` must receive a tuple of numbers, not a formatted string. Use `Locations((boss_x, boss_y, plate_t))`.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view (left):** overall rectangle 83 (X) \u00d7 40 (Y). A vertical line 11 mm from the left end (83 \u2212 72) marks the near face of the vertical wall; the wall occupies the left end. A \u23008 circle (boss) sits centered in Y (20) and 63 mm from the left end.\n- **Right view (middle):** overall height 60 (Z). A horizontal line 49 mm below the top = top of the base plate \u2192 plate thickness = 60 \u2212 49 = 11. A small 8 mm dimension = height of the cylindrical boss above the plate.\n- **ISO:** confirms L-shaped bracket: horizontal base plate with a small cylindrical boss on top, and a vertical wall at one end.\n\nDimension chains:\n- X: overall 83 = wall thickness (83 \u2212 72 = 11) + base length 72.\n- Z: overall 60 = 49 (wall top \u2192 plate top) + 11 (plate thickness).\n- Y: overall 40 (depth), boss centered at 20.\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Vertical wall 11 (X) \u00d7 40 (Y) \u00d7 60 (Z) at the left end.\n3. Cylindrical boss \u23008 \u00d7 8 high on the plate top at (63, 20).\n\nFix: `Locations` must receive a tuple of numbers, not a formatted string. Use `Locations((boss_x, boss_y, plate_t))`.\n</plan>\n\n```python\n# one complete runnable script\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 83          # mm, overall length (Top view)\nD = 40          # mm, overall depth (Top view)\nH = 60          # mm, overall height (Right view)\nbase_len = 72   # mm, base plate length from wall face (Top view)\nh_to_plate = 49 # mm, wall top to plate top (Right view)\nboss_d = 8      # mm, boss diameter (Top view callout)\nboss_h = 8      # mm, boss height above plate (Right view)\nboss_x = 63     # mm, boss center from left end (read in Top view, 20 from right)\n\n# ---- derived values ----\nwall_t = L - base_len        # 11 mm, wall thickness\nplate_t = H - h_to_plate     # 11 mm, base plate thickness\nboss_y = D / 2               # 20 mm, boss centered in depth\n\nwith BuildPart() as m:\n    # base plate\n    Box(L, D, plate_t, align=(Align.MIN, Align.MIN, Align.MIN))\n    # vertical wall at left end\n    Box(wall_t, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # cylindrical boss on plate top\n    with Locations((boss_x, boss_y, plate_t)):\n        Cylinder(boss_d / 2, boss_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = m.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     40.0,
+     60.0
+    ],
+    "volume_mm3": 58481.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 35.1,
+   "usage": {
+    "input_tokens": 7710,
+    "output_tokens": 2150
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std07_lbracket",
+  "split": "std",
+  "family": "lbracket",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9812,
+  "ag_final_cand": 2,
+  "best_iou": 0.9812,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 158.9,
+  "t_agentic_s": 213.7
+ },
+ "per_candidate_iou": {
+  "2": 0.9812
+ }
+}

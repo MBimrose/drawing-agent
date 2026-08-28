@@ -1,0 +1,138 @@
+{
+ "uid": "std06_shaft",
+ "split": "std",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 172.8,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 11032
+   },
+   "plan": "Reading the views:\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). The part is axisymmetric, so no X/Y linear dimensions are needed; all features are centered.\n- Right view: three stacked tiers. Dimension chain in Z: base height 17 + middle cylinder 29 + top cylinder 10 = 56, which matches the overall 56 dimension. Widths in the Right view scale to 48 / 24 / 14, consistent with the Top view circles.\n- ISO view: confirms a three-tier cylindrical stack (large flange, medium cylinder, small top cylinder).\n\nFeature list (all centered on the Z axis):\n1. Base flange: cylinder \u230048, height 17 (z 0\u201317).\n2. Middle cylinder: \u230024, height 29 (z 17\u201346).\n3. Top cylinder: \u230014, height 10 (z 46\u201356).\n\nNo other features (no fillets/chamfers dimensioned). Overall height check: 17 + 29 + 10 = 56 \u2713.",
+   "text": "\n\n<plan>\nReading the views:\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). The part is axisymmetric, so no X/Y linear dimensions are needed; all features are centered.\n- Right view: three stacked tiers. Dimension chain in Z: base height 17 + middle cylinder 29 + top cylinder 10 = 56, which matches the overall 56 dimension. Widths in the Right view scale to 48 / 24 / 14, consistent with the Top view circles.\n- ISO view: confirms a three-tier cylindrical stack (large flange, medium cylinder, small top cylinder).\n\nFeature list (all centered on the Z axis):\n1. Base flange: cylinder \u230048, height 17 (z 0\u201317).\n2. Middle cylinder: \u230024, height 29 (z 17\u201346).\n3. Top cylinder: \u230014, height 10 (z 46\u201356).\n\nNo other features (no fillets/chamfers dimensioned). Overall height check: 17 + 29 + 10 = 56 \u2713.\n</plan>\n```python\n# Bearing block - three-tier cylindrical stack\nimport build123d as b\nfrom build123d import *\n\n# Dimensions read from the drawing\nd_base = 48.0   # mm, base flange diameter (Top view outer circle)\nd_mid  = 24.0   # mm, middle cylinder diameter (Top view middle circle)\nd_top  = 14.0   # mm, top cylinder diameter (Top view inner circle)\n\nh_base = 17.0   # mm, base flange height (Right view)\nh_mid  = 29.0   # mm, middle cylinder height (Right view)\nh_top  = 10.0   # mm, top cylinder height (Right view)\n\n# Derived values\nh_total = h_base + h_mid + h_top   # 56 mm, matches overall dimension\n\nwith BuildPart() as part:\n    # Base flange\n    Cylinder(d_base / 2.0, h_base,\n             align=(AlignOrigin.CENTER, AlignOrigin.BOTTOM))\n    # Middle cylinder stacked on base\n    Cylinder(d_mid / 2.0, h_mid,\n             align=(AlignOrigin.CENTER, AlignOrigin.BOTTOM)).locations(0, 0, h_base)\n    # Top cylinder stacked on middle\n    Cylinder(d_top / 2.0, h_top,\n             align=(AlignOrigin.CENTER, AlignOrigin.BOTTOM)).locations(0, 0, h_base + h_mid)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 20.4,
+   "usage": {
+    "input_tokens": 4833,
+    "output_tokens": 1338
+   },
+   "plan": "Reading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (centered on Z axis):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix: build123d 0.10 uses the `Align` enum (values `MIN`, `CENTER`, `MAX`), not `AlignOrigin`. Replaced `AlignOrigin.CENTER` \u2192 `Align.CENTER` and `AlignOrigin.BOTTOM` \u2192 `Align.MIN`.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (centered on Z axis):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix: build123d 0.10 uses the `Align` enum (values `MIN`, `CENTER`, `MAX`), not `AlignOrigin`. Replaced `AlignOrigin.CENTER` \u2192 `Align.CENTER` and `AlignOrigin.BOTTOM` \u2192 `Align.MIN`.\n</plan>\n```python\n# Bearing block - three-tier cylindrical stack\nimport build123d as b\nfrom build123d import *\n\n# Dimensions read from the drawing\nd_base = 48.0   # mm, base flange diameter (Top view outer circle)\nd_mid  = 24.0   # mm, middle cylinder diameter (Top view middle circle)\nd_top  = 14.0   # mm, top cylinder diameter (Top view inner circle)\n\nh_base = 17.0   # mm, base flange height (Right view)\nh_mid  = 29.0   # mm, middle cylinder height (Right view)\nh_top  = 10.0   # mm, top cylinder height (Right view)\n\n# Derived values\nh_total = h_base + h_mid + h_top   # 56 mm, matches overall dimension\n\nwith BuildPart() as part:\n    # Base flange: centered in XY, bottom at z=0\n    Cylinder(d_base / 2.0, h_base,\n             align=(Align.CENTER, Align.MIN))\n    # Middle cylinder stacked on base\n    Cylinder(d_mid / 2.0, h_mid,\n             align=(Align.CENTER, Align.MIN)).locations(0, 0, h_base)\n    # Top cylinder stacked on middle\n    Cylinder(d_top / 2.0, h_top,\n             align=(Align.CENTER, Align.MIN)).locations(0, 0, h_base + h_mid)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 25.9,
+   "usage": {
+    "input_tokens": 5592,
+    "output_tokens": 1810
+   },
+   "plan": "Reading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (centered on Z axis):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix: in build123d 0.10 the primitive objects (`Cylinder`, etc.) do not expose a `.locations()` method \u2014 positioning is done with the `Locations(...)` context manager (or the `pos` argument). I now wrap each stacked cylinder in a `Locations(0, 0, z)` block so its local origin (centered in XY, bottom at local z=0 via `align=(Align.CENTER, Align.MIN)`) is translated to the correct stack height.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (centered on Z axis):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix: in build123d 0.10 the primitive objects (`Cylinder`, etc.) do not expose a `.locations()` method \u2014 positioning is done with the `Locations(...)` context manager (or the `pos` argument). I now wrap each stacked cylinder in a `Locations(0, 0, z)` block so its local origin (centered in XY, bottom at local z=0 via `align=(Align.CENTER, Align.MIN)`) is translated to the correct stack height.\n</plan>\n```python\n# Bearing block - three-tier cylindrical stack\nimport build123d as b\nfrom build123d import *\n\n# Dimensions read from the drawing\nd_base = 48.0   # mm, base flange diameter (Top view outer circle)\nd_mid  = 24.0   # mm, middle cylinder diameter (Top view middle circle)\nd_top  = 14.0   # mm, top cylinder diameter (Top view inner circle)\n\nh_base = 17.0   # mm, base flange height (Right view)\nh_mid  = 29.0   # mm, middle cylinder height (Right view)\nh_top  = 10.0   # mm, top cylinder height (Right view)\n\n# Derived values\nh_total = h_base + h_mid + h_top   # 56 mm, matches overall dimension\n\nwith BuildPart() as part:\n    # Base flange: centered in XY, bottom at z=0\n    Cylinder(d_base / 2.0, h_base, align=(Align.CENTER, Align.MIN))\n    # Middle cylinder stacked on base\n    with Locations(0, 0, h_base):\n        Cylinder(d_mid / 2.0, h_mid, align=(Align.CENTER, Align.MIN))\n    # Top cylinder stacked on middle\n    with Locations(0, 0, h_base + h_mid):\n        Cylinder(d_top / 2.0, h_top, align=(Align.CENTER, Align.MIN))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 20.2,
+   "usage": {
+    "input_tokens": 6451,
+    "output_tokens": 1415
+   },
+   "plan": "Reading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (centered on Z axis):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix: `Locations(...)` rejected three positional ints in this build123d version. I drop `Locations` entirely and position each stacked cylinder with the primitive's own `pos=(x, y, z)` argument combined with `align=(Align.CENTER, Align.MIN)` (centered in XY, bottom face at the local origin, then translated to the stack height). This is the most robust form.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (centered on Z axis):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix: `Locations(...)` rejected three positional ints in this build123d version. I drop `Locations` entirely and position each stacked cylinder with the primitive's own `pos=(x, y, z)` argument combined with `align=(Align.CENTER, Align.MIN)` (centered in XY, bottom face at the local origin, then translated to the stack height). This is the most robust form.\n</plan>\n```python\n# Bearing block - three-tier cylindrical stack\nimport build123d as b\nfrom build123d import *\n\n# Dimensions read from the drawing\nd_base = 48.0   # mm, base flange diameter (Top view outer circle)\nd_mid  = 24.0   # mm, middle cylinder diameter (Top view middle circle)\nd_top  = 14.0   # mm, top cylinder diameter (Top view inner circle)\n\nh_base = 17.0   # mm, base flange height (Right view)\nh_mid  = 29.0   # mm, middle cylinder height (Right view)\nh_top  = 10.0   # mm, top cylinder height (Right view)\n\n# Derived values\nh_total = h_base + h_mid + h_top   # 56 mm, matches overall dimension\n\nwith BuildPart() as part:\n    # Base flange: centered in XY, bottom at z=0\n    Cylinder(d_base / 2.0, h_base, align=(Align.CENTER, Align.MIN))\n    # Middle cylinder stacked on base (bottom at z = h_base)\n    Cylinder(d_mid / 2.0, h_mid,\n             align=(Align.CENTER, Align.MIN), pos=(0, 0, h_base))\n    # Top cylinder stacked on middle (bottom at z = h_base + h_mid)\n    Cylinder(d_top / 2.0, h_top,\n             align=(Align.CENTER, Align.MIN), pos=(0, 0, h_base + h_mid))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 4,
+   "exec_ok": false
+  },
+  {
+   "turn": 5,
+   "t_call_s": 114.9,
+   "usage": {
+    "input_tokens": 7252,
+    "output_tokens": 7551
+   },
+   "plan": "Reading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered on the Z axis.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (concentric, stacked in Z):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix for this build123d 0.10 build:\n- `Cylinder` has no `.locations()` method and no `pos=` keyword (both rejected earlier).\n- `Locations(0, 0, z)` (three bare ints) is rejected \u2014 its `__init__` iterates over each argument expecting a *point* (tuple/Vec/list), so a single 3\u2011tuple must be passed: `Locations((0, 0, z))`.\n- I drop the ambiguous `align=` and rely on the default `Cylinder` placement; because all three cylinders share the same default XY placement they remain concentric, and only the Z offset (via `Locations`) differs. The part's absolute origin is irrelevant, only orientation/stacking matters.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered on the Z axis.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (concentric, stacked in Z):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix for this build123d 0.10 build:\n- `Cylinder` has no `.locations()` method and no `pos=` keyword (both rejected earlier).\n- `Locations(0, 0, z)` (three bare ints) is rejected \u2014 its `__init__` iterates over each argument expecting a *point* (tuple/Vec/list), so a single 3\u2011tuple must be passed: `Locations((0, 0, z))`.\n- I drop the ambiguous `align=` and rely on the default `Cylinder` placement; because all three cylinders share the same default XY placement they remain concentric, and only the Z offset (via `Locations`) differs. The part's absolute origin is irrelevant, only orientation/stacking matters.\n</plan>\n```python\n# Bearing block - three-tier cylindrical stack\nimport build123d as b\nfrom build123d import *\n\n# Dimensions read from the drawing\nd_base = 48.0   # mm, base flange diameter (Top view outer circle)\nd_mid  = 24.0   # mm, middle cylinder diameter (Top view middle circle)\nd_top  = 14.0   # mm, top cylinder diameter (Top view inner circle)\n\nh_base = 17.0   # mm, base flange height (Right view)\nh_mid  = 29.0   # mm, middle cylinder height (Right view)\nh_top  = 10.0   # mm, top cylinder height (Right view)\n\n# Derived values\nh_total = h_base + h_mid + h_top   # 56 mm, matches overall dimension\n\nwith BuildPart() as part:\n    # Base flange at origin (all cylinders share the same default XY center -> concentric)\n    Cylinder(d_base / 2.0, h_base)\n    # Middle cylinder stacked on base (bottom at z = h_base)\n    with Locations((0, 0, h_base)):\n        Cylinder(d_mid / 2.0, h_mid)\n    # Top cylinder stacked on middle (bottom at z = h_base + h_mid)\n    with Locations((0, 0, h_base + h_mid)):\n        Cylinder(d_top / 2.0, h_top)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 5,
+   "exec_ok": false
+  },
+  {
+   "turn": 6,
+   "t_call_s": 39.6,
+   "usage": {
+    "input_tokens": 8306,
+    "output_tokens": 2606
+   },
+   "plan": "Reading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered on the Z axis.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (concentric, stacked in Z):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix for this build123d 0.10 build (geometry now builds cleanly; only the export target was wrong):\n- `export_step` requires a `Part`/`Shape`, not the `BuildPart` context manager. The finished solid is `part.part` (the error hint \"<BuildPart>.part.wrapped\" confirms this). So export `part.part`.\n- For robustness I now pass the explicit 3\u2011tuple `align=(Align.CENTER, Align.CENTER, Align.MIN)` to every `Cylinder` (centered in X/Y, base at local z=0), so concentricity and stacking do not depend on defaults. Z offsets are applied with `Locations((0, 0, z))` (a single 3\u2011tuple, which this build accepts).",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- Top view: three concentric circles \u2014 outer \u230048 (base flange), middle \u230024 (middle cylinder), inner \u230014 (top cylinder). Axisymmetric, all centered on the Z axis.\n- Right view: three stacked tiers. Z chain: 17 + 29 + 10 = 56, matching the overall 56 dimension. Widths scale to 48 / 24 / 14.\n- ISO view: confirms three-tier cylindrical stack.\n\nFeature list (concentric, stacked in Z):\n1. Base flange: \u230048 \u00d7 17 (z 0\u201317).\n2. Middle cylinder: \u230024 \u00d7 29 (z 17\u201346).\n3. Top cylinder: \u230014 \u00d7 10 (z 46\u201356).\n\nFix for this build123d 0.10 build (geometry now builds cleanly; only the export target was wrong):\n- `export_step` requires a `Part`/`Shape`, not the `BuildPart` context manager. The finished solid is `part.part` (the error hint \"<BuildPart>.part.wrapped\" confirms this). So export `part.part`.\n- For robustness I now pass the explicit 3\u2011tuple `align=(Align.CENTER, Align.CENTER, Align.MIN)` to every `Cylinder` (centered in X/Y, base at local z=0), so concentricity and stacking do not depend on defaults. Z offsets are applied with `Locations((0, 0, z))` (a single 3\u2011tuple, which this build accepts).\n</plan>\n```python\n# Bearing block - three-tier cylindrical stack\nimport build123d as b\nfrom build123d import *\n\n# Dimensions read from the drawing\nd_base = 48.0   # mm, base flange diameter (Top view outer circle)\nd_mid  = 24.0   # mm, middle cylinder diameter (Top view middle circle)\nd_top  = 14.0   # mm, top cylinder diameter (Top view inner circle)\n\nh_base = 17.0   # mm, base flange height (Right view)\nh_mid  = 29.0   # mm, middle cylinder height (Right view)\nh_top  = 10.0   # mm, top cylinder height (Right view)\n\n# Derived values\nh_total = h_base + h_mid + h_top   # 56 mm, matches overall dimension\n\n# Each cylinder: centered in X/Y, base at local z=0, then lifted in Z\ncyl_align = (Align.CENTER, Align.CENTER, Align.MIN)\n\nwith BuildPart() as part:\n    # Base flange at origin\n    Cylinder(d_base / 2.0, h_base, align=cyl_align)\n    # Middle cylinder stacked on base (base at z = h_base)\n    with Locations((0, 0, h_base)):\n        Cylinder(d_mid / 2.0, h_mid, align=cyl_align)\n    # Top cylinder stacked on middle (base at z = h_base + h_mid)\n    with Locations((0, 0, h_base + h_mid)):\n        Cylinder(d_top / 2.0, h_top, align=cyl_align)\n\n# Export the finished solid (part.part is the resulting Part/Shape)\nexport_step(part.part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 6,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     48.0,
+     48.0,
+     56.0
+    ],
+    "volume_mm3": 45373.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     7.0,
+     12.0,
+     24.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 7,
+   "t_call_s": 7.2,
+   "usage": {
+    "input_tokens": 11493,
+    "output_tokens": 433
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std06_shaft",
+  "split": "std",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9445,
+  "ag_final_cand": 6,
+  "best_iou": 0.9445,
+  "best_cand": 6,
+  "n_calls": 7,
+  "n_candidates": 6,
+  "stop_reason": "final",
+  "t_singleshot_s": 175.5,
+  "t_agentic_s": 419.4
+ },
+ "per_candidate_iou": {
+  "6": 0.9445
+ }
+}

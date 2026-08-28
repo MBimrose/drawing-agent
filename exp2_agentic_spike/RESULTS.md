@@ -3,9 +3,11 @@
 **Headline: the agentic loop beats single-shot with the SAME model on the same
 drawings — Kimi K3: 0.738 → 0.856 mean centered IoU (+0.118 overall; +0.149 on
 indirectly-dimensioned "hard" parts, +0.087 on standard parts), exec success
-17/20 → 20/20, at a mean cost of 2.3 model calls and ~10 s extra wall-clock per
-part. The lift comes almost entirely from repairing failed turn-1 attempts;
-the loop never regressed a part.**
+17/20 → 20/20, at a mean cost of 2.3 model calls and ~8% extra wall-clock per
+part; the loop never regressed a part. On a champion-class solver (qwen3.8-27b,
+the drawing-vlm base) the effect is decisive: 0.128 → 0.728 (+0.600), exec 5/20
+→ 20/20, STaR-gate (IoU ≥ 0.8) yield 0/20 → 9/20. Verdict: the agentic data
+engine is justified.**
 
 ## Setup
 
@@ -114,10 +116,106 @@ explicit FINAL — none hit the 12-call budget.)
   are chained parts. Direction matches the cadgenbench finding, magnitude
   smaller (Kimi chains competently: e.g. it summed 28+21+17=66 in its plan).
 
-## Secondary run — qwen3.8-27b (drawing-vlm base)
+## Secondary run — qwen3.8-27b (drawing-vlm base), fair output budget (24k)
 
-*(pending)*
+Same 20 drawings, same prompts, same two arms, `--max-tokens 24000`
+(`artifacts/results_qwen38b.json`):
 
-## Verdict
+| split | n | single-shot | agentic | delta | ss exec | ag exec | mean calls | mean t_ss | mean t_ag |
+|---|---|---|---|---|---|---|---|---|---|
+| std | 10 | 0.101 | 0.708 | **+0.607** | 2/10 | 10/10 | 4.2 | 210 s | 407 s |
+| hard | 10 | 0.155 | 0.748 | **+0.592** | 3/10 | 10/10 | 4.4 | 184 s | 423 s |
+| ALL | 20 | 0.128 | 0.728 | **+0.600** | 5/20 | 20/20 | 4.3 | 197 s | 415 s |
+
+For the weaker, champion-class model the loop is not an increment — it is the
+difference between a broken pipeline and a working one:
+
+- **Single-shot passes the STaR 0.8 acceptance gate on 0/20 parts; agentic on
+  9/20.** Turn-1 code almost always fails to execute (build123d API slips,
+  runaway `<think>`); the loop repairs execution on all 20 and then keeps
+  improving.
+- **Genuine geometry refinement, not just exec repair**: hard01 0.389 → 1.000,
+  hard05 0.515 → 1.000 (qwen+loop fully solved the symmetric-chain part that
+  Kimi confidently got wrong at 0.644), hard06 0 → 0.989, hard07 0 → 1.000,
+  std07 0 → 0.981, std06 0 → 0.945 — several of these took 3–5 feedback rounds
+  of comparing its own re-render against the drawing.
+- One regression, −0.007 (std08): the weak model revised a mediocre candidate
+  into a marginally worse one and FINAL'd. Per-candidate scoring shows
+  final ≈ best on every part (max gap 0.007), so "trust the model's FINAL" is a
+  sound stopping rule even for the weak solver.
+- Cost: 4.3 calls and 2.1× single-shot wall-clock per part.
+
+### Footnote — output-budget sensitivity (first qwen run, 8k)
+
+The first qwen run (`artifacts/results_qwen38.json`, max_tokens 8000 → router
+delivered exactly 7600 output tokens/call) had turn 1 truncate mid-`<think>`
+on 19/20 parts: single-shot 0.026 / exec 1/20, agentic 0.420 / exec 12/20, and
+8 parts died on three consecutive no-code replies. Two lessons: (a) thinking
+models need a large completion budget before "single-shot capability" is even
+measurable; (b) even budget-starved, the loop quadrupled usable output — extra
+turns partially substitute for missing thinking budget.
+
+## Deliverables
+
+- `artifacts/results.json` (Kimi), `results_qwen38b.json`, `results_qwen38.json`
+  — per-part records; `harness/summarize.py` renders the tables above.
+- `trajectories/*.json` — full turn-by-turn trajectories (plan, code, per-turn
+  measurements, usage, per-candidate IoU) for every part and both models
+  (`trajectories/qwen38b/` for the secondary).
+- `trajectories/accepted/` — STaR-gate (IoU ≥ 0.8) plan+code pairs: **16/20
+  Kimi**, 9/20 qwen38b. Plans contain explicit chain arithmetic ("X is given
+  only as a component chain: 28 + 21 + 17 = 66") — precisely the reasoning
+  rft_v3 wants to distill.
+- Dataset (drawings + GT code/STEP/STL + placed-dimension inventories) under
+  `artifacts/` (gitignored, regenerable via `gen/generate_dataset.py`).
+
+## Verdict — is an agentic data engine for the STaR loop justified?
+
+**Yes.** Three findings, in order of importance:
+
+1. **For the champion-class model the loop is the pipeline.** On the
+   drawing-vlm base model the acceptance-gate yield went 0/20 → 9/20 (+0.600
+   mean IoU). A STaR engine that samples single-shot from a base/weak policy
+   harvests almost nothing from fresh drawing families; the same policy inside
+   the loop produces accepted trajectories at a usable rate, including full
+   solves of indirect-dimensioned parts. The trajectories also embed the
+   *process* (chain arithmetic, feedback-driven revision) rather than just the
+   answer.
+2. **For a strong teacher the loop is cheap insurance with a real tail win.**
+   Kimi: +0.118 mean, entirely from rescuing the 3/20 turn-1 failures
+   (+1.000/+0.860/+0.483), 0 regressions, 2.3 calls, +8% wall-clock. On the
+   hard (indirect) split the delta is larger (+0.149 vs +0.087) — the question
+   the experiment was asked. But on parts whose turn-1 code already executed,
+   refinement gains were ≤0.005 — a strong model rarely revises its reading.
+3. **The loop's blind spot is confident misreads, and it is structural.** Every
+   residual Kimi miss (5 parts, incl. both one-sided chain sums 17+29 vs
+   17+29+17) survived because measurements/self-renders of your OWN part cannot
+   contradict a wrong belief about the TARGET. The fix is a sharper comparison
+   signal: render-vs-drawing overlay diff, or an independent critic that
+   re-reads the drawing (ties directly into exp1's critic-reranker question).
+
+**Recommendation for rft_v3**: build the agentic engine with the exact feedback
+stack used here (exec + stderr, bbox/volume/face measurements phrased as
+numbers not verdicts, one self-render per turn), gate acceptance on GT IoU ≥
+0.8 *outside* the loop, and add an overlay/critic comparison signal to attack
+the misread tail. Expected cost at Kimi-teacher quality: ~2.3 calls/part;
+at champion quality: ~4.3 calls/part for a yield single-shot cannot deliver
+at all.
+
+## Reproduce
+
+```bash
+# dataset (20 parts + drawings), system python 3.11 w/ build123d 0.10:
+/software/python-3.11.1/bin/python3.11 gen/generate_dataset.py
+# arms:
+python3 harness/run_arms.py --workers 5                                   # Kimi
+python3 harness/run_arms.py --workers 10 --model claude-qwen3.8-27b \
+        --tag qwen38b --max-tokens 24000                                  # secondary
+python3 harness/summarize.py [artifacts/results_qwen38b.json]
+```
+
+Hygiene: solver ran remotely via the router; no VL server was launched on
+wpk-serv-06 and its GPUs were never touched by this experiment.
+
 
 *(pending)*

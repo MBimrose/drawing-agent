@@ -1,0 +1,108 @@
+{
+ "uid": "std00_steps3",
+ "split": "std",
+ "family": "steps3",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 301.7,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7727
+   },
+   "plan": "View reading:\n- Top view: overall rectangle 85 (X) \u00d7 31 (Y). Two internal lines split the length into segments; dimensioned chain: 37 (middle segment) + 29 (right segment), and the overall 85, so left segment = 85 \u2212 37 \u2212 29 = 19.\n- Right view: overall height 34 (Z); a horizontal edge 15 below the top, so the lower portion height = 34 \u2212 15 = 19. Width matches 31 (Y).\n- ISO: confirms a stepped block \u2014 a lower platform with a raised band.\n\nDimension chains:\n- X: 19 + 37 + 29 = 85 (overall).\n- Y: 31 (single overall).\n- Z: 19 (base) + 15 (raised band) = 34 (overall).\n\nFeature list:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 long (X from 19 to 56) \u00d7 31 wide \u00d7 15 high, sitting on the base (top at Z=34).\n- No holes/fillets dimensioned.\n\nConstruction: two boxes (base + pad) in one BuildPart.",
+   "text": "\n\n<plan>\nView reading:\n- Top view: overall rectangle 85 (X) \u00d7 31 (Y). Two internal lines split the length into segments; dimensioned chain: 37 (middle segment) + 29 (right segment), and the overall 85, so left segment = 85 \u2212 37 \u2212 29 = 19.\n- Right view: overall height 34 (Z); a horizontal edge 15 below the top, so the lower portion height = 34 \u2212 15 = 19. Width matches 31 (Y).\n- ISO: confirms a stepped block \u2014 a lower platform with a raised band.\n\nDimension chains:\n- X: 19 + 37 + 29 = 85 (overall).\n- Y: 31 (single overall).\n- Z: 19 (base) + 15 (raised band) = 34 (overall).\n\nFeature list:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 long (X from 19 to 56) \u00d7 31 wide \u00d7 15 high, sitting on the base (top at Z=34).\n- No holes/fillets dimensioned.\n\nConstruction: two boxes (base + pad) in one BuildPart.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nL = 85.0            # mm, overall length (Top view)\nW = 31.0            # mm, overall width/depth (Top view)\nH = 34.0            # mm, overall height (Right view)\ntop_band = 15.0     # mm, height of raised band (Right view, from top edge to step line)\nseg_mid = 37.0      # mm, middle segment length (Top view)\nseg_right = 29.0    # mm, right segment length (Top view)\n\n# --- derived values ---\nbase_h = H - top_band                  # 19 mm, height of lower portion\nseg_left = L - seg_mid - seg_right     # 19 mm, left segment (chain: 19+37+29=85)\npad_x = seg_left + seg_mid / 2 - L / 2 # X center of raised band relative to part center\n\nwith BuildPart() as bp:\n    # lower base block, full footprint\n    Box(L, W, base_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # raised band on top of the middle segment\n    Box(seg_mid, W, top_band,\n        align=(Align.CENTER, Align.CENTER, Align.MIN),\n        locations=Location(pad_x, 0, base_h))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 65.7,
+   "usage": {
+    "input_tokens": 4912,
+    "output_tokens": 4347
+   },
+   "plan": "Reading unchanged (same dimensions as before):\n- Top: overall 85 (X) \u00d7 31 (Y); chain 19 + 37 + 29 = 85 (left segment derived).\n- Right: overall height 34 (Z); step line 15 below top \u2192 base height 34 \u2212 15 = 19.\n- ISO: stepped block = base platform + raised middle band.\n\nFeature list:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 (X) \u00d7 31 (Y) \u00d7 15 (Z), centered on the middle segment, top at Z = 34.\n\nCode fix: the previous `Location(pad_x, 0, base_h)` failed because build123d 0.10's 3\u2011positional\u2011float `Location` branch rejects a non\u2011float (`0` is `int`). I now build the translation from a `Vector` (1\u2011arg form), which accepts ints/floats uniformly: `locations=Location(Vector(pad_x, 0, base_h))`.",
+   "text": "\n\n<plan>\nReading unchanged (same dimensions as before):\n- Top: overall 85 (X) \u00d7 31 (Y); chain 19 + 37 + 29 = 85 (left segment derived).\n- Right: overall height 34 (Z); step line 15 below top \u2192 base height 34 \u2212 15 = 19.\n- ISO: stepped block = base platform + raised middle band.\n\nFeature list:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 (X) \u00d7 31 (Y) \u00d7 15 (Z), centered on the middle segment, top at Z = 34.\n\nCode fix: the previous `Location(pad_x, 0, base_h)` failed because build123d 0.10's 3\u2011positional\u2011float `Location` branch rejects a non\u2011float (`0` is `int`). I now build the translation from a `Vector` (1\u2011arg form), which accepts ints/floats uniformly: `locations=Location(Vector(pad_x, 0, base_h))`.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nL = 85.0            # mm, overall length (Top view)\nW = 31.0            # mm, overall width/depth (Top view)\nH = 34.0            # mm, overall height (Right view)\ntop_band = 15.0     # mm, height of raised band (Right view, top edge to step line)\nseg_mid = 37.0      # mm, middle segment length (Top view)\nseg_right = 29.0    # mm, right segment length (Top view)\n\n# --- derived values ---\nbase_h = H - top_band                  # 19 mm, height of lower portion\nseg_left = L - seg_mid - seg_right     # 19 mm, left segment (chain: 19+37+29=85)\npad_x = seg_left + seg_mid / 2 - L / 2 # X center of raised band relative to part center\n\nwith BuildPart() as bp:\n    # lower base block, full footprint\n    Box(L, W, base_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # raised band on top of the middle segment (translation via Vector to avoid\n    # the strict-float check in Location's 3-positional-arg branch)\n    Box(seg_mid, W, top_band,\n        align=(Align.CENTER, Align.CENTER, Align.MIN),\n        locations=Location(Vector(pad_x, 0, base_h)))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 59.3,
+   "usage": {
+    "input_tokens": 5686,
+    "output_tokens": 3783
+   },
+   "plan": "Reading unchanged (dimensions identical to prior attempts):\n- Top: overall 85 (X) \u00d7 31 (Y); chain 19 + 37 + 29 = 85 (left segment derived as 85 \u2212 37 \u2212 29).\n- Right: overall height 34 (Z); step line 15 below top \u2192 base height 34 \u2212 15 = 19.\n- ISO: stepped block = full base platform + raised middle band.\n\nFeature list:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 (X) \u00d7 31 (Y) \u00d7 15 (Z), over the middle segment, top at Z = 34.\n\nCode fix: build123d 0.10's `Box` has no `locations` keyword (that is a context manager). Position is set with the `pos` + `align` keywords. I place each box by its MIN corner (`align=(MIN,MIN,MIN)`) using `pos=(x_min, y_min, z_min)`, and I make every `pos` value a float (the earlier `Location` failure was triggered by an int literal inside a 3\u2011arg constructor). This avoids any explicit `Location`/`locations` call entirely.",
+   "text": "\n\n<plan>\nReading unchanged (dimensions identical to prior attempts):\n- Top: overall 85 (X) \u00d7 31 (Y); chain 19 + 37 + 29 = 85 (left segment derived as 85 \u2212 37 \u2212 29).\n- Right: overall height 34 (Z); step line 15 below top \u2192 base height 34 \u2212 15 = 19.\n- ISO: stepped block = full base platform + raised middle band.\n\nFeature list:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 (X) \u00d7 31 (Y) \u00d7 15 (Z), over the middle segment, top at Z = 34.\n\nCode fix: build123d 0.10's `Box` has no `locations` keyword (that is a context manager). Position is set with the `pos` + `align` keywords. I place each box by its MIN corner (`align=(MIN,MIN,MIN)`) using `pos=(x_min, y_min, z_min)`, and I make every `pos` value a float (the earlier `Location` failure was triggered by an int literal inside a 3\u2011arg constructor). This avoids any explicit `Location`/`locations` call entirely.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nL = 85.0            # mm, overall length (Top view)\nW = 31.0            # mm, overall width/depth (Top view)\nH = 34.0            # mm, overall height (Right view)\ntop_band = 15.0     # mm, height of raised band (Right view, top edge to step line)\nseg_mid = 37.0      # mm, middle segment length (Top view)\nseg_right = 29.0    # mm, right segment length (Top view)\n\n# --- derived values ---\nbase_h = H - top_band                  # 19 mm, height of lower portion\nseg_left = L - seg_mid - seg_right     # 19 mm, left segment (chain: 19+37+29=85)\n\n# min-corner coordinates (all floats) for MIN-aligned placement\nx0 = -L / 2.0                          # -42.5\ny0 = -W / 2.0                          # -15.5\nz0 = 0.0\npad_x0 = x0 + seg_left                 # -23.5, left edge of raised band\n\nwith BuildPart() as bp:\n    # lower base block, full footprint (min corner at x0,y0,z0)\n    Box(L, W, base_h,\n        align=(Align.MIN, Align.MIN, Align.MIN),\n        pos=(x0, y0, z0))\n    # raised band over the middle segment, sitting on the base\n    Box(seg_mid, W, top_band,\n        align=(Align.MIN, Align.MIN, Align.MIN),\n        pos=(pad_x0, y0, base_h))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 86.0,
+   "usage": {
+    "input_tokens": 6559,
+    "output_tokens": 5455
+   },
+   "plan": "Reading (unchanged):\n- Top: overall 85 (X) \u00d7 31 (Y); chain 19 + 37 + 29 = 85 (left segment = 85 \u2212 37 \u2212 29 = 19).\n- Right: overall height 34 (Z); step line 15 below top \u2192 base height 34 \u2212 15 = 19.\n- ISO: stepped block = full base platform + raised middle band.\n\nFeatures:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 (X) \u00d7 31 (Y) \u00d7 15 (Z), over the middle segment, top at Z = 34.\n\nCode fix: this build123d build's `Box` accepts `align` but **not** `pos`/`locations` (both rejected). So I position by:\n1. `align=(Align.MIN, Align.MIN, Align.MIN)` so each box's min corner sits at its local origin, and\n2. a `Locations(Location(Vector(...)))` context manager to translate the raised band to its min corner (seg_left, 0, base_h) = (19, 0, 19).\nThe base is added at the default origin. Both are unioned by `BuildPart`. All `Vector` components are floats.",
+   "text": "\n\n<plan>\nReading (unchanged):\n- Top: overall 85 (X) \u00d7 31 (Y); chain 19 + 37 + 29 = 85 (left segment = 85 \u2212 37 \u2212 29 = 19).\n- Right: overall height 34 (Z); step line 15 below top \u2192 base height 34 \u2212 15 = 19.\n- ISO: stepped block = full base platform + raised middle band.\n\nFeatures:\n- Base block: 85 \u00d7 31 \u00d7 19.\n- Raised band: 37 (X) \u00d7 31 (Y) \u00d7 15 (Z), over the middle segment, top at Z = 34.\n\nCode fix: this build123d build's `Box` accepts `align` but **not** `pos`/`locations` (both rejected). So I position by:\n1. `align=(Align.MIN, Align.MIN, Align.MIN)` so each box's min corner sits at its local origin, and\n2. a `Locations(Location(Vector(...)))` context manager to translate the raised band to its min corner (seg_left, 0, base_h) = (19, 0, 19).\nThe base is added at the default origin. Both are unioned by `BuildPart`. All `Vector` components are floats.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nL = 85.0            # mm, overall length (Top view)\nW = 31.0            # mm, overall width/depth (Top view)\nH = 34.0            # mm, overall height (Right view)\ntop_band = 15.0     # mm, height of raised band (Right view, top edge to step line)\nseg_mid = 37.0      # mm, middle segment length (Top view)\nseg_right = 29.0    # mm, right segment length (Top view)\n\n# --- derived values ---\nbase_h = H - top_band                  # 19 mm, height of lower portion\nseg_left = L - seg_mid - seg_right     # 19 mm, left segment (chain: 19+37+29=85)\n\n# min-corner translation for the raised band (all floats)\npad_x_min = seg_left                   # 19.0\npad_y_min = 0.0\npad_z_min = base_h                     # 19.0\n\nwith BuildPart() as bp:\n    # lower base block, full footprint (min corner at origin)\n    Box(L, W, base_h, align=(Align.MIN, Align.MIN, Align.MIN))\n    # raised band over the middle segment, sitting on the base\n    with Locations(Location(Vector(pad_x_min, pad_y_min, pad_z_min))):\n        Box(seg_mid, W, top_band, align=(Align.MIN, Align.MIN, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 4,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     85.0,
+     31.0,
+     34.0
+    ],
+    "volume_mm3": 67270.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 20.3,
+   "usage": {
+    "input_tokens": 8851,
+    "output_tokens": 1294
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std00_steps3",
+  "split": "std",
+  "family": "steps3",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6688,
+  "ag_final_cand": 4,
+  "best_iou": 0.6688,
+  "best_cand": 4,
+  "n_calls": 5,
+  "n_candidates": 4,
+  "stop_reason": "final",
+  "t_singleshot_s": 304.5,
+  "t_agentic_s": 546.7
+ },
+ "per_candidate_iou": {
+  "4": 0.6688
+ }
+}

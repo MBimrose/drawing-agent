@@ -1,0 +1,73 @@
+{
+ "uid": "std05_shaft",
+ "split": "std",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 115.7,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7659
+   },
+   "plan": "Reading the views:\n- Left view (labeled Top/Front): concentric circles showing the part's axis viewed end-on: outer \u230038, middle \u230024, inner \u230016. The small square is just the label box for the \u230016 note.\n- Right view: three stacked rectangles whose widths match the three diameters (38 : 24 : 16 \u2248 220 : 140 : 90 px). Height chain (component dimensions, summed for overall): bottom (\u230038) = 26, middle (\u230024) = 19, top (\u230016) = 22 \u2192 overall height = 26 + 19 + 22 = 67.\n- ISO view: confirms a solid coaxial stack of three cylinders (large flange at bottom, medium boss, small top boss); no through-hole is visible, so the part is solid.\n\nFeature list:\n1. Base flange cylinder: \u230038, height 26, from Z=0 to 26.\n2. Middle cylinder: \u230024, height 19, from Z=26 to 45.\n3. Top cylinder: \u230016, height 22, from Z=45 to 67.\nAll coaxial along Z. No fillets/chamfers dimensioned; no holes to cut.",
+   "text": "\n\n<plan>\nReading the views:\n- Left view (labeled Top/Front): concentric circles showing the part's axis viewed end-on: outer \u230038, middle \u230024, inner \u230016. The small square is just the label box for the \u230016 note.\n- Right view: three stacked rectangles whose widths match the three diameters (38 : 24 : 16 \u2248 220 : 140 : 90 px). Height chain (component dimensions, summed for overall): bottom (\u230038) = 26, middle (\u230024) = 19, top (\u230016) = 22 \u2192 overall height = 26 + 19 + 22 = 67.\n- ISO view: confirms a solid coaxial stack of three cylinders (large flange at bottom, medium boss, small top boss); no through-hole is visible, so the part is solid.\n\nFeature list:\n1. Base flange cylinder: \u230038, height 26, from Z=0 to 26.\n2. Middle cylinder: \u230024, height 19, from Z=26 to 45.\n3. Top cylinder: \u230016, height 22, from Z=45 to 67.\nAll coaxial along Z. No fillets/chamfers dimensioned; no holes to cut.\n</plan>\n\n```python\n# Flange Plate (FLA-3476-2) reconstructed with build123d\nfrom build123d import *\n\n# --- Dimensions read from the drawing (mm) ---\nflange_d = 38.0   # mm  outer flange diameter (Top view, Right view bottom width)\nmid_d    = 24.0   # mm  middle cylinder diameter (Top view, Right view middle width)\ntop_d    = 16.0   # mm  top cylinder diameter (Top view, Right view top width)\n\nflange_h = 26.0   # mm  bottom segment height (Right view)\nmid_h    = 19.0   # mm  middle segment height (Right view)\ntop_h    = 22.0   # mm  top segment height (Right view)\n\n# Derived stack positions (dimension chain: 26 + 19 + 22 = 67 overall)\nz_mid  = flange_h                 # 26\nz_top  = flange_h + mid_h         # 45\ntotal_h = z_top + top_h           # 67\n\n# --- Build the coaxial stack of cylinders ---\nc_flange = Cylinder(radius=flange_d / 2, height=flange_h,\n                    align=(Align.CENTER, Align.CENTER, Align.MIN))\nc_mid = Cylinder(radius=mid_d / 2, height=mid_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN)).translate((0, 0, z_mid))\nc_top = Cylinder(radius=top_d / 2, height=top_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN)).translate((0, 0, z_top))\n\npart = c_flange.fuse(c_mid).fuse(c_top)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     37.98,
+     37.99,
+     67.0
+    ],
+    "volume_mm3": 42443.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0,
+     12.0,
+     19.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 20.4,
+   "usage": {
+    "input_tokens": 7556,
+    "output_tokens": 1196
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std05_shaft",
+  "split": "std",
+  "family": "shaft",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7745,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7745,
+  "ag_final_cand": 1,
+  "best_iou": 0.7745,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 118.4,
+  "t_agentic_s": 143.3
+ },
+ "per_candidate_iou": {
+  "1": 0.7745
+ }
+}

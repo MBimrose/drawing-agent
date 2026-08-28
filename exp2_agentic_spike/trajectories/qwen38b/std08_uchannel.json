@@ -1,0 +1,129 @@
+{
+ "uid": "std08_uchannel",
+ "split": "std",
+ "family": "uchannel",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 114.2,
+   "usage": {
+    "input_tokens": 4264,
+    "output_tokens": 7232
+   },
+   "plan": "Reading the drawing:\n- **Top view** (upper left): a rectangle 39 mm wide (X, horizontal on sheet) by 79 mm long (Y, vertical on sheet). Two internal lines run the full 79 mm length, each 9 mm in from the left and right edges (the \"9\" dimension is between the right internal line and the right edge; the left line is symmetric). These are the inner faces of two side walls.\n- **ISO view**: confirms the form \u2014 a flat base plate with a vertical wall rising from its edge(s), i.e. a U-channel / angle-bracket form. The wall height is comparable to the 39 mm width, consistent with an overall height of 39 mm.\n- No Front/Right view geometry is present, so the third axis is taken from the ISO proportions: overall height = 39 mm, wall/base thickness = 9 mm.\n\nDimension chains:\n- X: overall 39 (single dimension). Wall thickness 9 at each end \u2192 inner gap = 39 \u2212 2\u00b79 = 21.\n- Y: overall 79 (single dimension).\n- Z: overall 39 (from ISO proportion, equal to the 39 width); base and wall thickness 9.\n\nFeature list:\n- Base plate: 39 (X) \u00d7 79 (Y) \u00d7 9 (Z).\n- Two side walls at X = 0 and X = 39: 9 thick (X) \u00d7 79 long (Y) \u00d7 39 high (Z, overall).\n- No holes, fillets, or chamfers dimensioned.\n\nConstruction: union of one base box and two end-wall boxes in a single BuildPart.",
+   "text": "\n\n<plan>\nReading the drawing:\n- **Top view** (upper left): a rectangle 39 mm wide (X, horizontal on sheet) by 79 mm long (Y, vertical on sheet). Two internal lines run the full 79 mm length, each 9 mm in from the left and right edges (the \"9\" dimension is between the right internal line and the right edge; the left line is symmetric). These are the inner faces of two side walls.\n- **ISO view**: confirms the form \u2014 a flat base plate with a vertical wall rising from its edge(s), i.e. a U-channel / angle-bracket form. The wall height is comparable to the 39 mm width, consistent with an overall height of 39 mm.\n- No Front/Right view geometry is present, so the third axis is taken from the ISO proportions: overall height = 39 mm, wall/base thickness = 9 mm.\n\nDimension chains:\n- X: overall 39 (single dimension). Wall thickness 9 at each end \u2192 inner gap = 39 \u2212 2\u00b79 = 21.\n- Y: overall 79 (single dimension).\n- Z: overall 39 (from ISO proportion, equal to the 39 width); base and wall thickness 9.\n\nFeature list:\n- Base plate: 39 (X) \u00d7 79 (Y) \u00d7 9 (Z).\n- Two side walls at X = 0 and X = 39: 9 thick (X) \u00d7 79 long (Y) \u00d7 39 high (Z, overall).\n- No holes, fillets, or chamfers dimensioned.\n\nConstruction: union of one base box and two end-wall boxes in a single BuildPart.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nL = 79.0    # overall length, Y direction (Top view, vertical dim)\nW = 39.0    # overall width, X direction (Top view, horizontal dim)\nT = 9.0     # wall / base thickness (Top view, \"9\" dim)\nH = 39.0    # overall height, Z direction (ISO proportion, = width)\n\n# inner gap between the two walls (derived)\ninner_gap = W - 2 * T   # 21 mm\n\nwith BuildPart() as p:\n    # base plate\n    Box(W, L, T, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # side wall at X = 0 end\n    Box(T, L, H, align=(Align.MIN, Align.CENTER, Align.MIN))\n    # side wall at X = W end\n    Box(T, L, H, align=(Align.MAX, Align.CENTER, Align.MIN))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     39.0,
+     79.0,
+     39.0
+    ],
+    "volume_mm3": 70389.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 143.5,
+   "usage": {
+    "input_tokens": 7168,
+    "output_tokens": 8565
+   },
+   "plan": "Re-reading the views (the line-art is the full Top/Front/Right set of the same part):\n- **Top**: 39 (X) \u00d7 79 (Y) rectangle with two internal lines running the full length, 9 mm in from each side. These are the **side edges of a single central fin/ridge**, not the inner faces of two end walls. Side margins = 9 each, fin width = 39 \u2212 2\u00b79 = 21.\n- **Front** (XZ): an inverted\u2011T \u2014 a full\u2011width base with a **centered** vertical column rising from it. This is the key correction: my previous U\u2011channel had the raised material at the two *ends*, but the drawing shows it *centered*.\n- **Right** (YZ): 79 \u00d7 39 rectangle with a horizontal line near the bottom = top of the base plate (base thickness 9, overall height 39).\n\nDimension chains:\n- X: overall 39; fin width = 39 \u2212 2\u00b79 = 21 (centered).\n- Y: overall 79.\n- Z: overall 39; base thickness 9.\n\nFeature list:\n- Base plate 39 (X) \u00d7 79 (Y) \u00d7 9 (Z).\n- Central fin 21 (X) \u00d7 79 (Y) \u00d7 39 (Z), centered in X, rising to overall height 39.\n- No holes/fillets/chamfers.\n\nConstruction: union of one base box and one centered fin box.",
+   "text": "\n\n<plan>\nRe-reading the views (the line-art is the full Top/Front/Right set of the same part):\n- **Top**: 39 (X) \u00d7 79 (Y) rectangle with two internal lines running the full length, 9 mm in from each side. These are the **side edges of a single central fin/ridge**, not the inner faces of two end walls. Side margins = 9 each, fin width = 39 \u2212 2\u00b79 = 21.\n- **Front** (XZ): an inverted\u2011T \u2014 a full\u2011width base with a **centered** vertical column rising from it. This is the key correction: my previous U\u2011channel had the raised material at the two *ends*, but the drawing shows it *centered*.\n- **Right** (YZ): 79 \u00d7 39 rectangle with a horizontal line near the bottom = top of the base plate (base thickness 9, overall height 39).\n\nDimension chains:\n- X: overall 39; fin width = 39 \u2212 2\u00b79 = 21 (centered).\n- Y: overall 79.\n- Z: overall 39; base thickness 9.\n\nFeature list:\n- Base plate 39 (X) \u00d7 79 (Y) \u00d7 9 (Z).\n- Central fin 21 (X) \u00d7 79 (Y) \u00d7 39 (Z), centered in X, rising to overall height 39.\n- No holes/fillets/chamfers.\n\nConstruction: union of one base box and one centered fin box.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nW = 39.0    # overall width, X direction (Top view)\nL = 79.0    # overall length, Y direction (Top view)\nT = 9.0     # base thickness / fin side margin (Top & Front views)\nH = 39.0    # overall height, Z direction (Front/Right views)\n\n# central fin width (derived): overall width minus the two 9 mm side margins\nfin_w = W - 2 * T   # 21 mm\n\nwith BuildPart() as p:\n    # base plate\n    Box(W, L, T, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # central fin / ridge, centered in X, running the full length\n    Box(fin_w, L, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     39.0,
+     79.0,
+     39.0
+    ],
+    "volume_mm3": 77499.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 58.9,
+   "usage": {
+    "input_tokens": 7958,
+    "output_tokens": 4112
+   },
+   "plan": "Re-examining the original drawing's printed numbers, I had the wrong X extent. The distinct values are 79, 44, 26, 9, 30, 39, and they map as:\n- **Y (length)** = 79 (Top vertical, Right horizontal).\n- **Z (height)** = 39 overall (Front vertical, Right vertical); base thickness = 9, so fin above base = 30 (the \"30\" in Front).\n- **X (width)** = **44** overall (Top horizontal, Front horizontal) \u2014 *not* 39. Side margins = 9 each, central fin width = 26 (the \"26\" in Top/Front). Check: 9 + 26 + 9 = 44 \u2713.\n\nMy current solid used X = 39 and fin = 21, so its bounding box (39 \u00d7 79 \u00d7 39) is wrong on X, and the fin is too narrow. The aspect ratios in the original (Top \u2248 0.56 = 44/79; Front wider-than-tall = 44/39) confirm 44.\n\nCorrected feature list:\n- Base plate 44 (X) \u00d7 79 (Y) \u00d7 9 (Z).\n- Central fin 26 (X) \u00d7 79 (Y) \u00d7 39 (Z), centered in X.\n- No holes/fillets/chamfers.\n\nExpected bounding box 44 \u00d7 79 \u00d7 39; volume = 44\u00b779\u00b79 + 26\u00b779\u00b739 \u2212 26\u00b779\u00b79 = 92904 mm\u00b3.",
+   "text": "\n\n<plan>\nRe-examining the original drawing's printed numbers, I had the wrong X extent. The distinct values are 79, 44, 26, 9, 30, 39, and they map as:\n- **Y (length)** = 79 (Top vertical, Right horizontal).\n- **Z (height)** = 39 overall (Front vertical, Right vertical); base thickness = 9, so fin above base = 30 (the \"30\" in Front).\n- **X (width)** = **44** overall (Top horizontal, Front horizontal) \u2014 *not* 39. Side margins = 9 each, central fin width = 26 (the \"26\" in Top/Front). Check: 9 + 26 + 9 = 44 \u2713.\n\nMy current solid used X = 39 and fin = 21, so its bounding box (39 \u00d7 79 \u00d7 39) is wrong on X, and the fin is too narrow. The aspect ratios in the original (Top \u2248 0.56 = 44/79; Front wider-than-tall = 44/39) confirm 44.\n\nCorrected feature list:\n- Base plate 44 (X) \u00d7 79 (Y) \u00d7 9 (Z).\n- Central fin 26 (X) \u00d7 79 (Y) \u00d7 39 (Z), centered in X.\n- No holes/fillets/chamfers.\n\nExpected bounding box 44 \u00d7 79 \u00d7 39; volume = 44\u00b779\u00b79 + 26\u00b779\u00b739 \u2212 26\u00b779\u00b79 = 92904 mm\u00b3.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nW = 44.0     # overall width, X direction (Top & Front views)\nL = 79.0     # overall length, Y direction (Top & Right views)\nH = 39.0     # overall height, Z direction (Front & Right views)\nbase_t = 9.0 # base plate thickness, Z (Front: 39 - 30)\nmargin = 9.0 # side margin, X (Top/Front small dim)\n\n# central fin width (derived): overall width minus the two 9 mm side margins\nfin_w = W - 2 * margin          # 26 mm\n# fin height above the base (derived): overall height minus base thickness\nfin_above = H - base_t          # 30 mm  (matches the \"30\" in Front)\n\nwith BuildPart() as p:\n    # base plate\n    Box(W, L, base_t, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # central fin / ridge, centered in X, running the full length, to overall height\n    Box(fin_w, L, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     44.0,
+     79.0,
+     39.0
+    ],
+    "volume_mm3": 92904.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 19.1,
+   "usage": {
+    "input_tokens": 8770,
+    "output_tokens": 1136
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std08_uchannel",
+  "split": "std",
+  "family": "uchannel",
+  "ss_exec_ok": true,
+  "ss_iou": 0.2378,
+  "ag_exec_ok": true,
+  "ag_iou": 0.2308,
+  "ag_final_cand": 3,
+  "best_iou": 0.2378,
+  "best_cand": 1,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 118.5,
+  "t_agentic_s": 356.3
+ },
+ "per_candidate_iou": {
+  "1": 0.2378,
+  "2": 0.2241,
+  "3": 0.2308
+ }
+}

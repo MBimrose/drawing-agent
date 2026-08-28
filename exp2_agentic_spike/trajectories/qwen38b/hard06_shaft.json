@@ -1,0 +1,131 @@
+{
+ "uid": "hard06_shaft",
+ "split": "hard",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 117.9,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7537
+   },
+   "plan": "**View reading:**\n- **Top view:** three concentric circles \u2014 \u230042 (outer), \u230030 (middle), \u230018 (inner). These are the three coaxial cylindrical steps of the pump cover (axis vertical, Z).\n- **Right view:** three stacked rectangles giving the step heights: bottom = 26, middle = 21, top = 11. Widths match the diameters (42 / 30 / 18).\n- **Front view:** shows the top step, \u230018 wide and 11 high, confirming the top cylinder.\n- **ISO:** solid stepped cylinder, no holes, no fillets/chamfers.\n\n**Dimension chains:**\n- Z (height): 26 + 21 + 11 = 58 mm overall (component chain, no overall given).\n- X/Y: overall extent = \u230042 = 42 mm (single overall, consistent in Top and Right views).\n\n**Feature list:**\n1. Base cylinder: \u230042 \u00d7 26 high, z = 0\u202626.\n2. Middle cylinder: \u230030 \u00d7 21 high, z = 26\u202647.\n3. Top cylinder: \u230018 \u00d7 11 high, z = 47\u202658.\nNo holes, notches, or fillets.\n\n**Construction:** three centered cylinders translated to their base heights and unioned; axis along Z so Top view shows the circles.",
+   "text": "\n\n<plan>\n**View reading:**\n- **Top view:** three concentric circles \u2014 \u230042 (outer), \u230030 (middle), \u230018 (inner). These are the three coaxial cylindrical steps of the pump cover (axis vertical, Z).\n- **Right view:** three stacked rectangles giving the step heights: bottom = 26, middle = 21, top = 11. Widths match the diameters (42 / 30 / 18).\n- **Front view:** shows the top step, \u230018 wide and 11 high, confirming the top cylinder.\n- **ISO:** solid stepped cylinder, no holes, no fillets/chamfers.\n\n**Dimension chains:**\n- Z (height): 26 + 21 + 11 = 58 mm overall (component chain, no overall given).\n- X/Y: overall extent = \u230042 = 42 mm (single overall, consistent in Top and Right views).\n\n**Feature list:**\n1. Base cylinder: \u230042 \u00d7 26 high, z = 0\u202626.\n2. Middle cylinder: \u230030 \u00d7 21 high, z = 26\u202647.\n3. Top cylinder: \u230018 \u00d7 11 high, z = 47\u202658.\nNo holes, notches, or fillets.\n\n**Construction:** three centered cylinders translated to their base heights and unioned; axis along Z so Top view shows the circles.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nd_base = 42.0    # mm, base cylinder diameter   (Top: \u00d842 THRU)\nd_mid  = 30.0    # mm, middle cylinder diameter (Top: \u00d830 THRU)\nd_top  = 18.0    # mm, top cylinder diameter    (Top: \u00d818)\nh_base = 26.0    # mm, base step height         (Right view)\nh_mid  = 21.0    # mm, middle step height       (Right view)\nh_top  = 11.0    # mm, top step height          (Right / Front view)\n\n# ---- derived values ----\nH_total = h_base + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# ---- build the three coaxial cylinders, stacked from z = 0 ----\n# each Cylinder is created centered on the origin, then translated so its\n# base sits at the top of the previous step\nc_base = Cylinder(radius=d_base / 2, height=h_base, align=Align.CENTER).translate((0, 0, h_base / 2))\nc_mid  = Cylinder(radius=d_mid / 2,  height=h_mid,  align=Align.CENTER).translate((0, 0, h_base + h_mid / 2))\nc_top  = Cylinder(radius=d_top / 2,  height=h_top,  align=Align.CENTER).translate((0, 0, h_base + h_mid + h_top / 2))\n\n# ---- union into the finished solid ----\npart = c_base | c_mid | c_top\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 18.8,
+   "usage": {
+    "input_tokens": 4954,
+    "output_tokens": 1407
+   },
+   "plan": "Reading is unchanged (three coaxial stepped cylinders, axis vertical = Z):\n- **Top:** \u230042 / \u230030 / \u230018 concentric circles.\n- **Right:** step heights 26 / 21 / 11 \u2192 overall Z = 26 + 21 + 11 = 58 mm.\n- **Front:** top step \u230018 \u00d7 11, consistent.\n\n**Fix:** build123d 0.10 `Part` does not define the `|` (union) operator. I will build the solid inside a `BuildPart` context manager, where each placed `Cylinder` is added with the default `Mode.ADD`, producing a single fused solid. No other geometry changes.",
+   "text": "\n\n<plan>\nReading is unchanged (three coaxial stepped cylinders, axis vertical = Z):\n- **Top:** \u230042 / \u230030 / \u230018 concentric circles.\n- **Right:** step heights 26 / 21 / 11 \u2192 overall Z = 26 + 21 + 11 = 58 mm.\n- **Front:** top step \u230018 \u00d7 11, consistent.\n\n**Fix:** build123d 0.10 `Part` does not define the `|` (union) operator. I will build the solid inside a `BuildPart` context manager, where each placed `Cylinder` is added with the default `Mode.ADD`, producing a single fused solid. No other geometry changes.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nd_base = 42.0    # mm, base cylinder diameter   (Top: \u00d842 THRU)\nd_mid  = 30.0    # mm, middle cylinder diameter (Top: \u00d830 THRU)\nd_top  = 18.0    # mm, top cylinder diameter    (Top: \u00d818)\nh_base = 26.0    # mm, base step height         (Right view)\nh_mid  = 21.0    # mm, middle step height       (Right view)\nh_top  = 11.0    # mm, top step height          (Right / Front view)\n\n# ---- derived values ----\nH_total = h_base + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# ---- build the three coaxial cylinders, stacked from z = 0 ----\n# Each Cylinder is centered on the origin then translated so its base sits\n# on top of the previous step. Inside BuildPart the default Mode.ADD unions\n# them into one solid.\nwith BuildPart() as pump_cover:\n    Cylinder(radius=d_base / 2, height=h_base, align=Align.CENTER).translate((0, 0, h_base / 2))\n    Cylinder(radius=d_mid / 2,  height=h_mid,  align=Align.CENTER).translate((0, 0, h_base + h_mid / 2))\n    Cylinder(radius=d_top / 2,  height=h_top,  align=Align.CENTER).translate((0, 0, h_base + h_mid + h_top / 2))\n\npart = pump_cover.part()\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 33.8,
+   "usage": {
+    "input_tokens": 5678,
+    "output_tokens": 2403
+   },
+   "plan": "Geometry reading is unchanged \u2014 three coaxial stepped cylinders, axis vertical (Z):\n- **Top:** \u230042 / \u230030 / \u230018 concentric circles.\n- **Right:** step heights 26 / 21 / 11 \u2192 overall Z = 26 + 21 + 11 = 58 mm.\n- **Front:** top step \u230018 \u00d7 11, consistent.\n\n**Fix:** In build123d 0.10 the `BuildPart` context manager exposes the result via the **property** `.part`, not a method. The previous run executed the `BuildPart` block fine and only failed on `pump_cover.part()` (calling a `Part`). I drop the parentheses: `part = pump_cover.part`. The three placed cylinders are unioned by the default `Mode.ADD` inside the context.",
+   "text": "\n\n<plan>\nGeometry reading is unchanged \u2014 three coaxial stepped cylinders, axis vertical (Z):\n- **Top:** \u230042 / \u230030 / \u230018 concentric circles.\n- **Right:** step heights 26 / 21 / 11 \u2192 overall Z = 26 + 21 + 11 = 58 mm.\n- **Front:** top step \u230018 \u00d7 11, consistent.\n\n**Fix:** In build123d 0.10 the `BuildPart` context manager exposes the result via the **property** `.part`, not a method. The previous run executed the `BuildPart` block fine and only failed on `pump_cover.part()` (calling a `Part`). I drop the parentheses: `part = pump_cover.part`. The three placed cylinders are unioned by the default `Mode.ADD` inside the context.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nd_base = 42.0    # mm, base cylinder diameter   (Top: \u00d842 THRU)\nd_mid  = 30.0    # mm, middle cylinder diameter (Top: \u00d830 THRU)\nd_top  = 18.0    # mm, top cylinder diameter    (Top: \u00d818)\nh_base = 26.0    # mm, base step height         (Right view)\nh_mid  = 21.0    # mm, middle step height       (Right view)\nh_top  = 11.0    # mm, top step height          (Right / Front view)\n\n# ---- derived values ----\nH_total = h_base + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# ---- build the three coaxial cylinders, stacked from z = 0 ----\n# Each Cylinder is centered on the origin then translated so its base sits\n# on top of the previous step. Inside BuildPart the default Mode.ADD unions\n# them into one solid.\nwith BuildPart() as pump_cover:\n    Cylinder(radius=d_base / 2, height=h_base, align=Align.CENTER).translate((0, 0, h_base / 2))\n    Cylinder(radius=d_mid / 2,  height=h_mid,  align=Align.CENTER).translate((0, 0, h_base + h_mid / 2))\n    Cylinder(radius=d_top / 2,  height=h_top,  align=Align.CENTER).translate((0, 0, h_base + h_mid + h_top / 2))\n\n# .part is a property on the BuildPart context manager (not a method)\npart = pump_cover.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     42.0,
+     42.0,
+     26.0
+    ],
+    "volume_mm3": 35997.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 3,
+    "n_planar_faces": 2,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 48.9,
+   "usage": {
+    "input_tokens": 8344,
+    "output_tokens": 3246
+   },
+   "plan": "The previous solid came out as a **single** \u230042 \u00d7 26 cylinder (bbox 42 \u00d7 42 \u00d7 26, one r21 cylindrical face) \u2014 only the base step survived. The middle (\u230030 \u00d7 21) and top (\u230018 \u00d7 11) cylinders were lost, so the Z extent is 26 instead of the required 26 + 21 + 11 = 58. The cause is the `BuildPart` auto\u2011add behavior in build123d 0.10 not capturing the `.translate()`\u2011chained parts reliably.\n\n**Fix (no geometry change):** build the three coaxial cylinders as plain `Part` objects and combine them with the build123d union operator `+` (the `|` operator is not defined in this library, which was the original error). This is a pure boolean expression, fully deterministic, with no context\u2011manager auto\u2011add ambiguity.\n\n- Base: \u230042 (r21) \u00d7 26, center z = 13\n- Middle: \u230030 (r15) \u00d7 21, center z = 26 + 10.5 = 36.5\n- Top: \u230018 (r9) \u00d7 11, center z = 26 + 21 + 5.5 = 52.5\n- Expected result: bbox 42 \u00d7 42 \u00d7 58, 3 cylindrical faces (r21, r15, r9), 4 planar faces, volume \u2248 \u03c0\u00b7(21\u00b2\u00b726 + 15\u00b2\u00b721 + 9\u00b2\u00b711) \u2248 53 665 mm\u00b3.",
+   "text": "\n\n<plan>\nThe previous solid came out as a **single** \u230042 \u00d7 26 cylinder (bbox 42 \u00d7 42 \u00d7 26, one r21 cylindrical face) \u2014 only the base step survived. The middle (\u230030 \u00d7 21) and top (\u230018 \u00d7 11) cylinders were lost, so the Z extent is 26 instead of the required 26 + 21 + 11 = 58. The cause is the `BuildPart` auto\u2011add behavior in build123d 0.10 not capturing the `.translate()`\u2011chained parts reliably.\n\n**Fix (no geometry change):** build the three coaxial cylinders as plain `Part` objects and combine them with the build123d union operator `+` (the `|` operator is not defined in this library, which was the original error). This is a pure boolean expression, fully deterministic, with no context\u2011manager auto\u2011add ambiguity.\n\n- Base: \u230042 (r21) \u00d7 26, center z = 13\n- Middle: \u230030 (r15) \u00d7 21, center z = 26 + 10.5 = 36.5\n- Top: \u230018 (r9) \u00d7 11, center z = 26 + 21 + 5.5 = 52.5\n- Expected result: bbox 42 \u00d7 42 \u00d7 58, 3 cylindrical faces (r21, r15, r9), 4 planar faces, volume \u2248 \u03c0\u00b7(21\u00b2\u00b726 + 15\u00b2\u00b721 + 9\u00b2\u00b711) \u2248 53 665 mm\u00b3.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nd_base = 42.0    # mm, base cylinder diameter   (Top: \u00d842 THRU)\nd_mid  = 30.0    # mm, middle cylinder diameter (Top: \u00d830 THRU)\nd_top  = 18.0    # mm, top cylinder diameter    (Top: \u00d818)\nh_base = 26.0    # mm, base step height         (Right view)\nh_mid  = 21.0    # mm, middle step height       (Right view)\nh_top  = 11.0    # mm, top step height          (Right / Front view)\n\n# ---- derived values ----\nH_total = h_base + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# ---- three coaxial cylinders, stacked from z = 0 ----\n# Each is centered on the origin then translated so its base sits on top\n# of the previous step.\nc_base = Cylinder(radius=d_base / 2, height=h_base, align=Align.CENTER).translate((0, 0, h_base / 2))\nc_mid  = Cylinder(radius=d_mid / 2,  height=h_mid,  align=Align.CENTER).translate((0, 0, h_base + h_mid / 2))\nc_top  = Cylinder(radius=d_top / 2,  height=h_top,  align=Align.CENTER).translate((0, 0, h_base + h_mid + h_top / 2))\n\n# ---- union the three steps into one solid ----\npart = c_base + c_mid + c_top\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 4,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     41.99,
+     41.99,
+     58.0
+    ],
+    "volume_mm3": 53607.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     9.0,
+     15.0,
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 6.8,
+   "usage": {
+    "input_tokens": 9842,
+    "output_tokens": 418
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard06_shaft",
+  "split": "hard",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9891,
+  "ag_final_cand": 4,
+  "best_iou": 0.9891,
+  "best_cand": 4,
+  "n_calls": 5,
+  "n_candidates": 4,
+  "stop_reason": "final",
+  "t_singleshot_s": 120.3,
+  "t_agentic_s": 243.3
+ },
+ "per_candidate_iou": {
+  "3": 0.3934,
+  "4": 0.9891
+ }
+}

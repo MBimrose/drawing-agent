@@ -1,0 +1,84 @@
+{
+ "uid": "hard03_notchplate",
+ "split": "hard",
+ "family": "notchplate",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 114.1,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7233
+   },
+   "plan": "Reading the views:\n- **Top view** (only orthographic view given): outer rectangle = overall plan of the part. Horizontal chain: 24 + 20 + 28 = 72 mm overall width (X). Vertical: overall depth (Y) = 54 mm. Inner rectangle (footprint of raised block) is 20 wide (X from 24 to 44) and 16 deep from the bottom edge (Y 0\u201316). Two circles \"2X \u23008 THRU\" sit in the upper region, symmetric about the X centerline: centers at (12, 45) and (60, 45).\n- **ISO view**: confirms a flat base plate with a raised rectangular block over the 20\u00d716 footprint, and two through-holes in the flat top area. No Z dimensions are printed, so plate/block heights are taken from ISO proportions: base plate 10 mm, block total height 20 mm.\n\nDimension chains:\n- X: 24 + 20 + 28 = 72 (overall)\n- Y: 54 overall; block depth 16\n- Z: 10 (plate) / 20 (block top) \u2014 assumed from ISO.\n\nFeature list:\n1. Base plate 72 \u00d7 54 \u00d7 10.\n2. Raised block 20 \u00d7 16 \u00d7 10 (on top of plate, Z 10\u219220) at X 24\u201344, Y 0\u201316.\n3. Two \u23008 through-holes at (12,45) and (60,45).",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (only orthographic view given): outer rectangle = overall plan of the part. Horizontal chain: 24 + 20 + 28 = 72 mm overall width (X). Vertical: overall depth (Y) = 54 mm. Inner rectangle (footprint of raised block) is 20 wide (X from 24 to 44) and 16 deep from the bottom edge (Y 0\u201316). Two circles \"2X \u23008 THRU\" sit in the upper region, symmetric about the X centerline: centers at (12, 45) and (60, 45).\n- **ISO view**: confirms a flat base plate with a raised rectangular block over the 20\u00d716 footprint, and two through-holes in the flat top area. No Z dimensions are printed, so plate/block heights are taken from ISO proportions: base plate 10 mm, block total height 20 mm.\n\nDimension chains:\n- X: 24 + 20 + 28 = 72 (overall)\n- Y: 54 overall; block depth 16\n- Z: 10 (plate) / 20 (block top) \u2014 assumed from ISO.\n\nFeature list:\n1. Base plate 72 \u00d7 54 \u00d7 10.\n2. Raised block 20 \u00d7 16 \u00d7 10 (on top of plate, Z 10\u219220) at X 24\u201344, Y 0\u201316.\n3. Two \u23008 through-holes at (12,45) and (60,45).\n</plan>\n\n```python\n# build123d reconstruction of MANIFOLD (sheet 3)\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nw_seg1 = 24.0    # mm, left segment of top-view width chain\nw_seg2 = 20.0    # mm, middle segment (block width)\nw_seg3 = 28.0    # mm, right segment\nW = w_seg1 + w_seg2 + w_seg3   # 72 mm overall width (X)\nD = 54.0         # mm overall depth (Y)\nstep_y = 16.0    # mm block footprint depth from bottom edge (Y)\nhole_d = 8.0     # mm, \"2X D8 THRU\"\n\n# hole centers (symmetric about X midline, read from Top view)\nhole_x1 = 12.0   # mm\nhole_x2 = 60.0   # mm  (= W - hole_x1)\nhole_y  = 45.0   # mm\n\n# heights (not dimensioned on sheet; taken from ISO proportions)\nbase_t  = 10.0   # mm base plate thickness\nblock_h = 20.0   # mm total height of raised block\n\nwith BuildPart() as mp:\n    # base plate\n    Box(W, D, base_t, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # raised block over the 20 x 16 footprint\n    with Locations(f\"{w_seg1},0,{base_t}\"):\n        Box(w_seg2, step_y, block_h - base_t,\n            align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # two through holes\n    with Locations(f\"{hole_x1},{hole_y},0\",\n                   f\"{hole_x2},{hole_y},0\"):\n        Cylinder(hole_d / 2, base_t,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = mp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 14.9,
+   "usage": {
+    "input_tokens": 5116,
+    "output_tokens": 1075
+   },
+   "plan": "Reading the views (unchanged):\n- **Top view**: outer rectangle = overall plan. Horizontal chain 24 + 20 + 28 = 72 mm overall width (X). Vertical overall depth (Y) = 54 mm. Inner rectangle (raised block footprint) = 20 wide (X 24\u219244) \u00d7 16 deep from bottom edge (Y 0\u219216). Two circles \"2X \u23008 THRU\" symmetric about X midline at (12, 45) and (60, 45).\n- **ISO view**: flat base plate + raised rectangular block over the 20\u00d716 footprint + two through-holes in the flat top. No Z dims printed \u2192 plate 10 mm, block top 20 mm from ISO proportions.\n\nDimension chains:\n- X: 24 + 20 + 28 = 72 (overall)\n- Y: 54 overall; block depth 16\n- Z: 10 (plate) / 20 (block top) \u2014 assumed from ISO.\n\nFeature list:\n1. Base plate 72 \u00d7 54 \u00d7 10.\n2. Raised block 20 \u00d7 16 \u00d7 10 (Z 10\u219220) at X 24\u201344, Y 0\u201316.\n3. Two \u23008 through-holes at (12,45) and (60,45).\n\nFix applied: `Locations` does not accept string coordinates in build123d 0.10 \u2014 use tuples `(x, y, z)` instead.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view**: outer rectangle = overall plan. Horizontal chain 24 + 20 + 28 = 72 mm overall width (X). Vertical overall depth (Y) = 54 mm. Inner rectangle (raised block footprint) = 20 wide (X 24\u219244) \u00d7 16 deep from bottom edge (Y 0\u219216). Two circles \"2X \u23008 THRU\" symmetric about X midline at (12, 45) and (60, 45).\n- **ISO view**: flat base plate + raised rectangular block over the 20\u00d716 footprint + two through-holes in the flat top. No Z dims printed \u2192 plate 10 mm, block top 20 mm from ISO proportions.\n\nDimension chains:\n- X: 24 + 20 + 28 = 72 (overall)\n- Y: 54 overall; block depth 16\n- Z: 10 (plate) / 20 (block top) \u2014 assumed from ISO.\n\nFeature list:\n1. Base plate 72 \u00d7 54 \u00d7 10.\n2. Raised block 20 \u00d7 16 \u00d7 10 (Z 10\u219220) at X 24\u201344, Y 0\u201316.\n3. Two \u23008 through-holes at (12,45) and (60,45).\n\nFix applied: `Locations` does not accept string coordinates in build123d 0.10 \u2014 use tuples `(x, y, z)` instead.\n</plan>\n```python\n# build123d reconstruction of MANIFOLD (sheet 3)\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nw_seg1 = 24.0    # mm, left segment of top-view width chain\nw_seg2 = 20.0    # mm, middle segment (block width)\nw_seg3 = 28.0    # mm, right segment\nW = w_seg1 + w_seg2 + w_seg3   # 72 mm overall width (X)\nD = 54.0         # mm overall depth (Y)\nstep_y = 16.0    # mm block footprint depth from bottom edge (Y)\nhole_d = 8.0     # mm, \"2X D8 THRU\"\n\n# hole centers (symmetric about X midline, read from Top view)\nhole_x1 = 12.0   # mm\nhole_x2 = 60.0   # mm  (= W - hole_x1)\nhole_y  = 45.0   # mm\n\n# heights (not dimensioned on sheet; taken from ISO proportions)\nbase_t  = 10.0   # mm base plate thickness\nblock_h = 20.0   # mm total height of raised block\n\nwith BuildPart() as mp:\n    # base plate\n    Box(W, D, base_t, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # raised block over the 20 x 16 footprint\n    with Locations((w_seg1, 0, base_t)):\n        Box(w_seg2, step_y, block_h - base_t,\n            align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # two through holes\n    with Locations((hole_x1, hole_y, 0), (hole_x2, hole_y, 0)):\n        Cylinder(hole_d / 2, base_t,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = mp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     72.0,
+     54.0,
+     20.0
+    ],
+    "volume_mm3": 41077.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 52.5,
+   "usage": {
+    "input_tokens": 7610,
+    "output_tokens": 3172
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard03_notchplate",
+  "split": "hard",
+  "family": "notchplate",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.3646,
+  "ag_final_cand": 2,
+  "best_iou": 0.3646,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 116.6,
+  "t_agentic_s": 189.8
+ },
+ "per_candidate_iou": {
+  "2": 0.3646
+ }
+}

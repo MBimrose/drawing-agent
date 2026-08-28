@@ -1,0 +1,116 @@
+{
+ "uid": "std02_notchplate",
+ "split": "std",
+ "family": "notchplate",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 123.4,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7949
+   },
+   "plan": "**View reading:**\n- **Top view** (upper left, the only dimensioned view): a rectangular plate outline 83 wide (X) \u00d7 55 deep (Y). A rectangular notch 31 wide (X) \u00d7 16 deep (Y) is cut from the bottom edge, centered in X (83 \u2212 31 = 52 \u2192 26 mm margins each side). Two circles \"2X \u23008 THRU\" sit near the top corners, one in each lobe, symmetric about the vertical centerline.\n- **ISO view** (right): confirms a thin flat plate with a through notch (C/U shape) and the two through holes; no extra features.\n- **Right view:** label present but no additional dimensions are carried.\n\n**Dimension chains:**\n- X: overall = 83 (given directly). Notch component = 31, centered.\n- Y: overall = 55 (given directly). Notch component = 16 from the bottom edge.\n- Z (thickness): not dimensioned on the sheet; the ISO shows a thin plate, so a 10 mm thickness is assumed.\n\n**Features:**\n1. Base plate 83 \u00d7 55 \u00d7 10.\n2. Notch 31 \u00d7 16 \u00d7 10 through, centered on X at the \u2212Y end.\n3. Two \u23008 through holes (Z), symmetric: 13 mm from each outer X edge (lobe centers, 15.5 + 13 = 28.5 from centerline) and 13.75 mm from the top edge (55/4), matching the drawn positions.",
+   "text": "\n\n<plan>\n**View reading:**\n- **Top view** (upper left, the only dimensioned view): a rectangular plate outline 83 wide (X) \u00d7 55 deep (Y). A rectangular notch 31 wide (X) \u00d7 16 deep (Y) is cut from the bottom edge, centered in X (83 \u2212 31 = 52 \u2192 26 mm margins each side). Two circles \"2X \u23008 THRU\" sit near the top corners, one in each lobe, symmetric about the vertical centerline.\n- **ISO view** (right): confirms a thin flat plate with a through notch (C/U shape) and the two through holes; no extra features.\n- **Right view:** label present but no additional dimensions are carried.\n\n**Dimension chains:**\n- X: overall = 83 (given directly). Notch component = 31, centered.\n- Y: overall = 55 (given directly). Notch component = 16 from the bottom edge.\n- Z (thickness): not dimensioned on the sheet; the ISO shows a thin plate, so a 10 mm thickness is assumed.\n\n**Features:**\n1. Base plate 83 \u00d7 55 \u00d7 10.\n2. Notch 31 \u00d7 16 \u00d7 10 through, centered on X at the \u2212Y end.\n3. Two \u23008 through holes (Z), symmetric: 13 mm from each outer X edge (lobe centers, 15.5 + 13 = 28.5 from centerline) and 13.75 mm from the top edge (55/4), matching the drawn positions.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 83.0          # overall width (X), Top view\nH = 55.0          # overall depth (Y), Top view\nt = 10.0          # plate thickness (Z) - not dimensioned; thin plate per ISO\nnotch_w = 31.0    # notch width (X)\nnotch_d = 16.0    # notch depth (Y)\nhole_d = 8.0      # 2X dia 8 THRU\n\n# ---- derived hole positions (symmetric, per drawing) ----\nhole_x = notch_w / 2 + (W - notch_w) / 4   # 15.5 + 13 = 28.5 from centerline\nhole_y = H / 4                             # 13.75 from top edge (matches view)\n\nwith BuildPart() as mp:\n    # base plate, centered in XY, bottom at Z=0\n    Box(W, H, t, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # notch cut from the -Y end, centered in X\n    Box(notch_w, notch_d, t,\n        align=(Align.CENTER, Align.MIN, Align.MIN),\n        mode=Mode.SUBTRACT)\n    # two through holes\n    Cylinder(hole_d / 2, t,\n             align=(Align.CENTER, Align.CENTER, Align.MIN),\n             locations=[(hole_x, hole_y, 0), (-hole_x, hole_y, 0)],\n             mode=Mode.SUBTRACT)\n\npart = mp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 41.8,
+   "usage": {
+    "input_tokens": 4967,
+    "output_tokens": 2775
+   },
+   "plan": "**View reading (unchanged):**\n- **Top view** (only dimensioned view): rectangular plate 83 (X) \u00d7 55 (Y). A 31 (X) \u00d7 16 (Y) notch is cut from the bottom (\u2212Y) edge, centered in X (margins (83\u221231)/2 = 26 mm each side). Two \"\u23008 THRU\" circles sit symmetrically in the two upper lobes.\n- **ISO view:** thin flat C/U plate with the notch and two through holes; no other features.\n- **Right view:** label only, no extra dimensions.\n\n**Dimension chains:**\n- X: overall 83 (direct); notch 31 centered.\n- Y: overall 55 (direct); notch 16 from \u2212Y edge.\n- Z (thickness): not dimensioned; thin plate per ISO \u2192 assume 10 mm.\n\n**Features:**\n1. Base plate 83 \u00d7 55 \u00d7 10.\n2. Through notch 31 \u00d7 16, centered in X at the \u2212Y end.\n3. Two \u23008 through holes (Z), symmetric: hole_x = 31/2 + (83\u221231)/4 = 28.5 from centerline; hole_y = 55/4 = 13.75 from center (matches drawn positions).\n\n**Correction to previous script:** `Cylinder` does not accept a `locations` keyword. Multiple copies are placed with the `Locations(...)` context manager instead, which shifts the coordinate system per hole so `align` centers each hole at its (\u00b1hole_x, hole_y) point.",
+   "text": "\n\n<plan>\n**View reading (unchanged):**\n- **Top view** (only dimensioned view): rectangular plate 83 (X) \u00d7 55 (Y). A 31 (X) \u00d7 16 (Y) notch is cut from the bottom (\u2212Y) edge, centered in X (margins (83\u221231)/2 = 26 mm each side). Two \"\u23008 THRU\" circles sit symmetrically in the two upper lobes.\n- **ISO view:** thin flat C/U plate with the notch and two through holes; no other features.\n- **Right view:** label only, no extra dimensions.\n\n**Dimension chains:**\n- X: overall 83 (direct); notch 31 centered.\n- Y: overall 55 (direct); notch 16 from \u2212Y edge.\n- Z (thickness): not dimensioned; thin plate per ISO \u2192 assume 10 mm.\n\n**Features:**\n1. Base plate 83 \u00d7 55 \u00d7 10.\n2. Through notch 31 \u00d7 16, centered in X at the \u2212Y end.\n3. Two \u23008 through holes (Z), symmetric: hole_x = 31/2 + (83\u221231)/4 = 28.5 from centerline; hole_y = 55/4 = 13.75 from center (matches drawn positions).\n\n**Correction to previous script:** `Cylinder` does not accept a `locations` keyword. Multiple copies are placed with the `Locations(...)` context manager instead, which shifts the coordinate system per hole so `align` centers each hole at its (\u00b1hole_x, hole_y) point.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 83.0          # overall width (X), Top view\nH = 55.0          # overall depth (Y), Top view\nt = 10.0          # plate thickness (Z) - not dimensioned; thin plate per ISO\nnotch_w = 31.0    # notch width (X)\nnotch_d = 16.0    # notch depth (Y)\nhole_d = 8.0      # 2X dia 8 THRU\n\n# ---- derived hole positions (symmetric, per drawing) ----\nhole_x = notch_w / 2 + (W - notch_w) / 4   # 15.5 + 13 = 28.5 from centerline\nhole_y = H / 4                             # 13.75 from center (matches view)\n\nwith BuildPart() as mp:\n    # base plate, centered in XY, bottom at Z=0\n    Box(W, H, t, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # notch cut from the -Y end, centered in X, full thickness\n    Box(notch_w, notch_d, t,\n        align=(Align.CENTER, Align.MIN, Align.MIN),\n        mode=Mode.SUBTRACT)\n    # two through holes placed symmetrically via Locations\n    with Locations((hole_x, hole_y, 0), (-hole_x, hole_y, 0)):\n        Cylinder(hole_d / 2, t,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = mp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     55.0,
+     10.0
+    ],
+    "volume_mm3": 39687.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 159.6,
+   "usage": {
+    "input_tokens": 7165,
+    "output_tokens": 9923
+   },
+   "plan": "**Comparison of my current solid vs the drawing (Top view):**\n- Holes: correct (two \u23008 through holes in the upper lobes, symmetric). \u2714\n- Notch: **wrong position and wrong X placement.** In my render the 31\u00d716 rectangle is a closed pocket floating in the upper\u2011middle of the plate, but the drawing shows it as a notch **open to the bottom edge** (the 16 dim runs from the bottom edge up to the notch top). The cause: build123d `align` is relative to the **origin**, so `Align.MIN` in Y placed the notch's min face at Y=0 (plate centre) instead of at the plate's bottom edge.\n- Notch X: drawing gives asymmetric margins **25 (left) + 31 + 27 (right) = 83**, so the notch is offset 1 mm left of centre; my version was centred.\n\n**Corrections:**\n- Rebuild with the plate's bottom edge at Y=0 (so `align`\u2011to\u2011origin works), and place every feature by explicit `Locations` with `align=Align.CENTER`.\n- Notch: 31\u00d716, open at the bottom edge (Y 0\u219216), X centred at (25\u221227)/2 = \u22121.0 (giving 25 left / 27 right margins).\n- Holes: keep \u23008 through, symmetric at X = \u00b128.5, Y = 55 \u2212 13.75 = 41.25 (positions estimated from the view \u2014 not dimensioned on the sheet).\n- Thickness 10 mm (not dimensioned; thin plate per ISO).\n\n**Chains:** X: 25 + 31 + 27 = 83 \u2714; Y: overall 55, notch 16 from bottom \u2714; Z: 10 (assumed).",
+   "text": "\n\n<plan>\n**Comparison of my current solid vs the drawing (Top view):**\n- Holes: correct (two \u23008 through holes in the upper lobes, symmetric). \u2714\n- Notch: **wrong position and wrong X placement.** In my render the 31\u00d716 rectangle is a closed pocket floating in the upper\u2011middle of the plate, but the drawing shows it as a notch **open to the bottom edge** (the 16 dim runs from the bottom edge up to the notch top). The cause: build123d `align` is relative to the **origin**, so `Align.MIN` in Y placed the notch's min face at Y=0 (plate centre) instead of at the plate's bottom edge.\n- Notch X: drawing gives asymmetric margins **25 (left) + 31 + 27 (right) = 83**, so the notch is offset 1 mm left of centre; my version was centred.\n\n**Corrections:**\n- Rebuild with the plate's bottom edge at Y=0 (so `align`\u2011to\u2011origin works), and place every feature by explicit `Locations` with `align=Align.CENTER`.\n- Notch: 31\u00d716, open at the bottom edge (Y 0\u219216), X centred at (25\u221227)/2 = \u22121.0 (giving 25 left / 27 right margins).\n- Holes: keep \u23008 through, symmetric at X = \u00b128.5, Y = 55 \u2212 13.75 = 41.25 (positions estimated from the view \u2014 not dimensioned on the sheet).\n- Thickness 10 mm (not dimensioned; thin plate per ISO).\n\n**Chains:** X: 25 + 31 + 27 = 83 \u2714; Y: overall 55, notch 16 from bottom \u2714; Z: 10 (assumed).\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 83.0            # overall width (X)\nH = 55.0            # overall depth (Y)\nt = 10.0            # plate thickness (Z) - not dimensioned; thin plate per ISO\nnotch_w = 31.0      # notch width (X)\nnotch_d = 16.0      # notch depth (Y), open at the bottom edge\nmargin_left = 25.0  # left margin of notch (X)\nmargin_right = 27.0 # right margin of notch (X)  -> 25+31+27 = 83\nhole_d = 8.0        # 2X dia 8 THRU\n\n# ---- derived positions ----\nnotch_center_x = (margin_left - margin_right) / 2.0   # = -1.0 (offset left of centre)\nnotch_center_y = notch_d / 2.0                          # from bottom edge (Y=0)\nhole_x = 28.5           # estimated from view (not dimensioned)\nhole_from_top = 13.75   # estimated from view (not dimensioned)\nhole_y = H - hole_from_top   # = 41.25 from bottom edge\n\n# ---- build (plate bottom edge at Y=0 so align-to-origin is consistent) ----\nwith BuildPart() as mp:\n    with Locations((0.0, H / 2.0, t / 2.0)):\n        Box(W, H, t, align=Align.CENTER)\n    with Locations((notch_center_x, notch_center_y, t / 2.0)):\n        Box(notch_w, notch_d, t, align=Align.CENTER, mode=Mode.SUBTRACT)\n    with Locations((-hole_x, hole_y, t / 2.0), (hole_x, hole_y, t / 2.0)):\n        Cylinder(hole_d / 2.0, t, align=Align.CENTER, mode=Mode.SUBTRACT)\n\npart = mp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     55.0,
+     10.0
+    ],
+    "volume_mm3": 39687.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 57.1,
+   "usage": {
+    "input_tokens": 8297,
+    "output_tokens": 3420
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std02_notchplate",
+  "split": "std",
+  "family": "notchplate",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7928,
+  "ag_final_cand": 3,
+  "best_iou": 0.7928,
+  "best_cand": 3,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 126.4,
+  "t_agentic_s": 397.4
+ },
+ "per_candidate_iou": {
+  "2": 0.6304,
+  "3": 0.7928
+ }
+}
