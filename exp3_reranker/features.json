@@ -1,0 +1,6784 @@
+{
+"features": {
+"000bc5ac-ffb4-009a-e213-ec6618d29e54_d0": {
+"area_mm2": 7277.99,
+"aspect": 7.5,
+"bbox_mm": [
+60.0,
+40.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3534,
+"n_cylindrical_faces": 2,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 4.4,
+"volume_mm3": 6785.03,
+"watertight": true
+},
+"000bc5ac-ffb4-009a-e213-ec6618d29e54_d1": {
+"area_mm2": 7288.46,
+"aspect": 7.5,
+"bbox_mm": [
+60.0,
+40.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3534,
+"n_cylindrical_faces": 2,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 4.3,
+"volume_mm3": 6785.67,
+"watertight": true
+},
+"000bc5ac-ffb4-009a-e213-ec6618d29e54_d2": {
+"area_mm2": 7277.99,
+"aspect": 7.5,
+"bbox_mm": [
+60.0,
+40.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3534,
+"n_cylindrical_faces": 2,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 4.7,
+"volume_mm3": 6785.03,
+"watertight": true
+},
+"000bc5ac-ffb4-009a-e213-ec6618d29e54_d3": {
+"area_mm2": 7502.14,
+"aspect": 7.5,
+"bbox_mm": [
+60.0,
+40.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3654,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 7015.32,
+"watertight": true
+},
+"00199e66-2f80-ae33-2603-60a317088932_d0": {
+"area_mm2": 14597.38,
+"aspect": 5.0,
+"bbox_mm": [
+80.0,
+60.0,
+16.0
+],
+"exec_ok": true,
+"fill_frac": 0.6841,
+"n_cylindrical_faces": 5,
+"n_faces": 48,
+"n_mesh_components": 2,
+"n_planar_faces": 39,
+"n_solids": 2,
+"t_s": 4.8,
+"volume_mm3": 52540.46,
+"watertight": true
+},
+"00199e66-2f80-ae33-2603-60a317088932_d1": {
+"area_mm2": 14032.96,
+"aspect": 6.67,
+"bbox_mm": [
+80.0,
+60.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.9045,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 52101.89,
+"watertight": true
+},
+"00199e66-2f80-ae33-2603-60a317088932_d2": {
+"area_mm2": 14032.96,
+"aspect": 6.67,
+"bbox_mm": [
+80.0,
+60.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.9045,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 52101.89,
+"watertight": true
+},
+"00199e66-2f80-ae33-2603-60a317088932_d3": {
+"area_mm2": 14032.96,
+"aspect": 6.67,
+"bbox_mm": [
+80.0,
+60.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.9045,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 52101.89,
+"watertight": true
+},
+"0024c6d8-aa79-9abd-1584-78ed741bd77f_d0": {
+"area_mm2": 7793.03,
+"aspect": 8.0,
+"bbox_mm": [
+70.0,
+80.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3317,
+"n_cylindrical_faces": 4,
+"n_faces": 30,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.0,
+"volume_mm3": 18573.33,
+"watertight": true
+},
+"0024c6d8-aa79-9abd-1584-78ed741bd77f_d1": {
+"area_mm2": 7793.03,
+"aspect": 8.0,
+"bbox_mm": [
+70.0,
+80.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3317,
+"n_cylindrical_faces": 4,
+"n_faces": 30,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 18573.33,
+"watertight": true
+},
+"0024c6d8-aa79-9abd-1584-78ed741bd77f_d2": {
+"area_mm2": 7793.03,
+"aspect": 8.0,
+"bbox_mm": [
+70.0,
+80.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3317,
+"n_cylindrical_faces": 4,
+"n_faces": 30,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.0,
+"volume_mm3": 18573.33,
+"watertight": true
+},
+"0024c6d8-aa79-9abd-1584-78ed741bd77f_d3": {
+"area_mm2": 7793.03,
+"aspect": 8.0,
+"bbox_mm": [
+70.0,
+80.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3317,
+"n_cylindrical_faces": 4,
+"n_faces": 30,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.0,
+"volume_mm3": 18573.33,
+"watertight": true
+},
+"00874eac-be8c-17f8-ad7b-6a035b6c40ae_d0": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.7
+},
+"00874eac-be8c-17f8-ad7b-6a035b6c40ae_d1": {
+"area_mm2": 25252.3,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.1717,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 24727.73,
+"watertight": true
+},
+"00874eac-be8c-17f8-ad7b-6a035b6c40ae_d2": {
+"area_mm2": 23891.61,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.1606,
+"n_cylindrical_faces": 4,
+"n_faces": 31,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 4.4,
+"volume_mm3": 23131.73,
+"watertight": true
+},
+"00874eac-be8c-17f8-ad7b-6a035b6c40ae_d3": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.1
+},
+"00d1e3d6-db1e-758d-94e6-76e246cf7349_d0": {
+"area_mm2": 14957.72,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+80.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.9872,
+"n_cylindrical_faces": 5,
+"n_faces": 25,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 37909.1,
+"watertight": true
+},
+"00d1e3d6-db1e-758d-94e6-76e246cf7349_d1": {
+"area_mm2": 14957.72,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+80.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.9872,
+"n_cylindrical_faces": 5,
+"n_faces": 25,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 4.3,
+"volume_mm3": 37909.1,
+"watertight": true
+},
+"00d1e3d6-db1e-758d-94e6-76e246cf7349_d2": {
+"area_mm2": 14879.62,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+80.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.9834,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 37762.22,
+"watertight": true
+},
+"00d1e3d6-db1e-758d-94e6-76e246cf7349_d3": {
+"area_mm2": 14879.62,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+80.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.9834,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 37762.22,
+"watertight": true
+},
+"0120e88c-df7c-c3a2-4533-3b9d33302e59_d0": {
+"area_mm2": 11121.48,
+"aspect": 16.5,
+"bbox_mm": [
+82.5,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9648,
+"n_cylindrical_faces": 1,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 23878.67,
+"watertight": true
+},
+"0120e88c-df7c-c3a2-4533-3b9d33302e59_d1": {
+"area_mm2": 11084.21,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9871,
+"n_cylindrical_faces": 2,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 23691.0,
+"watertight": true
+},
+"0120e88c-df7c-c3a2-4533-3b9d33302e59_d2": {
+"area_mm2": 11087.84,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.986,
+"n_cylindrical_faces": 3,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 23663.12,
+"watertight": true
+},
+"0120e88c-df7c-c3a2-4533-3b9d33302e59_d3": {
+"area_mm2": 11008.76,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9923,
+"n_cylindrical_faces": 0,
+"n_faces": 15,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 23816.33,
+"watertight": true
+},
+"014e0c04-50a5-9b2b-5d15-048cc68be62e_d0": {
+"area_mm2": 8725.81,
+"aspect": 8.89,
+"bbox_mm": [
+80.0,
+70.0,
+9.0
+],
+"exec_ok": true,
+"fill_frac": 0.3901,
+"n_cylindrical_faces": 4,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 19660.09,
+"watertight": true
+},
+"014e0c04-50a5-9b2b-5d15-048cc68be62e_d1": {
+"area_mm2": 8674.18,
+"aspect": 8.89,
+"bbox_mm": [
+80.0,
+70.0,
+9.0
+],
+"exec_ok": true,
+"fill_frac": 0.3872,
+"n_cylindrical_faces": 4,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 4.5,
+"volume_mm3": 19513.23,
+"watertight": true
+},
+"014e0c04-50a5-9b2b-5d15-048cc68be62e_d2": {
+"area_mm2": 8722.01,
+"aspect": 8.89,
+"bbox_mm": [
+80.0,
+68.0,
+9.0
+],
+"exec_ok": true,
+"fill_frac": 0.4035,
+"n_cylindrical_faces": 2,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 22,
+"n_solids": 1,
+"t_s": 4.3,
+"volume_mm3": 19754.0,
+"watertight": true
+},
+"014e0c04-50a5-9b2b-5d15-048cc68be62e_d3": {
+"area_mm2": 8341.81,
+"aspect": 8.89,
+"bbox_mm": [
+80.0,
+50.0,
+9.0
+],
+"exec_ok": true,
+"fill_frac": 0.535,
+"n_cylindrical_faces": 3,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 21,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 19258.22,
+"watertight": true
+},
+"01854fac-2b62-88d1-11ce-99dc34837a7d_d0": {
+"area_mm2": 16080.8,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+100.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8516,
+"n_cylindrical_faces": 12,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 4.7,
+"volume_mm3": 34065.05,
+"watertight": true
+},
+"01854fac-2b62-88d1-11ce-99dc34837a7d_d1": {
+"area_mm2": 16076.57,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+100.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.85,
+"n_cylindrical_faces": 0,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 34000.0,
+"watertight": true
+},
+"01854fac-2b62-88d1-11ce-99dc34837a7d_d2": {
+"area_mm2": 16310.78,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+100.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.843,
+"n_cylindrical_faces": 10,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 33721.8,
+"watertight": true
+},
+"01854fac-2b62-88d1-11ce-99dc34837a7d_d3": {
+"area_mm2": 18204.32,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+100.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9217,
+"n_cylindrical_faces": 10,
+"n_faces": 31,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 36866.36,
+"watertight": true
+},
+"01bcfa42-0f4d-6549-addf-638a06cce057_d0": {
+"area_mm2": 11037.67,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9976,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 4.2,
+"volume_mm3": 23943.6,
+"watertight": true
+},
+"01bcfa42-0f4d-6549-addf-638a06cce057_d1": {
+"area_mm2": 11037.67,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9976,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 23943.6,
+"watertight": true
+},
+"01bcfa42-0f4d-6549-addf-638a06cce057_d2": {
+"area_mm2": 11018.84,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9988,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 4.7,
+"volume_mm3": 23971.8,
+"watertight": true
+},
+"01bcfa42-0f4d-6549-addf-638a06cce057_d3": {
+"area_mm2": 11037.67,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9976,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 4.3,
+"volume_mm3": 23943.6,
+"watertight": true
+},
+"01f125ec-6a23-34bb-4690-90f202c96d13_d0": {
+"area_mm2": 10098.34,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+70.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.6019,
+"n_cylindrical_faces": 5,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 26965.2,
+"watertight": true
+},
+"01f125ec-6a23-34bb-4690-90f202c96d13_d1": {
+"area_mm2": 10103.92,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+70.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.5958,
+"n_cylindrical_faces": 7,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 4.3,
+"volume_mm3": 26692.55,
+"watertight": true
+},
+"01f125ec-6a23-34bb-4690-90f202c96d13_d2": {
+"area_mm2": 9910.41,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+70.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.6026,
+"n_cylindrical_faces": 5,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 26998.09,
+"watertight": true
+},
+"01f125ec-6a23-34bb-4690-90f202c96d13_d3": {
+"area_mm2": 10192.64,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+70.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.5969,
+"n_cylindrical_faces": 6,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 26739.6,
+"watertight": true
+},
+"02042bd8-55db-513c-2dd6-5a84d5c6e200_d0": {
+"area_mm2": 25311.69,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.1717,
+"n_cylindrical_faces": 4,
+"n_faces": 29,
+"n_mesh_components": 2,
+"n_planar_faces": 25,
+"n_solids": 2,
+"t_s": 5.2,
+"volume_mm3": 24726.67,
+"watertight": true
+},
+"02042bd8-55db-513c-2dd6-5a84d5c6e200_d1": {
+"area_mm2": 25377.3,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.1713,
+"n_cylindrical_faces": 4,
+"n_faces": 25,
+"n_mesh_components": 2,
+"n_planar_faces": 21,
+"n_solids": 2,
+"t_s": 4.6,
+"volume_mm3": 24670.67,
+"watertight": true
+},
+"02042bd8-55db-513c-2dd6-5a84d5c6e200_d2": {
+"area_mm2": 25284.26,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.1716,
+"n_cylindrical_faces": 4,
+"n_faces": 33,
+"n_mesh_components": 2,
+"n_planar_faces": 29,
+"n_solids": 2,
+"t_s": 4.6,
+"volume_mm3": 24706.67,
+"watertight": true
+},
+"02042bd8-55db-513c-2dd6-5a84d5c6e200_d3": {
+"area_mm2": 25377.3,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.1713,
+"n_cylindrical_faces": 4,
+"n_faces": 25,
+"n_mesh_components": 2,
+"n_planar_faces": 21,
+"n_solids": 2,
+"t_s": 5.0,
+"volume_mm3": 24670.67,
+"watertight": true
+},
+"02133c18-0277-b899-bfb2-74a860ec2599_d0": {
+"area_mm2": 13652.1,
+"aspect": 18.0,
+"bbox_mm": [
+90.0,
+70.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8233,
+"n_cylindrical_faces": 5,
+"n_faces": 91,
+"n_mesh_components": 1,
+"n_planar_faces": 76,
+"n_solids": 1,
+"t_s": 5.0,
+"volume_mm3": 25934.9,
+"watertight": true
+},
+"02133c18-0277-b899-bfb2-74a860ec2599_d1": {
+"area_mm2": 13652.1,
+"aspect": 18.0,
+"bbox_mm": [
+90.0,
+70.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8233,
+"n_cylindrical_faces": 5,
+"n_faces": 91,
+"n_mesh_components": 1,
+"n_planar_faces": 76,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 25934.9,
+"watertight": true
+},
+"02133c18-0277-b899-bfb2-74a860ec2599_d2": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.2
+},
+"02133c18-0277-b899-bfb2-74a860ec2599_d3": {
+"area_mm2": 13652.1,
+"aspect": 18.0,
+"bbox_mm": [
+90.0,
+70.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8233,
+"n_cylindrical_faces": 5,
+"n_faces": 91,
+"n_mesh_components": 1,
+"n_planar_faces": 76,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 25934.9,
+"watertight": true
+},
+"024cdfc2-2898-0e12-ab5b-4f9e6bcca175_d0": {
+"area_mm2": 10540.76,
+"aspect": 2.0,
+"bbox_mm": [
+59.834,
+59.97,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4324,
+"n_cylindrical_faces": 4,
+"n_faces": 50,
+"n_mesh_components": 1,
+"n_planar_faces": 37,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 46548.31,
+"watertight": true
+},
+"024cdfc2-2898-0e12-ab5b-4f9e6bcca175_d1": {
+"area_mm2": 11724.82,
+"aspect": 2.08,
+"bbox_mm": [
+62.5,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4254,
+"n_cylindrical_faces": 3,
+"n_faces": 52,
+"n_mesh_components": 1,
+"n_planar_faces": 45,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 47861.95,
+"watertight": true
+},
+"024cdfc2-2898-0e12-ab5b-4f9e6bcca175_d2": {
+"area_mm2": 11471.64,
+"aspect": 2.08,
+"bbox_mm": [
+62.5,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4247,
+"n_cylindrical_faces": 3,
+"n_faces": 51,
+"n_mesh_components": 1,
+"n_planar_faces": 39,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 47781.24,
+"watertight": true
+},
+"024cdfc2-2898-0e12-ab5b-4f9e6bcca175_d3": {
+"area_mm2": 10550.41,
+"aspect": 2.0,
+"bbox_mm": [
+59.834,
+59.97,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4393,
+"n_cylindrical_faces": 2,
+"n_faces": 46,
+"n_mesh_components": 1,
+"n_planar_faces": 35,
+"n_solids": 1,
+"t_s": 7.1,
+"volume_mm3": 47288.99,
+"watertight": true
+},
+"0264f04e-9879-24a1-30c7-74b898c39e5c_d0": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.2
+},
+"0264f04e-9879-24a1-30c7-74b898c39e5c_d1": {
+"area_mm2": 11912.38,
+"aspect": 1.2,
+"bbox_mm": [
+60.0,
+60.0,
+50.0
+],
+"exec_ok": true,
+"fill_frac": 0.3849,
+"n_cylindrical_faces": 6,
+"n_faces": 16,
+"n_mesh_components": 1,
+"n_planar_faces": 4,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 69283.74,
+"watertight": true
+},
+"0264f04e-9879-24a1-30c7-74b898c39e5c_d2": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.4
+},
+"0264f04e-9879-24a1-30c7-74b898c39e5c_d3": {
+"area_mm2": 12160.29,
+"aspect": 1.2,
+"bbox_mm": [
+60.0,
+60.0,
+50.0
+],
+"exec_ok": true,
+"fill_frac": 0.3846,
+"n_cylindrical_faces": 6,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 4,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 69219.52,
+"watertight": true
+},
+"028bb3be-e823-62d8-0275-93746b20cc5d_d0": {
+"area_mm2": 16629.55,
+"aspect": 2.88,
+"bbox_mm": [
+86.348,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4159,
+"n_cylindrical_faces": 2,
+"n_faces": 106,
+"n_mesh_components": 1,
+"n_planar_faces": 104,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 86187.76,
+"watertight": true
+},
+"028bb3be-e823-62d8-0275-93746b20cc5d_d1": {
+"area_mm2": 15920.02,
+"aspect": 2.79,
+"bbox_mm": [
+83.665,
+79.968,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4319,
+"n_cylindrical_faces": 3,
+"n_faces": 71,
+"n_mesh_components": 1,
+"n_planar_faces": 68,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 86679.39,
+"watertight": true
+},
+"028bb3be-e823-62d8-0275-93746b20cc5d_d2": {
+"area_mm2": 16030.15,
+"aspect": 2.8,
+"bbox_mm": [
+83.982,
+79.99,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4298,
+"n_cylindrical_faces": 3,
+"n_faces": 58,
+"n_mesh_components": 1,
+"n_planar_faces": 55,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 86616.25,
+"watertight": true
+},
+"028bb3be-e823-62d8-0275-93746b20cc5d_d3": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.2
+},
+"02b4260a-2c89-b076-eed5-bd1a05cc4df7_d0": {
+"area_mm2": 11983.03,
+"aspect": 11.43,
+"bbox_mm": [
+80.0,
+60.0,
+7.0
+],
+"exec_ok": true,
+"fill_frac": 0.7385,
+"n_cylindrical_faces": 8,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 24812.17,
+"watertight": true
+},
+"02b4260a-2c89-b076-eed5-bd1a05cc4df7_d1": {
+"area_mm2": 12359.03,
+"aspect": 11.43,
+"bbox_mm": [
+80.0,
+60.0,
+7.0
+],
+"exec_ok": true,
+"fill_frac": 0.7538,
+"n_cylindrical_faces": 8,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 25326.17,
+"watertight": true
+},
+"02b4260a-2c89-b076-eed5-bd1a05cc4df7_d2": {
+"area_mm2": 11307.71,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+60.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9673,
+"n_cylindrical_faces": 8,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 23214.17,
+"watertight": true
+},
+"02b4260a-2c89-b076-eed5-bd1a05cc4df7_d3": {
+"area_mm2": 12304.95,
+"aspect": 11.43,
+"bbox_mm": [
+80.0,
+60.0,
+7.0
+],
+"exec_ok": true,
+"fill_frac": 0.9253,
+"n_cylindrical_faces": 9,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 31088.62,
+"watertight": true
+},
+"02c2c534-fdf5-09f0-a3b9-08fac95e67cc_d0": {
+"error": "File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_sketch.py\", line 227, in make_face\n    pending_face = Face(Wire.combine(outer_edges)[0])\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/two_d.py\", line 919, in __init__\n    raise ValueError(\"Face can only be created with closed wires\")\nValueError: Face can only be created with closed wires\n",
+"exec_ok": false,
+"t_s": 4.9
+},
+"02c2c534-fdf5-09f0-a3b9-08fac95e67cc_d1": {
+"area_mm2": 11921.9,
+"aspect": 1.42,
+"bbox_mm": [
+58.872,
+59.379,
+83.694
+],
+"exec_ok": true,
+"fill_frac": 0.0449,
+"n_cylindrical_faces": 2,
+"n_faces": 16,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 9.9,
+"volume_mm3": 13149.94,
+"watertight": true
+},
+"02c2c534-fdf5-09f0-a3b9-08fac95e67cc_d2": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.4
+},
+"02c2c534-fdf5-09f0-a3b9-08fac95e67cc_d3": {
+"area_mm2": 8227.67,
+"aspect": 2.34,
+"bbox_mm": [
+30.0,
+29.966,
+70.0
+],
+"exec_ok": true,
+"fill_frac": 0.1716,
+"n_cylindrical_faces": 2,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 5,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 10797.96,
+"watertight": true
+},
+"038de502-dae8-4b1f-95d1-74f6139edbf0_d0": {
+"area_mm2": 14024.7,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8814,
+"n_cylindrical_faces": 12,
+"n_faces": 28,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 28206.39,
+"watertight": true
+},
+"038de502-dae8-4b1f-95d1-74f6139edbf0_d1": {
+"area_mm2": 14002.6,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8796,
+"n_cylindrical_faces": 12,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 28147.68,
+"watertight": true
+},
+"038de502-dae8-4b1f-95d1-74f6139edbf0_d2": {
+"area_mm2": 14002.6,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8796,
+"n_cylindrical_faces": 12,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 28147.68,
+"watertight": true
+},
+"038de502-dae8-4b1f-95d1-74f6139edbf0_d3": {
+"area_mm2": 14780.73,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9334,
+"n_cylindrical_faces": 14,
+"n_faces": 25,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 29868.38,
+"watertight": true
+},
+"03b5b65e-5bdd-f566-8c3c-8743018784cb_d0": {
+"area_mm2": 18680.93,
+"aspect": 9.09,
+"bbox_mm": [
+100.0,
+70.0,
+11.0
+],
+"exec_ok": true,
+"fill_frac": 0.7537,
+"n_cylindrical_faces": 16,
+"n_faces": 71,
+"n_mesh_components": 1,
+"n_planar_faces": 47,
+"n_solids": 1,
+"t_s": 6.5,
+"volume_mm3": 58032.71,
+"watertight": true
+},
+"03b5b65e-5bdd-f566-8c3c-8743018784cb_d1": {
+"area_mm2": 18251.73,
+"aspect": 10.0,
+"bbox_mm": [
+100.0,
+70.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.7828,
+"n_cylindrical_faces": 12,
+"n_faces": 47,
+"n_mesh_components": 1,
+"n_planar_faces": 29,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 54797.32,
+"watertight": true
+},
+"03b5b65e-5bdd-f566-8c3c-8743018784cb_d2": {
+"area_mm2": 18295.02,
+"aspect": 9.09,
+"bbox_mm": [
+100.0,
+70.0,
+11.0
+],
+"exec_ok": true,
+"fill_frac": 0.7569,
+"n_cylindrical_faces": 16,
+"n_faces": 223,
+"n_mesh_components": 1,
+"n_planar_faces": 107,
+"n_solids": 1,
+"t_s": 8.7,
+"volume_mm3": 58281.27,
+"watertight": true
+},
+"03b5b65e-5bdd-f566-8c3c-8743018784cb_d3": {
+"area_mm2": 18929.45,
+"aspect": 9.09,
+"bbox_mm": [
+100.0,
+70.0,
+11.0
+],
+"exec_ok": true,
+"fill_frac": 0.7488,
+"n_cylindrical_faces": 16,
+"n_faces": 57,
+"n_mesh_components": 1,
+"n_planar_faces": 31,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 57655.18,
+"watertight": true
+},
+"03dfa680-4b62-4f14-3b39-0b6431faee2a_d0": {
+"area_mm2": 16722.89,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+80.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.6081,
+"n_cylindrical_faces": 4,
+"n_faces": 42,
+"n_mesh_components": 1,
+"n_planar_faces": 38,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 54484.24,
+"watertight": true
+},
+"03dfa680-4b62-4f14-3b39-0b6431faee2a_d1": {
+"area_mm2": 16735.54,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+80.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.4492,
+"n_cylindrical_faces": 4,
+"n_faces": 67,
+"n_mesh_components": 1,
+"n_planar_faces": 63,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 40249.8,
+"watertight": true
+},
+"03dfa680-4b62-4f14-3b39-0b6431faee2a_d2": {
+"area_mm2": 16717.39,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+80.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.4116,
+"n_cylindrical_faces": 4,
+"n_faces": 35,
+"n_mesh_components": 1,
+"n_planar_faces": 31,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 36882.4,
+"watertight": true
+},
+"03dfa680-4b62-4f14-3b39-0b6431faee2a_d3": {
+"area_mm2": 17286.72,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+80.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.5552,
+"n_cylindrical_faces": 4,
+"n_faces": 71,
+"n_mesh_components": 1,
+"n_planar_faces": 67,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 49746.39,
+"watertight": true
+},
+"03fe9cac-6070-1f10-6a88-55b8a3835295_d0": {
+"area_mm2": 9634.67,
+"aspect": 2.67,
+"bbox_mm": [
+70.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2484,
+"n_cylindrical_faces": 7,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 41730.52,
+"watertight": true
+},
+"03fe9cac-6070-1f10-6a88-55b8a3835295_d1": {
+"area_mm2": 11314.27,
+"aspect": 2.8,
+"bbox_mm": [
+80.0,
+30.0,
+84.0
+],
+"exec_ok": true,
+"fill_frac": 0.2255,
+"n_cylindrical_faces": 3,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 2,
+"t_s": 6.1,
+"volume_mm3": 45451.91,
+"watertight": false
+},
+"03fe9cac-6070-1f10-6a88-55b8a3835295_d2": {
+"area_mm2": 9415.01,
+"aspect": 2.67,
+"bbox_mm": [
+70.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2499,
+"n_cylindrical_faces": 2,
+"n_faces": 13,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 41979.55,
+"watertight": true
+},
+"03fe9cac-6070-1f10-6a88-55b8a3835295_d3": {
+"area_mm2": 10647.74,
+"aspect": 2.67,
+"bbox_mm": [
+70.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2435,
+"n_cylindrical_faces": 4,
+"n_faces": 15,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 40909.98,
+"watertight": true
+},
+"042c25e6-40b8-cd02-4c97-d42363f18b45_d0": {
+"area_mm2": 9525.49,
+"aspect": 3.0,
+"bbox_mm": [
+60.0,
+40.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8265,
+"n_cylindrical_faces": 16,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 39673.28,
+"watertight": true
+},
+"042c25e6-40b8-cd02-4c97-d42363f18b45_d1": {
+"area_mm2": 9525.49,
+"aspect": 3.0,
+"bbox_mm": [
+60.0,
+40.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8265,
+"n_cylindrical_faces": 16,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 39673.28,
+"watertight": true
+},
+"042c25e6-40b8-cd02-4c97-d42363f18b45_d2": {
+"area_mm2": 9561.45,
+"aspect": 3.0,
+"bbox_mm": [
+60.0,
+40.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8503,
+"n_cylindrical_faces": 16,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 40815.15,
+"watertight": true
+},
+"042c25e6-40b8-cd02-4c97-d42363f18b45_d3": {
+"area_mm2": 9525.49,
+"aspect": 3.0,
+"bbox_mm": [
+60.0,
+40.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8265,
+"n_cylindrical_faces": 16,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 39673.28,
+"watertight": true
+},
+"04a4e152-726a-31cb-2707-feccd5f5153e_d0": {
+"area_mm2": 4414.52,
+"aspect": 4.17,
+"bbox_mm": [
+50.0,
+30.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.6987,
+"n_cylindrical_faces": 1,
+"n_faces": 25,
+"n_mesh_components": 2,
+"n_planar_faces": 24,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 12577.36,
+"watertight": true
+},
+"04a4e152-726a-31cb-2707-feccd5f5153e_d1": {
+"area_mm2": 3660.4,
+"aspect": 4.17,
+"bbox_mm": [
+50.0,
+30.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.4341,
+"n_cylindrical_faces": 1,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 33,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 7814.4,
+"watertight": true
+},
+"04a4e152-726a-31cb-2707-feccd5f5153e_d2": {
+"area_mm2": 3684.4,
+"aspect": 4.17,
+"bbox_mm": [
+50.0,
+30.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.4301,
+"n_cylindrical_faces": 1,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 33,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 7742.4,
+"watertight": true
+},
+"04a4e152-726a-31cb-2707-feccd5f5153e_d3": {
+"area_mm2": 3552.48,
+"aspect": 4.17,
+"bbox_mm": [
+50.0,
+30.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.414,
+"n_cylindrical_faces": 1,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 31,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 7452.48,
+"watertight": true
+},
+"04e8b530-8885-7ae9-8ac3-c63db08adcfe_d0": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 3.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.7
+},
+"04e8b530-8885-7ae9-8ac3-c63db08adcfe_d1": {
+"area_mm2": 17281.4,
+"aspect": 1.78,
+"bbox_mm": [
+80.0,
+80.0,
+45.0
+],
+"exec_ok": true,
+"fill_frac": 0.1236,
+"n_cylindrical_faces": 2,
+"n_faces": 46,
+"n_mesh_components": 1,
+"n_planar_faces": 42,
+"n_solids": 1,
+"t_s": 6.6,
+"volume_mm3": 35607.21,
+"watertight": true
+},
+"04e8b530-8885-7ae9-8ac3-c63db08adcfe_d2": {
+"area_mm2": 17250.19,
+"aspect": 1.78,
+"bbox_mm": [
+80.0,
+80.0,
+45.0
+],
+"exec_ok": true,
+"fill_frac": 0.1211,
+"n_cylindrical_faces": 2,
+"n_faces": 56,
+"n_mesh_components": 1,
+"n_planar_faces": 50,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 34863.46,
+"watertight": true
+},
+"04e8b530-8885-7ae9-8ac3-c63db08adcfe_d3": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 3.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.6
+},
+"04e95c60-20cc-55db-11c5-6055a736b51f_d0": {
+"area_mm2": 43847.96,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+80.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.4252,
+"n_cylindrical_faces": 4,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 108854.0,
+"watertight": true
+},
+"04e95c60-20cc-55db-11c5-6055a736b51f_d1": {
+"area_mm2": 43815.96,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+80.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.4203,
+"n_cylindrical_faces": 4,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 29,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 107606.0,
+"watertight": true
+},
+"04e95c60-20cc-55db-11c5-6055a736b51f_d2": {
+"area_mm2": 44148.74,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+80.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.4199,
+"n_cylindrical_faces": 16,
+"n_faces": 40,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 107503.4,
+"watertight": true
+},
+"04e95c60-20cc-55db-11c5-6055a736b51f_d3": {
+"area_mm2": 44113.12,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+80.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.4028,
+"n_cylindrical_faces": 4,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 29,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 103106.7,
+"watertight": true
+},
+"053ba312-3046-9868-7133-6e4e4766e696_d0": {
+"area_mm2": 37295.54,
+"aspect": 1.33,
+"bbox_mm": [
+80.0,
+80.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.2043,
+"n_cylindrical_faces": 2,
+"n_faces": 44,
+"n_mesh_components": 7,
+"n_planar_faces": 38,
+"n_solids": 7,
+"t_s": 6.0,
+"volume_mm3": 78451.08,
+"watertight": true
+},
+"053ba312-3046-9868-7133-6e4e4766e696_d1": {
+"area_mm2": 29906.08,
+"aspect": 1.33,
+"bbox_mm": [
+80.0,
+80.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.182,
+"n_cylindrical_faces": 2,
+"n_faces": 90,
+"n_mesh_components": 1,
+"n_planar_faces": 74,
+"n_solids": 1,
+"t_s": 7.9,
+"volume_mm3": 69891.55,
+"watertight": true
+},
+"053ba312-3046-9868-7133-6e4e4766e696_d2": {
+"area_mm2": 33644.12,
+"aspect": 1.33,
+"bbox_mm": [
+80.0,
+80.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.1963,
+"n_cylindrical_faces": 13,
+"n_faces": 67,
+"n_mesh_components": 1,
+"n_planar_faces": 50,
+"n_solids": 1,
+"t_s": 7.1,
+"volume_mm3": 75365.05,
+"watertight": true
+},
+"053ba312-3046-9868-7133-6e4e4766e696_d3": {
+"area_mm2": 36528.52,
+"aspect": 1.33,
+"bbox_mm": [
+80.0,
+80.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.204,
+"n_cylindrical_faces": 5,
+"n_faces": 47,
+"n_mesh_components": 3,
+"n_planar_faces": 38,
+"n_solids": 3,
+"t_s": 7.0,
+"volume_mm3": 78349.6,
+"watertight": true
+},
+"0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0_d0": {
+"area_mm2": 36248.34,
+"aspect": 1.14,
+"bbox_mm": [
+70.0,
+70.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.1965,
+"n_cylindrical_faces": 2,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 22,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 77023.51,
+"watertight": true
+},
+"0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0_d1": {
+"area_mm2": 34840.46,
+"aspect": 1.14,
+"bbox_mm": [
+70.0,
+70.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.1948,
+"n_cylindrical_faces": 2,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 6.6,
+"volume_mm3": 76344.08,
+"watertight": true
+},
+"0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0_d2": {
+"area_mm2": 38319.4,
+"aspect": 1.14,
+"bbox_mm": [
+70.0,
+69.981,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.1917,
+"n_cylindrical_faces": 7,
+"n_faces": 88,
+"n_mesh_components": 1,
+"n_planar_faces": 74,
+"n_solids": 1,
+"t_s": 6.9,
+"volume_mm3": 75144.85,
+"watertight": false
+},
+"0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0_d3": {
+"area_mm2": 36248.34,
+"aspect": 1.14,
+"bbox_mm": [
+70.0,
+70.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.1965,
+"n_cylindrical_faces": 2,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 22,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 77023.51,
+"watertight": true
+},
+"058f2c3a-cfc8-1f2c-9abe-d42ebc007141_d0": {
+"area_mm2": 10145.0,
+"aspect": 14.0,
+"bbox_mm": [
+84.0,
+55.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.8622,
+"n_cylindrical_faces": 8,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 23899.68,
+"watertight": true
+},
+"058f2c3a-cfc8-1f2c-9abe-d42ebc007141_d1": {
+"area_mm2": 10128.75,
+"aspect": 12.02,
+"bbox_mm": [
+84.0,
+50.0,
+6.989
+],
+"exec_ok": true,
+"fill_frac": 0.8139,
+"n_cylindrical_faces": 17,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 23893.15,
+"watertight": true
+},
+"058f2c3a-cfc8-1f2c-9abe-d42ebc007141_d2": {
+"area_mm2": 10815.13,
+"aspect": 13.57,
+"bbox_mm": [
+95.0,
+50.0,
+7.0
+],
+"exec_ok": true,
+"fill_frac": 0.7386,
+"n_cylindrical_faces": 16,
+"n_faces": 31,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 7.0,
+"volume_mm3": 24559.42,
+"watertight": true
+},
+"058f2c3a-cfc8-1f2c-9abe-d42ebc007141_d3": {
+"error": " <module>\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 422, in fillet\n    target = object_list[0].topo_parent  # pylint: disable=no-member\n             ~~~~~~~~~~~^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/shape_core.py\", line 3001, in __getitem__\n    return list(self).__getitem__(key)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nIndexError: list index out of range\n",
+"exec_ok": false,
+"t_s": 5.4
+},
+"05d7977c-c029-a5b7-cb4f-49ca736bf726_d0": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 2.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.5
+},
+"05d7977c-c029-a5b7-cb4f-49ca736bf726_d1": {
+"area_mm2": 7087.85,
+"aspect": 4.29,
+"bbox_mm": [
+60.0,
+40.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.5989,
+"n_cylindrical_faces": 5,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 20122.85,
+"watertight": true
+},
+"05d7977c-c029-a5b7-cb4f-49ca736bf726_d2": {
+"area_mm2": 6962.24,
+"aspect": 5.0,
+"bbox_mm": [
+60.0,
+40.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.6769,
+"n_cylindrical_faces": 5,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.6,
+"volume_mm3": 19495.76,
+"watertight": true
+},
+"05d7977c-c029-a5b7-cb4f-49ca736bf726_d3": {
+"area_mm2": 6962.24,
+"aspect": 5.0,
+"bbox_mm": [
+60.0,
+40.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.6769,
+"n_cylindrical_faces": 5,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 19495.76,
+"watertight": true
+},
+"05ede2e8-984a-61c6-fe6d-daa687e9b92e_d0": {
+"area_mm2": 12712.44,
+"aspect": 9.41,
+"bbox_mm": [
+80.0,
+60.0,
+8.5
+],
+"exec_ok": true,
+"fill_frac": 0.581,
+"n_cylindrical_faces": 45,
+"n_faces": 87,
+"n_mesh_components": 5,
+"n_planar_faces": 42,
+"n_solids": 9,
+"t_s": 7.3,
+"volume_mm3": 23705.13,
+"watertight": false
+},
+"05ede2e8-984a-61c6-fe6d-daa687e9b92e_d1": {
+"area_mm2": 12835.82,
+"aspect": 9.41,
+"bbox_mm": [
+80.0,
+60.0,
+8.5
+],
+"exec_ok": true,
+"fill_frac": 0.5839,
+"n_cylindrical_faces": 41,
+"n_faces": 77,
+"n_mesh_components": 2,
+"n_planar_faces": 36,
+"n_solids": 6,
+"t_s": 7.4,
+"volume_mm3": 23824.55,
+"watertight": false
+},
+"05ede2e8-984a-61c6-fe6d-daa687e9b92e_d2": {
+"error": "\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 364, in fillet\n    fillet_builder.Add(radius, native_edge)\nOCP.OCP.Standard.Standard_ConstructionError: ChFi3d_Builder:only 2 faces\n",
+"exec_ok": false,
+"t_s": 6.2
+},
+"05ede2e8-984a-61c6-fe6d-daa687e9b92e_d3": {
+"area_mm2": 12712.44,
+"aspect": 9.41,
+"bbox_mm": [
+80.0,
+60.0,
+8.5
+],
+"exec_ok": true,
+"fill_frac": 0.581,
+"n_cylindrical_faces": 45,
+"n_faces": 87,
+"n_mesh_components": 5,
+"n_planar_faces": 42,
+"n_solids": 9,
+"t_s": 7.9,
+"volume_mm3": 23705.13,
+"watertight": false
+},
+"05f14712-467b-1bba-8da4-469495a3d5ef_d0": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.5
+},
+"05f14712-467b-1bba-8da4-469495a3d5ef_d1": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 6.2
+},
+"05f14712-467b-1bba-8da4-469495a3d5ef_d2": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 1.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 7.1
+},
+"05f14712-467b-1bba-8da4-469495a3d5ef_d3": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.6
+},
+"061ae590-e223-ad36-4cd6-ac729031aba5_d0": {
+"area_mm2": 12812.47,
+"aspect": 3.33,
+"bbox_mm": [
+80.0,
+60.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.3127,
+"n_cylindrical_faces": 2,
+"n_faces": 36,
+"n_mesh_components": 5,
+"n_planar_faces": 34,
+"n_solids": 5,
+"t_s": 6.2,
+"volume_mm3": 36019.47,
+"watertight": true
+},
+"061ae590-e223-ad36-4cd6-ac729031aba5_d1": {
+"area_mm2": 12736.9,
+"aspect": 4.0,
+"bbox_mm": [
+80.0,
+60.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.3879,
+"n_cylindrical_faces": 5,
+"n_faces": 39,
+"n_mesh_components": 1,
+"n_planar_faces": 34,
+"n_solids": 1,
+"t_s": 6.7,
+"volume_mm3": 37241.47,
+"watertight": true
+},
+"061ae590-e223-ad36-4cd6-ac729031aba5_d2": {
+"area_mm2": 12812.47,
+"aspect": 3.33,
+"bbox_mm": [
+80.0,
+60.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.3127,
+"n_cylindrical_faces": 2,
+"n_faces": 36,
+"n_mesh_components": 5,
+"n_planar_faces": 34,
+"n_solids": 5,
+"t_s": 6.8,
+"volume_mm3": 36019.47,
+"watertight": true
+},
+"061ae590-e223-ad36-4cd6-ac729031aba5_d3": {
+"area_mm2": 12812.47,
+"aspect": 3.33,
+"bbox_mm": [
+80.0,
+60.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.3127,
+"n_cylindrical_faces": 2,
+"n_faces": 36,
+"n_mesh_components": 5,
+"n_planar_faces": 34,
+"n_solids": 5,
+"t_s": 5.9,
+"volume_mm3": 36019.47,
+"watertight": true
+},
+"067e685e-8e0c-760d-264d-b945cf2eb03f_d0": {
+"area_mm2": 5847.88,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.5999,
+"n_cylindrical_faces": 8,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 11518.89,
+"watertight": true
+},
+"067e685e-8e0c-760d-264d-b945cf2eb03f_d1": {
+"area_mm2": 5863.53,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.6003,
+"n_cylindrical_faces": 8,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 11525.7,
+"watertight": true
+},
+"067e685e-8e0c-760d-264d-b945cf2eb03f_d2": {
+"area_mm2": 5856.23,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.6001,
+"n_cylindrical_faces": 8,
+"n_faces": 28,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 11521.26,
+"watertight": true
+},
+"067e685e-8e0c-760d-264d-b945cf2eb03f_d3": {
+"area_mm2": 5830.19,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.5992,
+"n_cylindrical_faces": 8,
+"n_faces": 28,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.0,
+"volume_mm3": 11503.79,
+"watertight": true
+},
+"06b4e884-8486-df74-36c5-4b3cf685d78e_d0": {
+"area_mm2": 12569.06,
+"aspect": 6.67,
+"bbox_mm": [
+100.0,
+40.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7693,
+"n_cylindrical_faces": 8,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 46159.33,
+"watertight": true
+},
+"06b4e884-8486-df74-36c5-4b3cf685d78e_d1": {
+"area_mm2": 12569.06,
+"aspect": 6.67,
+"bbox_mm": [
+100.0,
+40.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7693,
+"n_cylindrical_faces": 8,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 46159.33,
+"watertight": true
+},
+"06b4e884-8486-df74-36c5-4b3cf685d78e_d2": {
+"area_mm2": 12569.06,
+"aspect": 6.67,
+"bbox_mm": [
+100.0,
+40.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7693,
+"n_cylindrical_faces": 8,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 46159.33,
+"watertight": true
+},
+"06b4e884-8486-df74-36c5-4b3cf685d78e_d3": {
+"area_mm2": 12569.06,
+"aspect": 6.67,
+"bbox_mm": [
+100.0,
+40.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7693,
+"n_cylindrical_faces": 8,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 46159.33,
+"watertight": true
+},
+"06e3334c-5c6b-66b0-5c44-ea8c43acc4fe_d0": {
+"area_mm2": 27645.84,
+"aspect": 11.91,
+"bbox_mm": [
+134.134,
+154.885,
+13.0
+],
+"exec_ok": true,
+"fill_frac": 0.4162,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 112418.07,
+"watertight": true
+},
+"06e3334c-5c6b-66b0-5c44-ea8c43acc4fe_d1": {
+"area_mm2": 27667.29,
+"aspect": 11.95,
+"bbox_mm": [
+134.567,
+155.385,
+13.0
+],
+"exec_ok": true,
+"fill_frac": 0.4136,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 112430.74,
+"watertight": true
+},
+"06e3334c-5c6b-66b0-5c44-ea8c43acc4fe_d2": {
+"area_mm2": 27090.14,
+"aspect": 11.91,
+"bbox_mm": [
+134.134,
+154.885,
+13.0
+],
+"exec_ok": true,
+"fill_frac": 0.4207,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 113635.37,
+"watertight": true
+},
+"06e3334c-5c6b-66b0-5c44-ea8c43acc4fe_d3": {
+"area_mm2": 26866.71,
+"aspect": 11.95,
+"bbox_mm": [
+134.567,
+155.385,
+13.0
+],
+"exec_ok": true,
+"fill_frac": 0.4189,
+"n_cylindrical_faces": 1,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 113854.84,
+"watertight": true
+},
+"07035802-864d-0091-4bf7-4e785faf1a4f_d0": {
+"area_mm2": 16756.72,
+"aspect": 4.71,
+"bbox_mm": [
+80.0,
+60.0,
+17.0
+],
+"exec_ok": true,
+"fill_frac": 0.4165,
+"n_cylindrical_faces": 12,
+"n_faces": 44,
+"n_mesh_components": 1,
+"n_planar_faces": 32,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 33989.71,
+"watertight": true
+},
+"07035802-864d-0091-4bf7-4e785faf1a4f_d1": {
+"area_mm2": 17127.14,
+"aspect": 4.71,
+"bbox_mm": [
+80.0,
+60.0,
+17.0
+],
+"exec_ok": true,
+"fill_frac": 0.4032,
+"n_cylindrical_faces": 12,
+"n_faces": 42,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 32905.14,
+"watertight": true
+},
+"07035802-864d-0091-4bf7-4e785faf1a4f_d2": {
+"area_mm2": 18456.29,
+"aspect": 4.71,
+"bbox_mm": [
+80.0,
+60.0,
+17.0
+],
+"exec_ok": true,
+"fill_frac": 0.4028,
+"n_cylindrical_faces": 12,
+"n_faces": 69,
+"n_mesh_components": 1,
+"n_planar_faces": 57,
+"n_solids": 1,
+"t_s": 6.5,
+"volume_mm3": 32864.87,
+"watertight": false
+},
+"07035802-864d-0091-4bf7-4e785faf1a4f_d3": {
+"area_mm2": 17127.14,
+"aspect": 4.71,
+"bbox_mm": [
+80.0,
+60.0,
+17.0
+],
+"exec_ok": true,
+"fill_frac": 0.4032,
+"n_cylindrical_faces": 12,
+"n_faces": 42,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 32905.14,
+"watertight": true
+},
+"0730e4f2-e958-00df-1708-5486efc8747d_d0": {
+"area_mm2": 21559.49,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+60.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.1049,
+"n_cylindrical_faces": 14,
+"n_faces": 28,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 20133.63,
+"watertight": true
+},
+"0730e4f2-e958-00df-1708-5486efc8747d_d1": {
+"area_mm2": 22559.49,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+60.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.1111,
+"n_cylindrical_faces": 14,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 21333.63,
+"watertight": true
+},
+"0730e4f2-e958-00df-1708-5486efc8747d_d2": {
+"area_mm2": 22435.78,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+60.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.1125,
+"n_cylindrical_faces": 14,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 21609.6,
+"watertight": true
+},
+"0730e4f2-e958-00df-1708-5486efc8747d_d3": {
+"area_mm2": 21559.39,
+"aspect": 2.0,
+"bbox_mm": [
+80.0,
+60.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.1051,
+"n_cylindrical_faces": 12,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 20183.77,
+"watertight": true
+},
+"07832ef6-5dde-b57e-7f3f-37d19b242f35_d0": {
+"area_mm2": 18200.37,
+"aspect": 1.05,
+"bbox_mm": [
+75.98,
+75.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2175,
+"n_cylindrical_faces": 6,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 100448.65,
+"watertight": true
+},
+"07832ef6-5dde-b57e-7f3f-37d19b242f35_d1": {
+"area_mm2": 17669.21,
+"aspect": 1.05,
+"bbox_mm": [
+75.98,
+75.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2179,
+"n_cylindrical_faces": 6,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 100663.17,
+"watertight": true
+},
+"07832ef6-5dde-b57e-7f3f-37d19b242f35_d2": {
+"area_mm2": 18443.34,
+"aspect": 1.05,
+"bbox_mm": [
+75.98,
+75.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2124,
+"n_cylindrical_faces": 6,
+"n_faces": 15,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 98121.09,
+"watertight": true
+},
+"07832ef6-5dde-b57e-7f3f-37d19b242f35_d3": {
+"area_mm2": 17482.81,
+"aspect": 1.05,
+"bbox_mm": [
+75.98,
+75.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2206,
+"n_cylindrical_faces": 6,
+"n_faces": 13,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 101914.42,
+"watertight": true
+},
+"07bfb06a-6237-cc97-0a53-45a5be3d01b9_d0": {
+"area_mm2": 10940.48,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+60.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.8576,
+"n_cylindrical_faces": 4,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 24699.3,
+"watertight": true
+},
+"07bfb06a-6237-cc97-0a53-45a5be3d01b9_d1": {
+"area_mm2": 10752.48,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+60.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.8534,
+"n_cylindrical_faces": 4,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 24579.3,
+"watertight": true
+},
+"07bfb06a-6237-cc97-0a53-45a5be3d01b9_d2": {
+"area_mm2": 11762.76,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+60.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.9133,
+"n_cylindrical_faces": 5,
+"n_faces": 25,
+"n_mesh_components": 2,
+"n_planar_faces": 20,
+"n_solids": 2,
+"t_s": 5.6,
+"volume_mm3": 26304.1,
+"watertight": true
+},
+"07bfb06a-6237-cc97-0a53-45a5be3d01b9_d3": {
+"area_mm2": 10893.6,
+"aspect": 13.33,
+"bbox_mm": [
+80.0,
+60.0,
+6.0
+],
+"exec_ok": true,
+"fill_frac": 0.843,
+"n_cylindrical_faces": 8,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 24278.5,
+"watertight": true
+},
+"07d2049a-e04f-788b-343d-5455e5921446_d0": {
+"area_mm2": 19488.51,
+"aspect": 1.78,
+"bbox_mm": [
+80.0,
+80.0,
+45.0
+],
+"exec_ok": true,
+"fill_frac": 0.4607,
+"n_cylindrical_faces": 5,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 132681.67,
+"watertight": true
+},
+"07d2049a-e04f-788b-343d-5455e5921446_d1": {
+"area_mm2": 20011.77,
+"aspect": 1.78,
+"bbox_mm": [
+80.0,
+80.0,
+45.0
+],
+"exec_ok": true,
+"fill_frac": 0.449,
+"n_cylindrical_faces": 5,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 129309.66,
+"watertight": true
+},
+"07d2049a-e04f-788b-343d-5455e5921446_d2": {
+"area_mm2": 19299.92,
+"aspect": 1.78,
+"bbox_mm": [
+80.0,
+80.0,
+45.0
+],
+"exec_ok": true,
+"fill_frac": 0.4565,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 131477.24,
+"watertight": true
+},
+"07d2049a-e04f-788b-343d-5455e5921446_d3": {
+"area_mm2": 19184.29,
+"aspect": 1.78,
+"bbox_mm": [
+80.0,
+80.0,
+45.0
+],
+"exec_ok": true,
+"fill_frac": 0.4582,
+"n_cylindrical_faces": 5,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 131962.12,
+"watertight": true
+},
+"080b2e00-c9be-606a-3207-08419028ffd0_d0": {
+"area_mm2": 6167.46,
+"aspect": 12.0,
+"bbox_mm": [
+60.0,
+45.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8697,
+"n_cylindrical_faces": 6,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 11741.22,
+"watertight": true
+},
+"080b2e00-c9be-606a-3207-08419028ffd0_d1": {
+"area_mm2": 6300.77,
+"aspect": 12.0,
+"bbox_mm": [
+60.0,
+45.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8823,
+"n_cylindrical_faces": 7,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 11910.42,
+"watertight": true
+},
+"080b2e00-c9be-606a-3207-08419028ffd0_d2": {
+"area_mm2": 6167.46,
+"aspect": 12.0,
+"bbox_mm": [
+60.0,
+45.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8697,
+"n_cylindrical_faces": 6,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 11741.22,
+"watertight": true
+},
+"080b2e00-c9be-606a-3207-08419028ffd0_d3": {
+"area_mm2": 6167.46,
+"aspect": 12.0,
+"bbox_mm": [
+60.0,
+45.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8697,
+"n_cylindrical_faces": 6,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 11741.22,
+"watertight": true
+},
+"082d1e48-2084-f5e6-e02a-5dde5f72e9df_d0": {
+"area_mm2": 19806.45,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.6929,
+"n_cylindrical_faces": 5,
+"n_faces": 16,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 83144.51,
+"watertight": true
+},
+"082d1e48-2084-f5e6-e02a-5dde5f72e9df_d1": {
+"area_mm2": 19806.45,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.6929,
+"n_cylindrical_faces": 5,
+"n_faces": 16,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 83144.51,
+"watertight": true
+},
+"082d1e48-2084-f5e6-e02a-5dde5f72e9df_d2": {
+"area_mm2": 19973.43,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.6804,
+"n_cylindrical_faces": 5,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 81647.16,
+"watertight": true
+},
+"082d1e48-2084-f5e6-e02a-5dde5f72e9df_d3": {
+"area_mm2": 20066.45,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.6814,
+"n_cylindrical_faces": 5,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 81764.51,
+"watertight": true
+},
+"082dbea2-e3fe-49a1-d631-78cb38b86fd2_d0": {
+"area_mm2": 2298.9,
+"aspect": 3.0,
+"bbox_mm": [
+30.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9659,
+"n_cylindrical_faces": 5,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 6,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 5795.54,
+"watertight": true
+},
+"082dbea2-e3fe-49a1-d631-78cb38b86fd2_d1": {
+"area_mm2": 2298.9,
+"aspect": 3.0,
+"bbox_mm": [
+30.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9659,
+"n_cylindrical_faces": 5,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 6,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 5795.54,
+"watertight": true
+},
+"082dbea2-e3fe-49a1-d631-78cb38b86fd2_d2": {
+"area_mm2": 2298.9,
+"aspect": 3.0,
+"bbox_mm": [
+30.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9659,
+"n_cylindrical_faces": 5,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 6,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 5795.54,
+"watertight": true
+},
+"082dbea2-e3fe-49a1-d631-78cb38b86fd2_d3": {
+"area_mm2": 2298.9,
+"aspect": 3.0,
+"bbox_mm": [
+30.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9659,
+"n_cylindrical_faces": 5,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 6,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 5795.54,
+"watertight": true
+},
+"08734382-459c-b322-da4f-0df4b47d6f42_d0": {
+"area_mm2": 25301.59,
+"aspect": 1.4,
+"bbox_mm": [
+60.0,
+80.0,
+84.0
+],
+"exec_ok": true,
+"fill_frac": 0.2046,
+"n_cylindrical_faces": 24,
+"n_faces": 66,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 6.8,
+"volume_mm3": 82485.4,
+"watertight": true
+},
+"08734382-459c-b322-da4f-0df4b47d6f42_d1": {
+"area_mm2": 40148.82,
+"aspect": 1.05,
+"bbox_mm": [
+80.0,
+80.0,
+84.0
+],
+"exec_ok": true,
+"fill_frac": 0.2743,
+"n_cylindrical_faces": 24,
+"n_faces": 66,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 7.2,
+"volume_mm3": 147476.33,
+"watertight": true
+},
+"08734382-459c-b322-da4f-0df4b47d6f42_d2": {
+"area_mm2": 31100.38,
+"aspect": 1.43,
+"bbox_mm": [
+60.0,
+80.0,
+86.0
+],
+"exec_ok": true,
+"fill_frac": 0.2479,
+"n_cylindrical_faces": 28,
+"n_faces": 70,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 102341.2,
+"watertight": true
+},
+"08734382-459c-b322-da4f-0df4b47d6f42_d3": {
+"area_mm2": 30709.59,
+"aspect": 1.4,
+"bbox_mm": [
+60.0,
+80.0,
+84.0
+],
+"exec_ok": true,
+"fill_frac": 0.2312,
+"n_cylindrical_faces": 26,
+"n_faces": 68,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 6.9,
+"volume_mm3": 93210.94,
+"watertight": true
+},
+"087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf_d0": {
+"area_mm2": 21448.62,
+"aspect": 5.0,
+"bbox_mm": [
+100.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.3752,
+"n_cylindrical_faces": 24,
+"n_faces": 40,
+"n_mesh_components": 2,
+"n_planar_faces": 16,
+"n_solids": 2,
+"t_s": 6.4,
+"volume_mm3": 22512.16,
+"watertight": true
+},
+"087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf_d1": {
+"area_mm2": 20697.74,
+"aspect": 5.0,
+"bbox_mm": [
+100.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.4597,
+"n_cylindrical_faces": 22,
+"n_faces": 36,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 27584.91,
+"watertight": true
+},
+"087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf_d2": {
+"area_mm2": 20748.07,
+"aspect": 5.0,
+"bbox_mm": [
+100.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.4581,
+"n_cylindrical_faces": 24,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 27484.64,
+"watertight": true
+},
+"087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf_d3": {
+"area_mm2": 20673.56,
+"aspect": 5.0,
+"bbox_mm": [
+100.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.34,
+"n_cylindrical_faces": 20,
+"n_faces": 52,
+"n_mesh_components": 2,
+"n_planar_faces": 32,
+"n_solids": 6,
+"t_s": 5.4,
+"volume_mm3": 20398.89,
+"watertight": false
+},
+"08ceb60e-09e1-b2d4-d0e2-af718c90dfc8_d0": {
+"area_mm2": 20644.53,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.8275,
+"n_cylindrical_faces": 10,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 119160.03,
+"watertight": true
+},
+"08ceb60e-09e1-b2d4-d0e2-af718c90dfc8_d1": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 2.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.6
+},
+"08ceb60e-09e1-b2d4-d0e2-af718c90dfc8_d2": {
+"area_mm2": 20644.53,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.8275,
+"n_cylindrical_faces": 10,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 119160.03,
+"watertight": true
+},
+"08ceb60e-09e1-b2d4-d0e2-af718c90dfc8_d3": {
+"area_mm2": 20734.69,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.829,
+"n_cylindrical_faces": 10,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 119380.15,
+"watertight": true
+},
+"090d59fe-be2b-6344-a7b2-210a1b8cceca_d0": {
+"error": "h/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 679, in offset\n    solid.offset_3d(openings_in_this_solid, amount, kind=kind).fix()\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 668, in offset_3d\n    offset_builder.MakeThickSolidByJoin(\nOCP.OCP.Standard.Standard_NoSuchObject: BRep_Tool:: no parameter on edge\n",
+"exec_ok": false,
+"t_s": 4.8
+},
+"090d59fe-be2b-6344-a7b2-210a1b8cceca_d1": {
+"area_mm2": 21113.15,
+"aspect": 2.73,
+"bbox_mm": [
+80.0,
+40.0,
+29.311
+],
+"exec_ok": true,
+"fill_frac": 0.3285,
+"n_cylindrical_faces": 9,
+"n_faces": 45,
+"n_mesh_components": 1,
+"n_planar_faces": 36,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 30814.34,
+"watertight": true
+},
+"090d59fe-be2b-6344-a7b2-210a1b8cceca_d2": {
+"area_mm2": 19482.6,
+"aspect": 2.71,
+"bbox_mm": [
+80.0,
+40.0,
+29.553
+],
+"exec_ok": true,
+"fill_frac": 0.2909,
+"n_cylindrical_faces": 1,
+"n_faces": 41,
+"n_mesh_components": 1,
+"n_planar_faces": 40,
+"n_solids": 1,
+"t_s": 6.9,
+"volume_mm3": 27511.6,
+"watertight": true
+},
+"090d59fe-be2b-6344-a7b2-210a1b8cceca_d3": {
+"area_mm2": 16853.1,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+40.0,
+29.987
+],
+"exec_ok": true,
+"fill_frac": 0.8509,
+"n_cylindrical_faces": 4,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 7.1,
+"volume_mm3": 81651.1,
+"watertight": true
+},
+"092593f2-bbb7-b34d-61e3-4686c86404ac_d0": {
+"area_mm2": 6986.15,
+"aspect": 21.5,
+"bbox_mm": [
+86.0,
+40.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.7728,
+"n_cylindrical_faces": 6,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 10634.38,
+"watertight": true
+},
+"092593f2-bbb7-b34d-61e3-4686c86404ac_d1": {
+"area_mm2": 6858.15,
+"aspect": 21.0,
+"bbox_mm": [
+84.0,
+40.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.7823,
+"n_cylindrical_faces": 6,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 10514.38,
+"watertight": true
+},
+"092593f2-bbb7-b34d-61e3-4686c86404ac_d2": {
+"area_mm2": 6922.15,
+"aspect": 21.0,
+"bbox_mm": [
+84.0,
+40.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.7942,
+"n_cylindrical_faces": 6,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 10674.38,
+"watertight": true
+},
+"092593f2-bbb7-b34d-61e3-4686c86404ac_d3": {
+"area_mm2": 6922.15,
+"aspect": 21.0,
+"bbox_mm": [
+84.0,
+40.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.7942,
+"n_cylindrical_faces": 6,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 10674.38,
+"watertight": true
+},
+"0975cab6-f02f-e897-b6f6-449b7b9ace8e_d0": {
+"area_mm2": 8875.72,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+48.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.9381,
+"n_cylindrical_faces": 10,
+"n_faces": 29,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 14408.95,
+"watertight": true
+},
+"0975cab6-f02f-e897-b6f6-449b7b9ace8e_d1": {
+"area_mm2": 8876.07,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+48.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.9381,
+"n_cylindrical_faces": 2,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 14408.87,
+"watertight": true
+},
+"0975cab6-f02f-e897-b6f6-449b7b9ace8e_d2": {
+"area_mm2": 8876.07,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+48.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.9381,
+"n_cylindrical_faces": 2,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 14408.87,
+"watertight": true
+},
+"0975cab6-f02f-e897-b6f6-449b7b9ace8e_d3": {
+"area_mm2": 8876.07,
+"aspect": 20.0,
+"bbox_mm": [
+80.0,
+48.0,
+4.0
+],
+"exec_ok": true,
+"fill_frac": 0.9381,
+"n_cylindrical_faces": 2,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 14408.87,
+"watertight": true
+},
+"0979b252-eee8-3278-1a58-0188807a4b43_d0": {
+"area_mm2": 6810.04,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9734,
+"n_cylindrical_faces": 2,
+"n_faces": 25,
+"n_mesh_components": 1,
+"n_planar_faces": 23,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 18689.76,
+"watertight": true
+},
+"0979b252-eee8-3278-1a58-0188807a4b43_d1": {
+"error": "^^^^^^^^^^^^^^^^^^^^^\n  File \"<generated>\", line 33, in <module>\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/objects_part.py\", line 162, in __init__\n    solid = Solid.make_box(length, width, height)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 1345, in make_box\n    ).Shape()\n      ^^^^^^^\nOCP.OCP.Standard.Standard_DomainError\n",
+"exec_ok": false,
+"t_s": 5.4
+},
+"0979b252-eee8-3278-1a58-0188807a4b43_d2": {
+"area_mm2": 6722.46,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9835,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 18882.67,
+"watertight": true
+},
+"0979b252-eee8-3278-1a58-0188807a4b43_d3": {
+"area_mm2": 6784.21,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.977,
+"n_cylindrical_faces": 2,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 31,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 18758.58,
+"watertight": true
+},
+"09a06a3c-9e51-288f-de54-bc99ab136fb3_d0": {
+"area_mm2": 5292.26,
+"aspect": 5.5,
+"bbox_mm": [
+65.979,
+12.0,
+22.5
+],
+"exec_ok": true,
+"fill_frac": 0.8863,
+"n_cylindrical_faces": 5,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 15787.98,
+"watertight": true
+},
+"09a06a3c-9e51-288f-de54-bc99ab136fb3_d1": {
+"area_mm2": 6681.67,
+"aspect": 3.5,
+"bbox_mm": [
+69.966,
+20.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.9058,
+"n_cylindrical_faces": 5,
+"n_faces": 13,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 25351.43,
+"watertight": true
+},
+"09a06a3c-9e51-288f-de54-bc99ab136fb3_d2": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 8.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.1
+},
+"09a06a3c-9e51-288f-de54-bc99ab136fb3_d3": {
+"area_mm2": 7142.28,
+"aspect": 3.5,
+"bbox_mm": [
+69.967,
+21.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.945,
+"n_cylindrical_faces": 5,
+"n_faces": 30,
+"n_mesh_components": 1,
+"n_planar_faces": 21,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 27770.88,
+"watertight": true
+},
+"09ca4d7a-4a0b-6027-421c-fb8a00f19097_d0": {
+"area_mm2": 10351.76,
+"aspect": 5.28,
+"bbox_mm": [
+79.2,
+69.282,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.2847,
+"n_cylindrical_faces": 7,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 23430.29,
+"watertight": true
+},
+"09ca4d7a-4a0b-6027-421c-fb8a00f19097_d1": {
+"area_mm2": 10362.0,
+"aspect": 5.27,
+"bbox_mm": [
+79.0,
+69.282,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.2854,
+"n_cylindrical_faces": 7,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 23429.07,
+"watertight": true
+},
+"09ca4d7a-4a0b-6027-421c-fb8a00f19097_d2": {
+"area_mm2": 10369.02,
+"aspect": 5.3,
+"bbox_mm": [
+79.5,
+69.282,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.2837,
+"n_cylindrical_faces": 19,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 23438.44,
+"watertight": true
+},
+"09ca4d7a-4a0b-6027-421c-fb8a00f19097_d3": {
+"area_mm2": 10451.96,
+"aspect": 5.3,
+"bbox_mm": [
+79.5,
+69.282,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.2565,
+"n_cylindrical_faces": 7,
+"n_faces": 31,
+"n_mesh_components": 1,
+"n_planar_faces": 24,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 21194.18,
+"watertight": true
+},
+"09dc90de-9efd-73dd-8d21-69172528e129_d0": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 2.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.6
+},
+"09dc90de-9efd-73dd-8d21-69172528e129_d1": {
+"area_mm2": 20793.1,
+"aspect": 2.67,
+"bbox_mm": [
+50.0,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.8646,
+"n_cylindrical_faces": 24,
+"n_faces": 43,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 103748.91,
+"watertight": true
+},
+"09dc90de-9efd-73dd-8d21-69172528e129_d2": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 2.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.2
+},
+"09dc90de-9efd-73dd-8d21-69172528e129_d3": {
+"area_mm2": 20426.59,
+"aspect": 2.67,
+"bbox_mm": [
+50.0,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9367,
+"n_cylindrical_faces": 24,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 6,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 112408.91,
+"watertight": true
+},
+"0a01a8f6-a78b-1b51-8435-ede6e4562a4d_d0": {
+"area_mm2": 2818.72,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.2021,
+"n_cylindrical_faces": 18,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 4849.87,
+"watertight": true
+},
+"0a01a8f6-a78b-1b51-8435-ede6e4562a4d_d1": {
+"area_mm2": 2817.53,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.1919,
+"n_cylindrical_faces": 24,
+"n_faces": 48,
+"n_mesh_components": 2,
+"n_planar_faces": 12,
+"n_solids": 2,
+"t_s": 6.6,
+"volume_mm3": 4604.49,
+"watertight": true
+},
+"0a01a8f6-a78b-1b51-8435-ede6e4562a4d_d2": {
+"area_mm2": 2908.46,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.1943,
+"n_cylindrical_faces": 24,
+"n_faces": 48,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 2,
+"t_s": 6.8,
+"volume_mm3": 4662.51,
+"watertight": false
+},
+"0a01a8f6-a78b-1b51-8435-ede6e4562a4d_d3": {
+"area_mm2": 2908.46,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.1943,
+"n_cylindrical_faces": 24,
+"n_faces": 48,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 2,
+"t_s": 6.8,
+"volume_mm3": 4662.41,
+"watertight": false
+},
+"0a0a5992-bf73-fde0-95b6-799d65366486_d0": {
+"area_mm2": 45105.09,
+"aspect": 1.03,
+"bbox_mm": [
+79.98,
+79.99,
+82.0
+],
+"exec_ok": true,
+"fill_frac": 0.1922,
+"n_cylindrical_faces": 7,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 100814.71,
+"watertight": true
+},
+"0a0a5992-bf73-fde0-95b6-799d65366486_d1": {
+"area_mm2": 43924.6,
+"aspect": 1.05,
+"bbox_mm": [
+80.0,
+80.0,
+76.0
+],
+"exec_ok": true,
+"fill_frac": 0.1873,
+"n_cylindrical_faces": 8,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 91082.83,
+"watertight": true
+},
+"0a0a5992-bf73-fde0-95b6-799d65366486_d2": {
+"area_mm2": 48172.79,
+"aspect": 1.1,
+"bbox_mm": [
+80.0,
+80.0,
+88.0
+],
+"exec_ok": true,
+"fill_frac": 0.1791,
+"n_cylindrical_faces": 7,
+"n_faces": 20,
+"n_mesh_components": 2,
+"n_planar_faces": 13,
+"n_solids": 2,
+"t_s": 6.3,
+"volume_mm3": 100887.26,
+"watertight": true
+},
+"0a0a5992-bf73-fde0-95b6-799d65366486_d3": {
+"area_mm2": 48696.46,
+"aspect": 1.06,
+"bbox_mm": [
+80.0,
+80.0,
+85.0
+],
+"exec_ok": true,
+"fill_frac": 0.1871,
+"n_cylindrical_faces": 7,
+"n_faces": 20,
+"n_mesh_components": 2,
+"n_planar_faces": 13,
+"n_solids": 2,
+"t_s": 5.6,
+"volume_mm3": 101787.92,
+"watertight": true
+},
+"0a3681ac-2be6-0034-c7c3-70e0816f9397_d0": {
+"area_mm2": 6028.79,
+"aspect": 8.75,
+"bbox_mm": [
+70.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9567,
+"n_cylindrical_faces": 9,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 16072.03,
+"watertight": true
+},
+"0a3681ac-2be6-0034-c7c3-70e0816f9397_d1": {
+"area_mm2": 6290.88,
+"aspect": 8.75,
+"bbox_mm": [
+70.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9186,
+"n_cylindrical_faces": 9,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 15432.03,
+"watertight": true
+},
+"0a3681ac-2be6-0034-c7c3-70e0816f9397_d2": {
+"area_mm2": 5926.31,
+"aspect": 8.75,
+"bbox_mm": [
+70.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9471,
+"n_cylindrical_faces": 9,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 15912.03,
+"watertight": true
+},
+"0a3681ac-2be6-0034-c7c3-70e0816f9397_d3": {
+"area_mm2": 5918.31,
+"aspect": 8.75,
+"bbox_mm": [
+70.0,
+30.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9519,
+"n_cylindrical_faces": 9,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 15992.03,
+"watertight": true
+},
+"0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f_d0": {
+"area_mm2": 30896.42,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.2117,
+"n_cylindrical_faces": 4,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 23,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 30490.93,
+"watertight": true
+},
+"0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f_d1": {
+"area_mm2": 33723.26,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.2319,
+"n_cylindrical_faces": 6,
+"n_faces": 35,
+"n_mesh_components": 1,
+"n_planar_faces": 29,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 33388.83,
+"watertight": true
+},
+"0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f_d2": {
+"area_mm2": 34352.42,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.2366,
+"n_cylindrical_faces": 4,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 34074.93,
+"watertight": true
+},
+"0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f_d3": {
+"area_mm2": 34395.26,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.2319,
+"n_cylindrical_faces": 6,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 33388.83,
+"watertight": true
+},
+"0a7b7956-680e-3718-b287-efe844c4da2b_d0": {
+"area_mm2": 9295.24,
+"aspect": 12.0,
+"bbox_mm": [
+120.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.6109,
+"n_cylindrical_faces": 3,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 21993.67,
+"watertight": true
+},
+"0a7b7956-680e-3718-b287-efe844c4da2b_d1": {
+"area_mm2": 8349.26,
+"aspect": 11.0,
+"bbox_mm": [
+110.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.6889,
+"n_cylindrical_faces": 3,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 22734.67,
+"watertight": true
+},
+"0a7b7956-680e-3718-b287-efe844c4da2b_d2": {
+"area_mm2": 9332.86,
+"aspect": 12.0,
+"bbox_mm": [
+120.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.6926,
+"n_cylindrical_faces": 3,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 24934.67,
+"watertight": true
+},
+"0a7b7956-680e-3718-b287-efe844c4da2b_d3": {
+"area_mm2": 7539.5,
+"aspect": 10.0,
+"bbox_mm": [
+100.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.6419,
+"n_cylindrical_faces": 3,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 6.5,
+"volume_mm3": 19255.67,
+"watertight": true
+},
+"0a8774b8-ccb0-2954-6720-39bba429eb91_d0": {
+"area_mm2": 12540.46,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+60.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9658,
+"n_cylindrical_faces": 10,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 37088.53,
+"watertight": true
+},
+"0a8774b8-ccb0-2954-6720-39bba429eb91_d1": {
+"area_mm2": 12551.85,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+60.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9671,
+"n_cylindrical_faces": 10,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 6.7,
+"volume_mm3": 37138.21,
+"watertight": true
+},
+"0a8774b8-ccb0-2954-6720-39bba429eb91_d2": {
+"area_mm2": 12585.29,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+60.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9666,
+"n_cylindrical_faces": 11,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 7.0,
+"volume_mm3": 37115.76,
+"watertight": true
+},
+"0a8774b8-ccb0-2954-6720-39bba429eb91_d3": {
+"area_mm2": 12576.61,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+60.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9663,
+"n_cylindrical_faces": 11,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 37107.76,
+"watertight": true
+},
+"0ae0be88-1a82-d8a5-8f97-6faea3587e95_d0": {
+"area_mm2": 5880.75,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+55.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3267,
+"n_cylindrical_faces": 3,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 14376.96,
+"watertight": true
+},
+"0ae0be88-1a82-d8a5-8f97-6faea3587e95_d1": {
+"area_mm2": 5878.61,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+55.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.327,
+"n_cylindrical_faces": 3,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 14387.74,
+"watertight": true
+},
+"0ae0be88-1a82-d8a5-8f97-6faea3587e95_d2": {
+"area_mm2": 5880.75,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+55.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3267,
+"n_cylindrical_faces": 3,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 14376.96,
+"watertight": true
+},
+"0ae0be88-1a82-d8a5-8f97-6faea3587e95_d3": {
+"area_mm2": 5880.19,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+55.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.3284,
+"n_cylindrical_faces": 2,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 14448.33,
+"watertight": true
+},
+"0b144460-77a7-3e71-e475-aed973c42446_d0": {
+"area_mm2": 13023.08,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+60.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.4847,
+"n_cylindrical_faces": 32,
+"n_faces": 74,
+"n_mesh_components": 1,
+"n_planar_faces": 34,
+"n_solids": 1,
+"t_s": 8.1,
+"volume_mm3": 23263.6,
+"watertight": true
+},
+"0b144460-77a7-3e71-e475-aed973c42446_d1": {
+"area_mm2": 12945.3,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+60.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.491,
+"n_cylindrical_faces": 32,
+"n_faces": 74,
+"n_mesh_components": 1,
+"n_planar_faces": 34,
+"n_solids": 1,
+"t_s": 7.9,
+"volume_mm3": 23565.97,
+"watertight": true
+},
+"0b144460-77a7-3e71-e475-aed973c42446_d2": {
+"area_mm2": 13707.44,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+60.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.516,
+"n_cylindrical_faces": 32,
+"n_faces": 82,
+"n_mesh_components": 1,
+"n_planar_faces": 42,
+"n_solids": 1,
+"t_s": 7.5,
+"volume_mm3": 24766.01,
+"watertight": true
+},
+"0b144460-77a7-3e71-e475-aed973c42446_d3": {
+"area_mm2": 13555.05,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+60.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.5162,
+"n_cylindrical_faces": 32,
+"n_faces": 91,
+"n_mesh_components": 1,
+"n_planar_faces": 51,
+"n_solids": 1,
+"t_s": 7.7,
+"volume_mm3": 24776.36,
+"watertight": true
+},
+"0b611efc-c103-5519-6650-76d8117ad50e_d0": {
+"area_mm2": 6102.41,
+"aspect": 10.0,
+"bbox_mm": [
+72.0,
+80.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.2792,
+"n_cylindrical_faces": 1,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 13,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 12863.33,
+"watertight": true
+},
+"0b611efc-c103-5519-6650-76d8117ad50e_d1": {
+"area_mm2": 5536.0,
+"aspect": 10.0,
+"bbox_mm": [
+60.0,
+80.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3091,
+"n_cylindrical_faces": 0,
+"n_faces": 13,
+"n_mesh_components": 1,
+"n_planar_faces": 13,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 11868.0,
+"watertight": true
+},
+"0b611efc-c103-5519-6650-76d8117ad50e_d2": {
+"area_mm2": 5396.0,
+"aspect": 10.0,
+"bbox_mm": [
+60.0,
+80.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3069,
+"n_cylindrical_faces": 0,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 11784.0,
+"watertight": true
+},
+"0b611efc-c103-5519-6650-76d8117ad50e_d3": {
+"area_mm2": 5396.0,
+"aspect": 10.0,
+"bbox_mm": [
+60.0,
+80.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.3069,
+"n_cylindrical_faces": 0,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 11784.0,
+"watertight": true
+},
+"0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79_d0": {
+"error": "ted>\", line 28, in <module>\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/objects_curve.py\", line 1978, in __init__\n    new_edge = Edge.make_line(lines_pts[0], lines_pts[1])\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/one_d.py\", line 2347, in make_line\n    ).Edge()\n      ^^^^^^\nOCP.OCP.StdFail.StdFail_NotDone: BRep_API: command not done\n",
+"exec_ok": false,
+"t_s": 5.4
+},
+"0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79_d1": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.4
+},
+"0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79_d2": {
+"area_mm2": 25536.04,
+"aspect": 3.33,
+"bbox_mm": [
+100.0,
+60.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.901,
+"n_cylindrical_faces": 8,
+"n_faces": 45,
+"n_mesh_components": 1,
+"n_planar_faces": 33,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 162178.71,
+"watertight": true
+},
+"0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79_d3": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 0.5, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.2
+},
+"0c43354e-b72d-2468-0208-7cd98ff631cb_d0": {
+"area_mm2": 33581.08,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+30.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.1268,
+"n_cylindrical_faces": 3,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 18265.93,
+"watertight": true
+},
+"0c43354e-b72d-2468-0208-7cd98ff631cb_d1": {
+"area_mm2": 33528.35,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+30.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.1265,
+"n_cylindrical_faces": 3,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 18212.37,
+"watertight": true
+},
+"0c43354e-b72d-2468-0208-7cd98ff631cb_d2": {
+"area_mm2": 33581.08,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+30.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.1268,
+"n_cylindrical_faces": 3,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 18265.93,
+"watertight": true
+},
+"0c43354e-b72d-2468-0208-7cd98ff631cb_d3": {
+"area_mm2": 33528.35,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+30.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.1265,
+"n_cylindrical_faces": 3,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 18212.37,
+"watertight": true
+},
+"0cb7362e-5998-2862-8a9a-6aa7e782436c_d0": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.4
+},
+"0cb7362e-5998-2862-8a9a-6aa7e782436c_d1": {
+"area_mm2": 7091.92,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9918,
+"n_cylindrical_faces": 2,
+"n_faces": 13,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 23802.97,
+"watertight": true
+},
+"0cb7362e-5998-2862-8a9a-6aa7e782436c_d2": {
+"area_mm2": 7330.62,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.977,
+"n_cylindrical_faces": 6,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 13,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 23448.9,
+"watertight": true
+},
+"0cb7362e-5998-2862-8a9a-6aa7e782436c_d3": {
+"area_mm2": 7091.92,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+30.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9918,
+"n_cylindrical_faces": 2,
+"n_faces": 13,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 23802.97,
+"watertight": true
+},
+"0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6_d0": {
+"area_mm2": 7082.39,
+"aspect": 11.0,
+"bbox_mm": [
+110.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.7971,
+"n_cylindrical_faces": 6,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 17536.27,
+"watertight": true
+},
+"0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6_d1": {
+"area_mm2": 7095.62,
+"aspect": 11.0,
+"bbox_mm": [
+110.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.7951,
+"n_cylindrical_faces": 6,
+"n_faces": 36,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 17492.29,
+"watertight": true
+},
+"0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6_d2": {
+"area_mm2": 7082.39,
+"aspect": 11.0,
+"bbox_mm": [
+110.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.7971,
+"n_cylindrical_faces": 6,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 17536.27,
+"watertight": true
+},
+"0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6_d3": {
+"area_mm2": 7082.39,
+"aspect": 11.0,
+"bbox_mm": [
+110.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.7971,
+"n_cylindrical_faces": 6,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 17536.27,
+"watertight": true
+},
+"0ce4f582-33c1-7837-0a74-2222ca00a711_d0": {
+"area_mm2": 15263.25,
+"aspect": 4.0,
+"bbox_mm": [
+74.162,
+80.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.6787,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 2,
+"n_planar_faces": 16,
+"n_solids": 2,
+"t_s": 5.5,
+"volume_mm3": 80534.35,
+"watertight": true
+},
+"0ce4f582-33c1-7837-0a74-2222ca00a711_d1": {
+"area_mm2": 16491.14,
+"aspect": 4.1,
+"bbox_mm": [
+82.0,
+82.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.6471,
+"n_cylindrical_faces": 9,
+"n_faces": 38,
+"n_mesh_components": 2,
+"n_planar_faces": 24,
+"n_solids": 2,
+"t_s": 6.5,
+"volume_mm3": 87026.67,
+"watertight": true
+},
+"0ce4f582-33c1-7837-0a74-2222ca00a711_d2": {
+"area_mm2": 15385.33,
+"aspect": 4.0,
+"bbox_mm": [
+80.0,
+79.998,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.6738,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 86244.08,
+"watertight": true
+},
+"0ce4f582-33c1-7837-0a74-2222ca00a711_d3": {
+"area_mm2": 15771.37,
+"aspect": 4.0,
+"bbox_mm": [
+80.0,
+80.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.7664,
+"n_cylindrical_faces": 3,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 2,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 98103.46,
+"watertight": true
+},
+"0cfc10be-e86a-0791-d268-d7edf63e84e9_d0": {
+"area_mm2": 12448.12,
+"aspect": 1.0,
+"bbox_mm": [
+60.0,
+60.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.2949,
+"n_cylindrical_faces": 4,
+"n_faces": 15,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 63698.95,
+"watertight": true
+},
+"0cfc10be-e86a-0791-d268-d7edf63e84e9_d1": {
+"area_mm2": 12650.43,
+"aspect": 1.0,
+"bbox_mm": [
+60.0,
+59.981,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.2948,
+"n_cylindrical_faces": 5,
+"n_faces": 16,
+"n_mesh_components": 1,
+"n_planar_faces": 11,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 63655.93,
+"watertight": false
+},
+"0cfc10be-e86a-0791-d268-d7edf63e84e9_d2": {
+"area_mm2": 12463.76,
+"aspect": 1.0,
+"bbox_mm": [
+60.0,
+60.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.295,
+"n_cylindrical_faces": 4,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 63711.45,
+"watertight": true
+},
+"0cfc10be-e86a-0791-d268-d7edf63e84e9_d3": {
+"area_mm2": 12452.94,
+"aspect": 1.11,
+"bbox_mm": [
+59.992,
+66.496,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.2658,
+"n_cylindrical_faces": 3,
+"n_faces": 16,
+"n_mesh_components": 1,
+"n_planar_faces": 13,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 63617.44,
+"watertight": true
+},
+"0cfca2a4-82f2-1b33-7d3e-2b686d1df698_d0": {
+"area_mm2": 4944.78,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+25.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9765,
+"n_cylindrical_faces": 1,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 9764.82,
+"watertight": true
+},
+"0cfca2a4-82f2-1b33-7d3e-2b686d1df698_d1": {
+"area_mm2": 4984.1,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+25.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9667,
+"n_cylindrical_faces": 2,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 9666.9,
+"watertight": true
+},
+"0cfca2a4-82f2-1b33-7d3e-2b686d1df698_d2": {
+"area_mm2": 4944.78,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+25.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9765,
+"n_cylindrical_faces": 1,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 9764.82,
+"watertight": true
+},
+"0cfca2a4-82f2-1b33-7d3e-2b686d1df698_d3": {
+"area_mm2": 4944.78,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+25.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.9765,
+"n_cylindrical_faces": 1,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 9764.82,
+"watertight": true
+},
+"0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3_d0": {
+"area_mm2": 8649.98,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+30.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.7232,
+"n_cylindrical_faces": 17,
+"n_faces": 37,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 24300.32,
+"watertight": true
+},
+"0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3_d1": {
+"area_mm2": 8915.1,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+30.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.6404,
+"n_cylindrical_faces": 21,
+"n_faces": 43,
+"n_mesh_components": 1,
+"n_planar_faces": 22,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 21519.11,
+"watertight": true
+},
+"0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3_d2": {
+"area_mm2": 9136.91,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+30.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.6456,
+"n_cylindrical_faces": 22,
+"n_faces": 46,
+"n_mesh_components": 1,
+"n_planar_faces": 24,
+"n_solids": 1,
+"t_s": 6.5,
+"volume_mm3": 21693.04,
+"watertight": true
+},
+"0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3_d3": {
+"area_mm2": 9056.91,
+"aspect": 5.71,
+"bbox_mm": [
+80.0,
+30.0,
+14.0
+],
+"exec_ok": true,
+"fill_frac": 0.6363,
+"n_cylindrical_faces": 22,
+"n_faces": 46,
+"n_mesh_components": 1,
+"n_planar_faces": 24,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 21381.04,
+"watertight": true
+},
+"0d4e9816-812a-3636-3dea-ab081671de54_d0": {
+"area_mm2": 11118.66,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+50.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9451,
+"n_cylindrical_faces": 2,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 37805.5,
+"watertight": true
+},
+"0d4e9816-812a-3636-3dea-ab081671de54_d1": {
+"area_mm2": 11247.38,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+50.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9346,
+"n_cylindrical_faces": 4,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 37384.79,
+"watertight": true
+},
+"0d4e9816-812a-3636-3dea-ab081671de54_d2": {
+"area_mm2": 11118.66,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+50.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9451,
+"n_cylindrical_faces": 2,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 37805.5,
+"watertight": true
+},
+"0d4e9816-812a-3636-3dea-ab081671de54_d3": {
+"area_mm2": 11230.77,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+50.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.926,
+"n_cylindrical_faces": 2,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 37041.29,
+"watertight": true
+},
+"0d6ee184-71db-63ad-e8f1-8f9ace368b67_d0": {
+"area_mm2": 7677.78,
+"aspect": 7.0,
+"bbox_mm": [
+70.0,
+42.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.8564,
+"n_cylindrical_faces": 11,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 25178.0,
+"watertight": true
+},
+"0d6ee184-71db-63ad-e8f1-8f9ace368b67_d1": {
+"area_mm2": 7677.78,
+"aspect": 7.0,
+"bbox_mm": [
+70.0,
+42.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.8564,
+"n_cylindrical_faces": 11,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 25178.0,
+"watertight": true
+},
+"0d6ee184-71db-63ad-e8f1-8f9ace368b67_d2": {
+"area_mm2": 7677.78,
+"aspect": 7.0,
+"bbox_mm": [
+70.0,
+42.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.8564,
+"n_cylindrical_faces": 11,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 25178.0,
+"watertight": true
+},
+"0d6ee184-71db-63ad-e8f1-8f9ace368b67_d3": {
+"area_mm2": 7677.78,
+"aspect": 7.0,
+"bbox_mm": [
+70.0,
+42.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.8564,
+"n_cylindrical_faces": 11,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 25178.0,
+"watertight": true
+},
+"0d8231a8-81fd-47f7-9899-42026b48074c_d0": {
+"area_mm2": 15422.08,
+"aspect": 2.67,
+"bbox_mm": [
+50.0,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9974,
+"n_cylindrical_faces": 0,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 119685.33,
+"watertight": true
+},
+"0d8231a8-81fd-47f7-9899-42026b48074c_d1": {
+"area_mm2": 15422.08,
+"aspect": 2.67,
+"bbox_mm": [
+50.0,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9974,
+"n_cylindrical_faces": 0,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 119685.33,
+"watertight": true
+},
+"0d8231a8-81fd-47f7-9899-42026b48074c_d2": {
+"area_mm2": 15422.08,
+"aspect": 2.67,
+"bbox_mm": [
+50.0,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9974,
+"n_cylindrical_faces": 0,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 119685.33,
+"watertight": true
+},
+"0d8231a8-81fd-47f7-9899-42026b48074c_d3": {
+"area_mm2": 15422.08,
+"aspect": 2.67,
+"bbox_mm": [
+50.0,
+80.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9974,
+"n_cylindrical_faces": 0,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 119685.33,
+"watertight": true
+},
+"0d838d1e-2f52-96f5-a3d9-dab533013bca_d0": {
+"area_mm2": 15803.68,
+"aspect": 8.33,
+"bbox_mm": [
+100.0,
+60.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.6181,
+"n_cylindrical_faces": 8,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 6.7,
+"volume_mm3": 44500.8,
+"watertight": true
+},
+"0d838d1e-2f52-96f5-a3d9-dab533013bca_d1": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 6.2
+},
+"0d838d1e-2f52-96f5-a3d9-dab533013bca_d2": {
+"area_mm2": 15813.36,
+"aspect": 8.33,
+"bbox_mm": [
+100.0,
+60.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.627,
+"n_cylindrical_faces": 8,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 45140.4,
+"watertight": true
+},
+"0d838d1e-2f52-96f5-a3d9-dab533013bca_d3": {
+"area_mm2": 15727.03,
+"aspect": 8.33,
+"bbox_mm": [
+100.0,
+60.0,
+12.0
+],
+"exec_ok": true,
+"fill_frac": 0.6332,
+"n_cylindrical_faces": 8,
+"n_faces": 38,
+"n_mesh_components": 1,
+"n_planar_faces": 30,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 45588.0,
+"watertight": true
+},
+"0d9544aa-4886-e525-81f3-292eb5b0982c_d0": {
+"area_mm2": 1727.16,
+"aspect": 2.0,
+"bbox_mm": [
+20.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9613,
+"n_cylindrical_faces": 2,
+"n_faces": 9,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 3845.29,
+"watertight": true
+},
+"0d9544aa-4886-e525-81f3-292eb5b0982c_d1": {
+"area_mm2": 1678.49,
+"aspect": 2.0,
+"bbox_mm": [
+20.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9755,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 3902.08,
+"watertight": true
+},
+"0d9544aa-4886-e525-81f3-292eb5b0982c_d2": {
+"area_mm2": 1678.49,
+"aspect": 2.0,
+"bbox_mm": [
+20.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9755,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 3902.08,
+"watertight": true
+},
+"0d9544aa-4886-e525-81f3-292eb5b0982c_d3": {
+"area_mm2": 1678.49,
+"aspect": 2.0,
+"bbox_mm": [
+20.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9755,
+"n_cylindrical_faces": 1,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 7,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 3902.08,
+"watertight": true
+},
+"0dd6ca4c-ec3c-67a5-8742-017faa18c6b4_d0": {
+"area_mm2": 12789.6,
+"aspect": 1.6,
+"bbox_mm": [
+49.98,
+49.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.3907,
+"n_cylindrical_faces": 2,
+"n_faces": 11,
+"n_mesh_components": 1,
+"n_planar_faces": 2,
+"n_solids": 1,
+"t_s": 6.6,
+"volume_mm3": 78089.81,
+"watertight": true
+},
+"0dd6ca4c-ec3c-67a5-8742-017faa18c6b4_d1": {
+"area_mm2": 11928.7,
+"aspect": 1.6,
+"bbox_mm": [
+49.98,
+49.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.4065,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 4,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 81250.18,
+"watertight": true
+},
+"0dd6ca4c-ec3c-67a5-8742-017faa18c6b4_d2": {
+"area_mm2": 10657.28,
+"aspect": 1.6,
+"bbox_mm": [
+49.98,
+49.99,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.4196,
+"n_cylindrical_faces": 2,
+"n_faces": 9,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 6.0,
+"volume_mm3": 83865.87,
+"watertight": true
+},
+"0dd6ca4c-ec3c-67a5-8742-017faa18c6b4_d3": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.9
+},
+"0e134a30-6dfe-a1ae-559b-5c75fec1f359_d0": {
+"area_mm2": 15559.97,
+"aspect": 5.33,
+"bbox_mm": [
+80.0,
+60.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7478,
+"n_cylindrical_faces": 4,
+"n_faces": 31,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 6.3,
+"volume_mm3": 53838.33,
+"watertight": true
+},
+"0e134a30-6dfe-a1ae-559b-5c75fec1f359_d1": {
+"area_mm2": 15574.03,
+"aspect": 5.33,
+"bbox_mm": [
+80.0,
+60.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7478,
+"n_cylindrical_faces": 4,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 53838.33,
+"watertight": true
+},
+"0e134a30-6dfe-a1ae-559b-5c75fec1f359_d2": {
+"area_mm2": 15574.03,
+"aspect": 5.33,
+"bbox_mm": [
+80.0,
+60.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7478,
+"n_cylindrical_faces": 4,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 53838.33,
+"watertight": true
+},
+"0e134a30-6dfe-a1ae-559b-5c75fec1f359_d3": {
+"area_mm2": 15503.73,
+"aspect": 5.33,
+"bbox_mm": [
+80.0,
+60.0,
+15.0
+],
+"exec_ok": true,
+"fill_frac": 0.7478,
+"n_cylindrical_faces": 4,
+"n_faces": 31,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 53838.33,
+"watertight": true
+},
+"0e14533a-a751-9f25-2cd8-9e95126e2806_d0": {
+"area_mm2": 26872.41,
+"aspect": 1.6,
+"bbox_mm": [
+80.0,
+50.0,
+65.0
+],
+"exec_ok": true,
+"fill_frac": 0.8839,
+"n_cylindrical_faces": 5,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 229816.63,
+"watertight": true
+},
+"0e14533a-a751-9f25-2cd8-9e95126e2806_d1": {
+"area_mm2": 25835.7,
+"aspect": 1.6,
+"bbox_mm": [
+80.0,
+50.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.94,
+"n_cylindrical_faces": 5,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 225603.06,
+"watertight": true
+},
+"0e14533a-a751-9f25-2cd8-9e95126e2806_d2": {
+"area_mm2": 23601.11,
+"aspect": 1.6,
+"bbox_mm": [
+80.0,
+50.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.7859,
+"n_cylindrical_faces": 4,
+"n_faces": 34,
+"n_mesh_components": 2,
+"n_planar_faces": 27,
+"n_solids": 2,
+"t_s": 8.4,
+"volume_mm3": 188627.27,
+"watertight": false
+},
+"0e14533a-a751-9f25-2cd8-9e95126e2806_d3": {
+"area_mm2": 25835.7,
+"aspect": 1.6,
+"bbox_mm": [
+80.0,
+50.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.94,
+"n_cylindrical_faces": 5,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 225603.06,
+"watertight": true
+},
+"0e6d9ff8-bd0e-ca7d-b612-dee365cad664_d0": {
+"area_mm2": 7504.78,
+"aspect": 3.1,
+"bbox_mm": [
+62.0,
+62.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2426,
+"n_cylindrical_faces": 1,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 33,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 18649.35,
+"watertight": true
+},
+"0e6d9ff8-bd0e-ca7d-b612-dee365cad664_d1": {
+"area_mm2": 4163.4,
+"aspect": 3.1,
+"bbox_mm": [
+62.0,
+62.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.0948,
+"n_cylindrical_faces": 1,
+"n_faces": 29,
+"n_mesh_components": 1,
+"n_planar_faces": 28,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 7291.67,
+"watertight": true
+},
+"0e6d9ff8-bd0e-ca7d-b612-dee365cad664_d2": {
+"area_mm2": 6816.68,
+"aspect": 3.1,
+"bbox_mm": [
+62.0,
+62.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2044,
+"n_cylindrical_faces": 1,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 33,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 15711.88,
+"watertight": true
+},
+"0e6d9ff8-bd0e-ca7d-b612-dee365cad664_d3": {
+"area_mm2": 7135.37,
+"aspect": 3.1,
+"bbox_mm": [
+62.0,
+62.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.1944,
+"n_cylindrical_faces": 1,
+"n_faces": 34,
+"n_mesh_components": 1,
+"n_planar_faces": 33,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 14943.52,
+"watertight": true
+},
+"0ead60ac-739e-453e-0ca0-c687a546b676_d0": {
+"area_mm2": 5306.3,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9818,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 15709.33,
+"watertight": true
+},
+"0ead60ac-739e-453e-0ca0-c687a546b676_d1": {
+"area_mm2": 5306.3,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9818,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 15709.33,
+"watertight": true
+},
+"0ead60ac-739e-453e-0ca0-c687a546b676_d2": {
+"area_mm2": 5306.3,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.9818,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 6.1,
+"volume_mm3": 15709.33,
+"watertight": true
+},
+"0ead60ac-739e-453e-0ca0-c687a546b676_d3": {
+"area_mm2": 5711.54,
+"aspect": 8.0,
+"bbox_mm": [
+80.0,
+20.0,
+10.0
+],
+"exec_ok": true,
+"fill_frac": 0.8081,
+"n_cylindrical_faces": 2,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 12929.6,
+"watertight": true
+},
+"0ee24452-2025-7130-4abd-34aac0752476_d0": {
+"area_mm2": 7424.62,
+"aspect": 3.5,
+"bbox_mm": [
+60.0,
+70.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.226,
+"n_cylindrical_faces": 3,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 18986.99,
+"watertight": true
+},
+"0ee24452-2025-7130-4abd-34aac0752476_d1": {
+"area_mm2": 7424.62,
+"aspect": 3.5,
+"bbox_mm": [
+60.0,
+70.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.226,
+"n_cylindrical_faces": 3,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 9,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 18986.99,
+"watertight": true
+},
+"0ee24452-2025-7130-4abd-34aac0752476_d2": {
+"area_mm2": 7339.93,
+"aspect": 3.5,
+"bbox_mm": [
+60.0,
+70.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2173,
+"n_cylindrical_faces": 4,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 18253.33,
+"watertight": true
+},
+"0ee24452-2025-7130-4abd-34aac0752476_d3": {
+"area_mm2": 8671.69,
+"aspect": 3.5,
+"bbox_mm": [
+60.0,
+70.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2201,
+"n_cylindrical_faces": 2,
+"n_faces": 12,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 18492.5,
+"watertight": true
+},
+"0eec11b2-ceda-f288-f912-84a01f311449_d0": {
+"error": "nerated>\", \"exec\"), g)  # noqa: S102\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<generated>\", line 22\n    RadiusArc((0, 0, 0), (channel_radius * math.sin(math.radians(channel_angle)), 0, channel_radius * (1 - math.cos(math.radians(channel_angle)))], channel_radius)\n                                                                                                                                                 ^\nSyntaxError: closing parenthesis ']' does not match opening parenthesis '('\n",
+"exec_ok": false,
+"t_s": 0.1
+},
+"0eec11b2-ceda-f288-f912-84a01f311449_d1": {
+"area_mm2": 17943.97,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9802,
+"n_cylindrical_faces": 4,
+"n_faces": 20,
+"n_mesh_components": 2,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 6.4,
+"volume_mm3": 117625.31,
+"watertight": true
+},
+"0eec11b2-ceda-f288-f912-84a01f311449_d2": {
+"area_mm2": 18818.96,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.9446,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 6.2,
+"volume_mm3": 113346.82,
+"watertight": true
+},
+"0eec11b2-ceda-f288-f912-84a01f311449_d3": {
+"error": "/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/composite.py\", line 557, in __sub__\n    difference = Shape.__sub__(self, other)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/shape_core.py\", line 1126, in __sub__\n    raise ValueError(\"Dimensions of objects to subtract from are inconsistent\")\nValueError: Dimensions of objects to subtract from are inconsistent\n",
+"exec_ok": false,
+"t_s": 5.3
+},
+"0f48f6f2-1b82-9572-204d-b7e39755e809_d0": {
+"area_mm2": 21611.73,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.3668,
+"n_cylindrical_faces": 1,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 18,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 44014.83,
+"watertight": true
+},
+"0f48f6f2-1b82-9572-204d-b7e39755e809_d1": {
+"area_mm2": 21578.03,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.3875,
+"n_cylindrical_faces": 1,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 46494.07,
+"watertight": true
+},
+"0f48f6f2-1b82-9572-204d-b7e39755e809_d2": {
+"area_mm2": 21210.25,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.3623,
+"n_cylindrical_faces": 0,
+"n_faces": 26,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 43480.0,
+"watertight": true
+},
+"0f48f6f2-1b82-9572-204d-b7e39755e809_d3": {
+"area_mm2": 23022.82,
+"aspect": 2.67,
+"bbox_mm": [
+80.0,
+50.0,
+30.0
+],
+"exec_ok": true,
+"fill_frac": 0.4477,
+"n_cylindrical_faces": 1,
+"n_faces": 20,
+"n_mesh_components": 1,
+"n_planar_faces": 19,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 53724.08,
+"watertight": true
+},
+"0f58d446-8365-8dd1-b3b9-16baee60a3ee_d0": {
+"area_mm2": 8828.31,
+"aspect": 2.92,
+"bbox_mm": [
+70.0,
+40.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.366,
+"n_cylindrical_faces": 8,
+"n_faces": 30,
+"n_mesh_components": 1,
+"n_planar_faces": 22,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 24592.34,
+"watertight": true
+},
+"0f58d446-8365-8dd1-b3b9-16baee60a3ee_d1": {
+"area_mm2": 8570.85,
+"aspect": 2.92,
+"bbox_mm": [
+70.0,
+40.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.3798,
+"n_cylindrical_faces": 8,
+"n_faces": 22,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 25525.81,
+"watertight": true
+},
+"0f58d446-8365-8dd1-b3b9-16baee60a3ee_d2": {
+"area_mm2": 8528.8,
+"aspect": 2.92,
+"bbox_mm": [
+70.0,
+40.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.379,
+"n_cylindrical_faces": 8,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 25467.91,
+"watertight": true
+},
+"0f58d446-8365-8dd1-b3b9-16baee60a3ee_d3": {
+"area_mm2": 8777.23,
+"aspect": 2.92,
+"bbox_mm": [
+70.0,
+40.0,
+24.0
+],
+"exec_ok": true,
+"fill_frac": 0.3686,
+"n_cylindrical_faces": 8,
+"n_faces": 21,
+"n_mesh_components": 1,
+"n_planar_faces": 13,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 24768.41,
+"watertight": true
+},
+"0f65741c-4495-29d2-7265-cef52b9ef2f3_d0": {
+"area_mm2": 6023.72,
+"aspect": 16.83,
+"bbox_mm": [
+84.14,
+32.07,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8696,
+"n_cylindrical_faces": 22,
+"n_faces": 46,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.9,
+"volume_mm3": 11732.75,
+"watertight": true
+},
+"0f65741c-4495-29d2-7265-cef52b9ef2f3_d1": {
+"area_mm2": 5191.56,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+29.995,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8139,
+"n_cylindrical_faces": 5,
+"n_faces": 29,
+"n_mesh_components": 1,
+"n_planar_faces": 24,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 9765.43,
+"watertight": true
+},
+"0f65741c-4495-29d2-7265-cef52b9ef2f3_d2": {
+"area_mm2": 6095.1,
+"aspect": 16.66,
+"bbox_mm": [
+83.299,
+31.65,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.8868,
+"n_cylindrical_faces": 5,
+"n_faces": 25,
+"n_mesh_components": 1,
+"n_planar_faces": 20,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 11689.82,
+"watertight": true
+},
+"0f65741c-4495-29d2-7265-cef52b9ef2f3_d3": {
+"area_mm2": 5011.26,
+"aspect": 16.83,
+"bbox_mm": [
+84.136,
+32.071,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.6663,
+"n_cylindrical_faces": 6,
+"n_faces": 32,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.4,
+"volume_mm3": 8989.45,
+"watertight": true
+},
+"0fdd267e-0eab-cdea-2099-8bbc285b4a39_d0": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 5.2
+},
+"0fdd267e-0eab-cdea-2099-8bbc285b4a39_d1": {
+"area_mm2": 5276.83,
+"aspect": 14.01,
+"bbox_mm": [
+112.071,
+17.068,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.7996,
+"n_cylindrical_faces": 4,
+"n_faces": 36,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.8,
+"volume_mm3": 12235.58,
+"watertight": true
+},
+"0fdd267e-0eab-cdea-2099-8bbc285b4a39_d2": {
+"area_mm2": 4546.93,
+"aspect": 12.5,
+"bbox_mm": [
+100.0,
+15.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9302,
+"n_cylindrical_faces": 2,
+"n_faces": 33,
+"n_mesh_components": 1,
+"n_planar_faces": 25,
+"n_solids": 1,
+"t_s": 5.6,
+"volume_mm3": 11161.96,
+"watertight": true
+},
+"0fdd267e-0eab-cdea-2099-8bbc285b4a39_d3": {
+"area_mm2": 4925.77,
+"aspect": 13.75,
+"bbox_mm": [
+110.0,
+15.0,
+8.0
+],
+"exec_ok": true,
+"fill_frac": 0.9642,
+"n_cylindrical_faces": 1,
+"n_faces": 24,
+"n_mesh_components": 1,
+"n_planar_faces": 23,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 12727.96,
+"watertight": true
+},
+"0feed9be-4eb8-0add-b7e8-b7225422d911_d0": {
+"area_mm2": 26974.85,
+"aspect": 1.17,
+"bbox_mm": [
+60.0,
+60.0,
+70.0
+],
+"exec_ok": true,
+"fill_frac": 0.4241,
+"n_cylindrical_faces": 4,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 2,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 106885.45,
+"watertight": true
+},
+"0feed9be-4eb8-0add-b7e8-b7225422d911_d1": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 3.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 4.8
+},
+"0feed9be-4eb8-0add-b7e8-b7225422d911_d2": {
+"area_mm2": 26839.3,
+"aspect": 1.17,
+"bbox_mm": [
+60.0,
+60.0,
+70.0
+],
+"exec_ok": true,
+"fill_frac": 0.4228,
+"n_cylindrical_faces": 4,
+"n_faces": 9,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 5.7,
+"volume_mm3": 106540.13,
+"watertight": true
+},
+"0feed9be-4eb8-0add-b7e8-b7225422d911_d3": {
+"area_mm2": 26974.85,
+"aspect": 1.17,
+"bbox_mm": [
+60.0,
+60.0,
+70.0
+],
+"exec_ok": true,
+"fill_frac": 0.4241,
+"n_cylindrical_faces": 4,
+"n_faces": 8,
+"n_mesh_components": 1,
+"n_planar_faces": 2,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 106885.45,
+"watertight": true
+},
+"1027d3e0-b915-a769-8be4-68efff34bd31_d0": {
+"area_mm2": 8107.18,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+8.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.9867,
+"n_cylindrical_faces": 0,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 25258.67,
+"watertight": true
+},
+"1027d3e0-b915-a769-8be4-68efff34bd31_d1": {
+"area_mm2": 8107.18,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+8.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.9867,
+"n_cylindrical_faces": 0,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 25258.67,
+"watertight": true
+},
+"1027d3e0-b915-a769-8be4-68efff34bd31_d2": {
+"area_mm2": 8107.18,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+8.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.9867,
+"n_cylindrical_faces": 0,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 25258.67,
+"watertight": true
+},
+"1027d3e0-b915-a769-8be4-68efff34bd31_d3": {
+"area_mm2": 8107.18,
+"aspect": 10.0,
+"bbox_mm": [
+80.0,
+8.0,
+40.0
+],
+"exec_ok": true,
+"fill_frac": 0.9867,
+"n_cylindrical_faces": 0,
+"n_faces": 10,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 5.1,
+"volume_mm3": 25258.67,
+"watertight": true
+},
+"103a4b9c-3e82-6cb0-123d-ec6e878d94cf_d0": {
+"area_mm2": 9527.58,
+"aspect": 3.75,
+"bbox_mm": [
+75.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8405,
+"n_cylindrical_faces": 27,
+"n_faces": 53,
+"n_mesh_components": 1,
+"n_planar_faces": 26,
+"n_solids": 1,
+"t_s": 5.3,
+"volume_mm3": 37820.94,
+"watertight": true
+},
+"103a4b9c-3e82-6cb0-123d-ec6e878d94cf_d1": {
+"area_mm2": 9403.75,
+"aspect": 3.75,
+"bbox_mm": [
+75.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8276,
+"n_cylindrical_faces": 27,
+"n_faces": 54,
+"n_mesh_components": 1,
+"n_planar_faces": 27,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 37243.44,
+"watertight": true
+},
+"103a4b9c-3e82-6cb0-123d-ec6e878d94cf_d2": {
+"area_mm2": 9861.92,
+"aspect": 3.75,
+"bbox_mm": [
+75.0,
+30.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.8605,
+"n_cylindrical_faces": 27,
+"n_faces": 63,
+"n_mesh_components": 1,
+"n_planar_faces": 36,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 38724.57,
+"watertight": true
+},
+"103a4b9c-3e82-6cb0-123d-ec6e878d94cf_d3": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 0.5, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 5.1
+},
+"104587fa-61ef-cd7d-02d5-4978341a3bf6_d0": {
+"area_mm2": 11604.31,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.7755,
+"n_cylindrical_faces": 13,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 24815.41,
+"watertight": true
+},
+"104587fa-61ef-cd7d-02d5-4978341a3bf6_d1": {
+"area_mm2": 11604.31,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.7755,
+"n_cylindrical_faces": 13,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.5,
+"volume_mm3": 24815.41,
+"watertight": true
+},
+"104587fa-61ef-cd7d-02d5-4978341a3bf6_d2": {
+"area_mm2": 11604.31,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.7755,
+"n_cylindrical_faces": 13,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.0,
+"volume_mm3": 24815.41,
+"watertight": true
+},
+"104587fa-61ef-cd7d-02d5-4978341a3bf6_d3": {
+"area_mm2": 11604.31,
+"aspect": 16.0,
+"bbox_mm": [
+80.0,
+80.0,
+5.0
+],
+"exec_ok": true,
+"fill_frac": 0.7755,
+"n_cylindrical_faces": 13,
+"n_faces": 27,
+"n_mesh_components": 1,
+"n_planar_faces": 14,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 24815.41,
+"watertight": true
+},
+"10827958-85be-a385-bf99-7c456eb80835_d0": {
+"area_mm2": 5975.2,
+"aspect": 4.67,
+"bbox_mm": [
+22.0,
+83.98,
+17.997
+],
+"exec_ok": true,
+"fill_frac": 0.4733,
+"n_cylindrical_faces": 4,
+"n_faces": 23,
+"n_mesh_components": 2,
+"n_planar_faces": 19,
+"n_solids": 2,
+"t_s": 5.3,
+"volume_mm3": 15738.36,
+"watertight": true
+},
+"10827958-85be-a385-bf99-7c456eb80835_d1": {
+"area_mm2": 6423.68,
+"aspect": 4.5,
+"bbox_mm": [
+20.0,
+90.0,
+21.0
+],
+"exec_ok": true,
+"fill_frac": 0.4398,
+"n_cylindrical_faces": 6,
+"n_faces": 29,
+"n_mesh_components": 2,
+"n_planar_faces": 23,
+"n_solids": 2,
+"t_s": 5.2,
+"volume_mm3": 16624.26,
+"watertight": true
+},
+"10827958-85be-a385-bf99-7c456eb80835_d2": {
+"area_mm2": 5851.15,
+"aspect": 5.36,
+"bbox_mm": [
+20.0,
+83.0,
+15.494
+],
+"exec_ok": true,
+"fill_frac": 0.606,
+"n_cylindrical_faces": 6,
+"n_faces": 23,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 5.2,
+"volume_mm3": 15586.96,
+"watertight": true
+},
+"10827958-85be-a385-bf99-7c456eb80835_d3": {
+"area_mm2": 5615.42,
+"aspect": 5.0,
+"bbox_mm": [
+20.0,
+79.98,
+16.0
+],
+"exec_ok": true,
+"fill_frac": 0.5762,
+"n_cylindrical_faces": 4,
+"n_faces": 21,
+"n_mesh_components": 2,
+"n_planar_faces": 17,
+"n_solids": 2,
+"t_s": 4.6,
+"volume_mm3": 14747.03,
+"watertight": true
+},
+"108abe88-f9f4-6578-74ef-ae929d382767_d0": {
+"area_mm2": 17620.95,
+"aspect": 1.9,
+"bbox_mm": [
+50.0,
+42.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.4107,
+"n_cylindrical_faces": 1,
+"n_faces": 25,
+"n_mesh_components": 1,
+"n_planar_faces": 24,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 68997.33,
+"watertight": true
+},
+"108abe88-f9f4-6578-74ef-ae929d382767_d1": {
+"area_mm2": 18670.11,
+"aspect": 1.9,
+"bbox_mm": [
+50.0,
+42.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.4094,
+"n_cylindrical_faces": 2,
+"n_faces": 18,
+"n_mesh_components": 1,
+"n_planar_faces": 16,
+"n_solids": 1,
+"t_s": 4.9,
+"volume_mm3": 68786.67,
+"watertight": true
+},
+"108abe88-f9f4-6578-74ef-ae929d382767_d2": {
+"error": "tch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 331, in chamfer\n    new_part = target.chamfer(length, length2, list(object_list), reference)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 287, in chamfer\n    raise ValueError(\nValueError: Failed creating a chamfer, try a smaller length value(s)\n",
+"exec_ok": false,
+"t_s": 4.5
+},
+"108abe88-f9f4-6578-74ef-ae929d382767_d3": {
+"area_mm2": 17713.42,
+"aspect": 1.9,
+"bbox_mm": [
+50.0,
+42.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.4003,
+"n_cylindrical_faces": 6,
+"n_faces": 22,
+"n_mesh_components": 2,
+"n_planar_faces": 16,
+"n_solids": 2,
+"t_s": 4.7,
+"volume_mm3": 67244.67,
+"watertight": true
+},
+"10a652e2-346b-78e7-a117-6b7a40e58cc4_d0": {
+"area_mm2": 8098.24,
+"aspect": 4.25,
+"bbox_mm": [
+85.0,
+65.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2437,
+"n_cylindrical_faces": 24,
+"n_faces": 50,
+"n_mesh_components": 1,
+"n_planar_faces": 10,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 26930.37,
+"watertight": true
+},
+"10a652e2-346b-78e7-a117-6b7a40e58cc4_d1": {
+"area_mm2": 11006.23,
+"aspect": 4.5,
+"bbox_mm": [
+90.0,
+70.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2134,
+"n_cylindrical_faces": 28,
+"n_faces": 48,
+"n_mesh_components": 1,
+"n_planar_faces": 8,
+"n_solids": 1,
+"t_s": 4.8,
+"volume_mm3": 26886.23,
+"watertight": true
+},
+"10a652e2-346b-78e7-a117-6b7a40e58cc4_d2": {
+"error": "nt_exp1/env/lib/python3.12/site-packages/build123d/operations_generic.py\", line 432, in fillet\n    new_part = target.fillet(radius, list(object_list))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/three_d.py\", line 371, in fillet\n    raise ValueError(\nValueError: Failed creating a fillet with radius of 2.0, try a smaller value or use max_fillet() to find the largest valid fillet radius\n",
+"exec_ok": false,
+"t_s": 4.3
+},
+"10a652e2-346b-78e7-a117-6b7a40e58cc4_d3": {
+"area_mm2": 7425.82,
+"aspect": 4.0,
+"bbox_mm": [
+80.0,
+60.0,
+20.0
+],
+"exec_ok": true,
+"fill_frac": 0.2448,
+"n_cylindrical_faces": 18,
+"n_faces": 40,
+"n_mesh_components": 1,
+"n_planar_faces": 12,
+"n_solids": 1,
+"t_s": 4.6,
+"volume_mm3": 23503.51,
+"watertight": true
+},
+"10d0ca90-0d13-721f-43e2-427a2c4c5c54_d0": {
+"area_mm2": 23191.61,
+"aspect": 2.67,
+"bbox_mm": [
+40.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2384,
+"n_cylindrical_faces": 2,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 4.5,
+"volume_mm3": 22886.33,
+"watertight": true
+},
+"10d0ca90-0d13-721f-43e2-427a2c4c5c54_d1": {
+"area_mm2": 23191.61,
+"aspect": 2.67,
+"bbox_mm": [
+40.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2384,
+"n_cylindrical_faces": 2,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 4.3,
+"volume_mm3": 22886.33,
+"watertight": true
+},
+"10d0ca90-0d13-721f-43e2-427a2c4c5c54_d2": {
+"area_mm2": 23191.61,
+"aspect": 2.67,
+"bbox_mm": [
+40.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2384,
+"n_cylindrical_faces": 2,
+"n_faces": 17,
+"n_mesh_components": 1,
+"n_planar_faces": 15,
+"n_solids": 1,
+"t_s": 4.0,
+"volume_mm3": 22886.33,
+"watertight": true
+},
+"10d0ca90-0d13-721f-43e2-427a2c4c5c54_d3": {
+"area_mm2": 23151.61,
+"aspect": 2.67,
+"bbox_mm": [
+40.0,
+30.0,
+80.0
+],
+"exec_ok": true,
+"fill_frac": 0.2374,
+"n_cylindrical_faces": 2,
+"n_faces": 19,
+"n_mesh_components": 1,
+"n_planar_faces": 17,
+"n_solids": 1,
+"t_s": 4.0,
+"volume_mm3": 22790.33,
+"watertight": true
+},
+"10d37114-2592-0370-3095-dc90744d6b2d_d0": {
+"area_mm2": 22718.79,
+"aspect": 1.0,
+"bbox_mm": [
+60.0,
+60.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.4911,
+"n_cylindrical_faces": 5,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 4.2,
+"volume_mm3": 106070.27,
+"watertight": true
+},
+"10d37114-2592-0370-3095-dc90744d6b2d_d1": {
+"area_mm2": 22718.79,
+"aspect": 1.0,
+"bbox_mm": [
+60.0,
+60.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.4911,
+"n_cylindrical_faces": 5,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 4.0,
+"volume_mm3": 106070.27,
+"watertight": true
+},
+"10d37114-2592-0370-3095-dc90744d6b2d_d2": {
+"area_mm2": 22718.79,
+"aspect": 1.0,
+"bbox_mm": [
+60.0,
+60.0,
+60.0
+],
+"exec_ok": true,
+"fill_frac": 0.4911,
+"n_cylindrical_faces": 5,
+"n_faces": 14,
+"n_mesh_components": 1,
+"n_planar_faces": 3,
+"n_solids": 1,
+"t_s": 4.1,
+"volume_mm3": 106070.27,
+"watertight": true
+},
+"10d37114-2592-0370-3095-dc90744d6b2d_d3": {
+"error": "File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/operations_sketch.py\", line 227, in make_face\n    pending_face = Face(Wire.combine(outer_edges)[0])\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/scratch/bimrose2/drawing_agent_exp1/env/lib/python3.12/site-packages/build123d/topology/two_d.py\", line 919, in __init__\n    raise ValueError(\"Face can only be created with closed wires\")\nValueError: Face can only be created with closed wires\n",
+"exec_ok": false,
+"t_s": 3.5
+},
+"10dff308-8a8d-b5da-769b-31f83512b5b7_d0": {
+"area_mm2": 14262.37,
+"aspect": 2.29,
+"bbox_mm": [
+80.0,
+50.0,
+35.0
+],
+"exec_ok": true,
+"fill_frac": 0.5676,
+"n_cylindrical_faces": 6,
+"n_faces": 112,
+"n_mesh_components": 16,
+"n_planar_faces": 106,
+"n_solids": 16,
+"t_s": 3.6,
+"volume_mm3": 79463.2,
+"watertight": true
+},
+"10dff308-8a8d-b5da-769b-31f83512b5b7_d1": {
+"area_mm2": 13926.37,
+"aspect": 2.29,
+"bbox_mm": [
+80.0,
+50.0,
+35.0
+],
+"exec_ok": true,
+"fill_frac": 0.5666,
+"n_cylindrical_faces": 6,
+"n_faces": 70,
+"n_mesh_components": 9,
+"n_planar_faces": 64,
+"n_solids": 9,
+"t_s": 3.4,
+"volume_mm3": 79323.2,
+"watertight": true
+},
+"10dff308-8a8d-b5da-769b-31f83512b5b7_d2": {
+"area_mm2": 14142.37,
+"aspect": 3.2,
+"bbox_mm": [
+80.0,
+50.0,
+25.0
+],
+"exec_ok": true,
+"fill_frac": 0.7946,
+"n_cylindrical_faces": 6,
+"n_faces": 97,
+"n_mesh_components": 1,
+"n_planar_faces": 91,
+"n_solids": 1,
+"t_s": 4.0,
+"volume_mm3": 79463.2,
+"watertight": true
+},
+"10dff308-8a8d-b5da-769b-31f83512b5b7_d3": {
+"area_mm2": 15132.39,
+"aspect": 2.29,
+"bbox_mm": [
+80.0,
+50.0,
+35.0
+],
+"exec_ok": true,
+"fill_frac": 0.5432,
+"n_cylindrical_faces": 7,
+"n_faces": 71,
+"n_mesh_components": 9,
+"n_planar_faces": 64,
+"n_solids": 9,
+"t_s": 3.7,
+"volume_mm3": 76052.0,
+"watertight": true
+}
+},
+"wall_s": 35.7,
+"workers": 64
+}
