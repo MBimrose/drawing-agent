@@ -366,7 +366,13 @@ def main():
                 still.append(i)
                 continue
             nocode_streak[i] = 0
-            if last_code[i] is not None and e["code"].strip() == last_code[i]:
+            # Convergence stop ONLY for an executing candidate: re-emitting a
+            # WORKING script twice = the model's answer. Re-emitting a BROKEN
+            # script is not a stop — each further round is a fresh T>0 sample
+            # with a chance to deviate (the deployed bo4 policy gets 3 fresh
+            # draws; cutting failed chains at round 1 would under-rescue).
+            if (e["exec_ok"] and last_code[i] is not None
+                    and e["code"].strip() == last_code[i]):
                 rec["rounds"].append(_strip(e))
                 rec["stop_reason"] = "converged"
                 continue

@@ -110,3 +110,22 @@ read-only; run artifacts under `/srv/scratch/bimrose2/drawing_agent_exp5/`.
   revisions on the other 88 samples).
 - Full-run config: checklist feedback, T_loop=0.7/top-p 0.95, renders ON (multi-image is
   clean), max-rounds 8, 16 workers stride 16, convergence/FINAL/no-code/budget stops.
+- 2026-08-28 full run v1 (16 workers, max wall 3.3 min, 0.54 GPU-h): turn-1 parity
+  perfect (median AND max |d0 diff| = 0.000000 vs exp1 at its 6-dp precision).
+  greedy 0.7871 → final 0.8122 (+0.025, CI [−0.006, +0.061] — n.s.), best-seen 0.8177;
+  vs deployed −0.063, vs oracle −0.110. 59 final / 37 converged, mean 2.12 calls.
+  Only 4/12 turn-1 exec failures rescued — **flaw found: the convergence stop
+  (identical code twice) was cutting FAILED repair chains at round 1–2**, while the
+  deployed bo4 policy gets 3 fresh draws (rescued 11/12 in exp1). Fix: convergence
+  stop now applies only to an EXECUTING candidate (re-emitting a working script = the
+  model's answer); broken chains keep resampling to budget. v1 archived as
+  `out_loop_v1/` on both nodes (kept as the strict-stop ablation).
+- Full run v2 (fixed stop rule; 16 workers, max wall 9.8 min, 1.06 GPU-h total):
+  greedy 0.7871 → **loop final 0.8178** (+0.031 [CI +0.000, +0.071]), best-seen 0.8179;
+  **−0.058 vs deployed bo4 0.8756**, −0.104 vs oracle 0.9222. Decomposition: on the 84
+  executing turn-1s the loop adds +0.0003 (1 refinement, 3 tiny regressions); on the 12
+  exec failures conditioned repair rescues 4/12 (bo4's fresh draws: 11/12) = the whole
+  deficit. STaR gate 71 → 74/96. GPUs verified released on both nodes.
+- **DONE 2026-08-28: RESULTS.md written — verdict: the loop is NOT additive with
+  best-of-4 for the RFT champion; revision is mode-collapsed; the oracle gap remains a
+  selection (critic) problem.**
