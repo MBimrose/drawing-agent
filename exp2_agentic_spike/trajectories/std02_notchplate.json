@@ -1,0 +1,71 @@
+{
+ "uid": "std02_notchplate",
+ "split": "std",
+ "family": "notchplate",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 44.3,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 6395
+   },
+   "plan": "**Top view (XY):** Overall extents printed: 83 (X) \u00d7 55 (Y). The X axis also carries a component chain: 25 (left margin) + 31 (notch) + 27 (right margin) = 83 \u2713 (matches the printed overall). A rectangular notch opens from the front (\u2212Y) edge: 31 wide (X) \u00d7 19 deep (Y), its left wall 25 from the left edge. Callout \"2X \u23008 THRU\": two \u23008 through-holes near the back edge, one left / one right, evidently symmetric (positions undimensioned \u2192 place 12.5 mm from each side edge and 12.5 mm from the back edge, consistent with the drawn proportions).\n\n**Front view (XZ):** Overall 83 (X) \u00d7 8 (Z thickness). Same chain 25 / 31 / 27; the notch walls show as full-height vertical edges and the silhouette stays a full rectangle \u2192 the notch is cut through the entire 8 mm thickness, opening toward \u2212Y.\n\n**Right view (YZ):** 55 (Y) \u00d7 8 (Z), confirming depth and thickness; hidden vertical line corresponds to the notch back wall at y = 19.\n\n**Feature list:**\n- Plate: 83 \u00d7 55 \u00d7 8 mm.\n- Through-notch from front edge: 31 (X) \u00d7 19 (Y), full 8 mm depth, at x = 25\u202656.\n- 2\u00d7 \u23008 through-holes at (12.5, 42.5) and (70.5, 42.5) \u2014 symmetric.",
+   "text": "<plan>\n**Top view (XY):** Overall extents printed: 83 (X) \u00d7 55 (Y). The X axis also carries a component chain: 25 (left margin) + 31 (notch) + 27 (right margin) = 83 \u2713 (matches the printed overall). A rectangular notch opens from the front (\u2212Y) edge: 31 wide (X) \u00d7 19 deep (Y), its left wall 25 from the left edge. Callout \"2X \u23008 THRU\": two \u23008 through-holes near the back edge, one left / one right, evidently symmetric (positions undimensioned \u2192 place 12.5 mm from each side edge and 12.5 mm from the back edge, consistent with the drawn proportions).\n\n**Front view (XZ):** Overall 83 (X) \u00d7 8 (Z thickness). Same chain 25 / 31 / 27; the notch walls show as full-height vertical edges and the silhouette stays a full rectangle \u2192 the notch is cut through the entire 8 mm thickness, opening toward \u2212Y.\n\n**Right view (YZ):** 55 (Y) \u00d7 8 (Z), confirming depth and thickness; hidden vertical line corresponds to the notch back wall at y = 19.\n\n**Feature list:**\n- Plate: 83 \u00d7 55 \u00d7 8 mm.\n- Through-notch from front edge: 31 (X) \u00d7 19 (Y), full 8 mm depth, at x = 25\u202656.\n- 2\u00d7 \u23008 through-holes at (12.5, 42.5) and (70.5, 42.5) \u2014 symmetric.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- Named dimensions read from the drawing (all mm) ---\nleft_margin = 25    # mm, X chain segment 1 (left edge to notch)\nnotch_width = 31    # mm, X chain segment 2 (notch width)\nright_margin = 27   # mm, X chain segment 3 (notch to right edge)\noverall_D = 55      # mm, overall Y depth (printed overall)\nthickness = 8       # mm, Z thickness (Front / Right views)\nnotch_depth = 19    # mm, notch depth from front (-Y) edge\nhole_dia = 8        # mm, 2X \u00d88 THRU\nhole_side_off = 12.5  # mm, hole center offset from side edges (symmetric, undimensioned)\nhole_back_off = 12.5  # mm, hole center offset from back edge (undimensioned)\n\n# --- Derived values ---\noverall_W = left_margin + notch_width + right_margin  # = 83 mm, matches printed overall\nhole_xs = [hole_side_off, overall_W - hole_side_off]\nhole_y = overall_D - hole_back_off\n\nwith BuildPart() as bp:\n    # Base plate, corner at origin: x 0..83, y 0..55, z 0..8\n    Box(overall_W, overall_D, thickness,\n        align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # Through-notch cut from the front edge (full Z thickness)\n    with Locations((left_margin, 0, 0)):\n        Box(notch_width, notch_depth, thickness,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # 2X \u00d88 through-holes\n    with Locations([(x, hole_y, 0) for x in hole_xs]):\n        Cylinder(radius=hole_dia / 2, height=thickness,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     55.0,
+     8.0
+    ],
+    "volume_mm3": 31005.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.5,
+   "usage": {
+    "input_tokens": 7758,
+    "output_tokens": 420
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std02_notchplate",
+  "split": "std",
+  "family": "notchplate",
+  "ss_exec_ok": true,
+  "ss_iou": 0.971,
+  "ag_exec_ok": true,
+  "ag_iou": 0.971,
+  "ag_final_cand": 1,
+  "best_iou": 0.971,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 47.5,
+  "t_agentic_s": 54.5
+ },
+ "per_candidate_iou": {
+  "1": 0.971
+ }
+}

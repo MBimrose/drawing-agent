@@ -1,0 +1,69 @@
+{
+ "uid": "hard00_steps3",
+ "split": "hard",
+ "family": "steps3",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 44.9,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 9956
+   },
+   "plan": "Top view (XY): footprint is a rectangle. X is given only as a component chain: 28 + 21 + 17 = 66 mm overall. Y is an overall dimension = 36 mm. Two interior lines parallel to Y (at x = 28 and x = 28+21 = 49) are the step breaks.\n\nFront view (XZ): a staircase profile, tall on the left stepping down to the right. The Z riser chain is 10 + 13 + 15 = 38 mm total. Each X segment is paired with a riser: the 28-wide segment carries the top riser (15) so it reaches 10+13+15 = 38; the 21-wide segment carries the 13 riser so it reaches 10+13 = 23; the 17-wide segment is the lowest tread at height 10. So solid height by X: [0,28]\u219238, [28,49]\u219223, [49,66]\u219210.\n\nRight view (YZ, from +X): 36 (Y) \u00d7 38 (Z) with solid horizontal edges at z = 10 and z = 23. Seeing those edges as solid from +X confirms the low (10 mm) step is at the +X end and the taller steps rise behind it \u2014 consistent with the Front view (high at low X, low at high X).\n\nFeatures: three rectangular treads, each spanning the full 36 mm Y depth. No hole callouts on this sheet; no dimensioned fillets/chamfers (omitted).\n\nBuild: fuse three boxes \u2014 base 66\u00d736\u00d710 (z 0\u201310, full footprint); middle 49\u00d736\u00d713 (z 10\u201323, over the high+mid steps); top 28\u00d736\u00d715 (z 23\u201338, over the high step only). This yields exactly the chained heights 10 / 23 / 38.",
+   "text": "<plan>\nTop view (XY): footprint is a rectangle. X is given only as a component chain: 28 + 21 + 17 = 66 mm overall. Y is an overall dimension = 36 mm. Two interior lines parallel to Y (at x = 28 and x = 28+21 = 49) are the step breaks.\n\nFront view (XZ): a staircase profile, tall on the left stepping down to the right. The Z riser chain is 10 + 13 + 15 = 38 mm total. Each X segment is paired with a riser: the 28-wide segment carries the top riser (15) so it reaches 10+13+15 = 38; the 21-wide segment carries the 13 riser so it reaches 10+13 = 23; the 17-wide segment is the lowest tread at height 10. So solid height by X: [0,28]\u219238, [28,49]\u219223, [49,66]\u219210.\n\nRight view (YZ, from +X): 36 (Y) \u00d7 38 (Z) with solid horizontal edges at z = 10 and z = 23. Seeing those edges as solid from +X confirms the low (10 mm) step is at the +X end and the taller steps rise behind it \u2014 consistent with the Front view (high at low X, low at high X).\n\nFeatures: three rectangular treads, each spanning the full 36 mm Y depth. No hole callouts on this sheet; no dimensioned fillets/chamfers (omitted).\n\nBuild: fuse three boxes \u2014 base 66\u00d736\u00d710 (z 0\u201310, full footprint); middle 49\u00d736\u00d713 (z 10\u201323, over the high+mid steps); top 28\u00d736\u00d715 (z 23\u201338, over the high step only). This yields exactly the chained heights 10 / 23 / 38.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nw_high = 28   # mm  X width of tallest step (left segment in Front view)\nw_mid  = 21   # mm  X width of middle step\nw_low  = 17   # mm  X width of lowest step (right segment in Front view)\ndepth  = 36   # mm  Y depth (overall in Top and Right views)\n\nh_base = 10   # mm  height of lowest step (base layer, z 0..10)\nh_mid  = 13   # mm  middle riser (z 10..23)\nh_top  = 15   # mm  top riser (z 23..38)\n\n# ---- derived extents ----\nW     = w_high + w_mid + w_low   # 28+21+17 = 66 mm total X\nH     = h_base + h_mid + h_top   # 10+13+15 = 38 mm total Z\nx_mid = w_high + w_mid           # 49 mm: X extent that reaches the middle height\nz_mid = h_base                   # 10 mm: top of base layer\nz_top = h_base + h_mid           # 23 mm: top of middle layer\n\nwith BuildPart() as bp:\n    # base layer: full footprint, height of the lowest step\n    Box(W, depth, h_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # second layer: only under the high + middle steps\n    with Locations((0, 0, z_mid)):\n        Box(x_mid, depth, h_mid, align=(Align.MIN, Align.MIN, Align.MIN))\n    # third layer: only under the highest step\n    with Locations((0, 0, z_top)):\n        Box(w_high, depth, h_top, align=(Align.MIN, Align.MIN, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     66.0,
+     36.0,
+     38.0
+    ],
+    "volume_mm3": 61812.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.1,
+   "usage": {
+    "input_tokens": 8382,
+    "output_tokens": 120
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard00_steps3",
+  "split": "hard",
+  "family": "steps3",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 47.3,
+  "t_agentic_s": 52.7
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

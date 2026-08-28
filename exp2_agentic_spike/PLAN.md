@@ -32,3 +32,28 @@ IoU, turns, wall-clock) in RESULTS.md; accepted trajectories (plan + final code)
 
 **Hygiene:** if you launch the VL server, verify port 8002 free first, log it, and kill it when
 the experiment ends. Execute generated scripts in temp dirs outside the repo.
+
+---
+
+## Progress log (2026-08-27)
+
+- **Data: DONE.** 20 fresh parts (10 std / 10 hard), 7 parametric families
+  (steps3, notchplate, lbracket, tblock, shaft, uchannel, bossplate), fresh string
+  seeds (`exp2-fresh-2026/...`), no train-set overlap (parts authored here, not drawn
+  from Zero-To-CAD). Drawings rendered with the vendor legacy renderer
+  (`DRAW_RENDERER=legacy`, A3, modern_iso, 2200px PNG) but with a **controlled
+  dimensioner** (`gen/render_drawings.py`) replacing `dimensions.auto_dimension`:
+  - std split = `direct` scheme: per-view overall (bbox) dims + every unique hard edge;
+  - hard split = `chained` scheme: overalls suppressed by length-match, only chain
+    segments dimmed (e.g. steps3 shows 28/21/17 but never 66) — the cadgenbench
+    "indirect re-dimensioning" pattern.
+  Hole callouts deterministic (`⌀d THRU`), tolerances off. Post-render solvability
+  check verifies every required value is actually placed: **20/20 ok** (retry loop
+  with fresh layout seeds). GT code/STEP/STL + dims inventory under `artifacts/`
+  (gitignored), manifest at `artifacts/manifest.json`.
+- **Solver: Kimi K3 via hub router** (wpk-serv-07:3456, anthropic-messages).
+  Image input VERIFIED with a live call (read text out of a test PNG). No VL server
+  launched on this box (GPUs untouched). Harness = plain scripted loop (dsh skipped —
+  measurement over framework; noted for RESULTS).
+- Arm design: turn-1 completion is scored as the single-shot arm AND seeds the agentic
+  loop (same sample → the delta isolates the loop, no sampling noise between arms).

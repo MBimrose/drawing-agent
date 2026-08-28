@@ -1,0 +1,69 @@
+{
+ "uid": "std01_steps3",
+ "split": "std",
+ "family": "steps3",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 14.5,
+   "usage": {
+    "input_tokens": 5129,
+    "output_tokens": 2366
+   },
+   "plan": "**Views read:**\n- **Top (XY):** single rectangular footprint with two interior visible edges. X-chain: 21 + 33 + 14 = 68 (matches the printed overall 68). Y extent: 40 (overall). The interior edges at X = 21 and X = 54 are the step transitions, running full depth.\n- **Front (XZ):** stepped profile, overall width 68 (matches Top). Z-chain on the right side: 11 + 12 + 15 = 38 (matches printed overall 38). Left segment (21 wide) is full height 38; middle segment (33 wide) tops at 11 + 12 = 23; right segment (14 wide) tops at 11.\n- **Right (YZ):** rectangle 40 (Y) \u00d7 38 (Z) with horizontal edges at Z = 11 and Z = 23 \u2014 confirms the steps extend through the full 40 mm depth with no side features.\n- **ISO:** confirms a simple 3-tread staircase descending along +X.\n\n**Axis chains:**\n- X: 21 + 33 + 14 = 68 mm overall\n- Y: 40 mm overall\n- Z: 11 + 12 + 15 = 38 mm overall\n\n**Feature list:**\n- Step 1 (high): 21 (X) \u00d7 40 (Y) \u00d7 38 (Z), at X = 0\u201321\n- Step 2 (mid): 33 \u00d7 40 \u00d7 23, at X = 21\u201354\n- Step 3 (low): 14 \u00d7 40 \u00d7 11, at X = 54\u201368\n- No holes, no fillets/chamfers dimensioned.",
+   "text": "<plan>\n**Views read:**\n- **Top (XY):** single rectangular footprint with two interior visible edges. X-chain: 21 + 33 + 14 = 68 (matches the printed overall 68). Y extent: 40 (overall). The interior edges at X = 21 and X = 54 are the step transitions, running full depth.\n- **Front (XZ):** stepped profile, overall width 68 (matches Top). Z-chain on the right side: 11 + 12 + 15 = 38 (matches printed overall 38). Left segment (21 wide) is full height 38; middle segment (33 wide) tops at 11 + 12 = 23; right segment (14 wide) tops at 11.\n- **Right (YZ):** rectangle 40 (Y) \u00d7 38 (Z) with horizontal edges at Z = 11 and Z = 23 \u2014 confirms the steps extend through the full 40 mm depth with no side features.\n- **ISO:** confirms a simple 3-tread staircase descending along +X.\n\n**Axis chains:**\n- X: 21 + 33 + 14 = 68 mm overall\n- Y: 40 mm overall\n- Z: 11 + 12 + 15 = 38 mm overall\n\n**Feature list:**\n- Step 1 (high): 21 (X) \u00d7 40 (Y) \u00d7 38 (Z), at X = 0\u201321\n- Step 2 (mid): 33 \u00d7 40 \u00d7 23, at X = 21\u201354\n- Step 3 (low): 14 \u00d7 40 \u00d7 11, at X = 54\u201368\n- No holes, no fillets/chamfers dimensioned.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from drawing ----\ndepth = 40      # mm, Y extent (Top & Right views)\nw1 = 21         # mm, high-step width along X\nw2 = 33         # mm, mid-step width along X\nw3 = 14         # mm, low-step width along X\nh_top = 38      # mm, overall height (Z)\ndrop_hi = 15    # mm, drop from top level to mid level\ndrop_mid = 12   # mm, drop from mid level to low level\nh_low = 11      # mm, low-step height\n\n# ---- Derived values ----\nwidth = w1 + w2 + w3            # mm, overall X = 21 + 33 + 14 = 68\nh_mid = h_low + drop_mid        # mm, mid-step height = 11 + 12 = 23\nassert h_mid + drop_hi == h_top  # 23 + 15 = 38 chain check\n\n# ---- Model: three full-depth steps, bottoms on Z=0 ----\nwith BuildPart() as bp:\n    # High step: X 0..21\n    Box(w1, depth, h_top, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Mid step: X 21..54\n    with Locations((w1, 0, 0)):\n        Box(w2, depth, h_mid, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Low step: X 54..68\n    with Locations((w1 + w2, 0, 0)):\n        Box(w3, depth, h_low, align=(Align.MIN, Align.MIN, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     68.0,
+     40.0,
+     38.0
+    ],
+    "volume_mm3": 68440.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.5,
+   "usage": {
+    "input_tokens": 8301,
+    "output_tokens": 311
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std01_steps3",
+  "split": "std",
+  "family": "steps3",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 17.7,
+  "t_agentic_s": 23.9
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}
