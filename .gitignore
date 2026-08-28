@@ -1,0 +1,6 @@
+vendor/
+*.stl
+*.step
+*.pyc
+__pycache__/
+exp*/artifacts/
