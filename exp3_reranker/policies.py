@@ -20,7 +20,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def load_ctx():
     feats = json.load(open(os.path.join(HERE, "features.json")))["features"]
     views = json.load(open(os.path.join(HERE, "drawing_views.json")))
-    return {"feats": feats, "views": views}
+    ctx = {"feats": feats, "views": views}
+    pw = os.path.join(HERE, "pairwise_iou.json")
+    if os.path.exists(pw):
+        ctx["pairwise"] = json.load(open(pw))
+    return ctx
 
 
 # --- per-candidate feature helpers ------------------------------------------
@@ -106,6 +110,56 @@ def aspect_mismatch(ctx, rec, draw_idx):
 
 
 # --- policies ----------------------------------------------------------------
+
+def shape_consensus_dists(ctx, rec):
+    """1 - median pairwise candidate-vs-candidate centered IoU (GT-free shape-space
+    consensus; sees internal-feature differences that bbox consensus is blind to).
+    {} if no pairwise data for this sample."""
+    pw = ctx.get("pairwise", {}).get(rec["key"])
+    if not pw:
+        return {}
+    ex = [d["draw"] for d in bo4data.exec_draws(rec)]
+    out = {}
+    for i in ex:
+        vals = []
+        for j in ex:
+            if i == j:
+                continue
+            v = pw.get(f"{min(i, j)}-{max(i, j)}")
+            if v is not None:
+                vals.append(1.0 - v)
+        if vals:
+            vals.sort()
+            mid = len(vals) // 2
+            out[i] = vals[mid] if len(vals) % 2 else 0.5 * (vals[mid - 1] + vals[mid])
+    return out
+
+
+def make_shape_combined_policy(w_shape=1.0, w_asp=1.0, margin=0.05):
+    """Like make_combined_policy but consensus lives in shape space (pairwise mesh
+    IoU) instead of bbox space. Falls back to bbox consensus when pairwise data is
+    missing for a sample."""
+    def pol(rec, ctx):
+        ex = [d["draw"] for d in bo4data.exec_draws(rec)]
+        if not ex:
+            return None
+        sh = shape_consensus_dists(ctx, rec)
+        if not sh:
+            sh = consensus_scores(ctx, rec)
+
+        def score(i):
+            s = w_shape * sh.get(i, 0.0)
+            m = aspect_mismatch(ctx, rec, i)
+            if m is not None:
+                s += w_asp * m
+            return s
+
+        scored = {i: score(i) for i in ex}
+        first = min(ex)
+        best = min(ex, key=lambda i: (round(scored[i], 6), i))
+        return best if scored[first] - scored[best] > margin else first
+    return pol
+
 
 def make_gated_policy(use_degenerate=True, use_consensus=True, use_aspect=True,
                       cons_tau=0.15, asp_tau=math.log(1.35)):

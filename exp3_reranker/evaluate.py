@@ -73,6 +73,14 @@ def main():
         pol = P.make_combined_policy(w_cons=w_cons, w_asp=w_asp, margin=margin)
         add(f"combined c{w_cons}a{w_asp} m{margin}", picks_of(pol, recs, ctx))
 
+    # --- shape-space consensus (pairwise candidate mesh IoU) ---
+    if "pairwise" in ctx:
+        for w_shape, w_asp, margin in [(1, 1, 0.05), (1, 1, 0.10), (1, 1, 0.15),
+                                       (1, 0, 0.05), (1, 0, 0.10), (1, 1, 0.0),
+                                       (1, 2, 0.10), (2, 1, 0.10)]:
+            pol = P.make_shape_combined_policy(w_shape, w_asp, margin)
+            add(f"shape-comb s{w_shape}a{w_asp} m{margin}", picks_of(pol, recs, ctx))
+
     # --- VLM verdict files (+ hybrid: heuristic flags, VLM adjudicates) ---
     comb = P.make_combined_policy(w_cons=1, w_asp=1, margin=0.05)
     comb_picks = picks_of(comb, recs, ctx)
