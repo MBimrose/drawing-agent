@@ -18,9 +18,12 @@ sample champion at T=0.6, accept IoU≥0.8, mix back into SFT (~40–45% accepta
 ## Infrastructure facts
 - This box is **wpk-serv-06** (8×H200, currently idle). Qwen3.6-27B server on :8000 is stopped.
 - **Campus cluster**: `ssh cc-login` (ControlMaster auto, ControlPersist 12h,
-  socket `~/.claude-hub/cm-cc-*`). Password+Duo needed to open the master — **currently closed**;
-  poll with `ssh -o BatchMode=yes cc-login true`. Project dir:
+  socket `~/.claude-hub/cm-cc-*`). Project dir:
   `/projects/illinois/eng/ece/wpk/bimrose2/drawing_vlm`.
+  **STANDING RULE (user, 2026-08-27): the cluster is a data source ONLY — file pulls
+  (rsync/scp) and trivial ls/find over the tunnel are fine, but NO sbatch jobs and no heavy
+  login-node compute. All experiment compute runs on wpk-serv-05 and wpk-serv-06
+  (8×H200 each; serv-05 /srv/scratch has ~52T free).**
 - **Endpoints**: GLM-OCR at wpk-serv-11:8000 (up, vision, OCR-specialized). Hub router
   (anthropic-messages) at wpk-serv-07.mechse.illinois.edu:3456 — models incl.
   `claude-moonshotai/Kimi-K3[1m]`, `claude-qwen3.8-27b`, `claude-qwen36-27b-build123d-critic`;
