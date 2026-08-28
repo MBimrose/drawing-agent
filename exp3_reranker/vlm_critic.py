@@ -65,7 +65,7 @@ def img_block(data: bytes):
                                         "data": base64.b64encode(data).decode()}}
 
 
-def call_model(model, messages, max_tokens=1600, temperature=0.0, tag=""):
+def call_model(model, messages, max_tokens=6000, temperature=0.0, tag=""):
     body = {"model": model, "max_tokens": max_tokens, "temperature": temperature,
             "system": SYSTEM, "messages": messages}
     data = json.dumps(body).encode()

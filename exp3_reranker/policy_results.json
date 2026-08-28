@@ -18,6 +18,60 @@
   "wall_s": 0.0
  },
  {
+  "policy": "combined c1a2 m0.05",
+  "n": 96,
+  "mean_iou": 0.8982,
+  "delta_vs_deployed": 0.0227,
+  "ci95": [
+   0.0095,
+   0.0387
+  ],
+  "significant": true,
+  "pct_oracle_gap": 48.6,
+  "gross18_fixed": "8/18",
+  "n_improved_gt.01": 14,
+  "n_broken_gt.01": 1,
+  "worst_single_break": -0.0517,
+  "model_calls": 0,
+  "wall_s": 0.0
+ },
+ {
+  "policy": "combined c1a1 m0.05",
+  "n": 96,
+  "mean_iou": 0.8978,
+  "delta_vs_deployed": 0.0222,
+  "ci95": [
+   0.0092,
+   0.0381
+  ],
+  "significant": true,
+  "pct_oracle_gap": 47.7,
+  "gross18_fixed": "8/18",
+  "n_improved_gt.01": 13,
+  "n_broken_gt.01": 0,
+  "worst_single_break": 0.0,
+  "model_calls": 0,
+  "wall_s": 0.0
+ },
+ {
+  "policy": "combined c1a1 m0.0",
+  "n": 96,
+  "mean_iou": 0.8966,
+  "delta_vs_deployed": 0.0211,
+  "ci95": [
+   0.0051,
+   0.0386
+  ],
+  "significant": true,
+  "pct_oracle_gap": 45.2,
+  "gross18_fixed": "9/18",
+  "n_improved_gt.01": 24,
+  "n_broken_gt.01": 6,
+  "worst_single_break": -0.2011,
+  "model_calls": 0,
+  "wall_s": 0.0
+ },
+ {
   "policy": "aspect-best (always)",
   "n": 96,
   "mean_iou": 0.8928,
@@ -32,6 +86,42 @@
   "n_improved_gt.01": 12,
   "n_broken_gt.01": 2,
   "worst_single_break": -0.0517,
+  "model_calls": 0,
+  "wall_s": 0.0
+ },
+ {
+  "policy": "combined c0a1 m0.05",
+  "n": 96,
+  "mean_iou": 0.8917,
+  "delta_vs_deployed": 0.0162,
+  "ci95": [
+   0.0051,
+   0.0303
+  ],
+  "significant": true,
+  "pct_oracle_gap": 34.7,
+  "gross18_fixed": "6/18",
+  "n_improved_gt.01": 8,
+  "n_broken_gt.01": 0,
+  "worst_single_break": 0.0,
+  "model_calls": 0,
+  "wall_s": 0.0
+ },
+ {
+  "policy": "combined c1a1 m0.1",
+  "n": 96,
+  "mean_iou": 0.89,
+  "delta_vs_deployed": 0.0144,
+  "ci95": [
+   0.0044,
+   0.0263
+  ],
+  "significant": true,
+  "pct_oracle_gap": 30.9,
+  "gross18_fixed": "6/18",
+  "n_improved_gt.01": 8,
+  "n_broken_gt.01": 0,
+  "worst_single_break": 0.0,
   "model_calls": 0,
   "wall_s": 0.0
  },
@@ -176,6 +266,24 @@
   "n_improved_gt.01": 4,
   "n_broken_gt.01": 0,
   "worst_single_break": -0.0096,
+  "model_calls": 0,
+  "wall_s": 0.0
+ },
+ {
+  "policy": "combined c1a0 m0.05",
+  "n": 96,
+  "mean_iou": 0.8846,
+  "delta_vs_deployed": 0.009,
+  "ci95": [
+   0.0017,
+   0.0191
+  ],
+  "significant": true,
+  "pct_oracle_gap": 19.4,
+  "gross18_fixed": "4/18",
+  "n_improved_gt.01": 5,
+  "n_broken_gt.01": 0,
+  "worst_single_break": 0.0,
   "model_calls": 0,
   "wall_s": 0.0
  },

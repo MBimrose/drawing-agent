@@ -68,3 +68,24 @@ and the drawing.
   Eval-cache PNGs confirmed (blue dims / dark geometry). Envs checked: exp1 env python
   (b123d 0.11.1, trimesh 5.0) for exec+measure; /software/python-3.11.1 for renders
   (cairosvg). 128 CPUs available.
+- 2026-08-28: `bo4data.py` reproduces exp1 exactly (0.8756/0.9222/0.7871, 18 gross).
+  Re-exec of all 384 candidates: 36 s at 64 workers, **384/384 exec_ok agreement** with
+  shards, volumes match exp1's persisted STLs to ≤1e-6 rel. New baseline measured:
+  random-exec-expectation 0.8697 (< deployed — first-exec already beats random).
+- Drawing-view extraction: blue-ink filter + alignment-based view assignment
+  (front/right share y-span, front/top share x-span) → full front+top+right on 73/96;
+  cross-view scale consistency within 3% on ~95% of those (self-validating).
+- Heuristic findings: degenerate-solid checks are a DEAD END on this champion —
+  execution already filters junk; bad candidates are watertight single solids that are
+  mis-scaled/mis-shaped (not_watertight/many_solids fire mostly on GOOD candidates,
+  median IoU 0.86/0.98 → gating on them LOSES −0.009). Consensus medoid-always +0.013,
+  aspect-best-always +0.017 (both CI-significant). **Combined score
+  (consensus med-dist + aspect mismatch, switch only if it beats first-exec by >0.05
+  margin): +0.0222 [CI +0.009, +0.038], 13 switches ALL positive, 8/18 gross fixed,
+  0 breaks.** All 3-view renders done (347/347, 47 s).
+- Probe `claude-qwen36-27b-build123d-critic`: listed by router /v1/models but backend
+  404s ("model does not exist") — its qwen3.6 server (wpk-serv-06:8000) is stopped.
+  Not usable as-is → excluded per plan. (2 probe calls, both fail; router itself fine.)
+- Kimi K3 critic harness written (1 call/sample, drawing + ≤4 labeled renders in
+  key-seeded shuffled order, thinking-aware max_tokens 6000, JSON verdict
+  scores/best/gross). Smoke on 3 samples in flight; ~2–6 min/call observed.
