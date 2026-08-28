@@ -81,3 +81,14 @@ What happened instead:
 - `run_node.sh`: 8 single-GPU workers per node (54GB bf16 fits one H200).
   serv-06 = workers 0–7, serv-05 = workers 8–15, stride 16 (6 samples each).
   Tree rsynced to serv-05 at the same path. Per-worker JSONs merged by `analyze_bo4.py`.
+
+## Done 2026-08-27 (same day)
+
+Smoke test reproduced the original run's first-sample greedy IoU bit-exactly
+(0.982221348022466) across cluster L40S → lab H200. Full 16-worker run finished in
+~19 min, 0 errors. Rerun deployed mean 0.8756 vs original 0.8765. **Final numbers:
+greedy 0.7871 / deployed 0.8756 / oracle 0.9222; oracle−deployed +0.0466
+[95% CI +0.031, +0.064]. Verdict: qualified GO for a critic reranker** — see RESULTS.md.
+Per-sample data: `bo4_oracle_summary.json` (committed); full shards with candidate code
+in `artifacts/shards/` and on both servers under
+`/srv/scratch/bimrose2/drawing_agent_exp1/out_bo4_oracle/`.

@@ -1,0 +1,2987 @@
+{
+ "ckpt": "e24-rft consolidated-checkpoint-3250",
+ "run_hosts": "wpk-serv-05 + wpk-serv-06, 16 single-H200 workers, stride 16",
+ "date": "2026-08-27",
+ "n": 96,
+ "records": [
+  {
+   "key": "000bc5ac-ffb4-009a-e213-ec6618d29e54",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.982221
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.982316
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.982221
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.950159
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.982221,
+   "deployed_by": 0,
+   "oracle_iou": 0.982316,
+   "oracle_draw": 1,
+   "greedy_iou": 0.982221
+  },
+  {
+   "key": "00199e66-2f80-ae33-2603-60a317088932",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.683067
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.999984
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.999984
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.683067,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.683067
+  },
+  {
+   "key": "0024c6d8-aa79-9abd-1584-78ed741bd77f",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "00874eac-be8c-17f8-ad7b-6a035b6c40ae",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.935457
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 1,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "00d1e3d6-db1e-758d-94e6-76e246cf7349",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.998709
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.998709
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.997414
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.997414
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.998709,
+   "deployed_by": 0,
+   "oracle_iou": 0.998709,
+   "oracle_draw": 0,
+   "greedy_iou": 0.998709
+  },
+  {
+   "key": "0120e88c-df7c-c3a2-4533-3b9d33302e59",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.958519
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.988476
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.984039
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.993722
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.958519,
+   "deployed_by": 0,
+   "oracle_iou": 0.993722,
+   "oracle_draw": 3,
+   "greedy_iou": 0.958519
+  },
+  {
+   "key": "014e0c04-50a5-9b2b-5d15-048cc68be62e",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.999962
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.992566
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.99158
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.974559
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.999962,
+   "deployed_by": 0,
+   "oracle_iou": 0.999962,
+   "oracle_draw": 0,
+   "greedy_iou": 0.999962
+  },
+  {
+   "key": "01854fac-2b62-88d1-11ce-99dc34837a7d",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.988012
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.986105
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.911996
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.988012,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 2,
+   "greedy_iou": 0.988012
+  },
+  {
+   "key": "01bcfa42-0f4d-6549-addf-638a06cce057",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.998824
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "01f125ec-6a23-34bb-4690-90f202c96d13",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.918878
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.859277
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.866234
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.856725
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.918878,
+   "deployed_by": 0,
+   "oracle_iou": 0.918878,
+   "oracle_draw": 0,
+   "greedy_iou": 0.918878
+  },
+  {
+   "key": "02042bd8-55db-513c-2dd6-5a84d5c6e200",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.997735
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.996926
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.993536
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.997735,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.997735
+  },
+  {
+   "key": "02133c18-0277-b899-bfb2-74a860ec2599",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.893565
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.893565
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.893565
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.893565,
+   "deployed_by": 0,
+   "oracle_iou": 0.893565,
+   "oracle_draw": 0,
+   "greedy_iou": 0.893565
+  },
+  {
+   "key": "024cdfc2-2898-0e12-ab5b-4f9e6bcca175",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.870233
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.957478
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.961831
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.873953
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.870233,
+   "deployed_by": 0,
+   "oracle_iou": 0.961831,
+   "oracle_draw": 2,
+   "greedy_iou": 0.870233
+  },
+  {
+   "key": "0264f04e-9879-24a1-30c7-74b898c39e5c",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.978791
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.98311
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.978791,
+   "deployed_by": 1,
+   "oracle_iou": 0.98311,
+   "oracle_draw": 3,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "028bb3be-e823-62d8-0275-93746b20cc5d",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.927228
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.990239
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.993854
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.927228,
+   "deployed_by": 0,
+   "oracle_iou": 0.993854,
+   "oracle_draw": 2,
+   "greedy_iou": 0.927228
+  },
+  {
+   "key": "02b4260a-2c89-b076-eed5-bd1a05cc4df7",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.798111
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.814644
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.707945
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.798111,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 3,
+   "greedy_iou": 0.798111
+  },
+  {
+   "key": "02c2c534-fdf5-09f0-a3b9-08fac95e67cc",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.047695
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.0,
+   "deployed_by": 1,
+   "oracle_iou": 0.047695,
+   "oracle_draw": 3,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "038de502-dae8-4b1f-95d1-74f6139edbf0",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.997915
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.94239
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.997915,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.997915
+  },
+  {
+   "key": "03b5b65e-5bdd-f566-8c3c-8743018784cb",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.986513
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.857533
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.989445
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.968804
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.986513,
+   "deployed_by": 0,
+   "oracle_iou": 0.989445,
+   "oracle_draw": 2,
+   "greedy_iou": 0.986513
+  },
+  {
+   "key": "03dfa680-4b62-4f14-3b39-0b6431faee2a",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.838686
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.781105
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.657951
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.958674
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.838686,
+   "deployed_by": 0,
+   "oracle_iou": 0.958674,
+   "oracle_draw": 3,
+   "greedy_iou": 0.838686
+  },
+  {
+   "key": "03fe9cac-6070-1f10-6a88-55b8a3835295",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.954014
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.582604
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.95982
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.93797
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.954014,
+   "deployed_by": 0,
+   "oracle_iou": 0.95982,
+   "oracle_draw": 2,
+   "greedy_iou": 0.954014
+  },
+  {
+   "key": "042c25e6-40b8-cd02-4c97-d42363f18b45",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.957941
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.957941
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.985513
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.957941
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.957941,
+   "deployed_by": 0,
+   "oracle_iou": 0.985513,
+   "oracle_draw": 2,
+   "greedy_iou": 0.957941
+  },
+  {
+   "key": "04a4e152-726a-31cb-2707-feccd5f5153e",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.662483
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.807224
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.842165
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.791195
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.662483,
+   "deployed_by": 0,
+   "oracle_iou": 0.842165,
+   "oracle_draw": 2,
+   "greedy_iou": 0.662483
+  },
+  {
+   "key": "04e8b530-8885-7ae9-8ac3-c63db08adcfe",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.83107
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.807029
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.83107,
+   "deployed_by": 1,
+   "oracle_iou": 0.83107,
+   "oracle_draw": 1,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "04e95c60-20cc-55db-11c5-6055a736b51f",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.927804
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.918801
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.917911
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.878121
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.927804,
+   "deployed_by": 0,
+   "oracle_iou": 0.927804,
+   "oracle_draw": 0,
+   "greedy_iou": 0.927804
+  },
+  {
+   "key": "053ba312-3046-9868-7133-6e4e4766e696",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.947142
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.889554
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.962191
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.937584
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.947142,
+   "deployed_by": 0,
+   "oracle_iou": 0.962191,
+   "oracle_draw": 2,
+   "greedy_iou": 0.947142
+  },
+  {
+   "key": "0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.416151
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.412479
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.390364
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.416151
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.416151,
+   "deployed_by": 0,
+   "oracle_iou": 0.416151,
+   "oracle_draw": 0,
+   "greedy_iou": 0.416151
+  },
+  {
+   "key": "058f2c3a-cfc8-1f2c-9abe-d42ebc007141",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.739459
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.997911
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.850936
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.739459,
+   "deployed_by": 0,
+   "oracle_iou": 0.997911,
+   "oracle_draw": 1,
+   "greedy_iou": 0.739459
+  },
+  {
+   "key": "05d7977c-c029-a5b7-cb4f-49ca736bf726",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.793021
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.793021,
+   "deployed_by": 1,
+   "oracle_iou": 1.0,
+   "oracle_draw": 3,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "05ede2e8-984a-61c6-fe6d-daa687e9b92e",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.983246
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.978484
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.976927
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.983246,
+   "deployed_by": 0,
+   "oracle_iou": 0.983246,
+   "oracle_draw": 0,
+   "greedy_iou": 0.983246
+  },
+  {
+   "key": "05f14712-467b-1bba-8da4-469495a3d5ef",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": {
+    "exec_ok": false,
+    "iou_centered": 0.0
+   },
+   "deployed_iou": 0.0,
+   "deployed_by": null,
+   "oracle_iou": 0.0,
+   "oracle_draw": null,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "061ae590-e223-ad36-4cd6-ac729031aba5",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.95315
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.554676
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.95315
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.95315,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 3,
+   "greedy_iou": 0.95315
+  },
+  {
+   "key": "067e685e-8e0c-760d-264d-b945cf2eb03f",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.999409
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.999794
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.998278
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "06b4e884-8486-df74-36c5-4b3cf685d78e",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.999675
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.999675
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.999675
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.999675
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.999675,
+   "deployed_by": 0,
+   "oracle_iou": 0.999675,
+   "oracle_draw": 0,
+   "greedy_iou": 0.999675
+  },
+  {
+   "key": "06e3334c-5c6b-66b0-5c44-ea8c43acc4fe",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.359352
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.369112
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.368757
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.369425
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.359352,
+   "deployed_by": 0,
+   "oracle_iou": 0.369425,
+   "oracle_draw": 3,
+   "greedy_iou": 0.359352
+  },
+  {
+   "key": "07035802-864d-0091-4bf7-4e785faf1a4f",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.928847
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.857292
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.928847,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.928847
+  },
+  {
+   "key": "0730e4f2-e958-00df-1708-5486efc8747d",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.930143
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.987229
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.946101
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.930143,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.930143
+  },
+  {
+   "key": "07832ef6-5dde-b57e-7f3f-37d19b242f35",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.985595
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.987723
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.962779
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.985595,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 3,
+   "greedy_iou": 0.985595
+  },
+  {
+   "key": "07bfb06a-6237-cc97-0a53-45a5be3d01b9",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.97758
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.984744
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.916002
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.967755
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.97758,
+   "deployed_by": 0,
+   "oracle_iou": 0.984744,
+   "oracle_draw": 1,
+   "greedy_iou": 0.97758
+  },
+  {
+   "key": "07d2049a-e04f-788b-343d-5455e5921446",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.984918
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.959627
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.988942
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.99256
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.984918,
+   "deployed_by": 0,
+   "oracle_iou": 0.99256,
+   "oracle_draw": 3,
+   "greedy_iou": 0.984918
+  },
+  {
+   "key": "080b2e00-c9be-606a-3207-08419028ffd0",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.807831
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.965115
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.861241
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.834056
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.807831,
+   "deployed_by": 0,
+   "oracle_iou": 0.965115,
+   "oracle_draw": 1,
+   "greedy_iou": 0.807831
+  },
+  {
+   "key": "082d1e48-2084-f5e6-e02a-5dde5f72e9df",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.981927
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.981115
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "082dbea2-e3fe-49a1-d631-78cb38b86fd2",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "08734382-459c-b322-da4f-0df4b47d6f42",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.166049
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.630823
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.205017
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.199744
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.166049,
+   "deployed_by": 0,
+   "oracle_iou": 0.630823,
+   "oracle_draw": 1,
+   "greedy_iou": 0.166049
+  },
+  {
+   "key": "087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.787257
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.996378
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.9643
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.716774
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.787257,
+   "deployed_by": 0,
+   "oracle_iou": 0.996378,
+   "oracle_draw": 1,
+   "greedy_iou": 0.787257
+  },
+  {
+   "key": "08ceb60e-09e1-b2d4-d0e2-af718c90dfc8",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.99815
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "090d59fe-be2b-6344-a7b2-210a1b8cceca",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.740694
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.535239
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.355431
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.740694,
+   "deployed_by": 1,
+   "oracle_iou": 0.740694,
+   "oracle_draw": 1,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "092593f2-bbb7-b34d-61e3-4686c86404ac",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.927312
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.931581
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.92532
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.92219
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.927312,
+   "deployed_by": 0,
+   "oracle_iou": 0.931581,
+   "oracle_draw": 1,
+   "greedy_iou": 0.927312
+  },
+  {
+   "key": "0975cab6-f02f-e897-b6f6-449b7b9ace8e",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.991644
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.99165
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.99165
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.99165
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.991644,
+   "deployed_by": 0,
+   "oracle_iou": 0.99165,
+   "oracle_draw": 1,
+   "greedy_iou": 0.991644
+  },
+  {
+   "key": "0979b252-eee8-3278-1a58-0188807a4b43",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.992698
+    },
+    {
+     "draw": 1,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.997065
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.995845
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.992698,
+   "deployed_by": 0,
+   "oracle_iou": 0.997065,
+   "oracle_draw": 2,
+   "greedy_iou": 0.992698
+  },
+  {
+   "key": "09a06a3c-9e51-288f-de54-bc99ab136fb3",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.698388
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.712238
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.658318
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.698388,
+   "deployed_by": 0,
+   "oracle_iou": 0.712238,
+   "oracle_draw": 1,
+   "greedy_iou": 0.698388
+  },
+  {
+   "key": "09ca4d7a-4a0b-6027-421c-fb8a00f19097",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.999636
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.999584
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.999984
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.903985
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.999636,
+   "deployed_by": 0,
+   "oracle_iou": 0.999984,
+   "oracle_draw": 2,
+   "greedy_iou": 0.999636
+  },
+  {
+   "key": "09dc90de-9efd-73dd-8d21-69172528e129",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.384533
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.354909
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.384533,
+   "deployed_by": 1,
+   "oracle_iou": 0.384533,
+   "oracle_draw": 1,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "0a01a8f6-a78b-1b51-8435-ede6e4562a4d",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.949365
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.961281
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.961322
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "0a0a5992-bf73-fde0-95b6-799d65366486",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.902475
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.758855
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.636209
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.722876
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.902475,
+   "deployed_by": 0,
+   "oracle_iou": 0.902475,
+   "oracle_draw": 0,
+   "greedy_iou": 0.902475
+  },
+  {
+   "key": "0a3681ac-2be6-0034-c7c3-70e0816f9397",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.503665
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.493479
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.509366
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.507455
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.503665,
+   "deployed_by": 0,
+   "oracle_iou": 0.509366,
+   "oracle_draw": 2,
+   "greedy_iou": 0.503665
+  },
+  {
+   "key": "0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.700567
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.833074
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.58663
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.807941
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.700567,
+   "deployed_by": 0,
+   "oracle_iou": 0.833074,
+   "oracle_draw": 1,
+   "greedy_iou": 0.700567
+  },
+  {
+   "key": "0a7b7956-680e-3718-b287-efe844c4da2b",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.835879
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.78414
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.971121
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.728619
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.835879,
+   "deployed_by": 0,
+   "oracle_iou": 0.971121,
+   "oracle_draw": 2,
+   "greedy_iou": 0.835879
+  },
+  {
+   "key": "0a8774b8-ccb0-2954-6720-39bba429eb91",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.967582
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.980716
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.999784
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.967582,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 3,
+   "greedy_iou": 0.967582
+  },
+  {
+   "key": "0ae0be88-1a82-d8a5-8f97-6faea3587e95",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.999251
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.942405
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "0b144460-77a7-3e71-e475-aed973c42446",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.8204
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.6193
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.716996
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.8204,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 2,
+   "greedy_iou": 0.8204
+  },
+  {
+   "key": "0b611efc-c103-5519-6650-76d8117ad50e",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.631087
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.780074
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.746802
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.746802
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.631087,
+   "deployed_by": 0,
+   "oracle_iou": 0.780074,
+   "oracle_draw": 1,
+   "greedy_iou": 0.631087
+  },
+  {
+   "key": "0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.986623
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.986623,
+   "deployed_by": 2,
+   "oracle_iou": 0.986623,
+   "oracle_draw": 2,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "0c43354e-b72d-2468-0208-7cd98ff631cb",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.997068
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.997068
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "0cb7362e-5998-2862-8a9a-6aa7e782436c",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.97047
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 1,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.892927
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.965699
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.892927
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.892927
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.892927,
+   "deployed_by": 0,
+   "oracle_iou": 0.965699,
+   "oracle_draw": 1,
+   "greedy_iou": 0.892927
+  },
+  {
+   "key": "0ce4f582-33c1-7837-0a74-2222ca00a711",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.816404
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.857232
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.852797
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.968364
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.816404,
+   "deployed_by": 0,
+   "oracle_iou": 0.968364,
+   "oracle_draw": 3,
+   "greedy_iou": 0.816404
+  },
+  {
+   "key": "0cfc10be-e86a-0791-d268-d7edf63e84e9",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.96935
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.831301
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.969505
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.729155
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.96935,
+   "deployed_by": 0,
+   "oracle_iou": 0.969505,
+   "oracle_draw": 2,
+   "greedy_iou": 0.96935
+  },
+  {
+   "key": "0cfca2a4-82f2-1b33-7d3e-2b686d1df698",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.959152
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.949124
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.959152
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.959152
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.959152,
+   "deployed_by": 0,
+   "oracle_iou": 0.959152,
+   "oracle_draw": 0,
+   "greedy_iou": 0.959152
+  },
+  {
+   "key": "0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.80545
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.838486
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.932368
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.945408
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.80545,
+   "deployed_by": 0,
+   "oracle_iou": 0.945408,
+   "oracle_draw": 3,
+   "greedy_iou": 0.80545
+  },
+  {
+   "key": "0d4e9816-812a-3636-3dea-ab081671de54",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.909721
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.984816
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.909721
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.904319
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.909721,
+   "deployed_by": 0,
+   "oracle_iou": 0.984816,
+   "oracle_draw": 1,
+   "greedy_iou": 0.909721
+  },
+  {
+   "key": "0d6ee184-71db-63ad-e8f1-8f9ace368b67",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.976724
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.976724
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.94714
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.932677
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.976724,
+   "deployed_by": 0,
+   "oracle_iou": 0.976724,
+   "oracle_draw": 0,
+   "greedy_iou": 0.976724
+  },
+  {
+   "key": "0d8231a8-81fd-47f7-9899-42026b48074c",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "0d838d1e-2f52-96f5-a3d9-dab533013bca",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.965862
+    },
+    {
+     "draw": 1,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.981175
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.989544
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.965862,
+   "deployed_by": 0,
+   "oracle_iou": 0.989544,
+   "oracle_draw": 3,
+   "greedy_iou": 0.965862
+  },
+  {
+   "key": "0d9544aa-4886-e525-81f3-292eb5b0982c",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.964739
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.964739,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.964739
+  },
+  {
+   "key": "0dd6ca4c-ec3c-67a5-8742-017faa18c6b4",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.928231
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.963648
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.957707
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.928231,
+   "deployed_by": 0,
+   "oracle_iou": 0.963648,
+   "oracle_draw": 1,
+   "greedy_iou": 0.928231
+  },
+  {
+   "key": "0e134a30-6dfe-a1ae-559b-5c75fec1f359",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.999955
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.998886
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.999955,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 1,
+   "greedy_iou": 0.999955
+  },
+  {
+   "key": "0e14533a-a751-9f25-2cd8-9e95126e2806",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.91193
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.980407
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.980407
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.91193,
+   "deployed_by": 0,
+   "oracle_iou": 0.980407,
+   "oracle_draw": 1,
+   "greedy_iou": 0.91193
+  },
+  {
+   "key": "0e6d9ff8-bd0e-ca7d-b612-dee365cad664",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.961352
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.353562
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.78116
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.770332
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.961352,
+   "deployed_by": 0,
+   "oracle_iou": 0.961352,
+   "oracle_draw": 0,
+   "greedy_iou": 0.961352
+  },
+  {
+   "key": "0ead60ac-739e-453e-0ca0-c687a546b676",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.823052
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "0ee24452-2025-7130-4abd-34aac0752476",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.970626
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.970626
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.921708
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.885915
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.970626,
+   "deployed_by": 0,
+   "oracle_iou": 0.970626,
+   "oracle_draw": 0,
+   "greedy_iou": 0.970626
+  },
+  {
+   "key": "0eec11b2-ceda-f288-f912-84a01f311449",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.988243
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.956716
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.988243,
+   "deployed_by": 1,
+   "oracle_iou": 0.988243,
+   "oracle_draw": 1,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "0f48f6f2-1b82-9572-204d-b7e39755e809",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.815412
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.561623
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.805503
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.995284
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.815412,
+   "deployed_by": 0,
+   "oracle_iou": 0.995284,
+   "oracle_draw": 3,
+   "greedy_iou": 0.815412
+  },
+  {
+   "key": "0f58d446-8365-8dd1-b3b9-16baee60a3ee",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.950897
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.950492
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.941831
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.957484
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.950897,
+   "deployed_by": 0,
+   "oracle_iou": 0.957484,
+   "oracle_draw": 3,
+   "greedy_iou": 0.950897
+  },
+  {
+   "key": "0f65741c-4495-29d2-7265-cef52b9ef2f3",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.809619
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.958798
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.805681
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.794096
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.809619,
+   "deployed_by": 0,
+   "oracle_iou": 0.958798,
+   "oracle_draw": 1,
+   "greedy_iou": 0.809619
+  },
+  {
+   "key": "0fdd267e-0eab-cdea-2099-8bbc285b4a39",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.791072
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.876964
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.791072,
+   "deployed_by": 1,
+   "oracle_iou": 1.0,
+   "oracle_draw": 3,
+   "greedy_iou": 0.0
+  },
+  {
+   "key": "0feed9be-4eb8-0add-b7e8-b7225422d911",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.996765
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.999975
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "1027d3e0-b915-a769-8be4-68efff34bd31",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "103a4b9c-3e82-6cb0-123d-ec6e878d94cf",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.941436
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.940592
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.954463
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.941436,
+   "deployed_by": 0,
+   "oracle_iou": 0.954463,
+   "oracle_draw": 2,
+   "greedy_iou": 0.941436
+  },
+  {
+   "key": "104587fa-61ef-cd7d-02d5-4978341a3bf6",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  },
+  {
+   "key": "10827958-85be-a385-bf99-7c456eb80835",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.778212
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.58719
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.615585
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.604986
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.778212,
+   "deployed_by": 0,
+   "oracle_iou": 0.778212,
+   "oracle_draw": 0,
+   "greedy_iou": 0.778212
+  },
+  {
+   "key": "108abe88-f9f4-6578-74ef-ae929d382767",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.959362
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.956433
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.932843
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.959362,
+   "deployed_by": 0,
+   "oracle_iou": 0.959362,
+   "oracle_draw": 0,
+   "greedy_iou": 0.959362
+  },
+  {
+   "key": "10a652e2-346b-78e7-a117-6b7a40e58cc4",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.999999
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.496031
+    },
+    {
+     "draw": 2,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.541242
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.999999,
+   "deployed_by": 0,
+   "oracle_iou": 0.999999,
+   "oracle_draw": 0,
+   "greedy_iou": 0.999999
+  },
+  {
+   "key": "10d0ca90-0d13-721f-43e2-427a2c4c5c54",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.993708
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.993708
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.993708
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.993695
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.993708,
+   "deployed_by": 0,
+   "oracle_iou": 0.993708,
+   "oracle_draw": 0,
+   "greedy_iou": 0.993708
+  },
+  {
+   "key": "10d37114-2592-0370-3095-dc90744d6b2d",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 0.999957
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.999957
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.999957
+    },
+    {
+     "draw": 3,
+     "exec_ok": false,
+     "iou_centered": 0.0
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 0.999957,
+   "deployed_by": 0,
+   "oracle_iou": 0.999957,
+   "oracle_draw": 0,
+   "greedy_iou": 0.999957
+  },
+  {
+   "key": "10dff308-8a8d-b5da-769b-31f83512b5b7",
+   "draws": [
+    {
+     "draw": 0,
+     "exec_ok": true,
+     "iou_centered": 1.0
+    },
+    {
+     "draw": 1,
+     "exec_ok": true,
+     "iou_centered": 0.994223
+    },
+    {
+     "draw": 2,
+     "exec_ok": true,
+     "iou_centered": 0.583774
+    },
+    {
+     "draw": 3,
+     "exec_ok": true,
+     "iou_centered": 0.953139
+    }
+   ],
+   "repair": null,
+   "deployed_iou": 1.0,
+   "deployed_by": 0,
+   "oracle_iou": 1.0,
+   "oracle_draw": 0,
+   "greedy_iou": 1.0
+  }
+ ]
+}
