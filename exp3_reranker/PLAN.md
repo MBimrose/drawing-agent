@@ -103,3 +103,9 @@ and the drawing.
   at 4 workers, 01:30.
 - `claude-qwen36-27b-build123d-critic` probe: router lists it, backend 404s (qwen3.6
   server on serv-06:8000 stopped) — not usable as-is, excluded.
+- 2026-08-28 (final): full Kimi run done — 93/96 verdicts, 91 calls, 0.76M/1.25M
+  tokens, ~110 min at 4-way. **vlm-pick +0.0133 [−0.005, +0.031] NOT significant**
+  (11/18 gross fixed but 12 breaks, worst −0.416 off a perfect d0); hybrids
+  significant (+0.0165/+0.0174) but below the pure heuristic. Final verdict:
+  **deploy the no-model combined heuristic (+0.0222 [+0.009, +0.038], 48% of gap,
+  0 regressions); skip the VLM critic.** RESULTS.md written; all committed.
