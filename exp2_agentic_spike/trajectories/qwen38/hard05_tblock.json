@@ -1,0 +1,110 @@
+{
+ "uid": "hard05_tblock",
+ "split": "hard",
+ "family": "tblock",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 62.3,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 4049
+   },
+   "plan": "Reading the views:\n- **Top view** (XY, X right, Y up): an L-shaped outline. Dimensions: 22 = flange thickness (Y, top bar); 33 = stem length below the flange (Y); 29 = stem width (X); 17 = flange overhang beyond the stem (X). Chains: overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ, X right, Z up): rectangle 46 wide with an internal edge line at x = 29 (stem side edge); height matches the 11 from the Right view.\n- **Right view** (YZ, Y right, Z up): rectangle split 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11 and the Y chain.\n- **ISO**: confirms a plain L-shaped prism, no holes, no fillets.\n\nFeature list: L-prism of uniform height 11 mm = flange (46 \u00d7 22) at the back plus stem (29 \u00d7 33) at the front-left. No holes, no fillets, no chamfers.\n\nConstruction: two boxes in one BuildPart (union by default): stem box at origin corner, flange box translated +Y by 33.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (XY, X right, Y up): an L-shaped outline. Dimensions: 22 = flange thickness (Y, top bar); 33 = stem length below the flange (Y); 29 = stem width (X); 17 = flange overhang beyond the stem (X). Chains: overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ, X right, Z up): rectangle 46 wide with an internal edge line at x = 29 (stem side edge); height matches the 11 from the Right view.\n- **Right view** (YZ, Y right, Z up): rectangle split 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11 and the Y chain.\n- **ISO**: confirms a plain L-shaped prism, no holes, no fillets.\n\nFeature list: L-prism of uniform height 11 mm = flange (46 \u00d7 22) at the back plus stem (29 \u00d7 33) at the front-left. No holes, no fillets, no chamfers.\n\nConstruction: two boxes in one BuildPart (union by default): stem box at origin corner, flange box translated +Y by 33.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nflange_t  = 22.0    # top view: flange thickness (Y)\nstem_len  = 33.0    # top view: stem length below flange (Y)\nstem_wid  = 29.0    # top view: stem width (X)\noverhang  = 17.0    # top view: flange width beyond stem (X)\nheight    = 11.0    # right view: overall height (Z)\n\n# --- derived overall extents ---\nW = stem_wid + overhang    # 46 mm overall X  (29 + 17)\nD = flange_t + stem_len    # 55 mm overall Y  (22 + 33)\n\nwith BuildPart() as hub:\n    # stem: left/front portion, full height\n    Box(stem_wid, stem_len, height).align((X_MIN, Y_MIN, Z_MIN))\n    # flange: full width, located at the back (top of the Top view)\n    Box(W, flange_t, height).align((X_MIN, Y_MIN, Z_MIN)).translate((0, stem_len, 0))\n\npart = hub.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 124.7,
+   "usage": {
+    "input_tokens": 4829,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view** (XY): L\u2011shape. 22 = flange thickness (Y, top bar); 33 = stem length below flange (Y); 29 = stem width (X); 17 = flange overhang beyond stem (X). Overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ): 46 wide, 11 tall, internal step edge at x = 29.\n- **Right view** (YZ): 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11 and the Y chain.\n- **ISO**: plain L\u2011prism, no holes/fillets/chamfers.\n\nFeature list: L\u2011prism of uniform height 11 mm = flange (46 \u00d7 22) at the back + stem (29 \u00d7 33) at the front\u2011left.\n\nConstruction fix: in this build12",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 109.3,
+   "usage": {
+    "input_tokens": 5112,
+    "output_tokens": 7485
+   },
+   "plan": "Reading the views (unchanged):\n- **Top view** (XY): L\u2011shape. 22 = flange thickness (Y, back bar); 33 = stem length below flange (Y); 29 = stem width (X); 17 = flange overhang beyond stem (X). Overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ): 46 wide, 11 tall, step edge at x = 29.\n- **Right view** (YZ): 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11.\n- **ISO**: plain L\u2011prism, no holes/fillets/chamfers.\n\nFeature list: L\u2011prism, uniform height 11 mm = flange (46 \u00d7 22) + stem (29 \u00d7 33).\n\nConstruction fix: in build123d 0.10 `align` is a **constructor keyword** of `Box`, not a method (the previous `.align()` call caused the AttributeError). To avoid any translation call, I build the L as a bounding box minus a corner notch, both placed with `align=(X_MAX, Y_MIN, Z_MIN)` so they share the origin corner:\n- base = Box(46, 55, 11) \u2192 X[\u201146,0], Y[0,55]\n- notch = Box(17, 33, 11) \u2192 X[\u201117,0], Y[0,33] (the missing corner)\n- part = base.cut(notch) \u2192 flange (X[\u201146,0], Y[33,55]) + stem (X[\u201146,\u201117], Y[0,33]).",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view** (XY): L\u2011shape. 22 = flange thickness (Y, back bar); 33 = stem length below flange (Y); 29 = stem width (X); 17 = flange overhang beyond stem (X). Overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ): 46 wide, 11 tall, step edge at x = 29.\n- **Right view** (YZ): 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11.\n- **ISO**: plain L\u2011prism, no holes/fillets/chamfers.\n\nFeature list: L\u2011prism, uniform height 11 mm = flange (46 \u00d7 22) + stem (29 \u00d7 33).\n\nConstruction fix: in build123d 0.10 `align` is a **constructor keyword** of `Box`, not a method (the previous `.align()` call caused the AttributeError). To avoid any translation call, I build the L as a bounding box minus a corner notch, both placed with `align=(X_MAX, Y_MIN, Z_MIN)` so they share the origin corner:\n- base = Box(46, 55, 11) \u2192 X[\u201146,0], Y[0,55]\n- notch = Box(17, 33, 11) \u2192 X[\u201117,0], Y[0,33] (the missing corner)\n- part = base.cut(notch) \u2192 flange (X[\u201146,0], Y[33,55]) + stem (X[\u201146,\u201117], Y[0,33]).\n</plan>\n\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nflange_t = 22.0    # top view: flange thickness (Y)\nstem_len = 33.0    # top view: stem length below flange (Y)\nstem_wid = 29.0    # top view: stem width (X)\noverhang = 17.0    # top view: flange width beyond stem (X)\nheight   = 11.0    # right view: overall height (Z)\n\n# --- derived overall extents ---\nW = stem_wid + overhang    # 46 mm overall X  (29 + 17)\nD = flange_t + stem_len    # 55 mm overall Y  (22 + 33)\n\n# --- build the L-prism as bounding box minus corner notch ---\n# both boxes aligned to the same origin corner (X_MAX, Y_MIN, Z_MIN)\nbase  = Box(W, D, height, align=(X_MAX, Y_MIN, Z_MIN))\nnotch = Box(overhang, stem_len, height, align=(X_MAX, Y_MIN, Z_MIN))\npart = base.cut(notch)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 64.5,
+   "usage": {
+    "input_tokens": 5982,
+    "output_tokens": 4981
+   },
+   "plan": "Reading the views (unchanged):\n- **Top view** (XY): L\u2011shape. 22 = flange thickness (Y, back bar); 33 = stem length below flange (Y); 29 = stem width (X); 17 = flange overhang beyond stem (X). Overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ): 46 wide, 11 tall, step edge at x = 29.\n- **Right view** (YZ): 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11.\n- **ISO**: plain L\u2011prism, no holes/fillets/chamfers.\n\nFeature list: L\u2011prism, uniform height 11 mm = flange (46 \u00d7 22) + stem (29 \u00d7 33).\n\nConstruction fix: the previous failure was `NameError: X_MAX` \u2014 the alignment constants are not bound in this build123d 0.10 namespace, so I avoid `align=`/`X_MAX` entirely. Instead I use the default centered `Box` and place each piece with `.translate(...)`, then `.union`. Centers (origin at the L's front\u2011left corner, Z up): flange center = (W/2, stem_len + flange_t/2, height/2) = (23, 44, 5.5); stem center = (stem_wid/2, stem_len/2, height/2) = (14.5, 16.5, 5.5). This yields flange X[0,46]\u00d7Y[33,55] and stem X[0,29]\u00d7Y[0,33], matching all views.",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view** (XY): L\u2011shape. 22 = flange thickness (Y, back bar); 33 = stem length below flange (Y); 29 = stem width (X); 17 = flange overhang beyond stem (X). Overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ): 46 wide, 11 tall, step edge at x = 29.\n- **Right view** (YZ): 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11.\n- **ISO**: plain L\u2011prism, no holes/fillets/chamfers.\n\nFeature list: L\u2011prism, uniform height 11 mm = flange (46 \u00d7 22) + stem (29 \u00d7 33).\n\nConstruction fix: the previous failure was `NameError: X_MAX` \u2014 the alignment constants are not bound in this build123d 0.10 namespace, so I avoid `align=`/`X_MAX` entirely. Instead I use the default centered `Box` and place each piece with `.translate(...)`, then `.union`. Centers (origin at the L's front\u2011left corner, Z up): flange center = (W/2, stem_len + flange_t/2, height/2) = (23, 44, 5.5); stem center = (stem_wid/2, stem_len/2, height/2) = (14.5, 16.5, 5.5). This yields flange X[0,46]\u00d7Y[33,55] and stem X[0,29]\u00d7Y[0,33], matching all views.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing (mm) ---\nflange_t = 22.0    # top view: flange thickness (Y)\nstem_len = 33.0    # top view: stem length below flange (Y)\nstem_wid = 29.0    # top view: stem width (X)\noverhang = 17.0    # top view: flange width beyond stem (X)\nheight   = 11.0    # right view: overall height (Z)\n\n# --- derived overall extents ---\nW = stem_wid + overhang    # 46 mm overall X  (29 + 17)\nD = flange_t + stem_len    # 55 mm overall Y  (22 + 33)\n\n# --- build the L-prism as flange box + stem box, unioned ---\n# Box() is centered at the origin by default; translate each to its center.\nflange_c = (W / 2, stem_len + flange_t / 2, height / 2)   # (23, 44, 5.5)\nstem_c   = (stem_wid / 2, stem_len / 2, height / 2)        # (14.5, 16.5, 5.5)\n\nflange = Box(W, flange_t, height).translate(flange_c)\nstem   = Box(stem_wid, stem_len, height).translate(stem_c)\n\npart = flange.union(stem)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": false
+  },
+  {
+   "turn": 5,
+   "t_call_s": 93.6,
+   "usage": {
+    "input_tokens": 6929,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view** (XY): L\u2011shape. 22 = flange thickness (Y, back bar); 33 = stem length below flange (Y); 29 = stem width (X); 17 = flange overhang beyond stem (X). Overall X = 29 + 17 = 46; overall Y = 22 + 33 = 55.\n- **Front view** (XZ): 46 wide, 11 tall, step edge at x = 29.\n- **Right view** (YZ): 33 + 22 = 55 wide, 11 tall \u2014 confirms uniform height 11.\n- **ISO**: plain L\u2011prism, no holes/fillets/chamfers.\n\nFeature list:",
+   "action": "no_code"
+  },
+  {
+   "turn": 6,
+   "t_call_s": 82.1,
+   "usage": {
+    "input_tokens": 7157,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 7,
+   "t_call_s": 79.6,
+   "usage": {
+    "input_tokens": 7197,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  }
+ ],
+ "summary": {
+  "uid": "hard05_tblock",
+  "split": "hard",
+  "family": "tblock",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": false,
+  "ag_iou": 0.0,
+  "ag_final_cand": null,
+  "best_iou": 0.0,
+  "best_cand": null,
+  "n_calls": 7,
+  "n_candidates": 3,
+  "stop_reason": "no_code",
+  "t_singleshot_s": 64.9,
+  "t_agentic_s": 623.6
+ },
+ "per_candidate_iou": {}
+}

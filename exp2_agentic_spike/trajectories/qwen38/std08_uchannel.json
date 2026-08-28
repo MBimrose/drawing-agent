@@ -1,0 +1,117 @@
+{
+ "uid": "std08_uchannel",
+ "split": "std",
+ "family": "uchannel",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 110.8,
+   "usage": {
+    "input_tokens": 4264,
+    "output_tokens": 6953
+   },
+   "plan": "Reading the sheet:\n- **Top view** (labeled \"Top\", upper left): a rectangle 79 mm in the vertical (Y) direction \u2014 the only explicit linear dimension on the sheet. Its horizontal (X) extent is undimensioned; from the view proportions the width is \u2248 46 mm. Two faint internal lines mark the end-flange edge region.\n- **Right / Front region** (large rectangle, mid-sheet): no dimensions rendered; used only to confirm the part is a flat plate with a perpendicular end flange.\n- **ISO view**: shows the overall form \u2014 an L-shaped bracket: a flat base plate with a vertical flange at one end, flange spanning the full width.\n\nDimension chain:\n- Y (length): OVERALL = 79 (single given dimension, no chain).\n- X (width): not dimensioned; taken from Top-view proportion \u2248 46 mm.\n- Z (height): not dimensioned; flange height taken from ISO proportion \u2248 22 mm, plate thickness 5 mm (typical for the drawn wall).\n\nFeature list:\n1. Base plate: 46 (X) \u00d7 79 (Y) \u00d7 5 (Z), bottom at Z=0.\n2. End flange: 46 (X) \u00d7 5 (Y) \u00d7 22 (Z), at the Y=0 end, rising from the base bottom (union with base).\nNo holes, slots, fillets or chamfers are shown or dimensioned.",
+   "text": "\n\n<plan>\nReading the sheet:\n- **Top view** (labeled \"Top\", upper left): a rectangle 79 mm in the vertical (Y) direction \u2014 the only explicit linear dimension on the sheet. Its horizontal (X) extent is undimensioned; from the view proportions the width is \u2248 46 mm. Two faint internal lines mark the end-flange edge region.\n- **Right / Front region** (large rectangle, mid-sheet): no dimensions rendered; used only to confirm the part is a flat plate with a perpendicular end flange.\n- **ISO view**: shows the overall form \u2014 an L-shaped bracket: a flat base plate with a vertical flange at one end, flange spanning the full width.\n\nDimension chain:\n- Y (length): OVERALL = 79 (single given dimension, no chain).\n- X (width): not dimensioned; taken from Top-view proportion \u2248 46 mm.\n- Z (height): not dimensioned; flange height taken from ISO proportion \u2248 22 mm, plate thickness 5 mm (typical for the drawn wall).\n\nFeature list:\n1. Base plate: 46 (X) \u00d7 79 (Y) \u00d7 5 (Z), bottom at Z=0.\n2. End flange: 46 (X) \u00d7 5 (Y) \u00d7 22 (Z), at the Y=0 end, rising from the base bottom (union with base).\nNo holes, slots, fillets or chamfers are shown or dimensioned.\n</plan>\n```python\n# HUB ADAPTER (HUB-4364-1) - L-shaped bracket\n# All units mm\n\n# ---- Dimensions read from the drawing ----\nL = 79.0   # mm, overall length (Top view, vertical dimension)\n\n# ---- Dimensions inferred from view proportions (not explicitly dimensioned) ----\nW = 46.0   # mm, width (Top view horizontal extent)\nt = 5.0    # mm, plate / flange thickness (drawn wall)\nh = 22.0   # mm, flange height (ISO proportion ~0.28 * L)\n\nwith BuildPart() as part:\n    # Base plate: 46 (X) x 79 (Y) x 5 (Z), resting on Z=0\n    Box(W, L, t, align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Vertical end flange at the Y=0 end, full width, rising to Z=h\n    Box(W, t, h, align=(Align.CENTER, Align.MIN, Align.MIN))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.1,
+   "usage": {
+    "input_tokens": 5003,
+    "output_tokens": 616
+   },
+   "plan": "Reading the sheet (unchanged):\n- **Top view**: rectangle 79 mm in Y (the only explicit linear dimension). X width undimensioned; from view proportions \u2248 46 mm. Faint internal lines mark the end-flange region.\n- **ISO view**: L-shaped bracket \u2014 flat base plate with a vertical end flange spanning the full width.\n\nDimension chain:\n- Y (length): OVERALL = 79.\n- X (width): not dimensioned; \u2248 46 mm from Top proportion.\n- Z (height): not dimensioned; flange height \u2248 22 mm, thickness 5 mm from ISO.\n\nFeature list:\n1. Base plate: 46 (X) \u00d7 79 (Y) \u00d7 5 (Z), bottom at Z=0.\n2. End flange: 46 (X) \u00d7 5 (Y) \u00d7 22 (Z) at Y=0 end.\nNo holes/slots/fillets.\n\nFix: add the missing `from build123d import ...` so `BuildPart`, `Box`, `Align`, `export_step` are defined.",
+   "text": "\n\n<plan>\nReading the sheet (unchanged):\n- **Top view**: rectangle 79 mm in Y (the only explicit linear dimension). X width undimensioned; from view proportions \u2248 46 mm. Faint internal lines mark the end-flange region.\n- **ISO view**: L-shaped bracket \u2014 flat base plate with a vertical end flange spanning the full width.\n\nDimension chain:\n- Y (length): OVERALL = 79.\n- X (width): not dimensioned; \u2248 46 mm from Top proportion.\n- Z (height): not dimensioned; flange height \u2248 22 mm, thickness 5 mm from ISO.\n\nFeature list:\n1. Base plate: 46 (X) \u00d7 79 (Y) \u00d7 5 (Z), bottom at Z=0.\n2. End flange: 46 (X) \u00d7 5 (Y) \u00d7 22 (Z) at Y=0 end.\nNo holes/slots/fillets.\n\nFix: add the missing `from build123d import ...` so `BuildPart`, `Box`, `Align`, `export_step` are defined.\n</plan>\n```python\n# HUB ADAPTER (HUB-4364-1) - L-shaped bracket\n# All units mm\nfrom build123d import BuildPart, Box, Align, export_step\n\n# ---- Dimensions read from the drawing ----\nL = 79.0   # mm, overall length (Top view, vertical dimension)\n\n# ---- Dimensions inferred from view proportions (not explicitly dimensioned) ----\nW = 46.0   # mm, width (Top view horizontal extent)\nt = 5.0    # mm, plate / flange thickness (drawn wall)\nh = 22.0   # mm, flange height (ISO proportion ~0.28 * L)\n\nwith BuildPart() as part:\n    # Base plate: 46 (X) x 79 (Y) x 5 (Z), resting on Z=0\n    Box(W, L, t, align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Vertical end flange at the Y=0 end, full width, rising to Z=h\n    Box(W, t, h, align=(Align.CENTER, Align.MIN, Align.MIN))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 8.7,
+   "usage": {
+    "input_tokens": 5868,
+    "output_tokens": 585
+   },
+   "plan": "Reading unchanged. The only fix needed is that `export_step` must receive the actual solid, not the `BuildPart` context manager. In build123d, the solid is at `part.part` (a `Solid`/`Compound`), so the export call becomes `export_step(part.part, \"output.step\")`.",
+   "text": "\n\n<plan>\nReading unchanged. The only fix needed is that `export_step` must receive the actual solid, not the `BuildPart` context manager. In build123d, the solid is at `part.part` (a `Solid`/`Compound`), so the export call becomes `export_step(part.part, \"output.step\")`.\n</plan>\n```python\n# HUB ADAPTER (HUB-4364-1) - L-shaped bracket\n# All units mm\nfrom build123d import BuildPart, Box, Align, export_step\n\n# ---- Dimensions read from the drawing ----\nL = 79.0   # mm, overall length (Top view, vertical dimension)\n\n# ---- Dimensions inferred from view proportions (not explicitly dimensioned) ----\nW = 46.0   # mm, width (Top view horizontal extent)\nt = 5.0    # mm, plate / flange thickness (drawn wall)\nh = 22.0   # mm, flange height (ISO proportion ~0.28 * L)\n\nwith BuildPart() as part:\n    # Base plate: 46 (X) x 79 (Y) x 5 (Z), resting on Z=0\n    Box(W, L, t, align=(Align.CENTER, Align.MIN, Align.MIN))\n    # Vertical end flange at the Y=0 end, full width, rising to Z=h\n    Box(W, t, h, align=(Align.CENTER, Align.MIN, Align.MIN))\n\nexport_step(part.part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     46.0,
+     79.0,
+     22.0
+    ],
+    "volume_mm3": 22080.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 125.0,
+   "usage": {
+    "input_tokens": 8173,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 5,
+   "t_call_s": 127.5,
+   "usage": {
+    "input_tokens": 8213,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 6,
+   "t_call_s": 134.1,
+   "usage": {
+    "input_tokens": 8253,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  }
+ ],
+ "summary": {
+  "uid": "std08_uchannel",
+  "split": "std",
+  "family": "uchannel",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.1119,
+  "ag_final_cand": 3,
+  "best_iou": 0.1119,
+  "best_cand": 3,
+  "n_calls": 6,
+  "n_candidates": 3,
+  "stop_reason": "no_code",
+  "t_singleshot_s": 110.9,
+  "t_agentic_s": 525.7
+ },
+ "per_candidate_iou": {
+  "3": 0.1119
+ }
+}

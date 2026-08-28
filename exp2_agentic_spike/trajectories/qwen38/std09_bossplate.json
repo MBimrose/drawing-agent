@@ -1,0 +1,60 @@
+{
+ "uid": "std09_bossplate",
+ "split": "std",
+ "family": "bossplate",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 115.4,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 122.8,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 121.2,
+   "usage": {
+    "input_tokens": 4137,
+    "output_tokens": 7600
+   },
+   "plan": "**View reading**\n\n- **Top view (XY, X right / Y up):** outer rectangle = base plate; inner rectangle = boss; circle = through hole.\n  - `50` (vertical) = base plate depth **Y = 50** (overall).\n  - `25` (vertical, inner) = boss depth **Y = 25**.\n  - `35` (horizontal, inner) = boss width **X = 35**.\n  - `\u230012 THRU` = hole diameter **12**, through the full stack.\n  - Base plate length **X** is not numerically labelled; the plan aspect ratio (\u22482:1) gives **X = 100**. Boss and hole are centred in both X and Y.\n- **Right view (YZ, Y right / Z up):**\n  - `20` (vertical, narrow upper part) = boss height **Z = 20**.\n  - `31` (vertical, overall) = overall height **Z = 31** \u2192 base plate thickness = 31 \u2212 20 = **11**.\n- **ISO view:** confirms a flat base slab with a centred raised boss and a centred through hole; long plan direction \u2248 2\u00d7 short direction (consistent with 100 \u00d7 50).\n\n**Dimension chains**\n- Z: base 11 + boss 20 = 31 (overall) \u2713\n- Y: base 50 (overall), boss 25 centred \u2192 12.5 margin each side.\n- X: base 100 (overall), boss 35 centred \u2192 32.5 margin each side.\n\n**Feature list**\n1. Base plate 100 (X) \u00d7 50 (Y) \u00d7 11 (Z), bottom at Z=0, centred in XY.\n2. Boss 35 (X) \u00d7 25 (Y) \u00d7 20 (Z), centred in XY, sitting on top (Z=11\u219231).\n3. Through hole \u230012 on the Z axis through the centre (Z=0\u219231).\n\nNo fillets/chamfers are dimensioned, so none are added.",
+   "text": "\n\n<plan>\n**View reading**\n\n- **Top view (XY, X right / Y up):** outer rectangle = base plate; inner rectangle = boss; circle = through hole.\n  - `50` (vertical) = base plate depth **Y = 50** (overall).\n  - `25` (vertical, inner) = boss depth **Y = 25**.\n  - `35` (horizontal, inner) = boss width **X = 35**.\n  - `\u230012 THRU` = hole diameter **12**, through the full stack.\n  - Base plate length **X** is not numerically labelled; the plan aspect ratio (\u22482:1) gives **X = 100**. Boss and hole are centred in both X and Y.\n- **Right view (YZ, Y right / Z up):**\n  - `20` (vertical, narrow upper part) = boss height **Z = 20**.\n  - `31` (vertical, overall) = overall height **Z = 31** \u2192 base plate thickness = 31 \u2212 20 = **11**.\n- **ISO view:** confirms a flat base slab with a centred raised boss and a centred through hole; long plan direction \u2248 2\u00d7 short direction (consistent with 100 \u00d7 50).\n\n**Dimension chains**\n- Z: base 11 + boss 20 = 31 (overall) \u2713\n- Y: base 50 (overall), boss 25 centred \u2192 12.5 margin each side.\n- X: base 100 (overall), boss 35 centred \u2192 32.5 margin each side.\n\n**Feature list**\n1. Base plate 100 (X) \u00d7 50 (Y) \u00d7 11 (Z), bottom at Z=0, centred in XY.\n2. Boss 35 (X) \u00d7 25 (Y) \u00d7 20 (Z), centred in XY, sitting on top (Z=11\u219231).\n3. Through hole \u230012 on the Z axis through the centre (Z=0\u219231).\n\nNo fillets/chamfers are dimensioned, so none are added.\n</plan>\n```python\nimport math\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nbase_x = 100.0        # mm  base plate length (X), from plan aspect ratio",
+   "action": "no_code"
+  }
+ ],
+ "summary": {
+  "uid": "std09_bossplate",
+  "split": "std",
+  "family": "bossplate",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": false,
+  "ag_iou": 0.0,
+  "ag_final_cand": null,
+  "best_iou": 0.0,
+  "best_cand": null,
+  "n_calls": 3,
+  "n_candidates": 0,
+  "stop_reason": "no_code",
+  "t_singleshot_s": 115.4,
+  "t_agentic_s": 359.4
+ },
+ "per_candidate_iou": {}
+}

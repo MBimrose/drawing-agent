@@ -1,0 +1,134 @@
+{
+ "uid": "std01_steps3",
+ "split": "std",
+ "family": "steps3",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 116.0,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 124.9,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": "**Views read**\n- **Top (XY):** outer rectangle 68 (X) \u00d7 40 (Y). Two internal lines parallel to Y (constant X) are 33 apart, marking the boundaries of the middle step. The two outer X\u2011segments are not separately dimensioned, so by symmetry each = (68 \u2212 33)/2 = 17.5.\n- **Right (YZ):** outer 40 (Y) \u00d7 38 (Z). Two horizontal internal lines give the step heights. From the top: 15, then 12, so the three Z\u2011levels are 38 (top), 38\u221215 = 23, and 38\u221215\u221212 = 11.\n- **ISO:** confirms a 3\u2011step staircase rising along X (tall block at one end, medium in the middle, low platform at the other end), all full depth (40).\n\n**Dimension chains**\n- X: overall 68 = 17.5 + 33 + 17.5 (middle fixed at 33, outer halves symmetric).\n- Y: overall 40 (full depth, single value).\n- Z: overall 38 = 11 + 12 + 15 (low 11, medium 23, tall 38).\n\n**Feature list (3 stacked\u2011in\u2011X boxes, all 40 deep in Y)**\n- Tall block: X 0\u219217.5, Z 0\u219238.\n- Medium block: X 17.5\u219250.5, Z 0\u219223.\n- Low block: X 50.5\u219268, Z 0\u219211.\nNo holes, fillets, or chamfers are dimensioned.",
+   "text": "\n\n<plan>\n**Views read**\n- **Top (XY):** outer rectangle 68 (X) \u00d7 40 (Y). Two internal lines parallel to Y (constant X) are 33 apart, marking the boundaries of the middle step. The two outer X\u2011segments are not separately dimensioned, so by symmetry each = (68 \u2212 33)/2 = 17.5.\n- **Right (YZ):** outer 40 (Y) \u00d7 38 (Z). Two horizontal internal lines give the step heights. From the top: 15, then 12, so the three Z\u2011levels are 38 (top), 38\u221215 = 23, and 38\u221215\u221212 = 11.\n- **ISO:** confirms a 3\u2011step staircase rising along X (tall block at one end, medium in the middle, low platform at the other end), all full depth (40).\n\n**Dimension chains**\n- X: overall 68 = 17.5 + 33 + 17.5 (middle fixed at 33, outer halves symmetric).\n- Y: overall 40 (full depth, single value).\n- Z: overall 38 = 11 + 12 + 15 (low 11, medium 23, tall 38).\n\n**Feature list (3 stacked\u2011in\u2011X boxes, all 40 deep in Y)**\n- Tall block: X 0\u219217.5, Z 0\u219238.\n- Medium block: X 17.5\u219250.5, Z 0\u219223.\n- Low block: X 50.5\u219268, Z 0\u219211.\nNo holes, fillets, or chamfers are dimensioned.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nW = 68          # mm  overall width (X), Top view\nD = 40          # mm  overall depth  (Y), Top / Right view\nH_total = 38    # mm  overall height (Z), Right view\n\nd_top = 15      # mm  top band of Right view (tall - medium)\nd_mid = 12      # mm  middle band of Right view (medium - low)\n\nw_mid = 33      # mm  middle step width (X), Top view\n\n# ---- Derived values ----\nh_low  = H_total - d_top - d_mid   # 11  low step top\nh_med  = H_total - d_top           # 23  medium step top\nh_tall = H_total                   # 38  tall step top\nw_side = (W - w_mid) / 2.0         # 17.5 each outer step (symmetric)\n\n# ---- Build the 3-step staircase (union of 3 boxes, all full depth in Y) ----\nwith BuildPart()",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 95.2,
+   "usage": {
+    "input_tokens": 4807,
+    "output_tokens": 6088
+   },
+   "plan": "**View reading**\n\n- **Top view (XY):** outer rectangle 68 (X, horizontal) \u00d7 40 (Y, vertical/depth). Two internal lines parallel to Y (i.e. at constant X) split the 68 width into three bands. The middle band is dimensioned 33; the two outer bands are not separately dimensioned, so by symmetry each = (68 \u2212 33)/2 = 17.5. These constant\u2011X lines are the boundaries between three steps of different heights.\n- **Right view (YZ, seen from +X):** outer 40 (Y) \u00d7 38 (Z). Two full\u2011width horizontal lines give the step tops. From the top edge: top band = 15, middle band = 12, so bottom band = 38 \u2212 15 \u2212 12 = 11. Hence the three step heights (tops) are 38, 38\u221215 = 23, and 23\u221212 = 11. Because the lines span the full 40 depth, every step is a full\u2011depth slab and the height varies only along X \u2014 consistent with the Top view's constant\u2011X boundaries.\n- **ISO view:** confirms a 3\u2011step staircase (tall block / medium shelf / low platform), middle step widest, all full depth. No holes, fillets or chamfers are dimensioned.\n\n**Dimension chains**\n- X: 68 = 17.5 + 33 + 17.5 (middle fixed at 33, outer halves symmetric).\n- Y: 40 (full depth, single value).\n- Z: 38 = 11 + 12 + 15 \u2192 step tops 11, 23, 38.\n\n**Feature list (3 boxes unioned, all 40 deep in Y, sitting on Z=0)**\n- Low step:  X 0 \u2192 17.5,   height 11\n- Med step:  X 17.5 \u2192 50.5, height 23\n- Tall step: X 50.5 \u2192 68,   height 38\n\n(Tall/low end assignment follows the ISO orientation; the bounding box and feature set are identical either way.)",
+   "text": "\n\n<plan>\n**View reading**\n\n- **Top view (XY):** outer rectangle 68 (X, horizontal) \u00d7 40 (Y, vertical/depth). Two internal lines parallel to Y (i.e. at constant X) split the 68 width into three bands. The middle band is dimensioned 33; the two outer bands are not separately dimensioned, so by symmetry each = (68 \u2212 33)/2 = 17.5. These constant\u2011X lines are the boundaries between three steps of different heights.\n- **Right view (YZ, seen from +X):** outer 40 (Y) \u00d7 38 (Z). Two full\u2011width horizontal lines give the step tops. From the top edge: top band = 15, middle band = 12, so bottom band = 38 \u2212 15 \u2212 12 = 11. Hence the three step heights (tops) are 38, 38\u221215 = 23, and 23\u221212 = 11. Because the lines span the full 40 depth, every step is a full\u2011depth slab and the height varies only along X \u2014 consistent with the Top view's constant\u2011X boundaries.\n- **ISO view:** confirms a 3\u2011step staircase (tall block / medium shelf / low platform), middle step widest, all full depth. No holes, fillets or chamfers are dimensioned.\n\n**Dimension chains**\n- X: 68 = 17.5 + 33 + 17.5 (middle fixed at 33, outer halves symmetric).\n- Y: 40 (full depth, single value).\n- Z: 38 = 11 + 12 + 15 \u2192 step tops 11, 23, 38.\n\n**Feature list (3 boxes unioned, all 40 deep in Y, sitting on Z=0)**\n- Low step:  X 0 \u2192 17.5,   height 11\n- Med step:  X 17.5 \u2192 50.5, height 23\n- Tall step: X 50.5 \u2192 68,   height 38\n\n(Tall/low end assignment follows the ISO orientation; the bounding box and feature set are identical either way.)\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read directly from the drawing (mm) ----\nw_total  = 68    # mm  overall width  (X), Top view\nd        = 40    # mm  overall depth  (Y), Top / Right view\nh_total  = 38    # mm  overall height (Z), Right view\n\nband_top = 15    # mm  top band of Right view (tall top - med top)\nband_mid = 12    # mm  middle band of Right view (med top - low top)\n\nw_mid    = 33    # mm  middle step width (X), Top view\n\n# ---- Derived values ----\nh_low  = h_total - band_top - band_mid   # 11  low step top\nh_med  = h_total - band_top              # 23  medium step top\nh_tall = h_total                         # 38  tall step top\n\nw_side = (w_total - w_mid) / 2.0         # 17.5 each outer step (symmetric)\n\nx1 = w_side            # 17.5  boundary low | med\nx2 = w_side + w_mid    # 50.5  boundary med | tall\n\n# ---- Build the 3-step staircase (union of 3 full-depth boxes) ----\nlow  = Box(w_side, d, h_low,  align=Align.MIN)\nmed  = Box(w_mid,  d, h_med,  align=Align.MIN).translate((x1, 0, 0))\ntall = Box(w_side, d, h_tall, align=Align.MIN).translate((x2, 0, 0))\n\npart = low.union(med).union(tall)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 75.7,
+   "usage": {
+    "input_tokens": 5886,
+    "output_tokens": 4468
+   },
+   "plan": "**View reading (unchanged)**\n- **Top (XY):** outer 68 (X) \u00d7 40 (Y). Two constant\u2011X internal lines split the width into three bands; middle band = 33, outer bands symmetric = (68\u221233)/2 = 17.5 each. These are the step boundaries.\n- **Right (YZ):** outer 40 (Y) \u00d7 38 (Z). Two full\u2011depth horizontal lines give step tops; from top: 15 then 12, so tops are 38, 23, 11. Full\u2011depth lines \u21d2 height varies only along X.\n- **ISO:** 3\u2011step staircase, middle step widest, full depth. No holes/fillets/chamfers.\n\n**Chains:** X: 68 = 17.5 + 33 + 17.5. Y: 40. Z: 38 = 11 + 12 + 15 \u2192 tops 11, 23, 38.\n\n**Fix to previous script:** `Box`/`Part` in build123d 0.10 has no `.union()` method, so explicit boolean chaining failed. Instead I build all three boxes inside a single `BuildPart()` context (default `Mode.ADD` unions them automatically), positioning each with `Locations` at its exact center (default `Box` is origin\u2011centered). This avoids both the missing `.union` and any dependence on `align` semantics.\n\n**Feature list (3 full\u2011depth boxes, Z from 0):**\n- Low:  X 0\u219217.5,  h 11\n- Med:  X 17.5\u219250.5, h 23\n- Tall: X 50.5\u219268,  h 38",
+   "text": "\n\n<plan>\n**View reading (unchanged)**\n- **Top (XY):** outer 68 (X) \u00d7 40 (Y). Two constant\u2011X internal lines split the width into three bands; middle band = 33, outer bands symmetric = (68\u221233)/2 = 17.5 each. These are the step boundaries.\n- **Right (YZ):** outer 40 (Y) \u00d7 38 (Z). Two full\u2011depth horizontal lines give step tops; from top: 15 then 12, so tops are 38, 23, 11. Full\u2011depth lines \u21d2 height varies only along X.\n- **ISO:** 3\u2011step staircase, middle step widest, full depth. No holes/fillets/chamfers.\n\n**Chains:** X: 68 = 17.5 + 33 + 17.5. Y: 40. Z: 38 = 11 + 12 + 15 \u2192 tops 11, 23, 38.\n\n**Fix to previous script:** `Box`/`Part` in build123d 0.10 has no `.union()` method, so explicit boolean chaining failed. Instead I build all three boxes inside a single `BuildPart()` context (default `Mode.ADD` unions them automatically), positioning each with `Locations` at its exact center (default `Box` is origin\u2011centered). This avoids both the missing `.union` and any dependence on `align` semantics.\n\n**Feature list (3 full\u2011depth boxes, Z from 0):**\n- Low:  X 0\u219217.5,  h 11\n- Med:  X 17.5\u219250.5, h 23\n- Tall: X 50.5\u219268,  h 38\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read directly from the drawing (mm) ----\nw_total  = 68    # mm  overall width  (X), Top view\nd        = 40    # mm  overall depth  (Y), Top / Right view\nh_total  = 38    # mm  overall height (Z), Right view\n\nband_top = 15    # mm  top band of Right view (tall top - med top)\nband_mid = 12    # mm  middle band of Right view (med top - low top)\n\nw_mid    = 33    # mm  middle step width (X), Top view\n\n# ---- Derived values ----\nh_low  = h_total - band_top - band_mid   # 11  low step top\nh_med  = h_total - band_top              # 23  medium step top\nh_tall = h_total                         # 38  tall step top\n\nw_side = (w_total - w_mid) / 2.0         # 17.5 each outer step (symmetric)\n\nx1 = w_side            # 17.5  boundary low | med\nx2 = w_side + w_mid    # 50.5  boundary med | tall\n\n# Centers of each box (default Box is centered at the origin)\nlow_c  = (w_side / 2.0,            d / 2.0, h_low  / 2.0)\nmed_c  = (x1 + w_mid / 2.0,        d / 2.0, h_med  / 2.0)\ntall_c = (x2 + w_side / 2.0,       d / 2.0, h_tall / 2.0)\n\n# ---- Build the 3-step staircase: union of 3 full-depth boxes via BuildPart ----\nwith BuildPart() as p:\n    with Locations(low_c):\n        Box(w_side, d, h_low)\n    with Locations(med_c):\n        Box(w_mid, d, h_med)\n    with Locations(tall_c):\n        Box(w_side, d, h_tall)\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     68.0,
+     40.0,
+     38.0
+    ],
+    "volume_mm3": 64660.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 47.9,
+   "usage": {
+    "input_tokens": 8676,
+    "output_tokens": 3308
+   },
+   "plan": "**Comparison found an error in the X segmentation.**\n\nMy generated solid's bounding box (68 \u00d7 40 \u00d7 38), face count (10 planar), and the staircase orientation (low\u2011left \u2192 med\u2011middle \u2192 tall\u2011right in Front) all match the drawing. However, comparing the internal line positions in the Top view and the step widths in the Front view reveals I wrongly assumed the two outer bands were symmetric (17.5 each). The drawing explicitly dimensions them:\n\n- Top view horizontal chain: **21 + 33 + 14 = 68**\n- Front view horizontal chain: **21 + 33 + 14 = 68**\n\nSo the correct widths are low = 21, medium = 33, tall = 14 (not 17.5 / 33 / 17.5). The heights (11 / 23 / 38) and depth (40) were already correct.\n\n**Corrected X layout (steps rise left\u2192right in Front view):**\n- Low step:  X 0 \u2192 21,   h 11\n- Med step:  X 21 \u2192 54,  h 23\n- Tall step: X 54 \u2192 68,  h 38\n\nExpected new volume = 21\u00b740\u00b711 + 33\u00b740\u00b723 + 14\u00b740\u00b738 = 9240 + 30360 + 21280 = **60880 mm\u00b3** (was 64660).",
+   "text": "\n\n<plan>\n**Comparison found an error in the X segmentation.**\n\nMy generated solid's bounding box (68 \u00d7 40 \u00d7 38), face count (10 planar), and the staircase orientation (low\u2011left \u2192 med\u2011middle \u2192 tall\u2011right in Front) all match the drawing. However, comparing the internal line positions in the Top view and the step widths in the Front view reveals I wrongly assumed the two outer bands were symmetric (17.5 each). The drawing explicitly dimensions them:\n\n- Top view horizontal chain: **21 + 33 + 14 = 68**\n- Front view horizontal chain: **21 + 33 + 14 = 68**\n\nSo the correct widths are low = 21, medium = 33, tall = 14 (not 17.5 / 33 / 17.5). The heights (11 / 23 / 38) and depth (40) were already correct.\n\n**Corrected X layout (steps rise left\u2192right in Front view):**\n- Low step:  X 0 \u2192 21,   h 11\n- Med step:  X 21 \u2192 54,  h 23\n- Tall step: X 54 \u2192 68,  h 38\n\nExpected new volume = 21\u00b740\u00b711 + 33\u00b740\u00b723 + 14\u00b740\u00b738 = 9240 + 30360 + 21280 = **60880 mm\u00b3** (was 64660).\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read directly from the drawing (mm) ----\nd        = 40    # mm  overall depth  (Y), Top / Right view\n\n# X segmentation (Top & Front horizontal chains): 21 + 33 + 14 = 68\nw_low  = 21     # mm  low step width  (X), left band\nw_med  = 33     # mm  medium step width (X), middle band\nw_tall = 14     # mm  tall step width  (X), right band\nW      = w_low + w_med + w_tall   # 68  overall width (X)\n\n# Z step heights (Right vertical chain): 11 + 12 + 15 = 38\nh_low    = 11   # mm  low step top\nband_mid = 12   # mm  med top - low top\nband_top = 15   # mm  tall top - med top\nh_med  = h_low + band_mid         # 23\nh_tall = h_med + band_top         # 38\nH      = h_tall                   # 38 overall height (Z)\n\n# ---- Box centers (default Box is centered at the origin) ----\nlow_c  = (w_low / 2.0,                          d / 2.0, h_low  / 2.0)\nmed_c  = (w_low + w_med / 2.0,                   d / 2.0, h_med  / 2.0)\ntall_c = (w_low + w_med + w_tall / 2.0,          d / 2.0, h_tall / 2.0)\n\n# ---- Build the 3-step staircase: union of 3 full-depth boxes ----\nwith BuildPart() as p:\n    with Locations(low_c):\n        Box(w_low, d, h_low)\n    with Locations(med_c):\n        Box(w_med, d, h_med)\n    with Locations(tall_c):\n        Box(w_tall, d, h_tall)\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     68.0,
+     40.0,
+     38.0
+    ],
+    "volume_mm3": 60880.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 6,
+   "t_call_s": 4.3,
+   "usage": {
+    "input_tokens": 9748,
+    "output_tokens": 245
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std01_steps3",
+  "split": "std",
+  "family": "steps3",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5476,
+  "ag_final_cand": 3,
+  "best_iou": 0.5538,
+  "best_cand": 2,
+  "n_calls": 6,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 116.0,
+  "t_agentic_s": 479.7
+ },
+ "per_candidate_iou": {
+  "2": 0.5538,
+  "3": 0.5476
+ }
+}

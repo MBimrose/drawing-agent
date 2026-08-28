@@ -1,0 +1,60 @@
+{
+ "uid": "std00_steps3",
+ "split": "std",
+ "family": "steps3",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 123.0,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 131.8,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 131.7,
+   "usage": {
+    "input_tokens": 4137,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  }
+ ],
+ "summary": {
+  "uid": "std00_steps3",
+  "split": "std",
+  "family": "steps3",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": false,
+  "ag_iou": 0.0,
+  "ag_final_cand": null,
+  "best_iou": 0.0,
+  "best_cand": null,
+  "n_calls": 3,
+  "n_candidates": 0,
+  "stop_reason": "no_code",
+  "t_singleshot_s": 123.0,
+  "t_agentic_s": 386.5
+ },
+ "per_candidate_iou": {}
+}

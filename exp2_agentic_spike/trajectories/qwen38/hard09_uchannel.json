@@ -1,0 +1,117 @@
+{
+ "uid": "hard09_uchannel",
+ "split": "hard",
+ "family": "uchannel",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 116.0,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 108.8,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 79.8,
+   "usage": {
+    "input_tokens": 4137,
+    "output_tokens": 6367
+   },
+   "plan": "**View reading**\n- **Top (XY):** outer rectangle 60 (X) \u00d7 54 (Y). Two internal lines split X into 9 | 42 | 9 \u2192 a slot 42 wide running the full 54 depth. The \"54\" is the Y extent.\n- **Front (XZ):** U\u2011shape. Two legs of thickness 9, inner gap 42, a bottom web, and a top notch of depth 53. The \"9\" (left) is the wall thickness; \"42\" inner width; \"53\" notch (cavity) height.\n- **Right (YZ):** rectangle 54 (Y) wide with a hidden line near the bottom = top of the bottom web. Confirms Y = 54 and a bottom web.\n- **ISO:** open U\u2011channel (two parallel walls + bottom web), open at top and at both Y ends.\n\n**Dimension chains**\n- X (width): 9 (left wall) + 42 (cavity) + 9 (right wall) = **60**\n- Y (depth): **54** (Top vertical = Right horizontal)\n- Z (height): 53 (cavity) + 9 (bottom web, = uniform wall thickness) = **62**\n\n**Feature list**\n- Base block 60 \u00d7 54 \u00d7 62.\n- Subtract top cavity 42 (X) \u00d7 54 (Y) \u00d7 53 (Z), centered in X (9 from each side), full Y, open at top (z from 9 to 62).\n- No fillets/chamfers dimensioned \u2192 omitted.",
+   "text": "\n\n<plan>\n**View reading**\n- **Top (XY):** outer rectangle 60 (X) \u00d7 54 (Y). Two internal lines split X into 9 | 42 | 9 \u2192 a slot 42 wide running the full 54 depth. The \"54\" is the Y extent.\n- **Front (XZ):** U\u2011shape. Two legs of thickness 9, inner gap 42, a bottom web, and a top notch of depth 53. The \"9\" (left) is the wall thickness; \"42\" inner width; \"53\" notch (cavity) height.\n- **Right (YZ):** rectangle 54 (Y) wide with a hidden line near the bottom = top of the bottom web. Confirms Y = 54 and a bottom web.\n- **ISO:** open U\u2011channel (two parallel walls + bottom web), open at top and at both Y ends.\n\n**Dimension chains**\n- X (width): 9 (left wall) + 42 (cavity) + 9 (right wall) = **60**\n- Y (depth): **54** (Top vertical = Right horizontal)\n- Z (height): 53 (cavity) + 9 (bottom web, = uniform wall thickness) = **62**\n\n**Feature list**\n- Base block 60 \u00d7 54 \u00d7 62.\n- Subtract top cavity 42 (X) \u00d7 54 (Y) \u00d7 53 (Z), centered in X (9 from each side), full Y, open at top (z from 9 to 62).\n- No fillets/chamfers dimensioned \u2192 omitted.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nwall_t   = 9    # mm  wall / web thickness (Front \"9\", Top \"9\")\ninner_w  = 42   # mm  cavity inner width (Front/Top \"42\")\ndepth    = 54   # mm  Y extent (Top vertical \"54\", Right horizontal \"54\")\ncavity_h = 53   # mm  top notch / cavity height (Front \"53\")\n\n# ---- derived overall extents ----\nW = wall_t + inner_w + wall_t   # 60 mm  overall X width\nH = cavity_h + wall_t           # 62 mm  overall Z height (cavity + bottom web)\n\n# ---- build the U-channel ----\nbase   = Box(W, depth, H, align=(Align.MIN, Align.MIN, Align.MIN))\ncavity = Box(inner_w, depth, cavity_h, align=(Align.MIN, Align.MIN, Align.MIN))\ncavity = cavity.located((wall_t, 0, wall_t))   # 9 in from left, full Y, bottom at z=9 (open top)\n\npart = base - cavity\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 13.3,
+   "usage": {
+    "input_tokens": 5008,
+    "output_tokens": 1276
+   },
+   "plan": "**View reading** (unchanged)\n- **Top (XY):** outer rectangle 60 (X) \u00d7 54 (Y); internal lines split X into 9 | 42 | 9 \u2192 a 42\u2011wide slot running the full 54 depth.\n- **Front (XZ):** U\u2011shape, two legs of thickness 9, inner gap 42, top notch depth 53.\n- **Right (YZ):** 54 (Y) wide rectangle with a hidden line near the bottom = top of the bottom web.\n- **ISO:** open U\u2011channel (two parallel walls + bottom web), open at top and both Y ends.\n\n**Dimension chains**\n- X: 9 + 42 + 9 = **60**\n- Y: **54**\n- Z: 53 (cavity) + 9 (bottom web) = **62**\n\n**Feature list**\n- Base block 60 \u00d7 54 \u00d7 62 (min corner at origin).\n- Subtract cavity 42 \u00d7 54 \u00d7 53, offset (9, 0, 9) from origin (9 from left wall, full Y, bottom at z=9 \u2192 open top).\n- No dimensioned fillets/chamfers \u2192 omitted.\n\n**Fix:** `located()` requires a `Location` object, not a tuple; use `translate(x, y, z)` to offset the cavity.",
+   "text": "\n\n<plan>\n**View reading** (unchanged)\n- **Top (XY):** outer rectangle 60 (X) \u00d7 54 (Y); internal lines split X into 9 | 42 | 9 \u2192 a 42\u2011wide slot running the full 54 depth.\n- **Front (XZ):** U\u2011shape, two legs of thickness 9, inner gap 42, top notch depth 53.\n- **Right (YZ):** 54 (Y) wide rectangle with a hidden line near the bottom = top of the bottom web.\n- **ISO:** open U\u2011channel (two parallel walls + bottom web), open at top and both Y ends.\n\n**Dimension chains**\n- X: 9 + 42 + 9 = **60**\n- Y: **54**\n- Z: 53 (cavity) + 9 (bottom web) = **62**\n\n**Feature list**\n- Base block 60 \u00d7 54 \u00d7 62 (min corner at origin).\n- Subtract cavity 42 \u00d7 54 \u00d7 53, offset (9, 0, 9) from origin (9 from left wall, full Y, bottom at z=9 \u2192 open top).\n- No dimensioned fillets/chamfers \u2192 omitted.\n\n**Fix:** `located()` requires a `Location` object, not a tuple; use `translate(x, y, z)` to offset the cavity.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nwall_t   = 9    # mm  wall / web thickness (Front \"9\", Top \"9\")\ninner_w  = 42   # mm  cavity inner width (Front/Top \"42\")\ndepth    = 54   # mm  Y extent (Top vertical \"54\", Right horizontal \"54\")\ncavity_h = 53   # mm  top notch / cavity height (Front \"53\")\n\n# ---- derived overall extents ----\nW = wall_t + inner_w + wall_t   # 60 mm  overall X width\nH = cavity_h + wall_t           # 62 mm  overall Z height (cavity + bottom web)\n\n# ---- build the U-channel ----\nbase   = Box(W, depth, H, align=(Align.MIN, Align.MIN, Align.MIN))\ncavity = Box(inner_w, depth, cavity_h, align=(Align.MIN, Align.MIN, Align.MIN))\ncavity = cavity.translate(wall_t, 0, wall_t)   # 9 in from left, full Y, bottom at z=9 (open top)\n\npart = base - cavity\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 5,
+   "t_call_s": 61.6,
+   "usage": {
+    "input_tokens": 5772,
+    "output_tokens": 5615
+   },
+   "plan": "**View reading** (unchanged)\n- **Top (XY):** outer rectangle 60 (X) \u00d7 54 (Y); internal lines split X into 9 | 42 | 9 \u2192 a 42\u2011wide slot running the full 54 depth.\n- **Front (XZ):** U\u2011shape, two legs of thickness 9, inner gap 42, top notch depth 53.\n- **Right (YZ):** 54 (Y) wide rectangle with a hidden line near the bottom = top of the bottom web.\n- **ISO:** open U\u2011channel (two parallel walls + bottom web), open at top and both Y ends.\n\n**Dimension chains**\n- X: 9 + 42 + 9 = **60**\n- Y: **54**\n- Z: 53 (cavity) + 9 (bottom web) = **62**\n\n**Feature list**\n- Base block 60 \u00d7 54 \u00d7 62 (min corner at origin).\n- Subtract cavity 42 \u00d7 54 \u00d7 53, offset (9, 0, 9) from origin (9 from left wall, full Y, bottom at z=9 \u2192 open top).\n- No dimensioned fillets/chamfers \u2192 omitted.\n\n**Fix:** In build123d 0.10 `Shape.translate` takes a *single* vector argument, not three scalars. Pass the offset as one tuple: `cavity.translate((wall_t, 0, wall_t))`.",
+   "text": "\n\n<plan>\n**View reading** (unchanged)\n- **Top (XY):** outer rectangle 60 (X) \u00d7 54 (Y); internal lines split X into 9 | 42 | 9 \u2192 a 42\u2011wide slot running the full 54 depth.\n- **Front (XZ):** U\u2011shape, two legs of thickness 9, inner gap 42, top notch depth 53.\n- **Right (YZ):** 54 (Y) wide rectangle with a hidden line near the bottom = top of the bottom web.\n- **ISO:** open U\u2011channel (two parallel walls + bottom web), open at top and both Y ends.\n\n**Dimension chains**\n- X: 9 + 42 + 9 = **60**\n- Y: **54**\n- Z: 53 (cavity) + 9 (bottom web) = **62**\n\n**Feature list**\n- Base block 60 \u00d7 54 \u00d7 62 (min corner at origin).\n- Subtract cavity 42 \u00d7 54 \u00d7 53, offset (9, 0, 9) from origin (9 from left wall, full Y, bottom at z=9 \u2192 open top).\n- No dimensioned fillets/chamfers \u2192 omitted.\n\n**Fix:** In build123d 0.10 `Shape.translate` takes a *single* vector argument, not three scalars. Pass the offset as one tuple: `cavity.translate((wall_t, 0, wall_t))`.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nwall_t   = 9    # mm  wall / web thickness (Front \"9\", Top \"9\")\ninner_w  = 42   # mm  cavity inner width (Front/Top \"42\")\ndepth    = 54   # mm  Y extent (Top vertical \"54\", Right horizontal \"54\")\ncavity_h = 53   # mm  top notch / cavity height (Front \"53\")\n\n# ---- derived overall extents ----\nW = wall_t + inner_w + wall_t   # 60 mm  overall X width\nH = cavity_h + wall_t           # 62 mm  overall Z height (cavity + bottom web)\n\n# ---- build the U-channel ----\nbase   = Box(W, depth, H, align=(Align.MIN, Align.MIN, Align.MIN))\ncavity = Box(inner_w, depth, cavity_h, align=(Align.MIN, Align.MIN, Align.MIN))\ncavity = cavity.translate((wall_t, 0, wall_t))   # 9 in from left, full Y, bottom at z=9 (open top)\n\npart = base - cavity\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     54.0,
+     62.0
+    ],
+    "volume_mm3": 80676.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 6,
+   "t_call_s": 8.8,
+   "usage": {
+    "input_tokens": 8669,
+    "output_tokens": 765
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard09_uchannel",
+  "split": "hard",
+  "family": "uchannel",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5302,
+  "ag_final_cand": 3,
+  "best_iou": 0.5302,
+  "best_cand": 3,
+  "n_calls": 6,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 116.0,
+  "t_agentic_s": 400.7
+ },
+ "per_candidate_iou": {
+  "3": 0.5302
+ }
+}

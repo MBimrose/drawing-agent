@@ -1,0 +1,106 @@
+{
+ "uid": "hard08_lbracket",
+ "split": "hard",
+ "family": "lbracket",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 114.9,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 106.9,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "\n\n<plan>\n**View reading**\n- **Top (XY):** rectangle 68 (X, horizontal) \u00d7 46 (Y, vertical) with one \u00d87 circle. The circle is centered in Y and sits ~53 mm from the left edge in X (on the flat part of the base, clear of the vertical plate).\n- **Front (XZ):** L\u2011shape. Vertical leg on the left = 12 (X) wide \u00d7 51 (Z) tall; horizontal leg at bottom = 68 (X) long \u00d7 5 (Z) thick. Overall height = 51, overall length = 68.\n- **Right (YZ):** rectangle 46 (Y) \u00d7 51 (Z) with",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 46.0,
+   "usage": {
+    "input_tokens": 4299,
+    "output_tokens": 3740
+   },
+   "plan": "**View reading**\n- **Top (XY):** overall rectangle 68 (X) \u00d7 46 (Y). A single \u00d87 circle sits on the flat base, vertically centered (Y = 23) and toward the right end (X \u2248 53), clear of the vertical plate.\n- **Front (XZ):** L\u2011shape. Vertical leg on the left = 12 (X) \u00d7 51 (Z); horizontal base at bottom = 68 (X) \u00d7 5 (Z). Overall height 51, overall length 68.\n- **Right (YZ):** rectangle 46 (Y) \u00d7 51 (Z) with a horizontal line at Z = 5 (the base thickness). The full\u2011height silhouette comes from the vertical plate spanning the whole depth.\n- **ISO:** confirms an L\u2011bracket: a tall vertical plate at one end + a flat base, with one vertical hole in the base.\n\n**Dimension chains**\n- X (length): overall 68 (given); vertical\u2011plate segment 12 (component).\n- Y (depth): overall 46 (given, single value).\n- Z (height): overall 51 (given); base segment 5 (component).\n\n**Features**\n1. Base plate: 68 \u00d7 46 \u00d7 5.\n2. Vertical plate: 12 \u00d7 46 \u00d7 51, fused at the left end, full depth.\n3. One \u00d87 vertical through\u2011hole in the base at (X \u2248 53, Y = 23).\n\nNo fillets/chamfers are dimensioned, so none are added.",
+   "text": "\n\n<plan>\n**View reading**\n- **Top (XY):** overall rectangle 68 (X) \u00d7 46 (Y). A single \u00d87 circle sits on the flat base, vertically centered (Y = 23) and toward the right end (X \u2248 53), clear of the vertical plate.\n- **Front (XZ):** L\u2011shape. Vertical leg on the left = 12 (X) \u00d7 51 (Z); horizontal base at bottom = 68 (X) \u00d7 5 (Z). Overall height 51, overall length 68.\n- **Right (YZ):** rectangle 46 (Y) \u00d7 51 (Z) with a horizontal line at Z = 5 (the base thickness). The full\u2011height silhouette comes from the vertical plate spanning the whole depth.\n- **ISO:** confirms an L\u2011bracket: a tall vertical plate at one end + a flat base, with one vertical hole in the base.\n\n**Dimension chains**\n- X (length): overall 68 (given); vertical\u2011plate segment 12 (component).\n- Y (depth): overall 46 (given, single value).\n- Z (height): overall 51 (given); base segment 5 (component).\n\n**Features**\n1. Base plate: 68 \u00d7 46 \u00d7 5.\n2. Vertical plate: 12 \u00d7 46 \u00d7 51, fused at the left end, full depth.\n3. One \u00d87 vertical through\u2011hole in the base at (X \u2248 53, Y = 23).\n\nNo fillets/chamfers are dimensioned, so none are added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nL        = 68.0   # mm  overall length (X)  [Top / Front]\nD        = 46.0   # mm  overall depth  (Y)  [Top / Right]\nH        = 51.0   # mm  overall height (Z)  [Front / Right]\nt_plate  = 12.0   # mm  vertical plate thickness (X) [Front]\nt_base   = 5.0    # mm  base plate thickness (Z)     [Front / Right]\nhole_d   = 7.0    # mm  hole diameter [Top]\nhole_x   = 53.0   # mm  hole centre X (read from Top, on flat base)\nhole_y   = D / 2  # mm  hole centre Y (centred in depth)\n\nwith BuildPart() as part:\n    # Flat base plate (XY plane, Z from 0 to t_base)\n    Box(L, D, t_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Vertical plate at the left end (full depth, full height)\n    Box(t_plate, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Vertical through-hole in the base\n    with Locations((hole_x, hole_y, 0)):\n        Cylinder(\n            hole_d / 2,\n            t_base + 2.0,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT,\n        )\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 10.9,
+   "usage": {
+    "input_tokens": 5384,
+    "output_tokens": 1093
+   },
+   "plan": "**View reading**\n- **Top (XY):** overall rectangle 68 (X) \u00d7 46 (Y). A single \u00d87 circle sits on the flat base, vertically centered (Y = 23) and toward the right end (X \u2248 53), clear of the vertical plate.\n- **Front (XZ):** L\u2011shape. Vertical leg on the left = 12 (X) \u00d7 51 (Z); horizontal base at bottom = 68 (X) \u00d7 5 (Z). Overall height 51, overall length 68.\n- **Right (YZ):** rectangle 46 (Y) \u00d7 51 (Z) with a horizontal line at Z = 5 (the base thickness). The full\u2011height silhouette comes from the vertical plate spanning the whole depth.\n- **ISO:** confirms an L\u2011bracket: a tall vertical plate at one end + a flat base, with one vertical hole in the base.\n\n**Dimension chains**\n- X (length): overall 68 (given); vertical\u2011plate segment 12 (component).\n- Y (depth): overall 46 (given, single value).\n- Z (height): overall 51 (given); base segment 5 (component).\n\n**Features**\n1. Base plate: 68 \u00d7 46 \u00d7 5.\n2. Vertical plate: 12 \u00d7 46 \u00d7 51, fused at the left end, full depth.\n3. One \u00d87 vertical through\u2011hole in the base at (X \u2248 53, Y = 23).\n\n**Fix:** the previous script exported the `BuildPart` context object instead of the resulting solid. Now bind the solid via `part = bp.part` before exporting. No fillets/chamfers are dimensioned, so none are added.",
+   "text": "\n\n<plan>\n**View reading**\n- **Top (XY):** overall rectangle 68 (X) \u00d7 46 (Y). A single \u00d87 circle sits on the flat base, vertically centered (Y = 23) and toward the right end (X \u2248 53), clear of the vertical plate.\n- **Front (XZ):** L\u2011shape. Vertical leg on the left = 12 (X) \u00d7 51 (Z); horizontal base at bottom = 68 (X) \u00d7 5 (Z). Overall height 51, overall length 68.\n- **Right (YZ):** rectangle 46 (Y) \u00d7 51 (Z) with a horizontal line at Z = 5 (the base thickness). The full\u2011height silhouette comes from the vertical plate spanning the whole depth.\n- **ISO:** confirms an L\u2011bracket: a tall vertical plate at one end + a flat base, with one vertical hole in the base.\n\n**Dimension chains**\n- X (length): overall 68 (given); vertical\u2011plate segment 12 (component).\n- Y (depth): overall 46 (given, single value).\n- Z (height): overall 51 (given); base segment 5 (component).\n\n**Features**\n1. Base plate: 68 \u00d7 46 \u00d7 5.\n2. Vertical plate: 12 \u00d7 46 \u00d7 51, fused at the left end, full depth.\n3. One \u00d87 vertical through\u2011hole in the base at (X \u2248 53, Y = 23).\n\n**Fix:** the previous script exported the `BuildPart` context object instead of the resulting solid. Now bind the solid via `part = bp.part` before exporting. No fillets/chamfers are dimensioned, so none are added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nL        = 68.0   # mm  overall length (X)  [Top / Front]\nD        = 46.0   # mm  overall depth  (Y)  [Top / Right]\nH        = 51.0   # mm  overall height (Z)  [Front / Right]\nt_plate  = 12.0   # mm  vertical plate thickness (X) [Front]\nt_base   = 5.0    # mm  base plate thickness (Z)     [Front / Right]\nhole_d   = 7.0    # mm  hole diameter [Top]\nhole_x   = 53.0   # mm  hole centre X (read from Top, on flat base)\nhole_y   = D / 2  # mm  hole centre Y (centred in depth)\n\nwith BuildPart() as bp:\n    # Flat base plate (XY plane, Z from 0 to t_base)\n    Box(L, D, t_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Vertical plate at the left end (full depth, full height)\n    Box(t_plate, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # Vertical through-hole in the base\n    with Locations((hole_x, hole_y, 0)):\n        Cylinder(\n            hole_d / 2,\n            t_base + 2.0,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT,\n        )\n\n# Bind the finished solid to `part`\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     68.0,
+     46.0,
+     51.0
+    ],
+    "volume_mm3": 40840.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 9,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 13.2,
+   "usage": {
+    "input_tokens": 8229,
+    "output_tokens": 1176
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard08_lbracket",
+  "split": "hard",
+  "family": "lbracket",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.3362,
+  "ag_final_cand": 2,
+  "best_iou": 0.3362,
+  "best_cand": 2,
+  "n_calls": 5,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 114.9,
+  "t_agentic_s": 300.1
+ },
+ "per_candidate_iou": {
+  "2": 0.3362
+ }
+}

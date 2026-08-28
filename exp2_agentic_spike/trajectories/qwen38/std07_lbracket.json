@@ -1,0 +1,108 @@
+{
+ "uid": "std07_lbracket",
+ "split": "std",
+ "family": "lbracket",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 122.1,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 85.8,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 5500
+   },
+   "plan": "Reading the views:\n- **Top view** (XY, X right, Y up): overall rectangle 83 (X) \u00d7 40 (Y). A vertical line near the left edge splits it; the 72 dimension runs from that line to the right edge, so the left strip = 83 \u2212 72 = **11**. A single circle (boss) sits on the right portion, centered in Y.\n- **Right view** (YZ, Y right, Z up): full rectangle 40 (Y) \u00d7 60 (Z) with a horizontal line near the bottom. The 49 dimension runs from the top to that line, so the bottom strip = 60 \u2212 49 = **11** (base thickness).\n- **ISO**: an L\u2011bracket \u2014 a vertical wall at the left end (full depth, full height) plus a horizontal base plate extending to the right, with a small cylindrical boss on the base.\n\nDimension chains:\n- X: overall 83 = wall 11 + base 72.\n- Y (depth): 40.\n- Z: overall 60 = base 11 + wall\u2011above\u2011base 49.\n\nFeatures:\n1. Base plate: 83 (X) \u00d7 40 (Y) \u00d7 11 (Z).\n2. Vertical wall at left: 11 (X) \u00d7 40 (Y) \u00d7 60 (Z).\n3. Boss cylinder on base: \u230010 \u00d7 10 high, centered at Y = 20, X \u2248 63 (read from circle position; not explicitly dimensioned).\n\nConstruction: union of two boxes + one cylinder in a single BuildPart.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (XY, X right, Y up): overall rectangle 83 (X) \u00d7 40 (Y). A vertical line near the left edge splits it; the 72 dimension runs from that line to the right edge, so the left strip = 83 \u2212 72 = **11**. A single circle (boss) sits on the right portion, centered in Y.\n- **Right view** (YZ, Y right, Z up): full rectangle 40 (Y) \u00d7 60 (Z) with a horizontal line near the bottom. The 49 dimension runs from the top to that line, so the bottom strip = 60 \u2212 49 = **11** (base thickness).\n- **ISO**: an L\u2011bracket \u2014 a vertical wall at the left end (full depth, full height) plus a horizontal base plate extending to the right, with a small cylindrical boss on the base.\n\nDimension chains:\n- X: overall 83 = wall 11 + base 72.\n- Y (depth): 40.\n- Z: overall 60 = base 11 + wall\u2011above\u2011base 49.\n\nFeatures:\n1. Base plate: 83 (X) \u00d7 40 (Y) \u00d7 11 (Z).\n2. Vertical wall at left: 11 (X) \u00d7 40 (Y) \u00d7 60 (Z).\n3. Boss cylinder on base: \u230010 \u00d7 10 high, centered at Y = 20, X \u2248 63 (read from circle position; not explicitly dimensioned).\n\nConstruction: union of two boxes + one cylinder in a single BuildPart.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\noverall_x   = 83.0   # mm  Top view overall width (X)\ndepth_y     = 40.0   # mm  Top view depth (Y)\noverall_z   = 60.0   # mm  Right view overall height (Z)\nbase_len_x  = 72.0   # mm  Top view component (base length)\nwall_above  = 49.0   # mm  Right view component (wall height above base)\n\n# ---- Derived values ----\nwall_thk = overall_x - base_len_x          # 83 - 72 = 11  (wall thickness / base thickness)\nbase_thk = overall_z - wall_above          # 60 - 49 = 11  (base plate thickness)\n\n# Boss (cylinder on base) - position read from Top view circle, size estimated\nboss_dia = 10.0    # mm\nboss_h   = 10.0    # mm\nboss_x   = 63.0    # mm  from left edge\nboss_y   = depth_y / 2.0   # mm  centered in depth\n\n# ---- Build the solid ----\nwith BuildPart() as bp:\n    # Base plate: X 0..83, Y 0..40, Z 0..11\n    Box(overall_x, depth_y, base_thk).align((X_MIN, Y_MIN, Z_MIN))\n    # Vertical wall at left end: X 0..11, Y 0..40, Z 0..60\n    Box(wall_thk, depth_y, overall_z).align((X_MIN, Y_MIN, Z_MIN))\n    # Boss cylinder on top of base\n    Locations([Location(boss_x, boss_y, base_thk + boss_h / 2.0)])\n    Cylinder(boss_dia / 2.0, boss_h)\n\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 85.5,
+   "usage": {
+    "input_tokens": 5104,
+    "output_tokens": 5568
+   },
+   "plan": "Reading (unchanged from before):\n- **Top view** (XY): overall 83 (X) \u00d7 40 (Y); a vertical line at X = 83 \u2212 72 = **11** separates the left wall strip from the 72\u2011long base; one boss circle on the base, centered in Y.\n- **Right view** (YZ): overall 40 (Y) \u00d7 60 (Z); a horizontal line at Z = 60 \u2212 49 = **11** is the base\u2011plate top.\n- **ISO**: L\u2011bracket = left vertical wall (full depth/height) + horizontal base plate + small boss on the base.\n\nDimension chains: X: 83 = 11 (wall) + 72 (base). Y: 40. Z: 60 = 11 (base) + 49 (wall above base).\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Left wall 11 \u00d7 40 \u00d7 60.\n3. Boss \u230010 \u00d7 10 at (X\u224863, Y=20, on base top).\n\nConstruction fix: the previous `.align(...)` call is not available on the primitive in this build123d build, so each solid is positioned with a `Locations([Location(cx,cy,cz)])` context (placing the primitive's center at the computed corner\u2011derived center). This uses only `BuildPart`, `Locations`, `Box`, `Cylinder`.",
+   "text": "\n\n<plan>\nReading (unchanged from before):\n- **Top view** (XY): overall 83 (X) \u00d7 40 (Y); a vertical line at X = 83 \u2212 72 = **11** separates the left wall strip from the 72\u2011long base; one boss circle on the base, centered in Y.\n- **Right view** (YZ): overall 40 (Y) \u00d7 60 (Z); a horizontal line at Z = 60 \u2212 49 = **11** is the base\u2011plate top.\n- **ISO**: L\u2011bracket = left vertical wall (full depth/height) + horizontal base plate + small boss on the base.\n\nDimension chains: X: 83 = 11 (wall) + 72 (base). Y: 40. Z: 60 = 11 (base) + 49 (wall above base).\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Left wall 11 \u00d7 40 \u00d7 60.\n3. Boss \u230010 \u00d7 10 at (X\u224863, Y=20, on base top).\n\nConstruction fix: the previous `.align(...)` call is not available on the primitive in this build123d build, so each solid is positioned with a `Locations([Location(cx,cy,cz)])` context (placing the primitive's center at the computed corner\u2011derived center). This uses only `BuildPart`, `Locations`, `Box`, `Cylinder`.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\noverall_x  = 83.0   # mm  Top view overall width (X)\ndepth_y    = 40.0   # mm  Top view depth (Y)\noverall_z  = 60.0   # mm  Right view overall height (Z)\nbase_len_x = 72.0   # mm  Top view component (base length, wall face -> right edge)\nwall_above = 49.0   # mm  Right view component (wall height above base top)\n\n# ---- Derived values ----\nwall_thk = overall_x - base_len_x   # 83 - 72 = 11  wall thickness\nbase_thk = overall_z - wall_above   # 60 - 49 = 11  base plate thickness\n\n# ---- Boss (cylinder on base) ----\nboss_dia = 10.0    # mm\nboss_h   = 10.0    # mm\nboss_x   = 63.0    # mm  from left edge (read from Top view)\nboss_y   = depth_y / 2.0   # mm  centered in depth\n\n# ---- Build the solid (position via Locations; avoids .align) ----\nwith BuildPart() as bp:\n    # Base plate: X 0..83, Y 0..40, Z 0..11\n    with Locations([Location(overall_x / 2.0, depth_y / 2.0, base_thk / 2.0)]):\n        Box(overall_x, depth_y, base_thk)\n    # Vertical wall at left end: X 0..11, Y 0..40, Z 0..60\n    with Locations([Location(wall_thk / 2.0, depth_y / 2.0, overall_z / 2.0)]):\n        Box(wall_thk, depth_y, overall_z)\n    # Boss cylinder on top of base\n    with Locations([Location(boss_x, boss_y, base_thk + boss_h / 2.0)]):\n        Cylinder(boss_dia / 2.0, boss_h)\n\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 37.2,
+   "usage": {
+    "input_tokens": 6188,
+    "output_tokens": 2619
+   },
+   "plan": "Reading (unchanged):\n- **Top view** (XY): overall 83 (X) \u00d7 40 (Y); vertical line at X = 83 \u2212 72 = **11** separates the left wall strip from the 72\u2011long base; one boss circle on the base, centered in Y.\n- **Right view** (YZ): overall 40 (Y) \u00d7 60 (Z); horizontal line at Z = 60 \u2212 49 = **11** is the base\u2011plate top.\n- **ISO**: L\u2011bracket = left vertical wall (full depth/height) + horizontal base plate + small boss on the base.\n\nDimension chains: X: 83 = 11 (wall) + 72 (base). Y: 40. Z: 60 = 11 (base) + 49 (wall above base).\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Left wall 11 \u00d7 40 \u00d7 60.\n3. Boss \u230010 \u00d7 10 at (X\u224863, Y=20, on base top).\n\nConstruction fix: this build123d build rejects `Location(x, y, z)` with three floats (and `.align` is unavailable), so each primitive is centered at the origin and then placed with `Locations([Location(Vector(cx, cy, cz))])`, which the `Location` constructor accepts as a single `Vector` translation.",
+   "text": "\n\n<plan>\nReading (unchanged):\n- **Top view** (XY): overall 83 (X) \u00d7 40 (Y); vertical line at X = 83 \u2212 72 = **11** separates the left wall strip from the 72\u2011long base; one boss circle on the base, centered in Y.\n- **Right view** (YZ): overall 40 (Y) \u00d7 60 (Z); horizontal line at Z = 60 \u2212 49 = **11** is the base\u2011plate top.\n- **ISO**: L\u2011bracket = left vertical wall (full depth/height) + horizontal base plate + small boss on the base.\n\nDimension chains: X: 83 = 11 (wall) + 72 (base). Y: 40. Z: 60 = 11 (base) + 49 (wall above base).\n\nFeatures:\n1. Base plate 83 \u00d7 40 \u00d7 11.\n2. Left wall 11 \u00d7 40 \u00d7 60.\n3. Boss \u230010 \u00d7 10 at (X\u224863, Y=20, on base top).\n\nConstruction fix: this build123d build rejects `Location(x, y, z)` with three floats (and `.align` is unavailable), so each primitive is centered at the origin and then placed with `Locations([Location(Vector(cx, cy, cz))])`, which the `Location` constructor accepts as a single `Vector` translation.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\noverall_x  = 83.0   # mm  Top view overall width (X)\ndepth_y    = 40.0   # mm  Top view depth (Y)\noverall_z  = 60.0   # mm  Right view overall height (Z)\nbase_len_x = 72.0   # mm  Top view component (base length, wall face -> right edge)\nwall_above = 49.0   # mm  Right view component (wall height above base top)\n\n# ---- Derived values ----\nwall_thk = overall_x - base_len_x   # 83 - 72 = 11  wall thickness\nbase_thk = overall_z - wall_above   # 60 - 49 = 11  base plate thickness\n\n# ---- Boss (cylinder on base) ----\nboss_dia = 10.0    # mm\nboss_h   = 10.0    # mm\nboss_x   = 63.0    # mm  from left edge (read from Top view)\nboss_y   = depth_y / 2.0   # mm  centered in depth\n\n# ---- Build the solid (place each primitive via a Vector Location) ----\nwith BuildPart() as bp:\n    # Base plate: X 0..83, Y 0..40, Z 0..11\n    with Locations([Location(Vector(overall_x / 2.0, depth_y / 2.0, base_thk / 2.0))]):\n        Box(overall_x, depth_y, base_thk)\n    # Vertical wall at left end: X 0..11, Y 0..40, Z 0..60\n    with Locations([Location(Vector(wall_thk / 2.0, depth_y / 2.0, overall_z / 2.0))]):\n        Box(wall_thk, depth_y, overall_z)\n    # Boss cylinder on top of base\n    with Locations([Location(Vector(boss_x, boss_y, base_thk + boss_h / 2.0))]):\n        Cylinder(boss_dia / 2.0, boss_h)\n\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     40.0,
+     60.0
+    ],
+    "volume_mm3": 58863.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 22.1,
+   "usage": {
+    "input_tokens": 9012,
+    "output_tokens": 1340
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "std07_lbracket",
+  "split": "std",
+  "family": "lbracket",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9748,
+  "ag_final_cand": 3,
+  "best_iou": 0.9748,
+  "best_cand": 3,
+  "n_calls": 5,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 122.1,
+  "t_agentic_s": 363.6
+ },
+ "per_candidate_iou": {
+  "3": 0.9748
+ }
+}

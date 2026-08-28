@@ -1,0 +1,108 @@
+{
+ "uid": "hard07_shaft",
+ "split": "hard",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 121.3,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 113.2,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 48.5,
+   "usage": {
+    "input_tokens": 4137,
+    "output_tokens": 3871
+   },
+   "plan": "Reading the views:\n- **Top view** (left, circles): three concentric circles giving the three cylinder diameters \u2014 outer \u230042, middle \u230022, inner \u230016.\n- **Front view** (left, below Top) and **Right view** (center): identical stepped elevations of three stacked rectangles. Vertical dimension chain (top\u2192bottom): 13 + 18 + 26 = 57 mm total height. The rectangle widths match the three diameters (16 / 22 / 42).\n- **ISO view** (top right): confirms three concentric solid cylinders stacked on the Z axis \u2014 large base, medium middle, small top. No through-hole is present (the \"THRU\" text is annotation noise; ISO shows solid bodies).\n\nDimension chain per axis:\n- Z (height): 13 (top) + 18 (middle) + 26 (base) = **57 mm** overall.\n- X & Y (diameters): base \u230042, middle \u230022, top \u230016.\n\nFeature list (concentric, on Z axis, base at Z=0):\n1. Base cylinder: \u230042 (R21), height 26, Z 0\u219226.\n2. Middle cylinder: \u230022 (R11), height 18, Z 26\u219244.\n3. Top cylinder: \u230016 (R8), height 13, Z 44\u219257.\n\nNo fillets/chamfers are dimensioned, so none added.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (left, circles): three concentric circles giving the three cylinder diameters \u2014 outer \u230042, middle \u230022, inner \u230016.\n- **Front view** (left, below Top) and **Right view** (center): identical stepped elevations of three stacked rectangles. Vertical dimension chain (top\u2192bottom): 13 + 18 + 26 = 57 mm total height. The rectangle widths match the three diameters (16 / 22 / 42).\n- **ISO view** (top right): confirms three concentric solid cylinders stacked on the Z axis \u2014 large base, medium middle, small top. No through-hole is present (the \"THRU\" text is annotation noise; ISO shows solid bodies).\n\nDimension chain per axis:\n- Z (height): 13 (top) + 18 (middle) + 26 (base) = **57 mm** overall.\n- X & Y (diameters): base \u230042, middle \u230022, top \u230016.\n\nFeature list (concentric, on Z axis, base at Z=0):\n1. Base cylinder: \u230042 (R21), height 26, Z 0\u219226.\n2. Middle cylinder: \u230022 (R11), height 18, Z 26\u219244.\n3. Top cylinder: \u230016 (R8), height 13, Z 44\u219257.\n\nNo fillets/chamfers are dimensioned, so none added.\n</plan>\n```python\nfrom build123d import BuildPart, Cylinder, Locations, Align, export_step\n\n# ---- Dimensions read from the drawing (mm) ----\nbase_d = 42.0   # mm  base cylinder outer diameter (Top view outer circle)\nmid_d  = 22.0   # mm  middle cylinder outer diameter (Top view middle circle)\ntop_d  = 16.0   # mm  top cylinder outer diameter (Top view inner circle)\n\nbase_h = 26.0   # mm  base cylinder height (Front/Right bottom segment)\nmid_h  = 18.0   # mm  middle cylinder height (Front/Right middle segment)\ntop_h  = 13.0   # mm  top cylinder height (Front/Right top segment)\n\n# Derived values\nbase_r = base_d / 2.0   # mm\nmid_r  = mid_d  / 2.0   # mm\ntop_r  = top_d  / 2.0   # mm\ntotal_h = base_h + mid_h + top_h   # mm  = 57, overall height\n\n# ---- Build the stacked concentric cylinders (axis = Z, base at Z=0) ----\nC, M = Align.CENTER, Align.MINIMUM\nwith BuildPart() as p:\n    with Locations((0, 0, 0.0)):\n        Cylinder(base_r, base_h, align=(C, C, M))\n    with Locations((0, 0, base_h)):\n        Cylinder(mid_r, mid_h, align=(C, C, M))\n    with Locations((0, 0, base_h + mid_h)):\n        Cylinder(top_r, top_h, align=(C, C, M))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 4,
+   "t_call_s": 8.8,
+   "usage": {
+    "input_tokens": 5089,
+    "output_tokens": 861
+   },
+   "plan": "Reading unchanged from before \u2014 three concentric solid cylinders stacked on the Z axis:\n- **Top view**: three concentric circles \u2192 diameters \u230042 (base), \u230022 (middle), \u230016 (top).\n- **Front / Right views**: identical stepped elevations; vertical chain 13 + 18 + 26 = **57 mm** total height; rectangle widths match the three diameters.\n- **ISO view**: confirms three stacked solid cylinders (no through-hole).\n\nDimension chain per axis:\n- Z (height): top 13 + middle 18 + base 26 = **57 mm**.\n- X & Y: base \u230042, middle \u230022, top \u230016.\n\nFeature list (concentric, Z axis, base bottom at Z=0):\n1. Base: R21, h26, Z 0\u219226\n2. Middle: R11, h18, Z 26\u219244\n3. Top: R8, h13, Z 44\u219257\n\nFix: build123d 0.10 uses `Align.MIN` (not `Align.MINIMUM`) for the bottom alignment.",
+   "text": "\n\n<plan>\nReading unchanged from before \u2014 three concentric solid cylinders stacked on the Z axis:\n- **Top view**: three concentric circles \u2192 diameters \u230042 (base), \u230022 (middle), \u230016 (top).\n- **Front / Right views**: identical stepped elevations; vertical chain 13 + 18 + 26 = **57 mm** total height; rectangle widths match the three diameters.\n- **ISO view**: confirms three stacked solid cylinders (no through-hole).\n\nDimension chain per axis:\n- Z (height): top 13 + middle 18 + base 26 = **57 mm**.\n- X & Y: base \u230042, middle \u230022, top \u230016.\n\nFeature list (concentric, Z axis, base bottom at Z=0):\n1. Base: R21, h26, Z 0\u219226\n2. Middle: R11, h18, Z 26\u219244\n3. Top: R8, h13, Z 44\u219257\n\nFix: build123d 0.10 uses `Align.MIN` (not `Align.MINIMUM`) for the bottom alignment.\n</plan>\n```python\nfrom build123d import BuildPart, Cylinder, Locations, Align, export_step\n\n# ---- Dimensions read from the drawing (mm) ----\nbase_d = 42.0   # mm  base cylinder outer diameter (Top view outer circle)\nmid_d  = 22.0   # mm  middle cylinder outer diameter (Top view middle circle)\ntop_d  = 16.0   # mm  top cylinder outer diameter (Top view inner circle)\n\nbase_h = 26.0   # mm  base cylinder height (Front/Right bottom segment)\nmid_h  = 18.0   # mm  middle cylinder height (Front/Right middle segment)\ntop_h  = 13.0   # mm  top cylinder height (Front/Right top segment)\n\n# Derived values\nbase_r = base_d / 2.0   # mm\nmid_r  = mid_d  / 2.0   # mm\ntop_r  = top_d  / 2.0   # mm\ntotal_h = base_h + mid_h + top_h   # mm  = 57, overall height\n\n# ---- Build the stacked concentric cylinders (axis = Z, base bottom at Z=0) ----\nC = Align.CENTER\nM = Align.MIN\nwith BuildPart() as p:\n    with Locations((0, 0, 0.0)):\n        Cylinder(base_r, base_h, align=(C, C, M))\n    with Locations((0, 0, base_h)):\n        Cylinder(mid_r, mid_h, align=(C, C, M))\n    with Locations((0, 0, base_h + mid_h)):\n        Cylinder(top_r, top_h, align=(C, C, M))\n\npart = p.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     42.0,
+     41.97,
+     57.0
+    ],
+    "volume_mm3": 45427.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0,
+     11.0,
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 16.2,
+   "usage": {
+    "input_tokens": 8317,
+    "output_tokens": 1279
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard07_shaft",
+  "split": "hard",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 2,
+  "best_iou": 1.0,
+  "best_cand": 2,
+  "n_calls": 5,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 121.3,
+  "t_agentic_s": 317.2
+ },
+ "per_candidate_iou": {
+  "2": 1.0
+ }
+}

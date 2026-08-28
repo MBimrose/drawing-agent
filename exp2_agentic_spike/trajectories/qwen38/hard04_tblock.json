@@ -1,0 +1,69 @@
+{
+ "uid": "hard04_tblock",
+ "split": "hard",
+ "family": "tblock",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 112.2,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7119
+   },
+   "plan": "Reading the views:\n- **Top view**: L-shaped plan profile. Dimensions: 17 (thickness of the long bar, in Y), 34 (length of the stem beyond the bar, in Y), 23 (offset from left edge to stem left edge, in X), 25 (stem width, in X).\n- **Front view**: rectangle of height 12 (Z); horizontal chain 23 + 25 confirms the stem occupies X = 23..48 and overall X = 23 + 25 = 48.\n- **Right view**: height 12 (Z); horizontal chain 34 + 17 = 51 = overall Y, matching the top view (stem 34 + bar 17).\n- **ISO**: confirms a simple L-shaped collar (prism), no holes, no fillets.\n\nDimension chains:\n- X: 23 + 25 = 48 (overall width)\n- Y: 34 + 17 = 51 (overall depth)\n- Z: 12 (height)\n\nFeature list:\n1. Long bar: 48 (X) \u00d7 17 (Y) \u00d7 12 (Z), occupying Y = 34..51.\n2. Stem: 25 (X) \u00d7 34 (Y) \u00d7 12 (Z), occupying X = 23..48, Y = 0..34.\nUnion of the two boxes; no holes, no fillets/chamfers dimensioned.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view**: L-shaped plan profile. Dimensions: 17 (thickness of the long bar, in Y), 34 (length of the stem beyond the bar, in Y), 23 (offset from left edge to stem left edge, in X), 25 (stem width, in X).\n- **Front view**: rectangle of height 12 (Z); horizontal chain 23 + 25 confirms the stem occupies X = 23..48 and overall X = 23 + 25 = 48.\n- **Right view**: height 12 (Z); horizontal chain 34 + 17 = 51 = overall Y, matching the top view (stem 34 + bar 17).\n- **ISO**: confirms a simple L-shaped collar (prism), no holes, no fillets.\n\nDimension chains:\n- X: 23 + 25 = 48 (overall width)\n- Y: 34 + 17 = 51 (overall depth)\n- Z: 12 (height)\n\nFeature list:\n1. Long bar: 48 (X) \u00d7 17 (Y) \u00d7 12 (Z), occupying Y = 34..51.\n2. Stem: 25 (X) \u00d7 34 (Y) \u00d7 12 (Z), occupying X = 23..48, Y = 0..34.\nUnion of the two boxes; no holes, no fillets/chamfers dimensioned.\n</plan>\n```python\n# Shaft collar - L-shaped prism\n# Dimensions read from drawing (mm)\nbar_left   = 23   # mm, offset from left edge to stem left edge (X)\nstem_w     = 25   # mm, stem width (X)\nstem_l     = 34   # mm, stem length beyond the bar (Y)\nbar_t      = 17   # mm, long bar thickness (Y)\nh          = 12   # mm, part height (Z)\n\n# Derived overall extents (sums of dimension chains)\noverall_x  = bar_left + stem_w      # 23 + 25 = 48 mm\noverall_y  = stem_l + bar_t         # 34 + 17 = 51 mm\n\nfrom build123d import *\n\n# Long bar: X 0..48, Y 34..51, Z 0..12\ntop_bar = Box(overall_x, bar_t, h).translate(\n    (overall_x / 2, overall_y - bar_t / 2, h / 2)\n)\n\n# Stem: X 23..48, Y 0..34, Z 0..12\nstem = Box(stem_w, stem_l, h).translate(\n    (bar_left + stem_w / 2, stem_l / 2, h / 2)\n)\n\npart = top_bar.fuse(stem)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     48.0,
+     51.0,
+     12.0
+    ],
+    "volume_mm3": 19992.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 34.0,
+   "usage": {
+    "input_tokens": 6529,
+    "output_tokens": 1908
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard04_tblock",
+  "split": "hard",
+  "family": "tblock",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5208,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5208,
+  "ag_final_cand": 1,
+  "best_iou": 0.5208,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 115.3,
+  "t_agentic_s": 152.7
+ },
+ "per_candidate_iou": {
+  "1": 0.5208
+ }
+}

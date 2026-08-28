@@ -1,0 +1,60 @@
+{
+ "uid": "std04_tblock",
+ "split": "std",
+ "family": "tblock",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 125.3,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 123.5,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "\n\n<plan>\nReading the views:\n- **Top view** (XY plane, X right, Y up) is the only dimensioned view and shows the part's face profile. The **Right view** is blank (thickness not dimensioned) and the **ISO** confirms a flat plate with a rectangular notch on the front\u2011left edge.\n- Vertical (Y) chain: top band = **24**, lower band = **35**, overall = **59** (24 + 35 = 59 \u2713).\n- Horizontal (X): the only explicit dimension is **28**, the width of the left block / notch. The overall width is not dimensioned; inferred from the view proportions \u2248 **68**.\n- Thickness (Z) is not dimensioned; assumed **20** mm (flat plate, per ISO).\n- No holes, fillets, or chamfers are called out.\n\nFeature list (profile extruded through thickness):\n- Top band: full width 68 \u00d7 height 24 (Y 35\u219259).\n- Lower band: width (68\u201128)=40 \u00d7 height 35 (X 28\u219268, Y 0\u219235).\n- Not",
+   "action": "no_code"
+  },
+  {
+   "turn": 3,
+   "t_call_s": 124.2,
+   "usage": {
+    "input_tokens": 4403,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  }
+ ],
+ "summary": {
+  "uid": "std04_tblock",
+  "split": "std",
+  "family": "tblock",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": false,
+  "ag_iou": 0.0,
+  "ag_final_cand": null,
+  "best_iou": 0.0,
+  "best_cand": null,
+  "n_calls": 3,
+  "n_candidates": 0,
+  "stop_reason": "no_code",
+  "t_singleshot_s": 125.3,
+  "t_agentic_s": 373.0
+ },
+ "per_candidate_iou": {}
+}

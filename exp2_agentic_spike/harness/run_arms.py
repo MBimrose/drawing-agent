@@ -377,16 +377,18 @@ def run_part(rec):
 
 
 def main():
-    global MODEL, RUNS, TRAJ
+    global MODEL, RUNS, TRAJ, MAX_TOKENS
     ap = argparse.ArgumentParser()
     ap.add_argument("--parts", default=None, help="comma-separated uids")
     ap.add_argument("--workers", type=int, default=5)
     ap.add_argument("--model", default=MODEL)
+    ap.add_argument("--max-tokens", type=int, default=MAX_TOKENS)
     ap.add_argument("--tag", default=None,
                     help="secondary-run tag: writes runs/<tag>/, results_<tag>.json, "
                          "trajectories/<tag>/ (default: primary untagged layout)")
     args = ap.parse_args()
     MODEL = args.model
+    MAX_TOKENS = args.max_tokens
     results_name = "results.json"
     if args.tag:
         RUNS = os.path.join(EXP, "artifacts", "runs", args.tag)

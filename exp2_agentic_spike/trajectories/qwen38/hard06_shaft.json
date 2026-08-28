@@ -1,0 +1,133 @@
+{
+ "uid": "hard06_shaft",
+ "split": "hard",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 72.4,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 4745
+   },
+   "plan": "Reading the views:\n- **Top view**: three concentric circles, labeled \u230042 (outer), \u230030 (middle), \u230018 (inner). These are the diameters of the three coaxial cylindrical steps (the ISO view confirms a solid stepped cylinder \u2014 no internal hole, no hidden lines in any view).\n- **Front view**: three stacked rectangles (silhouette of the steps) with vertical dimension chain: 11 (top step) + 21 (middle step) + 26 (bottom step) = 58 mm overall height.\n- **Right view**: identical stacked-rectangle silhouette with the same chain 11 + 21 + 26 = 58 mm, confirming the part is a stack of three coaxial cylinders.\n- **ISO view**: confirms overall form \u2014 large base cylinder, medium middle cylinder, small top cylinder, all solid.\n\nDimension chains:\n- X/Y extents (from Top): 42, 30, 18 mm diameters.\n- Z extent (Front/Right): 26 + 21 + 11 = 58 mm overall.\n\nFeature list:\n1. Bottom cylinder: \u230042 \u00d7 26 high, base at Z=0.\n2. Middle cylinder: \u230030 \u00d7 21 high, from Z=26 to Z=47.\n3. Top cylinder: \u230018 \u00d7 11 high, from Z=47 to Z=58.\nNo holes, fillets, or chamfers are dimensioned.",
+   "text": "\n\n<plan>\nReading the views:\n- **Top view**: three concentric circles, labeled \u230042 (outer), \u230030 (middle), \u230018 (inner). These are the diameters of the three coaxial cylindrical steps (the ISO view confirms a solid stepped cylinder \u2014 no internal hole, no hidden lines in any view).\n- **Front view**: three stacked rectangles (silhouette of the steps) with vertical dimension chain: 11 (top step) + 21 (middle step) + 26 (bottom step) = 58 mm overall height.\n- **Right view**: identical stacked-rectangle silhouette with the same chain 11 + 21 + 26 = 58 mm, confirming the part is a stack of three coaxial cylinders.\n- **ISO view**: confirms overall form \u2014 large base cylinder, medium middle cylinder, small top cylinder, all solid.\n\nDimension chains:\n- X/Y extents (from Top): 42, 30, 18 mm diameters.\n- Z extent (Front/Right): 26 + 21 + 11 = 58 mm overall.\n\nFeature list:\n1. Bottom cylinder: \u230042 \u00d7 26 high, base at Z=0.\n2. Middle cylinder: \u230030 \u00d7 21 high, from Z=26 to Z=47.\n3. Top cylinder: \u230018 \u00d7 11 high, from Z=47 to Z=58.\nNo holes, fillets, or chamfers are dimensioned.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nd_bottom = 42.0    # mm, bottom cylinder OD (Top view outer circle)\nd_mid    = 30.0    # mm, middle cylinder OD (Top view middle circle)\nd_top    = 18.0    # mm, top cylinder OD (Top view inner circle)\nh_bottom = 26.0    # mm, bottom cylinder height (Front/Right views)\nh_mid    = 21.0    # mm, middle cylinder height\nh_top    = 11.0    # mm, top cylinder height\n\n# --- derived values ---\nh_total = h_bottom + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# --- build the solid: three coaxial cylinders stacked on Z axis ---\nwith BuildPart() as part:\n    Cylinder(d_bottom / 2, h_bottom,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    Cylinder(d_mid / 2, h_mid,\n             align=(Align.CENTER, Align.CENTER, Align.MIN)).translate((0, 0, h_bottom))\n    Cylinder(d_top / 2, h_top,\n             align=(Align.CENTER, Align.CENTER, Align.MIN)).translate((0, 0, h_bottom + h_mid))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 48.2,
+   "usage": {
+    "input_tokens": 5062,
+    "output_tokens": 2736
+   },
+   "plan": "Reading the views (unchanged from before \u2014 only the code binding was wrong):\n- **Top view**: three concentric circles, \u230042 (outer), \u230030 (middle), \u230018 (inner) \u2192 the three coaxial cylinder diameters.\n- **Front view**: stacked rectangles, vertical chain 11 + 21 + 26 = 58 mm overall height.\n- **Right view**: same silhouette, same chain 11 + 21 + 26 = 58 mm \u2192 confirms a solid 3-step coaxial cylinder (no holes, no hidden lines).\n- **ISO view**: confirms overall stepped-cylinder form.\n\nDimension chains:\n- X/Y (Top): 42, 30, 18 mm.\n- Z (Front/Right): 26 + 21 + 11 = 58 mm.\n\nFeatures:\n1. Bottom cylinder \u230042 \u00d7 26, base Z=0.\n2. Middle cylinder \u230030 \u00d7 21, base Z=26.\n3. Top cylinder \u230018 \u00d7 11, base Z=47.\n\nFix: in build123d 0.10 the `with BuildPart() as ...` object is the *context*, not the solid; the finished solid is `.part`. I also avoid method chaining on constructors (which can drop the object from the context) by positioning each cylinder with `pos` + `align` instead of `.translate`.",
+   "text": "\n\n<plan>\nReading the views (unchanged from before \u2014 only the code binding was wrong):\n- **Top view**: three concentric circles, \u230042 (outer), \u230030 (middle), \u230018 (inner) \u2192 the three coaxial cylinder diameters.\n- **Front view**: stacked rectangles, vertical chain 11 + 21 + 26 = 58 mm overall height.\n- **Right view**: same silhouette, same chain 11 + 21 + 26 = 58 mm \u2192 confirms a solid 3-step coaxial cylinder (no holes, no hidden lines).\n- **ISO view**: confirms overall stepped-cylinder form.\n\nDimension chains:\n- X/Y (Top): 42, 30, 18 mm.\n- Z (Front/Right): 26 + 21 + 11 = 58 mm.\n\nFeatures:\n1. Bottom cylinder \u230042 \u00d7 26, base Z=0.\n2. Middle cylinder \u230030 \u00d7 21, base Z=26.\n3. Top cylinder \u230018 \u00d7 11, base Z=47.\n\nFix: in build123d 0.10 the `with BuildPart() as ...` object is the *context*, not the solid; the finished solid is `.part`. I also avoid method chaining on constructors (which can drop the object from the context) by positioning each cylinder with `pos` + `align` instead of `.translate`.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nd_bottom = 42.0    # mm, bottom cylinder OD (Top view outer circle)\nd_mid    = 30.0    # mm, middle cylinder OD (Top view middle circle)\nd_top    = 18.0    # mm, top cylinder OD (Top view inner circle)\nh_bottom = 26.0    # mm, bottom cylinder height (Front/Right views)\nh_mid    = 21.0    # mm, middle cylinder height\nh_top    = 11.0    # mm, top cylinder height\n\n# --- derived values ---\nh_total = h_bottom + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# --- build the solid: three coaxial cylinders stacked on the Z axis ---\n# Each cylinder is placed with pos + align (no chaining) so it is registered\n# and unioned by the BuildPart context.\nwith BuildPart() as bp:\n    Cylinder(d_bottom / 2, h_bottom,\n             pos=(0, 0, 0),\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    Cylinder(d_mid / 2, h_mid,\n             pos=(0, 0, h_bottom),\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    Cylinder(d_top / 2, h_top,\n             pos=(0, 0, h_bottom + h_mid),\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n# bind the finished solid to `part`\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 48.2,
+   "usage": {
+    "input_tokens": 5935,
+    "output_tokens": 3111
+   },
+   "plan": "Reading the views (unchanged):\n- **Top view**: three concentric circles \u230042 / \u230030 / \u230018 \u2192 the three coaxial cylinder diameters.\n- **Front view**: stacked rectangles, vertical chain 11 + 21 + 26 = 58 mm overall height.\n- **Right view**: same silhouette, same chain 11 + 21 + 26 = 58 mm \u2192 solid 3-step coaxial cylinder (no holes, no hidden lines).\n- **ISO view**: confirms the stepped-cylinder form.\n\nDimension chains:\n- X/Y (Top): 42, 30, 18 mm.\n- Z (Front/Right): 26 + 21 + 11 = 58 mm.\n\nFeatures:\n1. Bottom cylinder \u230042 \u00d7 26, base Z=0.\n2. Middle cylinder \u230030 \u00d7 21, base Z=26.\n3. Top cylinder \u230018 \u00d7 11, base Z=47.\n\nFixes for build123d 0.10:\n- `Cylinder` has no `pos` keyword \u2192 position each step with a `Locations((0,0,z))` context (the documented placement mechanism). A default `Cylinder(r,h)` already sits base-on-XY centered in XY, so only the Z translation is needed.\n- Bind the finished solid via `part = bp.part` (the context object itself is not a shape).",
+   "text": "\n\n<plan>\nReading the views (unchanged):\n- **Top view**: three concentric circles \u230042 / \u230030 / \u230018 \u2192 the three coaxial cylinder diameters.\n- **Front view**: stacked rectangles, vertical chain 11 + 21 + 26 = 58 mm overall height.\n- **Right view**: same silhouette, same chain 11 + 21 + 26 = 58 mm \u2192 solid 3-step coaxial cylinder (no holes, no hidden lines).\n- **ISO view**: confirms the stepped-cylinder form.\n\nDimension chains:\n- X/Y (Top): 42, 30, 18 mm.\n- Z (Front/Right): 26 + 21 + 11 = 58 mm.\n\nFeatures:\n1. Bottom cylinder \u230042 \u00d7 26, base Z=0.\n2. Middle cylinder \u230030 \u00d7 21, base Z=26.\n3. Top cylinder \u230018 \u00d7 11, base Z=47.\n\nFixes for build123d 0.10:\n- `Cylinder` has no `pos` keyword \u2192 position each step with a `Locations((0,0,z))` context (the documented placement mechanism). A default `Cylinder(r,h)` already sits base-on-XY centered in XY, so only the Z translation is needed.\n- Bind the finished solid via `part = bp.part` (the context object itself is not a shape).\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nd_bottom = 42.0    # mm, bottom cylinder OD (Top view outer circle)\nd_mid    = 30.0    # mm, middle cylinder OD (Top view middle circle)\nd_top    = 18.0    # mm, top cylinder OD (Top view inner circle)\nh_bottom = 26.0    # mm, bottom cylinder height (Front/Right views)\nh_mid    = 21.0    # mm, middle cylinder height\nh_top    = 11.0    # mm, top cylinder height\n\n# --- derived values ---\nh_total = h_bottom + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# --- build the solid: three coaxial cylinders stacked on the Z axis ---\n# A default Cylinder(r, h) has its base on the XY plane (Z=0), centered in XY,\n# extending in +Z. Each upper step is shifted up with a Locations context.\nwith BuildPart() as bp:\n    Cylinder(d_bottom / 2, h_bottom)                       # base at Z = 0\n    with Locations((0, 0, h_bottom)):\n        Cylinder(d_mid / 2, h_mid)                          # base at Z = 26\n    with Locations((0, 0, h_bottom + h_mid)):\n        Cylinder(d_top / 2, h_top)                          # base at Z = 47\n\n# bind the finished (unioned) solid to `part`\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     42.0,
+     42.0,
+     65.5
+    ],
+    "volume_mm3": 53629.4,
+    "watertight": true,
+    "n_mesh_components": 3,
+    "n_faces": 9,
+    "n_planar_faces": 6,
+    "n_cylindrical_faces": 3,
+    "n_solids": 3,
+    "cylindrical_radii_mm": [
+     9.0,
+     15.0,
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 50.6,
+   "usage": {
+    "input_tokens": 9330,
+    "output_tokens": 3244
+   },
+   "plan": "Diagnosis of the mismatch (my reading of the drawing is unchanged):\n- Original: 3 coaxial cylinders, \u230042/\u230030/\u230018, heights 26/21/11, stacked face-to-face \u2192 overall Z = 26+21+11 = **58 mm**, single fused solid.\n- My produced solid: Z = **65.5 mm**, **3 separate solids**, with visible gaps between the steps in the Front/Right renders.\n\nRoot cause: in build123d 0.10 the default `align` for `Cylinder` is `CENTER` on all axes, so each cylinder was centered on its `Locations` point instead of sitting base-on-top-of-the-previous one. That (a) shifted the whole stack (bottom spanned \u221213\u2026+13, etc., giving 65.5 mm) and (b) left 2.5 mm gaps, so the union stayed 3 disjoint solids.\n\nFix: set `align=(Align.CENTER, Align.CENTER, Align.MIN)` on every cylinder so its base (min\u2011Z face) coincides with the `Locations` Z. Then:\n- bottom: Z 0\u202626\n- middle: Z 26\u202647\n- top: Z 47\u202658  \u2192 overall Z = 58 mm, faces coincide \u2192 single fused solid.\nExpected volume \u2248 \u03c0(21\u00b2\u00b726 + 15\u00b2\u00b721 + 9\u00b2\u00b711) \u2248 53 666 mm\u00b3.",
+   "text": "\n\n<plan>\nDiagnosis of the mismatch (my reading of the drawing is unchanged):\n- Original: 3 coaxial cylinders, \u230042/\u230030/\u230018, heights 26/21/11, stacked face-to-face \u2192 overall Z = 26+21+11 = **58 mm**, single fused solid.\n- My produced solid: Z = **65.5 mm**, **3 separate solids**, with visible gaps between the steps in the Front/Right renders.\n\nRoot cause: in build123d 0.10 the default `align` for `Cylinder` is `CENTER` on all axes, so each cylinder was centered on its `Locations` point instead of sitting base-on-top-of-the-previous one. That (a) shifted the whole stack (bottom spanned \u221213\u2026+13, etc., giving 65.5 mm) and (b) left 2.5 mm gaps, so the union stayed 3 disjoint solids.\n\nFix: set `align=(Align.CENTER, Align.CENTER, Align.MIN)` on every cylinder so its base (min\u2011Z face) coincides with the `Locations` Z. Then:\n- bottom: Z 0\u202626\n- middle: Z 26\u202647\n- top: Z 47\u202658  \u2192 overall Z = 58 mm, faces coincide \u2192 single fused solid.\nExpected volume \u2248 \u03c0(21\u00b2\u00b726 + 15\u00b2\u00b721 + 9\u00b2\u00b711) \u2248 53 666 mm\u00b3.\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nd_bottom = 42.0    # mm, bottom cylinder OD (Top view outer circle)\nd_mid    = 30.0    # mm, middle cylinder OD (Top view middle circle)\nd_top    = 18.0    # mm, top cylinder OD (Top view inner circle)\nh_bottom = 26.0    # mm, bottom cylinder height (Front/Right views)\nh_mid    = 21.0    # mm, middle cylinder height\nh_top    = 11.0    # mm, top cylinder height\n\n# --- derived values ---\nh_total = h_bottom + h_mid + h_top   # 58 mm overall height (26 + 21 + 11)\n\n# --- build the solid: three coaxial cylinders stacked on the Z axis ---\n# align MIN in Z puts each cylinder's base on its Locations point, so the\n# steps sit exactly on top of one another (face-to-face) and fuse into one solid.\nwith BuildPart() as bp:\n    Cylinder(d_bottom / 2, h_bottom,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))                       # base Z = 0\n    with Locations((0, 0, h_bottom)):\n        Cylinder(d_mid / 2, h_mid,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))                    # base Z = 26\n    with Locations((0, 0, h_bottom + h_mid)):\n        Cylinder(d_top / 2, h_top,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))                    # base Z = 47\n\n# bind the finished (unioned) solid to `part`\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 4,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     41.99,
+     41.99,
+     58.0
+    ],
+    "volume_mm3": 53607.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     9.0,
+     15.0,
+     21.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 5,
+   "t_call_s": 6.7,
+   "usage": {
+    "input_tokens": 10178,
+    "output_tokens": 402
+   },
+   "plan": null,
+   "text": "\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "hard06_shaft",
+  "split": "hard",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9891,
+  "ag_final_cand": 4,
+  "best_iou": 0.9891,
+  "best_cand": 4,
+  "n_calls": 5,
+  "n_candidates": 4,
+  "stop_reason": "final",
+  "t_singleshot_s": 74.9,
+  "t_agentic_s": 244.7
+ },
+ "per_candidate_iou": {
+  "3": 0.7901,
+  "4": 0.9891
+ }
+}

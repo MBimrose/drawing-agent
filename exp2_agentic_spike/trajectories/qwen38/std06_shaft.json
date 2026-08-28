@@ -1,0 +1,84 @@
+{
+ "uid": "std06_shaft",
+ "split": "std",
+ "family": "shaft",
+ "model": "claude-qwen3.8-27b",
+ "temperature": 0.6,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 112.6,
+   "usage": {
+    "input_tokens": 4057,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 2,
+   "t_call_s": 114.7,
+   "usage": {
+    "input_tokens": 4097,
+    "output_tokens": 6981
+   },
+   "plan": "Reading the views:\n- **Top (left view, XY):** concentric circles \u2014 outer \u230048 (boss OD), middle \u230024 (top cylinder OD), inner \u230014 THRU (through hole). A rectangular mounting tab sticks out on the \u2212Y side. Vertical (Y) dimension 46 = tab depth; 17 = tab/base thickness reference.\n- **Right (middle view, YZ):** stacked profile. Base/tab height 17; boss height 29; top cylinder height 10; overall height 56 (= 17 + 29 + 10).\n- **ISO:** confirms a flat base tab with a \u230048 boss and a smaller \u230024 cylinder on top, with a central through hole.\n\nDimension chains:\n- Z (height): 17 (base) + 29 (boss) + 10 (top) = 56 overall. \u2713\n- Y (top view): tab depth 46.\n- Diameters: boss 48, top cylinder 24, through hole 14.\n\nFeature list:\n1. Base tab: box 24 (X) \u00d7 46 (Y) \u00d7 17 (Z), centered in X, extending to \u2212Y.\n2. Boss: cylinder \u230048 \u00d7 29 on top of base, centered.\n3. Top cylinder: \u230024 \u00d7 10 on top of boss, centered.\n4. Through hole: \u230014 through full height (56).",
+   "text": "\n\n<plan>\nReading the views:\n- **Top (left view, XY):** concentric circles \u2014 outer \u230048 (boss OD), middle \u230024 (top cylinder OD), inner \u230014 THRU (through hole). A rectangular mounting tab sticks out on the \u2212Y side. Vertical (Y) dimension 46 = tab depth; 17 = tab/base thickness reference.\n- **Right (middle view, YZ):** stacked profile. Base/tab height 17; boss height 29; top cylinder height 10; overall height 56 (= 17 + 29 + 10).\n- **ISO:** confirms a flat base tab with a \u230048 boss and a smaller \u230024 cylinder on top, with a central through hole.\n\nDimension chains:\n- Z (height): 17 (base) + 29 (boss) + 10 (top) = 56 overall. \u2713\n- Y (top view): tab depth 46.\n- Diameters: boss 48, top cylinder 24, through hole 14.\n\nFeature list:\n1. Base tab: box 24 (X) \u00d7 46 (Y) \u00d7 17 (Z), centered in X, extending to \u2212Y.\n2. Boss: cylinder \u230048 \u00d7 29 on top of base, centered.\n3. Top cylinder: \u230024 \u00d7 10 on top of boss, centered.\n4. Through hole: \u230014 through full height (56).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nboss_d   = 48.0   # mm  boss outer diameter (Top outer circle)\ntop_d    = 24.0   # mm  top cylinder outer diameter (Top middle circle)\nhole_d   = 14.0   # mm  through hole diameter (Top inner circle, THRU)\nbase_h   = 17.0   # mm  base / tab height (Right view)\nboss_h   = 29.0   # mm  boss height (Right view)\ntop_h    = 10.0   # mm  top cylinder height (Right view)\ntab_d    = 46.0   # mm  mounting tab depth in Y (Top view vertical)\ntab_w    = 24.0   # mm  mounting tab width in X (Top view rectangle)\n\n# ---- Derived values ----\noverall_h = base_h + boss_h + top_h   # mm  = 56 (matches Right view overall)\n\nwith BuildPart() as P:\n    # Base mounting tab (box), centered in X, extending toward -Y\n    with BuildPart() as foot_p:\n        Box(tab_w, tab_d, base_h).align((X.Center, Y.Center, Z.Min))\n    foot = foot_p.part.translate((0, -tab_d / 2, 0))\n    P.add_part(foot)\n\n    # Boss cylinder on top of the base\n    with BuildPart() as boss_p:\n        Cylinder(radius=boss_d / 2, height=boss_h).align((X.Center, Y.Center, Z.Min))\n    boss = boss_p.part.translate((0, 0, base_h))\n    P.add_part(boss)\n\n    # Top small cylinder\n    with BuildPart() as top_p:\n        Cylinder(radius=top_d / 2, height=top_h).align((X.Center, Y.Center, Z.Min))\n    top = top_p.part.translate((0, 0, base_h + boss_h))\n    P.add_part(top)\n\n    # Central through hole (full height)\n    with BuildPart() as hole_p:\n        Cylinder(radius=hole_d / 2, height=overall_h + 2).align((X.Center, Y.Center, Z.Min))\n    hole = hole_p.part.translate((0, 0, -1))\n    P.subtract(hole)\n\npart = P.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 3,
+   "t_call_s": 128.0,
+   "usage": {
+    "input_tokens": 5154,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 4,
+   "t_call_s": 131.6,
+   "usage": {
+    "input_tokens": 5194,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  },
+  {
+   "turn": 5,
+   "t_call_s": 123.4,
+   "usage": {
+    "input_tokens": 5234,
+    "output_tokens": 7600
+   },
+   "plan": null,
+   "text": "",
+   "action": "no_code"
+  }
+ ],
+ "summary": {
+  "uid": "std06_shaft",
+  "split": "std",
+  "family": "shaft",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": false,
+  "ag_iou": 0.0,
+  "ag_final_cand": null,
+  "best_iou": 0.0,
+  "best_cand": null,
+  "n_calls": 5,
+  "n_candidates": 1,
+  "stop_reason": "no_code",
+  "t_singleshot_s": 112.6,
+  "t_agentic_s": 612.7
+ },
+ "per_candidate_iou": {}
+}
