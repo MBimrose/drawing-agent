@@ -3,10 +3,18 @@
 Agentic-harness experiments for the drawing→STEP project ([drawing-vlm](https://github.com/MBimrose/drawing-vlm)).
 Decides whether (1) critic-reranked best-of-N and (2) an agentic data engine are worth building.
 
-| Experiment | Question | Where it runs |
+| Experiment | Question | Answer |
 |---|---|---|
-| [exp1_bestof4_oracle](exp1_bestof4_oracle/) | How much IoU does "first-executing draw" leave on the table vs the oracle-best of 4 draws? (= ceiling for a critic reranker) | Campus cluster (e24-rft checkpoint + eval pool live there) |
-| [exp2_agentic_spike](exp2_agentic_spike/) | Does an agentic loop with geometry feedback beat single-shot on hard drawings? (= case for the STaR data engine) | wpk-serv-06 (fresh drawings generated with step_to_drw) |
+| [exp1_bestof4_oracle](exp1_bestof4_oracle/) | Oracle-of-4 vs deployed first-exec — reranker ceiling? | +0.047 [CI +0.031..+0.064]; 79% of gap in 18 gross errors → GO |
+| [exp2_agentic_spike](exp2_agentic_spike/) | Does an agentic measurement-feedback loop beat single-shot? | Yes: Kimi +0.118 (chained dims +0.149); base-27B +0.600, STaR gate 0→9/20 |
+| [exp3_reranker](exp3_reranker/) | Can selection policies close the oracle gap? | Heuristic rerank **0.876→0.898** [CI +0.009..+0.038], 0 model calls; VLM critic NOT significant |
+| [exp4_frontier_vs_finetune](exp4_frontier_vs_finetune/) | Does frontier+harness compare to the fine-tune on its own eval? | No: Kimi+loop 0.724 vs deployed 0.876 — but max(both)=0.919≈oracle → teacher for the stuck tail |
+| [exp5_champion_loop](exp5_champion_loop/) | Does the loop stack on top of fine-tuning? | No: 0.818 vs 0.876; revision mode-collapsed, fresh draws beat conditioned repair |
+
+**Frozen-96 ladder (centered IoU):** Kimi ss 0.549 → Kimi+loop 0.724 → champ greedy 0.787 →
+champ+loop 0.818 → champ bo4+repair 0.876 → **champ bo4+rerank 0.898 (deployable record)** → oracle 0.922.
+
+Benchmark design for the next cycle: [docs/benchmark_strategy.md](docs/benchmark_strategy.md) (v2 final).
 
 `vendor/` holds read-only reference clones (gitignored): drawing-vlm, step_to_drw.
 

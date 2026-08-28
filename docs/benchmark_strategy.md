@@ -1,4 +1,4 @@
-# Larger-benchmark strategy (draft v1 — finalize with exp3–5 results)
+# Larger-benchmark strategy (v2 FINAL — locked 2026-08-28 with exp3–5 results)
 
 Decides how to evaluate drawing→STEP systems beyond the frozen 96-sample eval and exp2's 20
 fresh parts, with enough statistical power to rank strategies honestly against the cluster
@@ -79,11 +79,24 @@ Protocol rules (non-negotiable, all learned the hard way):
 4. Never mix eval eras/pools in one table (the v14/v15 n=79/n=95 lesson).
 5. Checkpoint/system selection by benchmark IoU, never by validation loss.
 
-## 5. Open until exp3–5 land
+## 5. Resolved by exp3–5 (2026-08-28)
 
-- Which systems enter the v2 matrix (champion + best policy from exp3; champion-in-loop from
-  exp5 if it beats 0.876; Kimi arms from exp4 as teacher reference).
-- Whether STaR-gate yield or mean IoU is the headline column for data-engine decisions.
-- Whether the sparse/underdetermined scheme is scoreable with centered IoU alone or needs a
-  dimensional-accuracy metric (per-dimension relative error extracted from the GT parameter
-  table — the generator knows every named parameter, so this is cheap to add).
+**Frozen-96 results ladder** (centered IoU): Kimi single-shot 0.549 → Kimi+loop 0.724 →
+champ greedy 0.787 → champ+loop 0.818 (exp5, NOT additive over bo4) → champ bo4+repair
+0.876 → **champ bo4 + heuristic rerank 0.898 (exp3, new deployable record)** → oracle 0.922.
+max(Kimi+loop, champ deployed) = 0.919 ≈ oracle — the two systems fail on different parts.
+
+- **v2 system matrix**: champion bo4 + exp3 heuristic rerank (deployable reference);
+  champion greedy (cheap reference); Kimi+loop (teacher reference). Champion-in-loop is OUT
+  (exp5: 0.818, conditioned repair loses to fresh draws; loop revision is mode-collapsed on
+  the RFT champion). VLM-critic reranking is OUT (exp3: CI crosses zero, breaks near-ties).
+- **Headline columns**: mean IoU for deployment decisions, **STaR-gate yield (≥0.8) for
+  teacher/data-engine decisions** — exp4 showed they rank systems differently (Kimi+loop is
+  far below deployment parity yet harvests 6/19 of the champion's stuck tail, and gate-union
+  grows across seeds, so teacher passes are worth repeating).
+- **Sparse scheme**: add the per-dimension relative-error metric from the generator's named
+  parameter table; centered IoU alone under-resolves it (exp3's residual-gap analysis: half
+  the oracle gap is majority-wrong-shape, invisible to consensus and compressed by IoU).
+- **CONTAMINATION RULE (critical)**: teacher/harness runs executed ON the frozen 96 (exp4's
+  45+15 gate-passing trajectories, exp5's loop outputs) are evidence, NEVER training data.
+  The data engine harvests from train-pool rejects and fresh v2-generated parts only.
