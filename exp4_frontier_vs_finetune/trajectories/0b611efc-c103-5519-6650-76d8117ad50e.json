@@ -1,0 +1,74 @@
+{
+ "uid": "0b611efc-c103-5519-6650-76d8117ad50e",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 67.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 9852
+   },
+   "plan": "**View identification (third-angle):**\n- TOP view (upper left): L-shaped plan \u2014 horizontal bar across the top, vertical leg descending on the left. Dimensions: overall X = 64; pocket located 38 from the left edge; callout \"6 \u00d7 10 \u00d7 7 DEEP\" (rectangular blind pocket).\n- FRONT view (below top): rectangle 64 \u00d7 8 with a visible vertical line 12 from the left (the leg width) and dashed lines for the hidden pocket. Thickness Z = 8.\n- RIGHT view (right of front): rectangle 80 \u00d7 8; overall Y = 80; \"12\" at the right end = bar width in Y; \"74\" from the front edge = pocket centreline in Y, which checks against the arm centreline: 80 \u2212 12/2 = 74 \u2713. Dashed lines show the hidden pocket near the far end.\n- ISO view confirms: flat L-bracket, two 12-wide arms, pocket on the top face of the X-arm.\n\n**Dimension chains:**\n- X: overall given directly = 64. Leg width = 12. Pocket centre at 38 \u2192 pocket spans x 35\u201341.\n- Y: overall given directly = 80. Bar width = 12 (y 68\u201380). Pocket centre at 74 \u2192 pocket spans y 69\u201379 (centred across the arm).\n- Z: thickness 8; pocket 7 deep from top \u2192 1 mm floor remains (8 \u2212 7 = 1).\n\n**Features:**\n1. Arm along X: 64 \u00d7 12 \u00d7 8, occupying y 68\u201380.\n2. Arm along Y: 12 \u00d7 80 \u00d7 8, occupying x 0\u201312.\n3. Blind pocket 6 (X) \u00d7 10 (Y) \u00d7 7 deep, centred at (38, 74), opening on the top face.\n\nNo fillets/chamfers are called out \u2014 none added.",
+   "text": "<plan>\n**View identification (third-angle):**\n- TOP view (upper left): L-shaped plan \u2014 horizontal bar across the top, vertical leg descending on the left. Dimensions: overall X = 64; pocket located 38 from the left edge; callout \"6 \u00d7 10 \u00d7 7 DEEP\" (rectangular blind pocket).\n- FRONT view (below top): rectangle 64 \u00d7 8 with a visible vertical line 12 from the left (the leg width) and dashed lines for the hidden pocket. Thickness Z = 8.\n- RIGHT view (right of front): rectangle 80 \u00d7 8; overall Y = 80; \"12\" at the right end = bar width in Y; \"74\" from the front edge = pocket centreline in Y, which checks against the arm centreline: 80 \u2212 12/2 = 74 \u2713. Dashed lines show the hidden pocket near the far end.\n- ISO view confirms: flat L-bracket, two 12-wide arms, pocket on the top face of the X-arm.\n\n**Dimension chains:**\n- X: overall given directly = 64. Leg width = 12. Pocket centre at 38 \u2192 pocket spans x 35\u201341.\n- Y: overall given directly = 80. Bar width = 12 (y 68\u201380). Pocket centre at 74 \u2192 pocket spans y 69\u201379 (centred across the arm).\n- Z: thickness 8; pocket 7 deep from top \u2192 1 mm floor remains (8 \u2212 7 = 1).\n\n**Features:**\n1. Arm along X: 64 \u00d7 12 \u00d7 8, occupying y 68\u201380.\n2. Arm along Y: 12 \u00d7 80 \u00d7 8, occupying x 0\u201312.\n3. Blind pocket 6 (X) \u00d7 10 (Y) \u00d7 7 deep, centred at (38, 74), opening on the top face.\n\nNo fillets/chamfers are called out \u2014 none added.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (all mm) ----\nlen_x = 64        # overall X extent (top & front views)\nlen_y = 80        # overall Y extent (right view)\narm_w = 12        # arm width: leg width in X (front view) = bar width in Y (right view)\nthk = 8           # part thickness (front & right views)\n\npoc_x = 6         # pocket size along X  (callout: 6 x 10 x 7 DEEP)\npoc_y = 10        # pocket size along Y  (callout)\npoc_depth = 7     # pocket depth from top face (callout)\npoc_cx = 38       # pocket centre X, from left edge (top view)\npoc_cy = 74       # pocket centre Y, from front edge (right view) = 80 - 12/2 (arm centreline)\n\nwith BuildPart() as bp:\n    # Arm along X (back bar): x 0..64, y 68..80, z 0..8\n    with Locations((len_x / 2, len_y - arm_w / 2, thk / 2)):\n        Box(len_x, arm_w, thk)\n    # Arm along Y (left leg): x 0..12, y 0..80, z 0..8\n    with Locations((arm_w / 2, len_y / 2, thk / 2)):\n        Box(arm_w, len_y, thk)\n    # Blind pocket from the top face: 6 x 10, 7 deep (1 mm floor remains)\n    with Locations((poc_cx, poc_cy, thk - poc_depth / 2)):\n        Box(poc_x, poc_y, poc_depth, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     64.0,
+     80.0,
+     8.0
+    ],
+    "volume_mm3": 12252.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 13,
+    "n_planar_faces": 13,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.7,
+   "usage": {
+    "input_tokens": 7071,
+    "output_tokens": 394
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0b611efc-c103-5519-6650-76d8117ad50e",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 69.5,
+  "t_agentic_s": 76.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 9852
+  },
+  "total_tokens": {
+   "in": 11181,
+   "out": 10246
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

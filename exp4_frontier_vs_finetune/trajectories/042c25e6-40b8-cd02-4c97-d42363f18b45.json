@@ -1,0 +1,77 @@
+{
+ "uid": "042c25e6-40b8-cd02-4c97-d42363f18b45",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1624.8,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 18041
+   },
+   "plan": "**Views:** Top (XY, above), Front (XZ, below top), Right (YZ, right of front), plus ISO (NTS).\n\n**Axis chains:**\n- X (length): overall 60 given (top + front). Hole columns located from left edge: 15 and 45 \u2192 right margin 60 \u2212 45 = 15, symmetric.\n- Y (depth): overall 40 given (right view = top view depth). Hole rows located from front edge: 10 and 30 \u2192 back margin 40 \u2212 30 = 10, symmetric.\n- Z (height): overall 20 given (vertical dim beside right view). No chain needed on any axis \u2014 all overalls are explicit.\n\n**Features:**\n- Base block 60 \u00d7 40 \u00d7 20.\n- \"4\u00d7 R2\" appears once per view; each box edge shows as a corner in exactly one view \u2192 all 12 edges filleted R2 (matches ISO's fully rounded edges).\n- 4\u00d7 \u23006 THRU (vertical, through Z) at (15,10), (15,30), (45,10), (45,30).\n- Rectangular corner notch cut from the bottom at the front-left corner (visible open on the front and left faces in ISO; solid step lines at bottom-left of front/right views; hidden L in top view). The sheet gives no explicit dims for it; scaled from the views' proportions: ~25 (X) \u00d7 ~15 (Y) \u00d7 ~8 (Z), i.e. x:0\u219225, y:0\u219215, z:0\u21928.\n\nConstruction: filleted box \u2192 subtract corner notch (sharp internal corners, no callout) \u2192 subtract 4 through-holes (front-left hole passes through the notch void, as drawn).",
+   "text": "<plan>\n**Views:** Top (XY, above), Front (XZ, below top), Right (YZ, right of front), plus ISO (NTS).\n\n**Axis chains:**\n- X (length): overall 60 given (top + front). Hole columns located from left edge: 15 and 45 \u2192 right margin 60 \u2212 45 = 15, symmetric.\n- Y (depth): overall 40 given (right view = top view depth). Hole rows located from front edge: 10 and 30 \u2192 back margin 40 \u2212 30 = 10, symmetric.\n- Z (height): overall 20 given (vertical dim beside right view). No chain needed on any axis \u2014 all overalls are explicit.\n\n**Features:**\n- Base block 60 \u00d7 40 \u00d7 20.\n- \"4\u00d7 R2\" appears once per view; each box edge shows as a corner in exactly one view \u2192 all 12 edges filleted R2 (matches ISO's fully rounded edges).\n- 4\u00d7 \u23006 THRU (vertical, through Z) at (15,10), (15,30), (45,10), (45,30).\n- Rectangular corner notch cut from the bottom at the front-left corner (visible open on the front and left faces in ISO; solid step lines at bottom-left of front/right views; hidden L in top view). The sheet gives no explicit dims for it; scaled from the views' proportions: ~25 (X) \u00d7 ~15 (Y) \u00d7 ~8 (Z), i.e. x:0\u219225, y:0\u219215, z:0\u21928.\n\nConstruction: filleted box \u2192 subtract corner notch (sharp internal corners, no callout) \u2192 subtract 4 through-holes (front-left hole passes through the notch void, as drawn).\n</plan>\n\n```python\nfrom build123d import *\n\n# --- parameters (all mm, read from drawing) ---\nL = 60.0        # overall length X (top/front views)\nW = 40.0        # overall depth Y (right view)\nH = 20.0        # overall height Z (front/right views)\nedge_r = 2.0    # 4x R2 called out in each of the 3 views -> all 12 box edges\nhole_d = 6.0    # 4x \u23006 THRU\nhole_x1 = 15.0  # left hole column, from left edge\nhole_x2 = 45.0  # right hole column, from left edge (60-45=15 symmetric)\nhole_y1 = 10.0  # front hole row, from front edge\nhole_y2 = 30.0  # back hole row, from front edge (40-30=10 symmetric)\n# corner notch (front-left-bottom): no explicit dims on sheet, scaled from views\nnotch_x = 25.0  # notch extent in X from left (-X) face\nnotch_y = 15.0  # notch extent in Y from front (-Y) face\nnotch_z = 8.0   # notch height from bottom face\n\nwith BuildPart() as bp:\n    # base block centered on origin\n    Box(L, W, H)\n    # R2 on all 12 edges (three \"4x R2\" notes, one per view)\n    fillet(bp.edges(), radius=edge_r)\n    # rectangular corner notch, open on -X face, -Y face and bottom face\n    with Locations((-L / 2 + notch_x / 2,\n                    -W / 2 + notch_y / 2,\n                    -H / 2 + notch_z / 2)):\n        Box(notch_x, notch_y, notch_z, mode=Mode.SUBTRACT)\n    # 4x \u23006 through-holes along Z\n    hole_pts = [\n        (hole_x1 - L / 2, hole_y1 - W / 2, 0.0),\n        (hole_x1 - L / 2, hole_y2 - W / 2, 0.0),\n        (hole_x2 - L / 2, hole_y1 - W / 2, 0.0),\n        (hole_x2 - L / 2, hole_y2 - W / 2, 0.0),\n    ]\n    with Locations(hole_pts):\n        Cylinder(radius=hole_d / 2, height=H + 2.0, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     40.0,
+     20.0
+    ],
+    "volume_mm3": 42606.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 32,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 18.8,
+   "usage": {
+    "input_tokens": 7301,
+    "output_tokens": 2050
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "042c25e6-40b8-cd02-4c97-d42363f18b45",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9537,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9537,
+  "ag_final_cand": 1,
+  "best_iou": 0.9537,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 1628.1,
+  "t_agentic_s": 1650.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 18041
+  },
+  "total_tokens": {
+   "in": 11411,
+   "out": 20091
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9537
+ }
+}

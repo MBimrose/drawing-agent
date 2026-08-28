@@ -1,0 +1,77 @@
+{
+ "uid": "02b4260a-2c89-b076-eed5-bd1a05cc4df7",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 32.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 5976
+   },
+   "plan": "**Views:** Top (plan) = the large view with the hole pattern (XY). Front = thin view below it (XZ, shows thickness). Right side = view to the right of the front (YZ, 60 wide). SECTION A\u2013A = hatched view cut along the horizontal centerline of the top view, confirming a shallow top recess. ISO confirms a flat plate with 8 small holes and a central shallow circular pocket.\n\n**Dimension chains:**\n- X: overall 80 given directly; hole chain 10 (margin) + 3\u00d720 (pitches) + 10 (margin) = 80 \u2713 \u2192 columns at X = 10, 30, 50, 70. Centerline at 40 (the \"40\" dim).\n- Y: overall 60 (right view); hole chain 15 (margin) + 1\u00d730 (pitch) + 15 (margin) = 60 \u2713 \u2192 rows at Y = 15, 45. Centerline at 30.\n- Z: thickness 7 (front view).\n\n**Features:**\n- Base plate 80 \u00d7 60 \u00d7 7.\n- 8\u00d7 \u23005 THRU holes in a 2\u00d74 grid (pitches 20 in X, 30 in Y), centered on the plate.\n- Central blind pocket \u230030, 2 mm deep from the top face (\"\u230030 \u21932\", shown in SECTION A\u2013A and ISO).\n- C0.5 chamfers on the four vertical corner edges (called out at all four corners of the top view).\n- Pocket (r=15) clears the nearest holes at (\u00b110, \u00b115): center distance \u224818.0 > 15+2.5 \u2713.",
+   "text": "<plan>\n**Views:** Top (plan) = the large view with the hole pattern (XY). Front = thin view below it (XZ, shows thickness). Right side = view to the right of the front (YZ, 60 wide). SECTION A\u2013A = hatched view cut along the horizontal centerline of the top view, confirming a shallow top recess. ISO confirms a flat plate with 8 small holes and a central shallow circular pocket.\n\n**Dimension chains:**\n- X: overall 80 given directly; hole chain 10 (margin) + 3\u00d720 (pitches) + 10 (margin) = 80 \u2713 \u2192 columns at X = 10, 30, 50, 70. Centerline at 40 (the \"40\" dim).\n- Y: overall 60 (right view); hole chain 15 (margin) + 1\u00d730 (pitch) + 15 (margin) = 60 \u2713 \u2192 rows at Y = 15, 45. Centerline at 30.\n- Z: thickness 7 (front view).\n\n**Features:**\n- Base plate 80 \u00d7 60 \u00d7 7.\n- 8\u00d7 \u23005 THRU holes in a 2\u00d74 grid (pitches 20 in X, 30 in Y), centered on the plate.\n- Central blind pocket \u230030, 2 mm deep from the top face (\"\u230030 \u21932\", shown in SECTION A\u2013A and ISO).\n- C0.5 chamfers on the four vertical corner edges (called out at all four corners of the top view).\n- Pocket (r=15) clears the nearest holes at (\u00b110, \u00b115): center distance \u224818.0 > 15+2.5 \u2713.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nL = 80.0            # mm  overall length (X), top/front views\nW = 60.0            # mm  overall width (Y), right side view\nT = 7.0             # mm  plate thickness (Z), front view\n\nhole_dia = 5.0      # mm  8x D5 THRU (2x4)\ncol_pitch = 20.0    # mm  3x 20 between the 4 hole columns\nrow_pitch = 30.0    # mm  1x 30 between the 2 hole rows\ncol_margin = 10.0   # mm  left edge to first column\nrow_margin = 15.0   # mm  edge to first row (right side view)\n\npocket_dia = 30.0   # mm  D30 central blind pocket\npocket_depth = 2.0  # mm  pocket depth (blind, from top)\n\nedge_chamfer = 0.5  # mm  C0.5 on the four vertical corners\n\n# derived hole coordinates (base sketch is centered on the origin)\nxs = [col_margin + i * col_pitch - L / 2 for i in range(4)]   # -30,-10,10,30\nys = [row_margin + j * row_pitch - W / 2 for j in range(2)]   # -15, 15\n\nwith BuildPart() as bp:\n    # base plate\n    with BuildSketch():\n        Rectangle(L, W)\n    extrude(amount=T)\n\n    top = Plane.XY.offset(T)\n\n    # central D30 x 2 deep blind pocket (from top face)\n    with BuildSketch(top):\n        Circle(pocket_dia / 2)\n    extrude(amount=-pocket_depth, mode=Mode.SUBTRACT)\n\n    # eight D5 through holes, 4 columns x 2 rows\n    with BuildSketch(top):\n        with Locations([(x, y) for x in xs for y in ys]):\n            Circle(hole_dia / 2)\n    extrude(amount=-T, mode=Mode.SUBTRACT)\n\n    # C0.5 chamfers on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), edge_chamfer)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     7.0
+    ],
+    "volume_mm3": 31088.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 9,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     15.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.9,
+   "usage": {
+    "input_tokens": 6872,
+    "output_tokens": 398
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "02b4260a-2c89-b076-eed5-bd1a05cc4df7",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 35.1,
+  "t_agentic_s": 41.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 5976
+  },
+  "total_tokens": {
+   "in": 10982,
+   "out": 6374
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

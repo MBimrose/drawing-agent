@@ -1,0 +1,76 @@
+{
+ "uid": "10d0ca90-0d13-721f-43e2-427a2c4c5c54",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 95.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 15107
+   },
+   "plan": "**Views:** Top (XY, upper left), Front (XZ, lower left), Right (YZ, right of front), plus ISO (NTS).\n\n**Overall extents:**\n- X = 40 (top view, overall)\n- Y = 30 (right view, overall)\n- Z = 88 (front view, overall)\n\n**Form:** An open-top rectangular cup (ISO confirms). Wall thickness = 2 on all four sides (front view: \"2\" left wall, \"2\" right wall; right view: \"2\" front/back walls). Floor thickness = 2 (front view vertical \"2\"). Cavity: X 2\u219238, Y 2\u219228, Z 2\u219288.\n\n**Features:**\n1. **2\u00d7 \u23005 THRU** holes through the floor. Top view locates centers at X = 5 and X = 35 from the left edge; right view \"15\" locates them at Y = 15 (mid-depth of the 30). Positions: (5, 15) and (35, 15), drilled through the 2 mm floor.\n2. **6 \u00d7 8 \u00d7 4 DEEP** rectangular pocket in the floor. Top view shows it nested in the back-left corner of the cavity: X from 2 to 8 (center X = 5, matching the \"5\" dimension), Y from 20 to 28 (against the back wall inner face). Cut 4 deep downward from the floor top surface (Z = 2). Hidden-line steps at bottom-left of the front view and bottom-right of the right view confirm this location.\n3. **C0.5 chamfers** called out on the outer corners in both top and front views \u2192 0.5 mm 45\u00b0 chamfer on all 12 outer edges of the block (applied before the cavity is cut, so interior edges stay sharp).\n\n**Chain check:** X: 40 overall given; hole centers 5 and 35 are symmetric about 20. Y: 30 overall; holes at 15 = 30/2. Z: 88 overall; floor 2 \u2192 cavity depth 86.",
+   "text": "<plan>\n**Views:** Top (XY, upper left), Front (XZ, lower left), Right (YZ, right of front), plus ISO (NTS).\n\n**Overall extents:**\n- X = 40 (top view, overall)\n- Y = 30 (right view, overall)\n- Z = 88 (front view, overall)\n\n**Form:** An open-top rectangular cup (ISO confirms). Wall thickness = 2 on all four sides (front view: \"2\" left wall, \"2\" right wall; right view: \"2\" front/back walls). Floor thickness = 2 (front view vertical \"2\"). Cavity: X 2\u219238, Y 2\u219228, Z 2\u219288.\n\n**Features:**\n1. **2\u00d7 \u23005 THRU** holes through the floor. Top view locates centers at X = 5 and X = 35 from the left edge; right view \"15\" locates them at Y = 15 (mid-depth of the 30). Positions: (5, 15) and (35, 15), drilled through the 2 mm floor.\n2. **6 \u00d7 8 \u00d7 4 DEEP** rectangular pocket in the floor. Top view shows it nested in the back-left corner of the cavity: X from 2 to 8 (center X = 5, matching the \"5\" dimension), Y from 20 to 28 (against the back wall inner face). Cut 4 deep downward from the floor top surface (Z = 2). Hidden-line steps at bottom-left of the front view and bottom-right of the right view confirm this location.\n3. **C0.5 chamfers** called out on the outer corners in both top and front views \u2192 0.5 mm 45\u00b0 chamfer on all 12 outer edges of the block (applied before the cavity is cut, so interior edges stay sharp).\n\n**Chain check:** X: 40 overall given; hole centers 5 and 35 are symmetric about 20. Y: 30 overall; holes at 15 = 30/2. Z: 88 overall; floor 2 \u2192 cavity depth 86.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nwidth = 40          # mm  overall X extent (top view)\ndepth = 30          # mm  overall Y extent (right view)\nheight = 88         # mm  overall Z extent (front view)\nwall = 2            # mm  side wall thickness (front/right views)\nfloor = 2           # mm  bottom floor thickness (front view)\nedge_chamfer = 0.5  # mm  C0.5 chamfer called out on outer corners\n\nhole_dia = 5        # mm  \"2x \u00d85 THRU\"\nhole1_x = 5         # mm  first hole center from left edge (top view)\nhole2_x = 35        # mm  second hole center from left edge (top view)\nhole_y = 15         # mm  hole centerline in Y (right view)\n\npocket_x = 6        # mm  pocket size in X (\"6 x 8 x 4 DEEP\")\npocket_y = 8        # mm  pocket size in Y\npocket_depth = 4    # mm  pocket depth from interior floor surface\n\n# ---- Derived values ----\ncav_x = width - 2 * wall      # 36  cavity width\ncav_y = depth - 2 * wall      # 26  cavity depth\npocket_cx = wall + pocket_x / 2            # 5   pocket center X (matches \"5\" dim)\npocket_cy = depth - wall - pocket_y / 2    # 24  pocket center Y (against back wall)\n\nwith BuildPart() as bp:\n    # Outer block, corner at origin\n    with Locations((width / 2, depth / 2, height / 2)):\n        Box(width, depth, height)\n\n    # C0.5 chamfers on all outer edges (called out in top and front views)\n    chamfer(bp.edges(), edge_chamfer)\n\n    # Interior cavity, open at the top (2 mm walls, 2 mm floor)\n    with Locations((width / 2, depth / 2, height + 1)):\n        Box(cav_x, cav_y, height + 1 - floor,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # 2x \u00d85 THRU holes through the floor\n    with Locations((hole1_x, hole_y, floor / 2),\n                   (hole2_x, hole_y, floor / 2)):\n        Cylinder(hole_dia / 2, floor + 4, mode=Mode.SUBTRACT)\n\n    # 6 x 8 x 4 DEEP pocket at back-left corner of the cavity floor\n    with Locations((pocket_cx, pocket_cy, floor - pocket_depth / 2)):\n        Box(pocket_x, pocket_y, pocket_depth + 4,\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     40.0,
+     30.0,
+     88.0
+    ],
+    "volume_mm3": 24851.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 35,
+    "n_planar_faces": 33,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 48.6,
+   "usage": {
+    "input_tokens": 9282,
+    "output_tokens": 7114
+   },
+   "plan": null,
+   "text": "Comparing my renders against the original drawing:\n\n**Extents:** 40 \u00d7 30 \u00d7 88 \u2014 matches all three overall dimensions. \u2713\n\n**Top view:** Outer rectangle with C0.5-clipped corners, cavity inset 2 mm all around, 6\u00d78 pocket nested in the back-left corner of the cavity (touching left and back inner wall faces), two \u23005 holes at X = 5 and X = 35 on the Y = 15 centerline \u2014 all match. \u2713\n\n**Front view:** 40 \u00d7 88 with chamfered corners (the original calls out C0.5 at top-left, top-right, AND bottom-right corners \u2014 so the bottom rim is chamfered too, which my all-outer-edges chamfer captures), hidden wall/floor lines, pocket step at bottom-left (X 2\u20138). \u2713\n\n**Right view:** 30 \u00d7 88, chamfered corners, hidden wall/floor lines, pocket step at bottom-right (Y 20\u201328, back side). \u2713\n\n**Holes:** cylindrical radii [2.5] = \u23005 THRU through the 2 mm floor. \u2713\n\n**Chamfer scope:** The C0.5 leaders in the top view (both right corners) and front view (top and bottom corners) confirm chamfers on vertical edges plus top and bottom rim edges \u2014 exactly what chamfering all outer edges of the block before cutting the cavity produces, leaving interior edges sharp as shown in the ISO. \u2713\n\nNo discrepancies found.\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "10d0ca90-0d13-721f-43e2-427a2c4c5c54",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7881,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7881,
+  "ag_final_cand": 1,
+  "best_iou": 0.7881,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 98.7,
+  "t_agentic_s": 151.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 15107
+  },
+  "total_tokens": {
+   "in": 13392,
+   "out": 22221
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7881
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "uid": "0cfc10be-e86a-0791-d268-d7edf63e84e9",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 177.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 27518
+   },
+   "plan": "**View identification (third-angle):** Upper-left = TOP view (XY, seen from +Z): \u230060 circle with the blade footprint (8 mm wide rectangle) and a small \u230010 circle at the flange axis. Lower-left = FRONT view (XZ, seen from \u2212Y): flange rectangle (\u230060 \u00d7 20) with the thin blade rising from it, a small solid \u230010 rectangle at the blade base, and dashed vertical lines (hidden \u23006 hole) through the flange. Lower-right = RIGHT view (YZ, seen from +X): flange with the blade shown at its full 40 mm length.\n\n**Dimension chains per axis:**\n- X: overall = \u230060 (flange). Blade located by 34 from the flange \u2212X edge to the blade +X face: \u221230 + 34 = +4; blade thickness 8 \u2192 blade X \u2208 [\u22124, +4] (centred, matches front view).\n- Y: overall = \u230060. Blade +Y edge is 25 from the flange axis; blade length 40 (right view) \u2192 blade Y \u2208 [\u221215, +25].\n- Z: chain 20 (flange) + blade = 60 overall \u2192 blade height = 60 \u2212 20 = 40, blade Z \u2208 [20, 60].\n\n**Features:**\n- Flange: \u230060 \u00d7 20 cylinder.\n- Blade: flat plate 8 (X) \u00d7 40 (Y) \u00d7 40 (Z), sitting on the flange top, offset so its +Y edge is 25 from the axis.\n- Boss: \u230010 cylinder on the flange top at the axis (drawn with visible solid outlines in the front view \u2192 external feature, not a recess; it merges with the blade base). Its height is not directly dimensioned; scaled from the 1:1 views \u2248 4 mm (assumption noted).\n- Hole: \u23006 through the flange + boss at the axis (dashed lines in front/right views). It does not enter the blade above the boss (no hidden lines up the blade).\n\nNo fillets/chamfers are called out.",
+   "text": "<plan>\n**View identification (third-angle):** Upper-left = TOP view (XY, seen from +Z): \u230060 circle with the blade footprint (8 mm wide rectangle) and a small \u230010 circle at the flange axis. Lower-left = FRONT view (XZ, seen from \u2212Y): flange rectangle (\u230060 \u00d7 20) with the thin blade rising from it, a small solid \u230010 rectangle at the blade base, and dashed vertical lines (hidden \u23006 hole) through the flange. Lower-right = RIGHT view (YZ, seen from +X): flange with the blade shown at its full 40 mm length.\n\n**Dimension chains per axis:**\n- X: overall = \u230060 (flange). Blade located by 34 from the flange \u2212X edge to the blade +X face: \u221230 + 34 = +4; blade thickness 8 \u2192 blade X \u2208 [\u22124, +4] (centred, matches front view).\n- Y: overall = \u230060. Blade +Y edge is 25 from the flange axis; blade length 40 (right view) \u2192 blade Y \u2208 [\u221215, +25].\n- Z: chain 20 (flange) + blade = 60 overall \u2192 blade height = 60 \u2212 20 = 40, blade Z \u2208 [20, 60].\n\n**Features:**\n- Flange: \u230060 \u00d7 20 cylinder.\n- Blade: flat plate 8 (X) \u00d7 40 (Y) \u00d7 40 (Z), sitting on the flange top, offset so its +Y edge is 25 from the axis.\n- Boss: \u230010 cylinder on the flange top at the axis (drawn with visible solid outlines in the front view \u2192 external feature, not a recess; it merges with the blade base). Its height is not directly dimensioned; scaled from the 1:1 views \u2248 4 mm (assumption noted).\n- Hole: \u23006 through the flange + boss at the axis (dashed lines in front/right views). It does not enter the blade above the boss (no hidden lines up the blade).\n\nNo fillets/chamfers are called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions read from the drawing ----------------\nflange_dia    = 60.0   # mm  flange diameter (front view width / top view circle)\nflange_h      = 20.0   # mm  flange height (front view)\noverall_h     = 60.0   # mm  total height, flange bottom -> blade top (front view)\nblade_thk     = 8.0    # mm  blade thickness in X (top view)\nblade_len     = 40.0   # mm  blade length in Y (right view)\nblade_tip_y   = 25.0   # mm  blade +Y edge measured from flange axis (top view)\nedge_to_blade = 34.0   # mm  flange -X edge to blade +X face (top view)\nhole_dia      = 6.0    # mm  central through hole (front view leader)\nboss_dia      = 10.0   # mm  central boss diameter (front view leader)\nboss_h        = 4.0    # mm  boss height above flange (scaled from 1:1 views; not directly dimensioned)\n\n# ---------------- derived values ----------------\nflange_r  = flange_dia / 2.0\nblade_h   = overall_h - flange_h          # 40 mm of blade above the flange\nblade_x_hi = edge_to_blade - flange_r     # +4 mm  blade +X face\nblade_x_lo = blade_x_hi - blade_thk       # -4 mm  (blade centred on X)\nblade_y_hi = blade_tip_y                  # +25 mm\nblade_y_lo = blade_y_hi - blade_len       # -15 mm\nblade_cx  = (blade_x_lo + blade_x_hi) / 2 # 0\nblade_cy  = (blade_y_lo + blade_y_hi) / 2 # +5\n\n# ---------------- solid ----------------\nflange = Cylinder(radius=flange_r, height=flange_h,\n                  align=(Align.CENTER, Align.CENTER, Align.MIN))\n\nboss = Pos(0, 0, flange_h) * Cylinder(\n    radius=boss_dia / 2, height=boss_h,\n    align=(Align.CENTER, Align.CENTER, Align.MIN))\n\nblade = Pos(blade_cx, blade_cy, flange_h) * Box(\n    blade_thk, blade_len, blade_h,\n    align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n# central through hole (flange + boss), axis at the origin\nhole = Cylinder(radius=hole_dia / 2, height=flange_h + boss_h,\n                align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = flange + boss + blade - hole\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     60.0,
+     60.0
+    ],
+    "volume_mm3": 68667.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     5.0,
+     30.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 8.4,
+   "usage": {
+    "input_tokens": 8093,
+    "output_tokens": 1111
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0cfc10be-e86a-0791-d268-d7edf63e84e9",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8192,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8192,
+  "ag_final_cand": 1,
+  "best_iou": 0.8192,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 181.3,
+  "t_agentic_s": 193.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 27518
+  },
+  "total_tokens": {
+   "in": 12203,
+   "out": 28629
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.8192
+ }
+}

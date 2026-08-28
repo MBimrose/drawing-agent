@@ -1,0 +1,77 @@
+{
+ "uid": "00199e66-2f80-ae33-2603-60a317088932",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 77.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 16674
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper left): the hole-pattern rectangle. X axis horizontal, Y axis vertical.\n- **FRONT view** (below top): thin bar showing thickness, hidden lines for holes/recess.\n- **RIGHT view** (right of front): thin bar with the Y-direction chain dimensions.\n- **SECTION A\u2013A** (far right): cut along the horizontal centerline of the top view; hatched bar with a top recess.\n- ISO confirms: flat plate, 4 countersunk holes + central shallow circular recess on the top face, chamfered vertical corners.\n\n**Dimension chains:**\n- **X (width):** overall = 80 (bottom dim). Chain: 15 (left edge \u2192 hole col 1) + 40 (col 1 \u2192 col 2) \u21d2 col 2 at X = 55. Check dim at top: 80 \u2212 15 = **65** (col 1 \u2192 right edge) \u2713. Remaining right margin = 80 \u2212 15 \u2212 40 = 25.\n- **Y (depth):** no single overall on the top view; chain on the right view: 15 + 30 + 15 = **60** overall. Rows at Y = 15 and Y = 45 (the \"45\" dim = 15 + 30 \u2713). Symmetric.\n- **Z (thickness):** 12 (front/right views).\n\n**Features:**\n- Plate 80 \u00d7 60 \u00d7 12.\n- 4\u00d7 \u23005 THRU with countersink \u230010 \u00d7 82\u00b0 from the top face, at (X,Y) = (15,15), (15,45), (55,15), (55,45). Countersink depth = (10\u22125)/2 \u00f7 tan(41\u00b0) \u2248 2.88 mm.\n- Central blind hole \u230030 \u21936 from the top face at the plate center (40, 30) \u2014 confirmed blind by SECTION A\u2013A and hidden lines in front view.\n- C1 (1 mm \u00d7 45\u00b0) chamfers on the four vertical corner edges (leaders point to the corners in the top view; ISO shows the chamfered vertical edge).",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper left): the hole-pattern rectangle. X axis horizontal, Y axis vertical.\n- **FRONT view** (below top): thin bar showing thickness, hidden lines for holes/recess.\n- **RIGHT view** (right of front): thin bar with the Y-direction chain dimensions.\n- **SECTION A\u2013A** (far right): cut along the horizontal centerline of the top view; hatched bar with a top recess.\n- ISO confirms: flat plate, 4 countersunk holes + central shallow circular recess on the top face, chamfered vertical corners.\n\n**Dimension chains:**\n- **X (width):** overall = 80 (bottom dim). Chain: 15 (left edge \u2192 hole col 1) + 40 (col 1 \u2192 col 2) \u21d2 col 2 at X = 55. Check dim at top: 80 \u2212 15 = **65** (col 1 \u2192 right edge) \u2713. Remaining right margin = 80 \u2212 15 \u2212 40 = 25.\n- **Y (depth):** no single overall on the top view; chain on the right view: 15 + 30 + 15 = **60** overall. Rows at Y = 15 and Y = 45 (the \"45\" dim = 15 + 30 \u2713). Symmetric.\n- **Z (thickness):** 12 (front/right views).\n\n**Features:**\n- Plate 80 \u00d7 60 \u00d7 12.\n- 4\u00d7 \u23005 THRU with countersink \u230010 \u00d7 82\u00b0 from the top face, at (X,Y) = (15,15), (15,45), (55,15), (55,45). Countersink depth = (10\u22125)/2 \u00f7 tan(41\u00b0) \u2248 2.88 mm.\n- Central blind hole \u230030 \u21936 from the top face at the plate center (40, 30) \u2014 confirmed blind by SECTION A\u2013A and hidden lines in front view.\n- C1 (1 mm \u00d7 45\u00b0) chamfers on the four vertical corner edges (leaders point to the corners in the top view; ISO shows the chamfered vertical edge).\n</plan>\n\n```python\nfrom build123d import *\nfrom math import tan, radians\n\n# ---------------- dimensions read from the drawing ----------------\nplate_L = 80            # mm  overall width (X), top view bottom dimension\nplate_W = 60            # mm  overall depth (Y), right view chain: 15 + 30 + 15 = 60\nplate_T = 12            # mm  plate thickness (Z), front/right views\n\ncol_1_x = 15            # mm  first hole column from left edge\ncol_pitch = 40          # mm  column-to-column spacing (col 2 at 55; check dim 80-15=65)\nrow_1_y = 15            # mm  first hole row from front edge\nrow_pitch = 30          # mm  row-to-row spacing (row 2 at 45 = 15+30)\n\nthru_d = 5              # mm  callout: 4x \u00d85 THRU\ncsk_d = 10              # mm  callout: countersink \u00d810\ncsk_angle = 82          # deg callout: countersink included angle 82\u00b0\n\nblind_d = 30            # mm  callout: \u00d830 central hole\nblind_depth = 6         # mm  callout: depth \u21936 (blind, from top face)\n\nc1 = 1                  # mm  C1 chamfer, four vertical corner edges\n\n# ---------------- derived values ----------------\nhole_xy = [(x - plate_L / 2, y - plate_W / 2)\n           for x in (col_1_x, col_1_x + col_pitch)      # -25, +15 about center\n           for y in (row_1_y, row_1_y + row_pitch)]     # -15, +15 about center\ncsk_half = radians(csk_angle / 2)\ncsk_depth = (csk_d - thru_d) / 2 / tan(csk_half)        # \u2248 2.88 mm\novercut = 1                                             # mm extra so boolean cuts exit cleanly\ncsk_top_r = csk_d / 2 + overcut / tan(csk_half)         # cone radius extended above top face\n\nwith BuildPart() as builder:\n    # base plate\n    with BuildSketch():\n        Rectangle(plate_L, plate_W)\n    extrude(amount=plate_T)\n\n    # 4x \u00d85 through drills\n    with Locations([(x, y, plate_T / 2) for x, y in hole_xy]):\n        Cylinder(radius=thru_d / 2, height=plate_T + 2 * overcut,\n                 mode=Mode.SUBTRACT)\n\n    # 4x \u00d810 x 82\u00b0 countersinks from the top face\n    with Locations([(x, y, plate_T - csk_depth) for x, y in hole_xy]):\n        Cone(bottom_radius=thru_d / 2, top_radius=csk_top_r,\n             height=csk_depth + overcut,\n             align=(Align.CENTER, Align.CENTER, Align.MIN),\n             mode=Mode.SUBTRACT)\n\n    # central \u00d830 blind hole, 6 mm deep from the top face\n    with Locations((0, 0, plate_T - blind_depth)):\n        Cylinder(radius=blind_d / 2, height=blind_depth + overcut,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # C1 chamfers on the four vertical corner edges\n    chamfer(builder.edges().filter_by(Axis.Z), length=c1)\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     12.0
+    ],
+    "volume_mm3": 52070.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     15.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 22.0,
+   "usage": {
+    "input_tokens": 7344,
+    "output_tokens": 4358
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "00199e66-2f80-ae33-2603-60a317088932",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9759,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9759,
+  "ag_final_cand": 1,
+  "best_iou": 0.9759,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 81.0,
+  "t_agentic_s": 107.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 16674
+  },
+  "total_tokens": {
+   "in": 11454,
+   "out": 21032
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9759
+ }
+}

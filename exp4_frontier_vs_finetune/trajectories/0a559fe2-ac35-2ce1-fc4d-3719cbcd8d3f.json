@@ -1,0 +1,76 @@
+{
+ "uid": "0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2528.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 20932
+   },
+   "plan": "Views (third-angle): TOP (XY) upper-left, FRONT (XZ) below it, RIGHT (YZ) to the right of front; ISO is NTS.\n\nAxis chains / arithmetic:\n- X: TOP and FRONT both give the overall length = 80 (single overall dim). No chain needed.\n- Y (RIGHT view, horizontal, all from the front face Y=0): hole\u20111 at 20, hole\u20112 at 40, back face at 60 \u2192 overall depth W = 60 (the 60 extension line reaches the far edge; 20 and 40 locate the two holes, symmetric about mid\u2011depth 30).\n- Z (FRONT view, vertical, all from the bottom face Z=0): three hidden/top levels 25, 28, and overall 30. Check: 28 \u2212 25 = 3 = the \u23003 hole (so 25 and 28 are the lower/upper extremities of the hole band \u2192 hole axis at z = (25+28)/2 = 26.5), and 30 \u2212 28 = 2 = the top ligament, matching the repeated \"2\" notes. Overall height H = 30.\n\nFeatures:\n- Base solid: block 80 (X) \u00d7 60 (Y) \u00d7 30 (Z).\n- \"2\u00d7 \u23003 \u219340\": two drilled holes, radius 1.5, axis along X. They appear as visible circles in the RIGHT view (seen from +X), so they open on the +X face (X=80) and run blind to depth 40 \u2192 flat bottom at X = 80\u221240 = 40. Centres at (Y,Z) = (20, 26.5) and (40, 26.5).\n- \"C1\" (1 mm, 45\u00b0): TOP-view leaders hit the two +Y (back) corners \u2192 the two vertical back edges; RIGHT-view leaders hit the two +Y-side corners (Z=30 and Z=0) \u2192 the back\u2011top and back\u2011bottom long edges. Consistently: chamfer the four boundary edges of the back face (Y=60) by 1 mm.\n- The remaining \"2\" callouts only restate the same 2 mm ligament (30\u221228); no other feature positions are dimensioned, so none are invented.",
+   "text": "<plan>\nViews (third-angle): TOP (XY) upper-left, FRONT (XZ) below it, RIGHT (YZ) to the right of front; ISO is NTS.\n\nAxis chains / arithmetic:\n- X: TOP and FRONT both give the overall length = 80 (single overall dim). No chain needed.\n- Y (RIGHT view, horizontal, all from the front face Y=0): hole\u20111 at 20, hole\u20112 at 40, back face at 60 \u2192 overall depth W = 60 (the 60 extension line reaches the far edge; 20 and 40 locate the two holes, symmetric about mid\u2011depth 30).\n- Z (FRONT view, vertical, all from the bottom face Z=0): three hidden/top levels 25, 28, and overall 30. Check: 28 \u2212 25 = 3 = the \u23003 hole (so 25 and 28 are the lower/upper extremities of the hole band \u2192 hole axis at z = (25+28)/2 = 26.5), and 30 \u2212 28 = 2 = the top ligament, matching the repeated \"2\" notes. Overall height H = 30.\n\nFeatures:\n- Base solid: block 80 (X) \u00d7 60 (Y) \u00d7 30 (Z).\n- \"2\u00d7 \u23003 \u219340\": two drilled holes, radius 1.5, axis along X. They appear as visible circles in the RIGHT view (seen from +X), so they open on the +X face (X=80) and run blind to depth 40 \u2192 flat bottom at X = 80\u221240 = 40. Centres at (Y,Z) = (20, 26.5) and (40, 26.5).\n- \"C1\" (1 mm, 45\u00b0): TOP-view leaders hit the two +Y (back) corners \u2192 the two vertical back edges; RIGHT-view leaders hit the two +Y-side corners (Z=30 and Z=0) \u2192 the back\u2011top and back\u2011bottom long edges. Consistently: chamfer the four boundary edges of the back face (Y=60) by 1 mm.\n- The remaining \"2\" callouts only restate the same 2 mm ligament (30\u221228); no other feature positions are dimensioned, so none are invented.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named parameters (all mm, read from the drawing) ----\nL_X        = 80.0   # mm  overall length along X (TOP and FRONT overall dim)\n\n# RIGHT view horizontal chain along Y, all measured from the front face (Y=0)\ny_hole_1   = 20.0   # mm  centre of hole 1\ny_hole_2   = 40.0   # mm  centre of hole 2\nW_Y        = 60.0   # mm  overall depth along Y (chain end = back face)\n\n# FRONT view vertical dims along Z, all measured from the bottom face (Z=0)\nz_hole_lo  = 25.0   # mm  lower extremity of the hole band\nz_hole_hi  = 28.0   # mm  upper extremity of the hole band\nH_Z        = 30.0   # mm  overall height (note H_Z - z_hole_hi = 2 = the \"2\" ligament)\n\nhole_dia   = 3.0    # mm  \"2x \u23003\"  (== z_hole_hi - z_hole_lo, consistency check)\nhole_depth = 40.0   # mm  \"\u219340\" drilled from the +X end face -> flat bottom at X = L_X - 40 = 40\ncham       = 1.0    # mm  \"C1\" 45 deg chamfer on the four edges of the back face (Y = W_Y)\n\n# derived values\nz_hole   = (z_hole_lo + z_hole_hi) / 2.0   # 26.5 mm, hole axis height\nr_hole   = hole_dia / 2.0                  # 1.5 mm\nx_bottom = L_X - hole_depth                # 40 mm, blind (flat) bottom of the holes\n\nwith BuildPart() as bp:\n    # base block, min corner at the origin -> X[0,80], Y[0,60], Z[0,30]\n    Box(L_X, W_Y, H_Z, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # two blind holes from the +X face (X=80) to depth 40 (flat bottom at X=40)\n    for y in (y_hole_1, y_hole_2):\n        # composed location: put the cylinder base at (x_bottom, y, z_hole) and\n        # rotate its +Z axis onto +X so it spans X[x_bottom, x_bottom+hole_depth]\n        with Locations(Pos(x_bottom, y, z_hole) * Rot(0, 90, 0)):\n            Cylinder(r_hole, hole_depth,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN),\n                     mode=Mode.SUBTRACT)\n\n    # C1 chamfer on the four boundary edges of the back face (Y = W_Y):\n    # back-top & back-bottom long edges (RIGHT view) + the two vertical back edges (TOP view)\n    back_edges = bp.edges().filter_by(lambda e: abs(e.center().Y - W_Y) < 1e-3)\n    chamfer(back_edges, cham)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     30.0
+    ],
+    "volume_mm3": 143327.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 12,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.4,
+   "usage": {
+    "input_tokens": 7550,
+    "output_tokens": 1191
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0a559fe2-ac35-2ce1-fc4d-3719cbcd8d3f",
+  "ss_exec_ok": true,
+  "ss_iou": 0.2279,
+  "ag_exec_ok": true,
+  "ag_iou": 0.2279,
+  "ag_final_cand": 1,
+  "best_iou": 0.2279,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 2531.1,
+  "t_agentic_s": 2545.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 20932
+  },
+  "total_tokens": {
+   "in": 11660,
+   "out": 22123
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.2279
+ }
+}

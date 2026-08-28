@@ -1,0 +1,90 @@
+{
+ "uid": "0dd6ca4c-ec3c-67a5-8742-017faa18c6b4",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 903.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 22396
+   },
+   "plan": "**Views identified:** Circular view (upper left) = TOP view; view below it = FRONT; view to its right = RIGHT (identical, part is a solid of revolution); hatched view = SECTION A\u2011A (cut on the top view's horizontal centerline). ISO confirms a \"spinning\u2011top\" body of revolution, small cylinder at the bottom.\n\n**Diameter chain (from TOP + RIGHT views):**\n- Base cylinder: \u230030 (leader to hidden circle in top view)\n- Max body: \"25\" in top view is a radius (centerline \u2192 outer edge) \u2192 R25 = **\u230050**\n- Top face: \"25\" over the right view spans the top width \u2192 **\u230025**\n- Cross-check vs front-view pixel proportions: 30 : 50 : 25 \u2713\n\n**Height chain (Z, front view):** overall = 80 (given); base cylinder = 13.5; the waist (\u230050) height is not dimensioned \u2014 taken from the views' consistent proportion \u2248 0.6 \u00d7 80 = 48. Chain: 13.5 + 34.5 (flare \u230030\u2192\u230050) + 32 (taper \u230050\u2192\u230025) = 80 \u2713\n\n**Hole (callout \"\u230010 \u219321.6 \u2304 \u230016 \u00d7 82\u00b0\" + front dim \"25\"):** blind hole from the BOTTOM face (hidden lines in front view, recess in section, ISO all agree). Countersink \u230016\u00d782\u00b0 at the opening: cone depth = 3/tan41\u00b0 = 3.45; straight \u230010 portion 21.6 \u2192 total depth = 21.6 + 3.45 \u2248 **25**, matching the front-view \"25\" dimension to the top of the hidden hole \u2713\n\n**Features:** revolved profile (base cylinder \u230030\u00d713.5 \u2192 cone to \u230050 @ z=48 \u2192 cone to \u230025 @ z=80); \u230010 hole from bottom to z=25; 82\u00b0 countersink to \u230016 at bottom face. No fillets/chamfers called out.",
+   "text": "<plan>\n**Views identified:** Circular view (upper left) = TOP view; view below it = FRONT; view to its right = RIGHT (identical, part is a solid of revolution); hatched view = SECTION A\u2011A (cut on the top view's horizontal centerline). ISO confirms a \"spinning\u2011top\" body of revolution, small cylinder at the bottom.\n\n**Diameter chain (from TOP + RIGHT views):**\n- Base cylinder: \u230030 (leader to hidden circle in top view)\n- Max body: \"25\" in top view is a radius (centerline \u2192 outer edge) \u2192 R25 = **\u230050**\n- Top face: \"25\" over the right view spans the top width \u2192 **\u230025**\n- Cross-check vs front-view pixel proportions: 30 : 50 : 25 \u2713\n\n**Height chain (Z, front view):** overall = 80 (given); base cylinder = 13.5; the waist (\u230050) height is not dimensioned \u2014 taken from the views' consistent proportion \u2248 0.6 \u00d7 80 = 48. Chain: 13.5 + 34.5 (flare \u230030\u2192\u230050) + 32 (taper \u230050\u2192\u230025) = 80 \u2713\n\n**Hole (callout \"\u230010 \u219321.6 \u2304 \u230016 \u00d7 82\u00b0\" + front dim \"25\"):** blind hole from the BOTTOM face (hidden lines in front view, recess in section, ISO all agree). Countersink \u230016\u00d782\u00b0 at the opening: cone depth = 3/tan41\u00b0 = 3.45; straight \u230010 portion 21.6 \u2192 total depth = 21.6 + 3.45 \u2248 **25**, matching the front-view \"25\" dimension to the top of the hidden hole \u2713\n\n**Features:** revolved profile (base cylinder \u230030\u00d713.5 \u2192 cone to \u230050 @ z=48 \u2192 cone to \u230025 @ z=80); \u230010 hole from bottom to z=25; 82\u00b0 countersink to \u230016 at bottom face. No fillets/chamfers called out.\n</plan>\n\n```python\nfrom build123d import *\nfrom math import radians, tan\n\n# ---------- dimensions read from the drawing ----------\nbottom_dia  = 30.0   # mm  base cylinder dia (\u230030 leader, top view)\nbottom_h    = 13.5   # mm  base cylinder height (front view)\nmax_dia     = 50.0   # mm  max body dia = 2 x R25 (radius dim, top view)\ntop_dia     = 25.0   # mm  top face dia (25 dim over right view)\ntotal_h     = 80.0   # mm  overall height (front view)\nwaist_h     = 48.0   # mm  height of max dia (undimensioned; from view proportion 0.6*80)\nhole_dia    = 10.0   # mm  \u230010 blind hole from bottom face\nhole_depth  = 25.0   # mm  total hole depth (front-view 25 dim = 21.6 straight + c'sink)\ncsink_dia   = 16.0   # mm  countersink diameter (\u2304 \u230016)\ncsink_angle = 82.0   # deg countersink included angle (\u00d7 82\u00b0)\n\n# derived: depth of the 82\u00b0 countersink cone (~3.45 mm; 21.6 + 3.45 \u2248 25)\ncsink_depth = (csink_dia - hole_dia) / 2 / tan(radians(csink_angle / 2))\n\n# revolved half-profile (r, z)\nprofile = [\n    (0, 0),\n    (bottom_dia / 2, 0),\n    (bottom_dia / 2, bottom_h),\n    (max_dia / 2, waist_h),\n    (top_dia / 2, total_h),\n    (0, total_h),\n]\n\nwith BuildPart() as bp:\n    # body of revolution\n    with BuildSketch(Plane.XZ):\n        with BuildLine():\n            Polyline(*profile, (0, 0))\n        make_face()\n    revolve(axis=Axis.Z)\n\n    # \u230010 blind hole from the bottom face (to z = 25)\n    Cylinder(radius=hole_dia / 2, height=hole_depth,\n             align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n    # \u230016 x 82\u00b0 countersink at the bottom opening\n    Cone(base_radius=csink_dia / 2, top_radius=hole_dia / 2, height=csink_depth,\n         align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 11.6,
+   "usage": {
+    "input_tokens": 5340,
+    "output_tokens": 1871
+   },
+   "plan": "Reading unchanged (diameters \u230030 base / \u230050 max / \u230025 top; heights 13.5 base, waist at 48, total 80; \u230010 hole from bottom to z=25 with \u230016\u00d782\u00b0 countersink, cone depth 3/tan41\u00b0 = 3.45). The failure was only in the `Cone(...)` keyword API of this build123d version. Fix: cut the hole **and** the countersink in a single revolved triangular\u2011plus\u2011rectangular profile (no `Cone` call at all) \u2014 the revolved cut profile runs from radius \u230016/2 at z=0, tapering to \u230010/2 at z=3.45, then straight up to z=25.",
+   "text": "<plan>\nReading unchanged (diameters \u230030 base / \u230050 max / \u230025 top; heights 13.5 base, waist at 48, total 80; \u230010 hole from bottom to z=25 with \u230016\u00d782\u00b0 countersink, cone depth 3/tan41\u00b0 = 3.45). The failure was only in the `Cone(...)` keyword API of this build123d version. Fix: cut the hole **and** the countersink in a single revolved triangular\u2011plus\u2011rectangular profile (no `Cone` call at all) \u2014 the revolved cut profile runs from radius \u230016/2 at z=0, tapering to \u230010/2 at z=3.45, then straight up to z=25.\n</plan>\n```python\nfrom build123d import *\nfrom math import radians, tan\n\n# ---------- dimensions read from the drawing ----------\nbottom_dia  = 30.0   # mm  base cylinder dia (\u230030 leader, top view)\nbottom_h    = 13.5   # mm  base cylinder height (front view)\nmax_dia     = 50.0   # mm  max body dia = 2 x R25 (radius dim, top view)\ntop_dia     = 25.0   # mm  top face dia (25 dim over right view)\ntotal_h     = 80.0   # mm  overall height (front view)\nwaist_h     = 48.0   # mm  height of max dia (undimensioned; from view proportion 0.6*80)\nhole_dia    = 10.0   # mm  \u230010 blind hole from bottom face\nhole_depth  = 25.0   # mm  total hole depth (front-view 25 dim = 21.6 straight + c'sink)\ncsink_dia   = 16.0   # mm  countersink diameter (\u2304 \u230016)\ncsink_angle = 82.0   # deg countersink included angle (\u00d7 82\u00b0)\n\n# derived: depth of the 82\u00b0 countersink cone (~3.45 mm; 21.6 + 3.45 \u2248 25)\ncsink_depth = (csink_dia - hole_dia) / 2 / tan(radians(csink_angle / 2))\n\n# revolved half-profiles (r, z) in the XZ plane\nprofile = [\n    (0, 0),\n    (bottom_dia / 2, 0),\n    (bottom_dia / 2, bottom_h),\n    (max_dia / 2, waist_h),\n    (top_dia / 2, total_h),\n    (0, total_h),\n]\nhole_profile = [\n    (0, 0),\n    (csink_dia / 2, 0),                    # \u230016 opening at bottom face\n    (hole_dia / 2, csink_depth),           # 82\u00b0 countersink cone\n    (hole_dia / 2, hole_depth),            # \u230010 straight hole to z = 25\n    (0, hole_depth),\n]\n\nwith BuildPart() as bp:\n    # body of revolution\n    with BuildSketch(Plane.XZ):\n        with BuildLine():\n            Polyline(*profile, (0, 0))\n        make_face()\n    revolve(axis=Axis.Z)\n\n    # \u230010 blind hole + \u230016 x 82\u00b0 countersink as one revolved cut\n    with BuildSketch(Plane.XZ):\n        with BuildLine():\n            Polyline(*hole_profile, (0, 0))\n        make_face()\n    revolve(axis=Axis.Z, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     49.98,
+     49.99,
+     80.0
+    ],
+    "volume_mm3": 88130.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 3,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     5.0,
+     15.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 4.9,
+   "usage": {
+    "input_tokens": 9623,
+    "output_tokens": 428
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0dd6ca4c-ec3c-67a5-8742-017faa18c6b4",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9257,
+  "ag_final_cand": 2,
+  "best_iou": 0.9257,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 906.4,
+  "t_agentic_s": 929.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 22396
+  },
+  "total_tokens": {
+   "in": 19073,
+   "out": 24695
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.9257
+ }
+}

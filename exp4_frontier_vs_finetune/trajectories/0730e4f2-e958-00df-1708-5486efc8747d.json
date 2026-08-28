@@ -1,0 +1,77 @@
+{
+ "uid": "0730e4f2-e958-00df-1708-5486efc8747d",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 53.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 6368
+   },
+   "plan": "**View identification (third-angle):**\n- TOP view (upper left): rectangle 80 (X) wide, outer corners \"4\u00d7 R3\"; inner rectangle = open cavity seen from above, offset 2 mm (wall).\n- FRONT view (below top): 80 (X) \u00d7 40 (Z) outer, wall thickness \"2\" called out at left and right edges; 6 holes \"6\u00d7 \u23004 THRU (3\u00d72)\" in a 3-column \u00d7 2-row grid.\n- RIGHT view (right of front): 60 (Y) deep \u00d7 40 (Z) tall, wall \"2\" at both side walls.\n- ISO: open-top tray; hole field on one long (80 mm) wall \u2014 matches front wall.\n\n**Dimension chains per axis:**\n- X: overall given directly = 80 (top view; front view aligns).\n- Y: overall given directly = 60 (right view; top view depth agrees).\n- Z: overall given directly = 40 (front view; right view agrees).\n- Hole columns: chain 2\u00d7 20 = 40 total span across 3 columns, centered on X=0 \u2192 x = \u221220, 0, +20.\n- Hole rows: chain 1\u00d7 15 between 2 rows, centered in 40 height \u2192 z = 20 \u00b1 7.5 = 12.5, 27.5.\n- Cavity: 80 \u2212 2\u00b72 = 76 (X), 60 \u2212 2\u00b72 = 56 (Y), bottom thickness 2, open at top.\n\n**Feature list:**\n1. Outer shell 80 \u00d7 60 \u00d7 40, bottom at Z=0.\n2. 4\u00d7 R3 fillets on the vertical outer corners (before hollowing, so inner corners stay sharp as undimensioned).\n3. Open-top cavity 76 \u00d7 56 \u00d7 38 starting at Z=2 (uniform 2 mm walls/bottom).\n4. 6\u00d7 \u23004 through-holes in the front (\u2212Y) wall: grid x \u2208 {\u221220, 0, 20}, z \u2208 {12.5, 27.5}, axes along Y.",
+   "text": "<plan>\n**View identification (third-angle):**\n- TOP view (upper left): rectangle 80 (X) wide, outer corners \"4\u00d7 R3\"; inner rectangle = open cavity seen from above, offset 2 mm (wall).\n- FRONT view (below top): 80 (X) \u00d7 40 (Z) outer, wall thickness \"2\" called out at left and right edges; 6 holes \"6\u00d7 \u23004 THRU (3\u00d72)\" in a 3-column \u00d7 2-row grid.\n- RIGHT view (right of front): 60 (Y) deep \u00d7 40 (Z) tall, wall \"2\" at both side walls.\n- ISO: open-top tray; hole field on one long (80 mm) wall \u2014 matches front wall.\n\n**Dimension chains per axis:**\n- X: overall given directly = 80 (top view; front view aligns).\n- Y: overall given directly = 60 (right view; top view depth agrees).\n- Z: overall given directly = 40 (front view; right view agrees).\n- Hole columns: chain 2\u00d7 20 = 40 total span across 3 columns, centered on X=0 \u2192 x = \u221220, 0, +20.\n- Hole rows: chain 1\u00d7 15 between 2 rows, centered in 40 height \u2192 z = 20 \u00b1 7.5 = 12.5, 27.5.\n- Cavity: 80 \u2212 2\u00b72 = 76 (X), 60 \u2212 2\u00b72 = 56 (Y), bottom thickness 2, open at top.\n\n**Feature list:**\n1. Outer shell 80 \u00d7 60 \u00d7 40, bottom at Z=0.\n2. 4\u00d7 R3 fillets on the vertical outer corners (before hollowing, so inner corners stay sharp as undimensioned).\n3. Open-top cavity 76 \u00d7 56 \u00d7 38 starting at Z=2 (uniform 2 mm walls/bottom).\n4. 6\u00d7 \u23004 through-holes in the front (\u2212Y) wall: grid x \u2208 {\u221220, 0, 20}, z \u2208 {12.5, 27.5}, axes along Y.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nL = 80          # mm  overall length (X), top/front views\nW = 60          # mm  overall depth (Y), right view\nH = 40          # mm  overall height (Z), front/right views\nT = 2           # mm  wall thickness (side walls and bottom)\nR_CORNER = 3    # mm  outer vertical corner radius, \"4x R3\"\nHOLE_D = 4      # mm  hole diameter, \"6x D4 THRU (3x2)\"\nPITCH_X = 20    # mm  hole column spacing, \"2x 20\"\nPITCH_Z = 15    # mm  hole row spacing, \"1x 15\"\n\n# ---- Derived values ----\nCOL_X = [-PITCH_X, 0.0, PITCH_X]                 # 3 columns, centered (2x20 = 40 span)\nROW_Z = [H / 2 - PITCH_Z / 2, H / 2 + PITCH_Z / 2]  # 2 rows, centered in height\n\nwith BuildPart() as bp:\n    # Outer envelope, bottom face on Z = 0\n    Box(L, W, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # 4x R3 on the vertical outer corners (done before hollowing)\n    fillet(bp.edges().filter_by(Axis.Z), radius=R_CORNER)\n\n    # Open-top cavity: uniform 2 mm walls, 2 mm bottom\n    with Locations((0, 0, T)):\n        Box(L - 2 * T, W - 2 * T, H - T,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # 6x D4 THRU in the front (-Y) wall, 3x2 grid, axes along Y\n    with Locations([(x, -W / 2 + T / 2, z) for x in COL_X for z in ROW_Z]):\n        Cylinder(radius=HOLE_D / 2, height=T + 2, rotation=(90, 0, 0),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     40.0
+    ],
+    "volume_mm3": 29811.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 21,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 10,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.1,
+   "usage": {
+    "input_tokens": 7405,
+    "output_tokens": 408
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0730e4f2-e958-00df-1708-5486efc8747d",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7051,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7051,
+  "ag_final_cand": 1,
+  "best_iou": 0.7051,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 56.5,
+  "t_agentic_s": 64.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 6368
+  },
+  "total_tokens": {
+   "in": 11515,
+   "out": 6776
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7051
+ }
+}

@@ -1,0 +1,76 @@
+{
+ "uid": "00d1e3d6-db1e-758d-94e6-76e246cf7349",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 84.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 13817
+   },
+   "plan": "**Views identified:** Upper-left = TOP view (square plate outline, 5 hole circles in one horizontal row, cutting plane A\u2013A through the hole row). Lower-left = FRONT view (thin plate, thickness 6, hidden lines of the blind holes, \"C0.5\" leaders on both top corners). Lower-middle = RIGHT side view (plate edge, \"40\" dimensioned from the plate edge to the hole centreline \u2014 the text/span sits on the left half of the view, so it is edge-to-centre, not overall; \"C0.5\" on both top corners). Lower-right = SECTION A\u2013A (confirms 5 blind holes from the top face, not through). ISO shows a square plate with a centred row of 5 small bosses/holes.\n\n**Dimension chains:**\n- X: 16 (edge\u2192hole 1) + 4\u00d712 (hole-to-hole) + 16 (right margin mirrors left, holes centred) = **80**\n- Y: 40 (edge\u2192hole centreline) \u00d7 2 (row centred) = **80** \u2014 matches the square top view and ISO\n- Z (thickness): **6** (front view)\n\n**Features:**\n- 5\u00d7 \u23005 blind holes, depth 4.5 from the top face (leaves 1.5 floor, per Section A\u2013A), pitch 12, first hole 16 from the left edge \u2192 centres at X = \u221224, \u221212, 0, +12, +24; row on the Y centreline.\n- C0.5 (0.5 mm \u00d7 45\u00b0) chamfer on the top perimeter edges (called out in front and side views).",
+   "text": "<plan>\n**Views identified:** Upper-left = TOP view (square plate outline, 5 hole circles in one horizontal row, cutting plane A\u2013A through the hole row). Lower-left = FRONT view (thin plate, thickness 6, hidden lines of the blind holes, \"C0.5\" leaders on both top corners). Lower-middle = RIGHT side view (plate edge, \"40\" dimensioned from the plate edge to the hole centreline \u2014 the text/span sits on the left half of the view, so it is edge-to-centre, not overall; \"C0.5\" on both top corners). Lower-right = SECTION A\u2013A (confirms 5 blind holes from the top face, not through). ISO shows a square plate with a centred row of 5 small bosses/holes.\n\n**Dimension chains:**\n- X: 16 (edge\u2192hole 1) + 4\u00d712 (hole-to-hole) + 16 (right margin mirrors left, holes centred) = **80**\n- Y: 40 (edge\u2192hole centreline) \u00d7 2 (row centred) = **80** \u2014 matches the square top view and ISO\n- Z (thickness): **6** (front view)\n\n**Features:**\n- 5\u00d7 \u23005 blind holes, depth 4.5 from the top face (leaves 1.5 floor, per Section A\u2013A), pitch 12, first hole 16 from the left edge \u2192 centres at X = \u221224, \u221212, 0, +12, +24; row on the Y centreline.\n- C0.5 (0.5 mm \u00d7 45\u00b0) chamfer on the top perimeter edges (called out in front and side views).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nedge_to_first_hole = 16   # mm - top view: left edge to 1st hole centre\nhole_pitch = 12           # mm - top view: \"4x 12\" between adjacent hole centres\nhole_count = 5            #     - callout \"5x \u23005 \u2193 4.5\"\nhole_diameter = 5         # mm - hole callout\nhole_depth = 4.5          # mm - blind depth from top face (Section A-A: not thru)\nedge_to_hole_row = 40     # mm - side view: plate edge to hole-row centreline\nplate_thickness = 6       # mm - front view\ntop_chamfer = 0.5         # mm - \"C0.5\" on top corners (front & side views)\n\n# ---------- derived overall sizes ----------\n# X chain: 16 + 4*12 + 16 (right margin mirrors the left) = 80\nplate_length = 2 * edge_to_first_hole + (hole_count - 1) * hole_pitch\n# Y: hole row centred, 40 each side -> 80 (square plate, per top/ISO views)\nplate_width = 2 * edge_to_hole_row\n\nwith BuildPart() as bp:\n    # base plate 80 x 80 x 6, bottom face on Z=0\n    Box(plate_length, plate_width, plate_thickness,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # C0.5 x 45 deg chamfer around the top perimeter edges\n    chamfer(bp.edges().group_by(Axis.Z)[-1], top_chamfer)\n\n    # five blind holes \u23005 x 4.5 deep from the top face, row centred in Y\n    x_first = -plate_length / 2 + edge_to_first_hole\n    with Locations([(x_first + i * hole_pitch, 0, plate_thickness)\n                    for i in range(hole_count)]):\n        Cylinder(hole_diameter / 2, hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     6.0
+    ],
+    "volume_mm3": 37919.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.4,
+   "usage": {
+    "input_tokens": 6935,
+    "output_tokens": 806
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "00d1e3d6-db1e-758d-94e6-76e246cf7349",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9984,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9984,
+  "ag_final_cand": 1,
+  "best_iou": 0.9984,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 86.9,
+  "t_agentic_s": 96.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 13817
+  },
+  "total_tokens": {
+   "in": 11045,
+   "out": 14623
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9984
+ }
+}

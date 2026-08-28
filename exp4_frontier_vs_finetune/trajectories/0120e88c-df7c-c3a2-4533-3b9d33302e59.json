@@ -1,0 +1,104 @@
+{
+ "uid": "0120e88c-df7c-c3a2-4533-3b9d33302e59",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 79.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 12433
+   },
+   "plan": "Views (third\u2011angle): upper\u2011left rectangle = TOP (plan, XY); the thin strip directly below it = FRONT (XZ); the thin strip to the right of the front = RIGHT side (YZ); pictorial = ISO (NTS).\n\nAxis extents (all given as OVERALL dimensions, no chain needed):\n- X = 80 (front view and top view overall).\n- Y = 60 (right side view overall \"60\"). Cross\u2011checks with the plan height.\n- Z = 5 (front view thickness \"5\").\n\nFeatures:\n- C1 chamfers: called out on the top and bottom edges in the front view and at the front edge in plan. The plan corners remain square, so only the 8 horizontal perimeter edges (top face loop + bottom face loop) get a 1 mm 45\u00b0 chamfer; the 4 vertical corner edges stay sharp.\n- Blind rectangular slot on the TOP face, callout \"2 \u00d7 20 \u00d7 2.5 DEEP\" = one recess 2 mm (Y) \u00d7 20 mm (X), 2.5 mm deep (not through; plate is 5 thick). Position: top view \"40\" to the slot centre (= 80/2, so centred in X); right view \"52.5\" from the front edge to the slot centre (overall Y = 60, i.e. near the back edge \u2014 matches the ISO). Front view shows it dashed (hidden), consistent with a top recess near the back.\n\nSlot solid: centre (x=40, y=52.5), spanning z from 5\u22122.5 = 2.5 up to 5.",
+   "text": "<plan>\nViews (third\u2011angle): upper\u2011left rectangle = TOP (plan, XY); the thin strip directly below it = FRONT (XZ); the thin strip to the right of the front = RIGHT side (YZ); pictorial = ISO (NTS).\n\nAxis extents (all given as OVERALL dimensions, no chain needed):\n- X = 80 (front view and top view overall).\n- Y = 60 (right side view overall \"60\"). Cross\u2011checks with the plan height.\n- Z = 5 (front view thickness \"5\").\n\nFeatures:\n- C1 chamfers: called out on the top and bottom edges in the front view and at the front edge in plan. The plan corners remain square, so only the 8 horizontal perimeter edges (top face loop + bottom face loop) get a 1 mm 45\u00b0 chamfer; the 4 vertical corner edges stay sharp.\n- Blind rectangular slot on the TOP face, callout \"2 \u00d7 20 \u00d7 2.5 DEEP\" = one recess 2 mm (Y) \u00d7 20 mm (X), 2.5 mm deep (not through; plate is 5 thick). Position: top view \"40\" to the slot centre (= 80/2, so centred in X); right view \"52.5\" from the front edge to the slot centre (overall Y = 60, i.e. near the back edge \u2014 matches the ISO). Front view shows it dashed (hidden), consistent with a top recess near the back.\n\nSlot solid: centre (x=40, y=52.5), spanning z from 5\u22122.5 = 2.5 up to 5.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nplate_x = 80.0       # mm  overall length (front & top views)\nplate_y = 60.0       # mm  overall depth (right side view, overall \"60\")\nplate_z = 5.0        # mm  plate thickness (front view \"5\")\nedge_chamfer = 1.0   # mm  C1 chamfer called out on the plate edges\n\nslot_wid = 2.0       # mm  recess width along Y  (callout \"2 x ...\")\nslot_len = 20.0      # mm  recess length along X (callout \"... x 20 x ...\")\nslot_depth = 2.5     # mm  recess depth          (callout \"... 2.5 DEEP\")\nslot_cx = 40.0       # mm  slot centre from left edge (top view) = plate_x/2\nslot_cy = 52.5       # mm  slot centre from front edge (right side view)\n\nwith BuildPart() as bp:\n    # base plate, front-left-bottom corner at the origin\n    Box(plate_x, plate_y, plate_z,\n        align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # C1 on the top and bottom perimeter edges only\n    # (plan corners stay square -> vertical corner edges are NOT chamfered)\n    perim_edges = [e for e in bp.edges()\n                   if abs(e.center().Z) < 1e-6\n                   or abs(e.center().Z - plate_z) < 1e-6]\n    chamfer(perim_edges, edge_chamfer)\n\n    # blind rectangular slot on the top face (sharp edges, cut after chamfer)\n    with Locations((slot_cx, slot_cy, plate_z - slot_depth)):\n        Box(slot_len, slot_wid, slot_depth,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     5.0
+    ],
+    "volume_mm3": 23622.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 19,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 97.8,
+   "usage": {
+    "input_tokens": 6771,
+    "output_tokens": 12931
+   },
+   "plan": "Comparison of my render vs the original drawing:\n\n- Extents: 80 \u00d7 60 \u00d7 5 \u2713 (all given as overalls; no chains).\n- Slot: 2 \u00d7 20 \u00d7 2.5 deep, centre X = 40 (top view), centre Y = 52.5 from the front edge (right view) \u2014 position and hidden-line appearance match in all three views \u2713.\n- Chamfers: MISMATCH. My render chamfers only the 8 horizontal (top/bottom perimeter) edges, so the plan corners stay square and the front view shows only angled corners. The original drawing has C1 callouts in BOTH the plan (arrows at the two front corners \u2192 vertical corner edges chamfered, seen as diagonal corners in plan) AND the front view (C1 at top and bottom \u2192 top/bottom perimeter edges chamfered). The front view's left end shows the tell-tale inset vertical line with small corner diagonals, and the ISO view shows a chamfer on the near vertical corner. Conclusion: ALL 12 outer edges of the plate carry the C1 chamfer.\n\nFix: chamfer all edges of the base box (C1), then cut the blind slot (slot edges stay sharp, no chamfer callout on the slot). Slot sits at x 30\u201350, y 51.5\u201353.5, z 2.5\u20135, entirely on the flat top face, clear of the chamfers.",
+   "text": "<plan>\nComparison of my render vs the original drawing:\n\n- Extents: 80 \u00d7 60 \u00d7 5 \u2713 (all given as overalls; no chains).\n- Slot: 2 \u00d7 20 \u00d7 2.5 deep, centre X = 40 (top view), centre Y = 52.5 from the front edge (right view) \u2014 position and hidden-line appearance match in all three views \u2713.\n- Chamfers: MISMATCH. My render chamfers only the 8 horizontal (top/bottom perimeter) edges, so the plan corners stay square and the front view shows only angled corners. The original drawing has C1 callouts in BOTH the plan (arrows at the two front corners \u2192 vertical corner edges chamfered, seen as diagonal corners in plan) AND the front view (C1 at top and bottom \u2192 top/bottom perimeter edges chamfered). The front view's left end shows the tell-tale inset vertical line with small corner diagonals, and the ISO view shows a chamfer on the near vertical corner. Conclusion: ALL 12 outer edges of the plate carry the C1 chamfer.\n\nFix: chamfer all edges of the base box (C1), then cut the blind slot (slot edges stay sharp, no chamfer callout on the slot). Slot sits at x 30\u201350, y 51.5\u201353.5, z 2.5\u20135, entirely on the flat top face, clear of the chamfers.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nplate_x = 80.0       # mm  overall length (front & top views)\nplate_y = 60.0       # mm  overall depth (right side view, overall \"60\")\nplate_z = 5.0        # mm  plate thickness (front view \"5\")\nedge_chamfer = 1.0   # mm  C1 chamfer on the plate edges\n                     #     (plan callouts at the corners -> vertical corner edges;\n                     #      front view callouts top & bottom -> top/bottom perimeter edges)\n\nslot_wid = 2.0       # mm  recess width along Y  (callout \"2 x ...\")\nslot_len = 20.0      # mm  recess length along X (callout \"... x 20 x ...\")\nslot_depth = 2.5     # mm  recess depth          (callout \"... 2.5 DEEP\")\nslot_cx = 40.0       # mm  slot centre from left edge (top view) = plate_x/2\nslot_cy = 52.5       # mm  slot centre from front edge (right side view)\n\nwith BuildPart() as bp:\n    # base plate, front-left-bottom corner at the origin\n    Box(plate_x, plate_y, plate_z,\n        align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # C1 on ALL outer edges of the plate:\n    # 8 top/bottom perimeter edges + 4 vertical corner edges\n    chamfer(bp.edges(), edge_chamfer)\n\n    # blind rectangular slot on the top face (sharp edges, cut after chamfer)\n    with Locations((slot_cx, slot_cy, plate_z - slot_depth)):\n        Box(slot_len, slot_wid, slot_depth,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     5.0
+    ],
+    "volume_mm3": 23615.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 31,
+    "n_planar_faces": 31,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 2.6,
+   "usage": {
+    "input_tokens": 7722,
+    "output_tokens": 243
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0120e88c-df7c-c3a2-4533-3b9d33302e59",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9916,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9916,
+  "ag_final_cand": 2,
+  "best_iou": 0.9916,
+  "best_cand": 1,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 82.3,
+  "t_agentic_s": 192.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 12433
+  },
+  "total_tokens": {
+   "in": 18603,
+   "out": 25607
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9916,
+  "2": 0.9916
+ }
+}

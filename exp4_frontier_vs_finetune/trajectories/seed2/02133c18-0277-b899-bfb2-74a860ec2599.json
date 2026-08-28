@@ -1,0 +1,77 @@
+{
+ "uid": "02133c18-0277-b899-bfb2-74a860ec2599",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 215.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 5273
+   },
+   "plan": "Views (third-angle): the rectangle-with-holes at upper-left is the TOP (plan, XY from +Z); the thin strip directly below it is the FRONT (XZ); the thin strip to the right of the front is the RIGHT side (YZ). ISO confirms a flat chamfered plate.\n\nAxis chains:\n- X (top & front): overall = 90. Stacked from left edge: 15 (to left hole column), 45 (to centre = 90/2), 75 (to right hole column). Check: (15+75)/2 = 45 \u2713. Hole columns at x = 15 and 75 \u2192 offset from centre = \u00b130.\n- Y (top & right): overall = 70. Stacked from front edge: 15 (to front hole row), 35 (to centre = 70/2), 55 (to back row). Check: (15+55)/2 = 35 \u2713. Hole rows at y = 15 and 55 \u2192 offset from centre = \u00b120.\n- Z (front & right): thickness = 5.\n\nFeatures: 4\u00d7 \u23006 THRU at (\u00b130, \u00b120); 1\u00d7 \u230010 THRU at centre (0,0). C0.5 (45\u00b0 \u00d7 0.5 mm) called out on all four plan corners and on the top/bottom edges in both elevations \u2192 chamfer every exterior edge of the plate (the 12 box edges) by 0.5. Holes are cut after chamfering so hole walls stay sharp (no chamfer called out on holes).",
+   "text": "<plan>\nViews (third-angle): the rectangle-with-holes at upper-left is the TOP (plan, XY from +Z); the thin strip directly below it is the FRONT (XZ); the thin strip to the right of the front is the RIGHT side (YZ). ISO confirms a flat chamfered plate.\n\nAxis chains:\n- X (top & front): overall = 90. Stacked from left edge: 15 (to left hole column), 45 (to centre = 90/2), 75 (to right hole column). Check: (15+75)/2 = 45 \u2713. Hole columns at x = 15 and 75 \u2192 offset from centre = \u00b130.\n- Y (top & right): overall = 70. Stacked from front edge: 15 (to front hole row), 35 (to centre = 70/2), 55 (to back row). Check: (15+55)/2 = 35 \u2713. Hole rows at y = 15 and 55 \u2192 offset from centre = \u00b120.\n- Z (front & right): thickness = 5.\n\nFeatures: 4\u00d7 \u23006 THRU at (\u00b130, \u00b120); 1\u00d7 \u230010 THRU at centre (0,0). C0.5 (45\u00b0 \u00d7 0.5 mm) called out on all four plan corners and on the top/bottom edges in both elevations \u2192 chamfer every exterior edge of the plate (the 12 box edges) by 0.5. Holes are cut after chamfering so hole walls stay sharp (no chamfer called out on holes).\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nplate_x = 90.0      # mm  overall X (top view bottom dim / front view)\nplate_y = 70.0      # mm  overall Y (right view \"70\")\nplate_t = 5.0       # mm  thickness (front/right view \"5\")\n\ndim_x_left   = 15.0  # mm  left edge -> left hole column\ndim_x_center = 45.0  # mm  left edge -> centre (= plate_x/2)\ndim_x_right  = 75.0  # mm  left edge -> right hole column\ndim_y_front  = 15.0  # mm  front edge -> front hole row\ndim_y_center = 35.0  # mm  front edge -> centre (= plate_y/2)\ndim_y_back   = 55.0  # mm  front edge -> back hole row\n\nd_small = 6.0   # mm  4x dia-6 THRU\nd_big   = 10.0  # mm  dia-10 THRU (centre)\ncham    = 0.5   # mm  C0.5 chamfer on all exterior edges\n\n# ---- derived ----\nhole_x = (dim_x_right - dim_x_left) / 2.0   # (75-15)/2 = 30\nhole_y = (dim_y_back - dim_y_front) / 2.0   # (55-15)/2 = 20\n# consistency: (dim_x_left+dim_x_right)/2 == dim_x_center == plate_x/2\n#              (dim_y_front+dim_y_back)/2 == dim_y_center == plate_y/2\n\nwith BuildPart() as bp:\n    # base plate, centred in XY, sitting on Z=0\n    Box(plate_x, plate_y, plate_t,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # C0.5 on every exterior edge (4 plan corners + top/bottom rims)\n    chamfer(edges(), length=cham)\n\n    # centre hole: dia 10 THRU\n    with Locations((0.0, 0.0, plate_t / 2.0)):\n        Cylinder(d_big / 2.0, plate_t + 4.0, mode=Mode.SUBTRACT)\n\n    # 4x dia 6 THRU at (\u00b130, \u00b120)\n    pts = [( hole_x,  hole_y, plate_t / 2.0),\n           ( hole_x, -hole_y, plate_t / 2.0),\n           (-hole_x,  hole_y, plate_t / 2.0),\n           (-hole_x, -hole_y, plate_t / 2.0)]\n    with Locations(pts):\n        Cylinder(d_small / 2.0, plate_t + 4.0, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     90.0,
+     70.0,
+     5.0
+    ],
+    "volume_mm3": 30462.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 31,
+    "n_planar_faces": 26,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.9,
+   "usage": {
+    "input_tokens": 6927,
+    "output_tokens": 268
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "02133c18-0277-b899-bfb2-74a860ec2599",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9006,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9006,
+  "ag_final_cand": 1,
+  "best_iou": 0.9006,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 218.8,
+  "t_agentic_s": 225.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 5273
+  },
+  "total_tokens": {
+   "in": 11037,
+   "out": 5541
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9006
+ }
+}

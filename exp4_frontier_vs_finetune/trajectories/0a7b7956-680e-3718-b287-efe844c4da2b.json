@@ -1,0 +1,77 @@
+{
+ "uid": "0a7b7956-680e-3718-b287-efe844c4da2b",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 701.8,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 21005
+   },
+   "plan": "Views: TOP (XY) upper-left, FRONT (XZ) below it, RIGHT (YZ) to the right of the front view, plus ISO (NTS).\n\nForm: a flat stepped-width bar (dog-bone-like): a wide left pad (full 30 mm width) transitioning to a narrower central/right waist (15 mm, centered), constant thickness.\n\nAxis chains:\n- X: overall = 120 (direct overall dim). Component dims: 10 = left edge \u2192 first \u23006 hole center; 30 = pitch between the two \u23006 holes \u2192 holes at X = 10 and X = 40; 114 = left edge \u2192 \u230010 hole center (so the \u230010 hole sits 6 mm from the right end). The wide-pad length is not directly dimensioned; it is set by equal 10 mm margins around the hole pair: 10 + 30 + 10 = 50, so the step is at X = 50 and the waist runs 50 \u2192 120.\n- Y: overall = 30 (right view); waist width = 15, centered (right view inner dim). Step is symmetric: 7.5 mm in from each side.\n- Z: thickness = 16 (front view).\n\nFeatures:\n- Wide pad: X 0\u201350, full 30 mm width.\n- Narrow waist: X 50\u2013120, 15 mm wide, centered (Y 7.5\u201322.5).\n- 2\u00d7 \u23006 THRU (vertical, through the 16 mm thickness) at (10, 15) and (40, 15).\n- \u230010 THRU at (114, 15), in the waist near the right end.\n- No chamfers/fillets called out.",
+   "text": "<plan>\nViews: TOP (XY) upper-left, FRONT (XZ) below it, RIGHT (YZ) to the right of the front view, plus ISO (NTS).\n\nForm: a flat stepped-width bar (dog-bone-like): a wide left pad (full 30 mm width) transitioning to a narrower central/right waist (15 mm, centered), constant thickness.\n\nAxis chains:\n- X: overall = 120 (direct overall dim). Component dims: 10 = left edge \u2192 first \u23006 hole center; 30 = pitch between the two \u23006 holes \u2192 holes at X = 10 and X = 40; 114 = left edge \u2192 \u230010 hole center (so the \u230010 hole sits 6 mm from the right end). The wide-pad length is not directly dimensioned; it is set by equal 10 mm margins around the hole pair: 10 + 30 + 10 = 50, so the step is at X = 50 and the waist runs 50 \u2192 120.\n- Y: overall = 30 (right view); waist width = 15, centered (right view inner dim). Step is symmetric: 7.5 mm in from each side.\n- Z: thickness = 16 (front view).\n\nFeatures:\n- Wide pad: X 0\u201350, full 30 mm width.\n- Narrow waist: X 50\u2013120, 15 mm wide, centered (Y 7.5\u201322.5).\n- 2\u00d7 \u23006 THRU (vertical, through the 16 mm thickness) at (10, 15) and (40, 15).\n- \u230010 THRU at (114, 15), in the waist near the right end.\n- No chamfers/fillets called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL_total   = 120   # mm  overall length (X), top view dim \"120\"\nW_total   = 30    # mm  overall width (Y), right view dim \"30\"\nT         = 16    # mm  thickness (Z), front view dim \"16\"\nhole1_x   = 10    # mm  first \u23006 hole centre from left edge, dim \"10\"\nhole_pitch = 30   # mm  pitch between the two \u23006 holes, dim \"30\"\nmargin    = 10    # mm  pad margin after 2nd hole (matches left margin)\npad_len   = hole1_x + hole_pitch + margin   # mm wide pad length = 50\nW_narrow  = 15    # mm  narrow waist width, right view dim \"15\"\nhole_big_x = 114  # mm  \u230010 hole centre from left edge, dim \"114\"\nd_small   = 6     # mm  2\u00d7 \u23006 THRU\nd_big     = 10    # mm  \u230010 THRU\n\nhole2_x = hole1_x + hole_pitch   # mm second \u23006 hole centre (40)\ncy = W_total / 2                 # mm longitudinal hole centreline (Y = 15)\n\nwith BuildPart() as bp:\n    # wide end pad: X 0..50, full 30 mm width\n    with Locations((pad_len / 2, cy, T / 2)):\n        Box(pad_len, W_total, T)\n    # narrow waist: X 50..120, 15 mm wide, centred in Y\n    with Locations(((pad_len + L_total) / 2, cy, T / 2)):\n        Box(L_total - pad_len, W_narrow, T)\n    # 2\u00d7 \u23006 through holes\n    with Locations((hole1_x, cy, T / 2), (hole2_x, cy, T / 2)):\n        Cylinder(radius=d_small / 2, height=T + 2, mode=Mode.SUBTRACT)\n    # \u230010 through hole near the right end\n    with Locations((hole_big_x, cy, T / 2)):\n        Cylinder(radius=d_big / 2, height=T + 2, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     120.0,
+     30.0,
+     16.0
+    ],
+    "volume_mm3": 38644.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 13,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.2,
+   "usage": {
+    "input_tokens": 6539,
+    "output_tokens": 647
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0a7b7956-680e-3718-b287-efe844c4da2b",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5019,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5019,
+  "ag_final_cand": 1,
+  "best_iou": 0.5019,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 704.9,
+  "t_agentic_s": 713.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 21005
+  },
+  "total_tokens": {
+   "in": 10649,
+   "out": 21652
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5019
+ }
+}

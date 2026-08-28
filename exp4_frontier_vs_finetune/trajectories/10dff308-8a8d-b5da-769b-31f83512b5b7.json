@@ -1,0 +1,76 @@
+{
+ "uid": "10dff308-8a8d-b5da-769b-31f83512b5b7",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 166.8,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 26310
+   },
+   "plan": "Views (third\u2011angle): upper\u2011left = TOP (XY), lower\u2011left = FRONT (XZ), view to its right = RIGHT (YZ, width 50). ISO (NTS) confirms a flat base with square pins on top and round blind holes in the side faces.\n\nAxis chains / extents\n- X (top ordinate dims from left edge): feature lines at 10, 25, 40, 55 and overall 70 \u2192 overall X = 70 (no chain needed; 70 is given). Pin columns at X = 10/25/40/55 (15 mm pitch).\n- Y: RIGHT view gives the overall depth directly = 50. Pin rows by the same \"10 edge + 15 pitch\" logic inside 50: 10 + 15 + 15 + 10 = 50 \u2192 rows at Y = 10/25/40 (middle row on the centreline 25, symmetric).\n- Z (front view, three stacked levels from the base bottom): 20 (top of base), 30 (top of short pins), 35 (top of tall pins = overall height). So base = 20, short pins = 30\u221220 = 10, tall pins = 35\u221220 = 15.\n\nFeatures\n- Base block 70 (X) \u00d7 50 (Y) \u00d7 20 (Z); C2 (2 mm, 45\u00b0) on the four vertical corner edges (called out 4\u00d7 in the top view).\n- Square pins on the top face: cross\u2011section 2 \u00d7 2 (the repeated \"2\" callouts; clearly smaller than the \u00d86 hidden\u2011hole rectangles). Grid = X{10,25,40,55} \u00d7 Y{10,25,40} = 12 pins. Field pins height 10 (to level 30); the four corner pins of the grid height 15 (to level 35) so the overall height equals the dimensioned 35.\n- Blind holes: two callouts \"3\u00d7 \u00d86 \u21934\" = 3 holes on the front face (Y=0) + 3 on the back face (Y=50), each \u00d86, 4 mm deep (confirmed by the dashed rectangles on both edges of the top view and the hidden rectangles on both edges of the right view). Spacing \"2\u00d7 20\" \u2192 pitch 20, centred on X: 35\u221220, 35, 35+20 = 15/35/55. Axis height = mid of the 20 mm face = 10.",
+   "text": "<plan>\nViews (third\u2011angle): upper\u2011left = TOP (XY), lower\u2011left = FRONT (XZ), view to its right = RIGHT (YZ, width 50). ISO (NTS) confirms a flat base with square pins on top and round blind holes in the side faces.\n\nAxis chains / extents\n- X (top ordinate dims from left edge): feature lines at 10, 25, 40, 55 and overall 70 \u2192 overall X = 70 (no chain needed; 70 is given). Pin columns at X = 10/25/40/55 (15 mm pitch).\n- Y: RIGHT view gives the overall depth directly = 50. Pin rows by the same \"10 edge + 15 pitch\" logic inside 50: 10 + 15 + 15 + 10 = 50 \u2192 rows at Y = 10/25/40 (middle row on the centreline 25, symmetric).\n- Z (front view, three stacked levels from the base bottom): 20 (top of base), 30 (top of short pins), 35 (top of tall pins = overall height). So base = 20, short pins = 30\u221220 = 10, tall pins = 35\u221220 = 15.\n\nFeatures\n- Base block 70 (X) \u00d7 50 (Y) \u00d7 20 (Z); C2 (2 mm, 45\u00b0) on the four vertical corner edges (called out 4\u00d7 in the top view).\n- Square pins on the top face: cross\u2011section 2 \u00d7 2 (the repeated \"2\" callouts; clearly smaller than the \u00d86 hidden\u2011hole rectangles). Grid = X{10,25,40,55} \u00d7 Y{10,25,40} = 12 pins. Field pins height 10 (to level 30); the four corner pins of the grid height 15 (to level 35) so the overall height equals the dimensioned 35.\n- Blind holes: two callouts \"3\u00d7 \u00d86 \u21934\" = 3 holes on the front face (Y=0) + 3 on the back face (Y=50), each \u00d86, 4 mm deep (confirmed by the dashed rectangles on both edges of the top view and the hidden rectangles on both edges of the right view). Spacing \"2\u00d7 20\" \u2192 pitch 20, centred on X: 35\u221220, 35, 35+20 = 15/35/55. Axis height = mid of the 20 mm face = 10.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 70                  # mm  overall width X (top view, overall dim)\nW = 50                  # mm  overall depth Y (right side view)\nH_base = 20             # mm  base block height (front view, lowest level)\nH_mid = 30              # mm  level: top of the short pins (front view)\nH_top = 35              # mm  level: top of the tall pins = overall height (front view)\nC2 = 2                  # mm  45 deg chamfer leg on the 4 vertical base corners (C2)\n\npin = 2                 # mm  square pin cross-section (repeated \"2\" callouts, top view)\npin_h_short = H_mid - H_base        # mm = 10\npin_h_tall = H_top - H_base         # mm = 15\npin_xs = [10, 25, 40, 55]           # mm  pin columns, ordinate from left edge (top view)\npin_ys = [10, 25, 40]               # mm  pin rows: 10 edge + 15 pitch inside W=50\n\nhole_d = 6                # mm  blind-hole diameter (\u00d86)\nhole_depth = 4            # mm  blind-hole depth (\u21934): 3 off front + 3 off back\nhole_z = H_base / 2       # mm  hole axis height = 10 (centred in the 20 mm face)\nhole_pitch = 20           # mm  \"2x 20\" spacing of the three holes\nhole_xs = [L / 2 - hole_pitch, L / 2, L / 2 + hole_pitch]  # mm = 15, 35, 55 (centred)\novercut = 1               # mm  extra length so each blind hole opens cleanly at the face\n\nx0, x1 = min(pin_xs), max(pin_xs)\ny0, y1 = min(pin_ys), max(pin_ys)\n\nwith BuildPart() as bp:\n    # base block, front-left-bottom corner at the origin\n    Box(L, W, H_base, align=(Align.MIN, Align.MIN, Align.MIN))\n    # C2 on the four vertical corner edges\n    chamfer(bp.part.edges().filter_by(Axis.Z), length=C2)\n\n    # square pins standing on the top face (z = H_base); grid corners are the tall pins\n    for x in pin_xs:\n        for y in pin_ys:\n            h = pin_h_tall if (x in (x0, x1) and y in (y0, y1)) else pin_h_short\n            with Locations((x, y, H_base)):\n                Box(pin, pin, h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # 3x \u00d86 \u21934 on the front face (y=0, axis +Y) and 3x on the back face (y=W, axis -Y)\n    front_c = (hole_depth - overcut) / 2   # cylinder centre -> spans y=-overcut .. hole_depth\n    back_c = W - front_c                   # spans y=W-hole_depth .. W+overcut\n    cyl_len = hole_depth + overcut\n    centres = [(x, front_c, hole_z) for x in hole_xs] + \\\n              [(x, back_c, hole_z) for x in hole_xs]\n    with Locations(*centres):\n        Cylinder(radius=hole_d / 2, height=cyl_len,\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 rotation=(90, 0, 0), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     50.0,
+     35.0
+    ],
+    "volume_mm3": 69723.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 82,
+    "n_planar_faces": 76,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.1,
+   "usage": {
+    "input_tokens": 7848,
+    "output_tokens": 932
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "10dff308-8a8d-b5da-769b-31f83512b5b7",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8643,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8643,
+  "ag_final_cand": 1,
+  "best_iou": 0.8643,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 170.5,
+  "t_agentic_s": 180.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 26310
+  },
+  "total_tokens": {
+   "in": 11958,
+   "out": 27242
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.8643
+ }
+}

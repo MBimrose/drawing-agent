@@ -1,0 +1,90 @@
+{
+ "uid": "0e14533a-a751-9f25-2cd8-9e95126e2806",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1996.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 23934
+   },
+   "plan": "**Views identified:** Top (plan) upper-left; Front below it; Right view to the right of front; Section A\u2013A (cut along the X centerline of the top view) far right; ISO pictorial (NTS).\n\n**Dimension chains / extents:**\n- X: overall 80 (top & front views). Feature centered at 40 (= 80/2, dimensioned from left edge).\n- Y: overall 50 (right view). Hole centered at 25 (= 50/2, dimensioned from front edge).\n- Z: overall 60 (front view). No chains needed \u2014 all axes give direct overalls.\n\n**Features:**\n1. Dovetail slot across the full top, running front-to-back (Y): top view shows its edges as lines parallel to Y; front view shows its trapezoid cross-section in *solid* lines (it breaks the front/back faces); right view shows it hidden. Callout \"\u2304 \u230024 \u00d7 29.9\u00b0\": opening width 24, walls at 29.9\u00b0 from the axis \u2192 depth = (24\u221216)/2 / tan(29.9\u00b0) \u2248 6.96, narrowing to 16.\n2. Blind hole \"\u230016 \u219330\": \u230016, 30 mm deep from the top face, at (40, 25) \u2014 shown as dashed rectangle below the trapezoid in front/right views and sectioned in A\u2013A.\n3. \"2\u00d7 R3\": fillets on the two top edges of the dovetail slot (the quarter-round scallops seen at the trapezoid's top corners in the front view and section A\u2013A).\n4. \"C2\": 45\u00b0 chamfers, 2 mm, on the four bottom perimeter edges (called out at bottom corners of both front and right views).",
+   "text": "<plan>\n**Views identified:** Top (plan) upper-left; Front below it; Right view to the right of front; Section A\u2013A (cut along the X centerline of the top view) far right; ISO pictorial (NTS).\n\n**Dimension chains / extents:**\n- X: overall 80 (top & front views). Feature centered at 40 (= 80/2, dimensioned from left edge).\n- Y: overall 50 (right view). Hole centered at 25 (= 50/2, dimensioned from front edge).\n- Z: overall 60 (front view). No chains needed \u2014 all axes give direct overalls.\n\n**Features:**\n1. Dovetail slot across the full top, running front-to-back (Y): top view shows its edges as lines parallel to Y; front view shows its trapezoid cross-section in *solid* lines (it breaks the front/back faces); right view shows it hidden. Callout \"\u2304 \u230024 \u00d7 29.9\u00b0\": opening width 24, walls at 29.9\u00b0 from the axis \u2192 depth = (24\u221216)/2 / tan(29.9\u00b0) \u2248 6.96, narrowing to 16.\n2. Blind hole \"\u230016 \u219330\": \u230016, 30 mm deep from the top face, at (40, 25) \u2014 shown as dashed rectangle below the trapezoid in front/right views and sectioned in A\u2013A.\n3. \"2\u00d7 R3\": fillets on the two top edges of the dovetail slot (the quarter-round scallops seen at the trapezoid's top corners in the front view and section A\u2013A).\n4. \"C2\": 45\u00b0 chamfers, 2 mm, on the four bottom perimeter edges (called out at bottom corners of both front and right views).\n</plan>\n\n```python\nfrom build123d import *\nimport math\n\n# --- Dimensions read from the drawing ---\nW = 80.0             # mm  overall width (X), top & front views\nD = 50.0             # mm  overall depth (Y), right view\nH = 60.0             # mm  overall height (Z), front view\nhole_d = 16.0        # mm  hole diameter (\u230016)\nhole_depth = 30.0    # mm  hole depth from top face (\u219330, blind)\ndove_w = 24.0        # mm  dovetail opening width (\u230024)\ndove_ang = 29.9      # deg dovetail wall angle from hole axis\nslot_r = 3.0         # mm  2\u00d7 R3 fillets on dovetail top edges\nc_bot = 2.0          # mm  C2 chamfers on bottom edges\ncx = 40.0            # mm  slot/hole center in X (dim 40)\ncy = 25.0            # mm  hole center in Y (dim 25)\n\n# derived: depth at which the 24-wide dovetail narrows to \u230016\ndove_depth = (dove_w - hole_d) / 2 / math.tan(math.radians(dove_ang))  # \u2248 6.96 mm\n\nwith BuildPart() as part:\n    # base block\n    Box(W, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # dovetail slot across the top, running the full depth in Y\n    with BuildSketch(Plane.XZ):\n        with BuildLine():\n            Polyline([\n                (cx - dove_w / 2, H),\n                (cx - hole_d / 2, H - dove_depth),\n                (cx + hole_d / 2, H - dove_depth),\n                (cx + dove_w / 2, H),\n            ], close=True)\n        make_face()\n    extrude(amount=D, both=True, mode=Mode.SUBTRACT)\n\n    # \u230016 blind hole, 30 mm deep from the top face\n    with Locations((cx, cy, H)):\n        Cylinder(radius=hole_d / 2, height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\n    # 2\u00d7 R3 fillets on the two top edges of the dovetail slot\n    slot_top_edges = (\n        part.edges()\n        .filter_by(Axis.Y)\n        .filter_by(lambda e: abs(e.center().Z - H) < 1e-3\n                   and abs(abs(e.center().X - cx) - dove_w / 2) < 1e-3)\n    )\n    fillet(slot_top_edges, radius=slot_r)\n\n    # C2 chamfers on the four bottom perimeter edges\n    bottom_edges = part.edges().filter_by(lambda e: abs(e.center().Z) < 1e-3)\n    chamfer(bottom_edges, length=c_bot)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 15.9,
+   "usage": {
+    "input_tokens": 5487,
+    "output_tokens": 2490
+   },
+   "plan": "The geometry built successfully \u2014 the failure was only at export: inside `with BuildPart() as part:`, the name `part` is the *builder*, not the solid. Fix: use a builder name (`bp`) inside the context, then bind the finished solid with `part = bp.part` before `export_step(part, ...)`.\n\nReading unchanged: 80 \u00d7 50 \u00d7 60 block; dovetail slot across the full top (opening 24, walls 29.9\u00b0 from axis, depth \u2248 6.96, narrowing to \u230016) running the full Y depth; \u230016 blind hole 30 deep from top at (40, 25); R3 fillets on the two slot top edges; C2 chamfers on the four bottom edges.",
+   "text": "<plan>\nThe geometry built successfully \u2014 the failure was only at export: inside `with BuildPart() as part:`, the name `part` is the *builder*, not the solid. Fix: use a builder name (`bp`) inside the context, then bind the finished solid with `part = bp.part` before `export_step(part, ...)`.\n\nReading unchanged: 80 \u00d7 50 \u00d7 60 block; dovetail slot across the full top (opening 24, walls 29.9\u00b0 from axis, depth \u2248 6.96, narrowing to \u230016) running the full Y depth; \u230016 blind hole 30 deep from top at (40, 25); R3 fillets on the two slot top edges; C2 chamfers on the four bottom edges.\n</plan>\n\n```python\nfrom build123d import *\nimport math\n\n# --- Dimensions read from the drawing ---\nW = 80.0             # mm  overall width (X), top & front views\nD = 50.0             # mm  overall depth (Y), right view\nH = 60.0             # mm  overall height (Z), front view\nhole_d = 16.0        # mm  hole diameter (\u230016)\nhole_depth = 30.0    # mm  hole depth from top face (\u219330, blind)\ndove_w = 24.0        # mm  dovetail opening width (\u230024)\ndove_ang = 29.9      # deg dovetail wall angle from hole axis\nslot_r = 3.0         # mm  2\u00d7 R3 fillets on dovetail top edges\nc_bot = 2.0          # mm  C2 chamfers on bottom edges\ncx = 40.0            # mm  slot/hole center in X (dim 40)\ncy = 25.0            # mm  hole center in Y (dim 25)\n\n# derived: depth at which the 24-wide dovetail narrows to \u230016\ndove_depth = (dove_w - hole_d) / 2 / math.tan(math.radians(dove_ang))  # \u2248 6.96 mm\n\nwith BuildPart() as bp:\n    # base block\n    Box(W, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # dovetail slot across the top, running the full depth in Y\n    with BuildSketch(Plane.XZ):\n        with BuildLine():\n            Polyline([\n                (cx - dove_w / 2, H),\n                (cx - hole_d / 2, H - dove_depth),\n                (cx + hole_d / 2, H - dove_depth),\n                (cx + dove_w / 2, H),\n            ], close=True)\n        make_face()\n    extrude(amount=D, both=True, mode=Mode.SUBTRACT)\n\n    # \u230016 blind hole, 30 mm deep from the top face\n    with Locations((cx, cy, H)):\n        Cylinder(radius=hole_d / 2, height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\n    # 2\u00d7 R3 fillets on the two top edges of the dovetail slot\n    slot_top_edges = (\n        bp.edges()\n        .filter_by(Axis.Y)\n        .filter_by(lambda e: abs(e.center().Z - H) < 1e-3\n                   and abs(abs(e.center().X - cx) - dove_w / 2) < 1e-3)\n    )\n    fillet(slot_top_edges, radius=slot_r)\n\n    # C2 chamfers on the four bottom perimeter edges\n    bottom_edges = bp.edges().filter_by(lambda e: abs(e.center().Z) < 1e-3)\n    chamfer(bottom_edges, length=c_bot)\n\n# bind the finished solid (not the builder) to `part`\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     50.0,
+     60.0
+    ],
+    "volume_mm3": 227864.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     8.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 4.8,
+   "usage": {
+    "input_tokens": 8960,
+    "output_tokens": 467
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0e14533a-a751-9f25-2cd8-9e95126e2806",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9598,
+  "ag_final_cand": 2,
+  "best_iou": 0.9598,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 1999.2,
+  "t_agentic_s": 2026.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 23934
+  },
+  "total_tokens": {
+   "in": 18557,
+   "out": 26891
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.9598
+ }
+}

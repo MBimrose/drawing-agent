@@ -1,0 +1,77 @@
+{
+ "uid": "00199e66-2f80-ae33-2603-60a317088932",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 69.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11679
+   },
+   "plan": "Views (third-angle): TOP view upper-left (XY from +Z), FRONT view below it (XZ from \u2212Y), RIGHT side view right of the front (YZ from +X), SECTION A\u2013A cut along the horizontal centerline of the top view, plus the NTS ISO.\n\nAxis chains:\n- X (top view, baseline dims from left edge): 15 = left hole column, 40 = part center, 65 = right hole column; overall 80. Check: 80 \u2212 65 = 15 \u2192 symmetric; hole columns at \u00b125 about center.\n- Y (right side view, baseline dims from front edge): 15 = front hole row, 30 = center, 45 = back row; overall 60. Check: 60 \u2212 45 = 15 \u2192 symmetric; hole rows at \u00b115 about center.\n- Z (front view): plate thickness 12 overall; central recess depth 6.\n\nFeatures:\n1. Rectangular plate 80 (X) \u00d7 60 (Y) \u00d7 12 (Z).\n2. Central blind pocket \u230030, 6 mm deep from the top face (confirmed by SECTION A\u2013A recess at top and hidden lines in front view).\n3. 4\u00d7 \u23005 THRU holes with \u230010 \u00d7 82\u00b0 countersinks from the top face, at (\u00b125, \u00b115) \u2014 countersinks visible in ISO and section.\n4. C1 chamfers called out on the four plate corners in the top view \u2192 1 mm 45\u00b0 chamfer on the four vertical corner edges (visible on the ISO corner).\n\nConstruction: Box for the plate; subtract a cylinder for the blind pocket; at each of the 4 hole locations subtract a through cylinder plus a cone (frustum \u23005\u2192\u230010, height = 2.5/tan(41\u00b0) \u2248 2.88) for the countersink; finally chamfer the Z-parallel edges by 1.",
+   "text": "<plan>\nViews (third-angle): TOP view upper-left (XY from +Z), FRONT view below it (XZ from \u2212Y), RIGHT side view right of the front (YZ from +X), SECTION A\u2013A cut along the horizontal centerline of the top view, plus the NTS ISO.\n\nAxis chains:\n- X (top view, baseline dims from left edge): 15 = left hole column, 40 = part center, 65 = right hole column; overall 80. Check: 80 \u2212 65 = 15 \u2192 symmetric; hole columns at \u00b125 about center.\n- Y (right side view, baseline dims from front edge): 15 = front hole row, 30 = center, 45 = back row; overall 60. Check: 60 \u2212 45 = 15 \u2192 symmetric; hole rows at \u00b115 about center.\n- Z (front view): plate thickness 12 overall; central recess depth 6.\n\nFeatures:\n1. Rectangular plate 80 (X) \u00d7 60 (Y) \u00d7 12 (Z).\n2. Central blind pocket \u230030, 6 mm deep from the top face (confirmed by SECTION A\u2013A recess at top and hidden lines in front view).\n3. 4\u00d7 \u23005 THRU holes with \u230010 \u00d7 82\u00b0 countersinks from the top face, at (\u00b125, \u00b115) \u2014 countersinks visible in ISO and section.\n4. C1 chamfers called out on the four plate corners in the top view \u2192 1 mm 45\u00b0 chamfer on the four vertical corner edges (visible on the ISO corner).\n\nConstruction: Box for the plate; subtract a cylinder for the blind pocket; at each of the 4 hole locations subtract a through cylinder plus a cone (frustum \u23005\u2192\u230010, height = 2.5/tan(41\u00b0) \u2248 2.88) for the countersink; finally chamfer the Z-parallel edges by 1.\n</plan>\n\n```python\nfrom build123d import *\nfrom math import tan, radians\n\n# ---------- dimensions read from the drawing ----------\nplate_L   = 80   # mm  overall length (X)                - top view overall dim\nplate_W   = 60   # mm  overall width  (Y)                - right side view overall dim\nplate_T   = 12   # mm  plate thickness (Z)               - front view\ncol_left  = 15   # mm  left hole column from left edge   - top view baseline dim\ncol_right = 65   # mm  right hole column from left edge  - top view baseline dim\nrow_front = 15   # mm  front hole row from front edge    - right side view baseline dim\nrow_back  = 45   # mm  back hole row from front edge     - right side view baseline dim\nhole_d    = 5    # mm  through-hole diameter, \"4x \u23005 THRU\"\ncsk_d     = 10   # mm  countersink diameter,  \"\u230010 \u00d7 82\u00b0\"\ncsk_a     = 82   # deg countersink included angle\npocket_d  = 30   # mm  central blind pocket,  \"\u230030 \u21936\"\npocket_z  = 6    # mm  pocket depth from top face\nc1        = 1    # mm  45\u00b0 chamfer on the 4 corner edges, \"C1\"\n\n# ---------- derived values ----------\nhx    = (col_right - col_left) / 2                        # 25 mm - hole column offset from centre\nhy    = (row_back - row_front) / 2                        # 15 mm - hole row offset from centre\ncsk_h = (csk_d - hole_d) / 2 / tan(radians(csk_a / 2))    # ~2.88 mm - countersink cone height\n\nwith BuildPart() as bp:\n    # base plate: bottom face on Z=0, centred in X/Y\n    Box(plate_L, plate_W, plate_T,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # central blind pocket \u230030, 6 deep from the top face\n    with Locations((0, 0, plate_T - pocket_z)):\n        Cylinder(pocket_d / 2, pocket_z + 1,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # 4x \u23005 through holes with \u230010 x 82\u00b0 countersinks from the top\n    with Locations([(sx * hx, sy * hy, plate_T)\n                    for sx in (-1, 1) for sy in (-1, 1)]):\n        Cylinder(hole_d / 2, plate_T + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n        Cone(hole_d / 2, csk_d / 2, csk_h,\n             align=(Align.CENTER, Align.CENTER, Align.MAX),\n             mode=Mode.SUBTRACT)\n\n    # C1 chamfer on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), length=c1)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     12.0
+    ],
+    "volume_mm3": 52101.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     15.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.7,
+   "usage": {
+    "input_tokens": 7204,
+    "output_tokens": 889
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "00199e66-2f80-ae33-2603-60a317088932",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 73.1,
+  "t_agentic_s": 84.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11679
+  },
+  "total_tokens": {
+   "in": 11314,
+   "out": 12568
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

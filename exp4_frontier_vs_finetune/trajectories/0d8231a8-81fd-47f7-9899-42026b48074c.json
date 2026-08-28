@@ -1,0 +1,74 @@
+{
+ "uid": "0d8231a8-81fd-47f7-9899-42026b48074c",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 20.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 3227
+   },
+   "plan": "**View identification (third-angle):**\n- Upper-left view = TOP (plan): rectangle 50 wide (X) \u00d7 80 deep (Y, undimensioned here but confirmed by right view).\n- Lower-left view = FRONT: rectangle 50 wide (X) \u00d7 30 high (Z, dimension \"30\").\n- Lower-right view = RIGHT: rectangle 80 wide (Y, dimension \"80\") \u00d7 30 high (Z).\n\n**Dimension chains / overalls:**\n- X overall = 50 (single overall dimension, top & front views).\n- Y overall = 80 (single overall dimension, right view).\n- Z overall = 30 (single overall dimension, front view).\nAll three axes have explicit overall dimensions; no chains to sum. Cross-check: top view height (\u224880) matches right view width (80); front view width (50) matches top view width (50); front/right heights (30) match. ISO proportions (long 80, medium 50, short 30) agree.\n\n**Features:**\n- Plain rectangular block; no holes, pockets, or internal features (no hidden lines in any orthographic view).\n- \"C1\" notes point to every corner of all three views \u2192 all 12 edges get a 1 mm \u00d7 45\u00b0 chamfer. The ISO view confirms this: double lines on visible edges are the chamfer faces, and the dashed lines are the hidden chamfer/bottom edges of the solid block.\n\n**Construction:** Box(50 \u00d7 80 \u00d7 30) centered, then chamfer all edges with length 1.",
+   "text": "<plan>\n**View identification (third-angle):**\n- Upper-left view = TOP (plan): rectangle 50 wide (X) \u00d7 80 deep (Y, undimensioned here but confirmed by right view).\n- Lower-left view = FRONT: rectangle 50 wide (X) \u00d7 30 high (Z, dimension \"30\").\n- Lower-right view = RIGHT: rectangle 80 wide (Y, dimension \"80\") \u00d7 30 high (Z).\n\n**Dimension chains / overalls:**\n- X overall = 50 (single overall dimension, top & front views).\n- Y overall = 80 (single overall dimension, right view).\n- Z overall = 30 (single overall dimension, front view).\nAll three axes have explicit overall dimensions; no chains to sum. Cross-check: top view height (\u224880) matches right view width (80); front view width (50) matches top view width (50); front/right heights (30) match. ISO proportions (long 80, medium 50, short 30) agree.\n\n**Features:**\n- Plain rectangular block; no holes, pockets, or internal features (no hidden lines in any orthographic view).\n- \"C1\" notes point to every corner of all three views \u2192 all 12 edges get a 1 mm \u00d7 45\u00b0 chamfer. The ISO view confirms this: double lines on visible edges are the chamfer faces, and the dashed lines are the hidden chamfer/bottom edges of the solid block.\n\n**Construction:** Box(50 \u00d7 80 \u00d7 30) centered, then chamfer all edges with length 1.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- Dimensions read from drawing ---\nwidth_x = 50   # mm - overall width (X), top & front views\ndepth_y = 80   # mm - overall depth (Y), right view\nheight_z = 30  # mm - overall height (Z), front view\ncham = 1       # mm - C1: 45 deg chamfer, 1 mm leg, called out on all corners (all 12 edges)\n\nwith BuildPart() as bp:\n    Box(width_x, depth_y, height_z)\n    chamfer(bp.edges(), length=cham)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     50.0,
+     80.0,
+     30.0
+    ],
+    "volume_mm3": 119685.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 26,
+    "n_planar_faces": 26,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.2,
+   "usage": {
+    "input_tokens": 7209,
+    "output_tokens": 79
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0d8231a8-81fd-47f7-9899-42026b48074c",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 23.2,
+  "t_agentic_s": 27.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 3227
+  },
+  "total_tokens": {
+   "in": 11319,
+   "out": 3306
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

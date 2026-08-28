@@ -1,0 +1,77 @@
+{
+ "uid": "0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 163.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 16790
+   },
+   "plan": "Views: TOP (upper left) = circular outline of a tube; FRONT (lower left) and RIGHT (lower right) are the two elevation views; ISO confirms an open hollow cylinder.\n\nAxis chains / cross-checks:\n- X (diameter): FRONT gives \u230070 overall (and the \"35\" half-dimension to the centerline confirms 2\u00d735 = 70). RIGHT repeats the \"35\" half-width. \u2192 outer radius 35.\n- Y: same cylinder (\u230070). TOP is a circle, consistent.\n- Z: FRONT overall height = 88 (no chain needed). The 40 and 42.5 dims are elevation references to the mid horizontal datum (where the \u230060 leader sits); 42.5\u221240 = 2.5, corroborating the 2.5 groove depth.\n- Bore: \"\u230060\" in FRONT (hidden lines at \u00b130) = through inner diameter \u2192 inner radius 30, wall = (70\u221260)/2 = 5. ISO shows an open through tube.\n\nFeature list:\n- Hollow cylinder: OD \u230070 (R35), ID \u230060 (R30), height 88, axis = Z, base at Z=0.\n- Four milled axial flats/slots on the OD at 0\u00b0/90\u00b0/180\u00b0/270\u00b0. Callouts \"4 \u00d7 56 \u00d7 2.4 DEEP\" / \"4 \u00d7 56 \u00d7 2.5 DEEP\" = 4 slots, axial length 56, radial depth 2.5 (the 2.4 leader is the same feature repeated; I use 2.5, matching the RIGHT view and 42.5\u221240). \"12 A/F\" in TOP labels the 12 mm chord (flat) width of each slot. Slots run from the top rim downward (as in ISO): z = 88\u221256 = 32 \u2192 88. Each is a flat cut to a plane at radius 35\u22122.5 = 32.5 (max depth 2.5 at slot center; blind \u2014 floor radius 32.5 > bore 30, so it never breaks through, leaving 2.5 wall). The front-facing slot (toward \u2212Y) is the solid narrow rectangle in FRONT; the rear one is hidden.\n- No dimensioned fillets/chamfers; the small mid-height rectangles are the projected edges of these slots at the Z=40 datum (no independent size given), so no extra cuts are added.",
+   "text": "<plan>\nViews: TOP (upper left) = circular outline of a tube; FRONT (lower left) and RIGHT (lower right) are the two elevation views; ISO confirms an open hollow cylinder.\n\nAxis chains / cross-checks:\n- X (diameter): FRONT gives \u230070 overall (and the \"35\" half-dimension to the centerline confirms 2\u00d735 = 70). RIGHT repeats the \"35\" half-width. \u2192 outer radius 35.\n- Y: same cylinder (\u230070). TOP is a circle, consistent.\n- Z: FRONT overall height = 88 (no chain needed). The 40 and 42.5 dims are elevation references to the mid horizontal datum (where the \u230060 leader sits); 42.5\u221240 = 2.5, corroborating the 2.5 groove depth.\n- Bore: \"\u230060\" in FRONT (hidden lines at \u00b130) = through inner diameter \u2192 inner radius 30, wall = (70\u221260)/2 = 5. ISO shows an open through tube.\n\nFeature list:\n- Hollow cylinder: OD \u230070 (R35), ID \u230060 (R30), height 88, axis = Z, base at Z=0.\n- Four milled axial flats/slots on the OD at 0\u00b0/90\u00b0/180\u00b0/270\u00b0. Callouts \"4 \u00d7 56 \u00d7 2.4 DEEP\" / \"4 \u00d7 56 \u00d7 2.5 DEEP\" = 4 slots, axial length 56, radial depth 2.5 (the 2.4 leader is the same feature repeated; I use 2.5, matching the RIGHT view and 42.5\u221240). \"12 A/F\" in TOP labels the 12 mm chord (flat) width of each slot. Slots run from the top rim downward (as in ISO): z = 88\u221256 = 32 \u2192 88. Each is a flat cut to a plane at radius 35\u22122.5 = 32.5 (max depth 2.5 at slot center; blind \u2014 floor radius 32.5 > bore 30, so it never breaks through, leaving 2.5 wall). The front-facing slot (toward \u2212Y) is the solid narrow rectangle in FRONT; the rear one is hidden.\n- No dimensioned fillets/chamfers; the small mid-height rectangles are the projected edges of these slots at the Z=40 datum (no independent size given), so no extra cuts are added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nOD = 70.0          # mm  outer diameter (\u230070; half-dim 35 confirms)\nID = 60.0          # mm  through bore (\u230060)\nH  = 88.0          # mm  overall height\nslot_len   = 56.0  # mm  axial length of the 4 milled slots (\"4 \u00d7 56 \u00d7 \u2026 DEEP\")\nslot_depth = 2.5   # mm  radial depth of slots (\"\u2026 \u00d7 2.5 DEEP\"; a repeated 2.4 leader denotes the same feature)\nslot_w     = 12.0  # mm  chord/flat width of each slot (\"12 A/F\" in top view)\n\n# ---- derived values ----\nR_out = OD / 2.0            # 35 mm outer radius\nR_in  = ID / 2.0            # 30 mm inner radius\nflat_r = R_out - slot_depth # 32.5 mm: radius of the milled flat plane (max depth at slot centre)\nz0 = H - slot_len           # 32 mm: slots start here and run to the top rim (per ISO)\nzc = (z0 + H) / 2.0         # 60 mm: axial centre of the slots\ncut_extra = 2.0             # mm: overtravel past the OD so the cutter fully breaks the surface\ncut_x  = (R_out + cut_extra) - flat_r   # radial size of cutter box (32.5 -> 37)\nr_mid  = (flat_r + (R_out + cut_extra)) / 2.0  # radial centre of cutter box\n\n# ---- base tube (open through bore) ----\nouter = Cylinder(radius=R_out, height=H, align=(Align.CENTER, Align.CENTER, Align.MIN))\ninner = Cylinder(radius=R_in,  height=H, align=(Align.CENTER, Align.CENTER, Align.MIN))\npart  = outer - inner\n\n# ---- one slot cutter, then 4 rotational copies (0/90/180/270 deg) ----\ndef slot_cutter(angle_deg):\n    b = Box(cut_x, slot_w, slot_len, align=(Align.CENTER, Align.CENTER, Align.CENTER))\n    b = Pos(r_mid, 0, zc) * b          # place flat plane at radius flat_r, centred on the slot\n    return Rot(0, 0, angle_deg) * b    # spin about the cylinder axis\n\nfor a in (0.0, 90.0, 180.0, 270.0):\n    part = part - slot_cutter(a)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     69.99,
+     69.99,
+     88.0
+    ],
+    "volume_mm3": 83638.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 18,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     30.0,
+     35.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 372.0,
+   "usage": {
+    "input_tokens": 8365,
+    "output_tokens": 896
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0580ef4e-edaa-7eaa-0a10-6105fd6d8ad0",
+  "ss_exec_ok": true,
+  "ss_iou": 0.3862,
+  "ag_exec_ok": true,
+  "ag_iou": 0.3862,
+  "ag_final_cand": 1,
+  "best_iou": 0.3862,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 166.6,
+  "t_agentic_s": 542.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 16790
+  },
+  "total_tokens": {
+   "in": 12475,
+   "out": 17686
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.3862
+ }
+}

@@ -1,0 +1,76 @@
+{
+ "uid": "0ead60ac-739e-453e-0ca0-c687a546b676",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 93.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 15784
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view (upper left):** plan, XY. Overall X extent matches the 80 given on the front view; Y depth = 20 (from right view). Shows two hole circles at X = 25 and X = 55 measured from the left end, both centred across the width. Callout: \"2\u00d7 \u23004 THRU\" \u2192 vertical holes through the Z thickness.\n- **FRONT view (lower left):** XZ. Overall length 80 (X), height 10 (Z, from right view). Two pairs of vertical hidden lines = the through-holes, confirming they pass through Z.\n- **RIGHT view (right of front):** YZ cross-section, 20 (Y) \u00d7 10 (Z). C0.5 callouts on all four corners \u2192 0.5 mm 45\u00b0 chamfers on the four longitudinal (X-parallel) edges. \"10\" locates the hole axis at mid-width (matches the centred circles in the top view); holes shown hidden.\n- **ISO (NTS):** plain rectangular bar with two vertical through-holes \u2014 confirms form.\n\n**Dimension chains:**\n- X: overall = 80 (given directly). Holes at 25 and 55 from the \u2212X end \u2192 pitch 30, symmetric about mid-length (x = \u221215, +15 in centred coords).\n- Y: overall = 20; hole centre = 10 (mid-width).\n- Z: overall = 10; holes through.\n\n**Feature list:**\n1. Bar 80 (X) \u00d7 20 (Y) \u00d7 10 (Z).\n2. 2\u00d7 \u23004 through-holes along Z at (25, 10) and (55, 10).\n3. C0.5 chamfers on the four long edges.",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view (upper left):** plan, XY. Overall X extent matches the 80 given on the front view; Y depth = 20 (from right view). Shows two hole circles at X = 25 and X = 55 measured from the left end, both centred across the width. Callout: \"2\u00d7 \u23004 THRU\" \u2192 vertical holes through the Z thickness.\n- **FRONT view (lower left):** XZ. Overall length 80 (X), height 10 (Z, from right view). Two pairs of vertical hidden lines = the through-holes, confirming they pass through Z.\n- **RIGHT view (right of front):** YZ cross-section, 20 (Y) \u00d7 10 (Z). C0.5 callouts on all four corners \u2192 0.5 mm 45\u00b0 chamfers on the four longitudinal (X-parallel) edges. \"10\" locates the hole axis at mid-width (matches the centred circles in the top view); holes shown hidden.\n- **ISO (NTS):** plain rectangular bar with two vertical through-holes \u2014 confirms form.\n\n**Dimension chains:**\n- X: overall = 80 (given directly). Holes at 25 and 55 from the \u2212X end \u2192 pitch 30, symmetric about mid-length (x = \u221215, +15 in centred coords).\n- Y: overall = 20; hole centre = 10 (mid-width).\n- Z: overall = 10; holes through.\n\n**Feature list:**\n1. Bar 80 (X) \u00d7 20 (Y) \u00d7 10 (Z).\n2. 2\u00d7 \u23004 through-holes along Z at (25, 10) and (55, 10).\n3. C0.5 chamfers on the four long edges.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 80.0        # mm  overall length (X) - front view overall dimension\nW = 20.0        # mm  overall width  (Y) - right view\nH = 10.0        # mm  overall height (Z) - right view\nHOLE_D = 4.0    # mm  \"2x \u00d84 THRU\" - vertical through-holes\nHOLE_X1 = 25.0  # mm  hole 1 centre from the -X end (top view)\nHOLE_X2 = 55.0  # mm  hole 2 centre from the -X end (top view)\nHOLE_Y = 10.0   # mm  hole centre across width (right view) = mid-width\nCH = 0.5        # mm  C0.5 chamfer on the four longitudinal edges\n\n# derived positions (part centred on origin)\nx1 = HOLE_X1 - L / 2   # -15 mm\nx2 = HOLE_X2 - L / 2   # +15 mm\nyc = HOLE_Y - W / 2    #   0 mm\n\nwith BuildPart() as bp:\n    Box(L, W, H)\n    # 2x \u00d84 through-holes (vertical, through the 10 mm thickness)\n    with Locations((x1, yc, 0), (x2, yc, 0)):\n        Cylinder(radius=HOLE_D / 2, height=H + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n    # C0.5 chamfers on the four edges parallel to X\n    chamfer(bp.edges().filter_by(Axis.X), length=CH)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     20.0,
+     10.0
+    ],
+    "volume_mm3": 15709.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 12,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.1,
+   "usage": {
+    "input_tokens": 6580,
+    "output_tokens": 420
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0ead60ac-739e-453e-0ca0-c687a546b676",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 96.4,
+  "t_agentic_s": 103.3,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 15784
+  },
+  "total_tokens": {
+   "in": 10690,
+   "out": 16204
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

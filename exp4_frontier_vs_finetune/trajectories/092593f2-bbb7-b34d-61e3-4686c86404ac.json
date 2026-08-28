@@ -1,0 +1,90 @@
+{
+ "uid": "092593f2-bbb7-b34d-61e3-4686c86404ac",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2718.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 22506
+   },
+   "plan": "**Views:** Top-left = TOP (plan, XY); below it = FRONT (XZ); right of front = RIGHT side (YZ); ISO is NTS. Views are 1:1 and mutually consistent in scale.\n\n**Axis chains:**\n- **Y (width):** Overall = 40 (right view). Holes located by baseline dims 5 and 35 from the front edge (hidden hole lines in right view) \u2192 5 + 30 + 5 = 40 \u2713. Tab: 8 + 24 + 8 = 40 \u2192 tab is 24 wide, centred. Pocket spans Y = 5\u219235 (edges align with hole centrelines, measured from 1:1 top view) \u2192 30 tall, centred.\n- **Z (thickness):** Plate = 4 (front view). Pocket is blind, ~2 deep from top face (scaled). Tab is thin (~1.5) and centred in Z (scaled from front view).\n- **X (length):** No overall dim and no full chain. Components: hole CL at 8 from left edge; pocket 20 wide with its right edge 8 from the right end (scaled). Overall length from the 1:1 views = 100 mm (2.5 \u00d7 width, matches ISO proportions).\n\n**Features:**\n- Plate 100 \u00d7 40 \u00d7 4.\n- 2\u00d7 \u23005 THRU at (X=8, Y=5) and (X=8, Y=35).\n- Blind rounded-rect pocket on top face: 20 (X) \u00d7 30 (Y), corner R\u22482, depth 2, centred at Y=20, right edge 8 from right end (X = 72\u219292).\n- Tab on +X edge: protrudes 5, 24 wide (Y = 8\u219232), 1.5 thick, centred in Z.\n- No chamfer/fillet callouts (pocket corner radius is intrinsic to its drawn shape).",
+   "text": "<plan>\n**Views:** Top-left = TOP (plan, XY); below it = FRONT (XZ); right of front = RIGHT side (YZ); ISO is NTS. Views are 1:1 and mutually consistent in scale.\n\n**Axis chains:**\n- **Y (width):** Overall = 40 (right view). Holes located by baseline dims 5 and 35 from the front edge (hidden hole lines in right view) \u2192 5 + 30 + 5 = 40 \u2713. Tab: 8 + 24 + 8 = 40 \u2192 tab is 24 wide, centred. Pocket spans Y = 5\u219235 (edges align with hole centrelines, measured from 1:1 top view) \u2192 30 tall, centred.\n- **Z (thickness):** Plate = 4 (front view). Pocket is blind, ~2 deep from top face (scaled). Tab is thin (~1.5) and centred in Z (scaled from front view).\n- **X (length):** No overall dim and no full chain. Components: hole CL at 8 from left edge; pocket 20 wide with its right edge 8 from the right end (scaled). Overall length from the 1:1 views = 100 mm (2.5 \u00d7 width, matches ISO proportions).\n\n**Features:**\n- Plate 100 \u00d7 40 \u00d7 4.\n- 2\u00d7 \u23005 THRU at (X=8, Y=5) and (X=8, Y=35).\n- Blind rounded-rect pocket on top face: 20 (X) \u00d7 30 (Y), corner R\u22482, depth 2, centred at Y=20, right edge 8 from right end (X = 72\u219292).\n- Tab on +X edge: protrudes 5, 24 wide (Y = 8\u219232), 1.5 thick, centred in Z.\n- No chamfer/fillet callouts (pocket corner radius is intrinsic to its drawn shape).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nplate_wid = 40        # mm  overall width (Y), right view\nplate_thk = 4         # mm  plate thickness (Z), front view\nplate_len = 100       # mm  overall length (X) \u2014 no overall dim on sheet; from 1:1 views (2.5 \u00d7 width, matches ISO)\n\nhole_dia = 5          # mm  callout \"2\u00d7 \u23005 THRU\"\nhole_x = 8            # mm  hole centreline from left edge, top view\nhole_y1 = 5           # mm  first hole centreline from front edge, right view baseline dim\nhole_y2 = 35          # mm  second hole centreline from front edge, right view baseline dim\n\npocket_len = 20       # mm  pocket size along X, top view\npocket_wid = 30       # mm  pocket size along Y \u2014 spans Y=5..35 (hole centrelines), from 1:1 top view\npocket_depth = 2      # mm  blind pocket depth from top face, from 1:1 side views\npocket_rad = 2        # mm  pocket corner radius, from 1:1 top view\npocket_end_gap = 8    # mm  pocket right edge to plate right end, from 1:1 top view\n\ntab_wid = 24          # mm  tab width along Y, top view (8+24+8 = 40 \u2192 centred)\ntab_gap = 8           # mm  tab lower edge to front edge, top view\ntab_len = 5           # mm  tab protrusion along +X, from 1:1 views\ntab_thk = 1.5         # mm  tab thickness, centred in Z, from 1:1 front view\ntab_embed = 1         # mm  overlap of tab into plate for robust fusion\n\n# ---- derived values ----\npocket_cx = plate_len - pocket_end_gap - pocket_len / 2   # pocket centre X = 82\npocket_cy = plate_wid / 2                                  # pocket centre Y = 20\ntab_z0 = (plate_thk - tab_thk) / 2                         # centring tab in Z\n\nwith BuildPart() as part:\n    # base plate, min corner at origin\n    Box(plate_len, plate_wid, plate_thk, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # tab protruding from the +X edge (embedded 1 mm for a clean fuse)\n    with Locations((plate_len - tab_embed, tab_gap, tab_z0)):\n        Box(tab_len + tab_embed, tab_wid, tab_thk,\n            align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # 2\u00d7 \u23005 through holes (slightly oversized in Z to guarantee THRU)\n    with Locations([(hole_x, hole_y1, -1), (hole_x, hole_y2, -1)]):\n        Cylinder(radius=hole_dia / 2, height=plate_thk + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # blind rounded-rectangle pocket cut from the top face\n    with BuildSketch(Plane.XY.offset(plate_thk)):\n        with Locations((pocket_cx, pocket_cy)):\n            RectangleRounded(pocket_len, pocket_wid, pocket_rad)\n    extrude(amount=-pocket_depth, mode=Mode.SUBTRACT)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.8,
+   "usage": {
+    "input_tokens": 5632,
+    "output_tokens": 1073
+   },
+   "plan": "Reading unchanged: plate 100 \u00d7 40 \u00d7 4; 2\u00d7 \u23005 THRU at (8, 5) and (8, 35); blind rounded pocket 20 \u00d7 30 \u00d7 2 deep (R2) centred at (82, 20); tab on +X edge protruding 5, 24 wide, 1.5 thick, centred in Z.\n\nFix: `with BuildPart() as part:` binds the *builder*, not the solid \u2014 `export_step` needs the resulting `Part`. Rename the builder and bind `part = bp.part` after the block.",
+   "text": "<plan>\nReading unchanged: plate 100 \u00d7 40 \u00d7 4; 2\u00d7 \u23005 THRU at (8, 5) and (8, 35); blind rounded pocket 20 \u00d7 30 \u00d7 2 deep (R2) centred at (82, 20); tab on +X edge protruding 5, 24 wide, 1.5 thick, centred in Z.\n\nFix: `with BuildPart() as part:` binds the *builder*, not the solid \u2014 `export_step` needs the resulting `Part`. Rename the builder and bind `part = bp.part` after the block.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nplate_wid = 40        # mm  overall width (Y), right view\nplate_thk = 4         # mm  plate thickness (Z), front view\nplate_len = 100       # mm  overall length (X) \u2014 no overall dim on sheet; from 1:1 views (2.5 \u00d7 width, matches ISO)\n\nhole_dia = 5          # mm  callout \"2\u00d7 \u23005 THRU\"\nhole_x = 8            # mm  hole centreline from left edge, top view\nhole_y1 = 5           # mm  first hole centreline from front edge, right view baseline dim\nhole_y2 = 35          # mm  second hole centreline from front edge, right view baseline dim\n\npocket_len = 20       # mm  pocket size along X, top view\npocket_wid = 30       # mm  pocket size along Y \u2014 spans Y=5..35 (hole centrelines), from 1:1 top view\npocket_depth = 2      # mm  blind pocket depth from top face, from 1:1 side views\npocket_rad = 2        # mm  pocket corner radius, from 1:1 top view\npocket_end_gap = 8    # mm  pocket right edge to plate right end, from 1:1 top view\n\ntab_wid = 24          # mm  tab width along Y, top view (8+24+8 = 40 \u2192 centred)\ntab_gap = 8           # mm  tab lower edge to front edge, top view\ntab_len = 5           # mm  tab protrusion along +X, from 1:1 views\ntab_thk = 1.5         # mm  tab thickness, centred in Z, from 1:1 front view\ntab_embed = 1         # mm  overlap of tab into plate for robust fusion\n\n# ---- derived values ----\npocket_cx = plate_len - pocket_end_gap - pocket_len / 2   # pocket centre X = 82\npocket_cy = plate_wid / 2                                  # pocket centre Y = 20\ntab_z0 = (plate_thk - tab_thk) / 2                         # centring tab in Z\n\nwith BuildPart() as bp:\n    # base plate, min corner at origin\n    Box(plate_len, plate_wid, plate_thk, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # tab protruding from the +X edge (embedded 1 mm for a clean fuse)\n    with Locations((plate_len - tab_embed, tab_gap, tab_z0)):\n        Box(tab_len + tab_embed, tab_wid, tab_thk,\n            align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # 2\u00d7 \u23005 through holes (slightly oversized in Z to guarantee THRU)\n    with Locations([(hole_x, hole_y1, -1), (hole_x, hole_y2, -1)]):\n        Cylinder(radius=hole_dia / 2, height=plate_thk + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # blind rounded-rectangle pocket cut from the top face\n    with BuildSketch(Plane.XY.offset(plate_thk)):\n        with Locations((pocket_cx, pocket_cy)):\n            RectangleRounded(pocket_len, pocket_wid, pocket_rad)\n    extrude(amount=-pocket_depth, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     105.0,
+     40.0,
+     4.0
+    ],
+    "volume_mm3": 14830.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 22,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 2.7,
+   "usage": {
+    "input_tokens": 8069,
+    "output_tokens": 275
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "092593f2-bbb7-b34d-61e3-4686c86404ac",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6513,
+  "ag_final_cand": 2,
+  "best_iou": 0.6513,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 2721.5,
+  "t_agentic_s": 2735.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 22506
+  },
+  "total_tokens": {
+   "in": 17811,
+   "out": 23854
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.6513
+ }
+}

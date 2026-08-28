@@ -1,0 +1,77 @@
+{
+ "uid": "104587fa-61ef-cd7d-02d5-4978341a3bf6",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 40.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 6387
+   },
+   "plan": "- ISO view: thin circular plate with a ring of small blind holes on its top face.\n- TOP view (circular view, XY plane): the \"40\" dimension runs from the left edge of the circle to the vertical centerline \u2192 radius 40, i.e. \u00d880 disc. Hole callout: \"12\u00d7 \u23004 \u2193 2 EQ SP ON \u230060 BC\" = 12 blind holes, \u00d84, 2 mm deep, equally spaced on a \u00d860 bolt circle. Section arrows A\u2013A lie on the horizontal centerline.\n- FRONT view (below top): overall \"\u230080\" (confirms radius 40) and thickness \"5\". Hidden dashed lines confirm the holes are blind from the top.\n- SECTION A\u2013A (right of front): confirms thickness 5, radius \"40\" again, and blind holes 2 deep from the top face; the cutting plane passes through holes on the horizontal axis, so holes sit at 0\u00b0/180\u00b0 (12 holes every 30\u00b0, first on +X).\n\nDimension chains: X extent = \u00d880 (radius 40 given in both TOP and SECTION); Y extent = \u00d880; Z extent = 5 (single overall). No chains to sum.\n\nFeature list:\n1. Base disc \u00d880 \u00d7 5 thick, axis along Z.\n2. 12\u00d7 \u00d84 blind holes, 2 mm deep from the top face, equally spaced (30\u00b0) on \u00d860 bolt circle (radius 30), starting on the +X axis.\nNo chamfers or fillets are called out.",
+   "text": "<plan>\n- ISO view: thin circular plate with a ring of small blind holes on its top face.\n- TOP view (circular view, XY plane): the \"40\" dimension runs from the left edge of the circle to the vertical centerline \u2192 radius 40, i.e. \u00d880 disc. Hole callout: \"12\u00d7 \u23004 \u2193 2 EQ SP ON \u230060 BC\" = 12 blind holes, \u00d84, 2 mm deep, equally spaced on a \u00d860 bolt circle. Section arrows A\u2013A lie on the horizontal centerline.\n- FRONT view (below top): overall \"\u230080\" (confirms radius 40) and thickness \"5\". Hidden dashed lines confirm the holes are blind from the top.\n- SECTION A\u2013A (right of front): confirms thickness 5, radius \"40\" again, and blind holes 2 deep from the top face; the cutting plane passes through holes on the horizontal axis, so holes sit at 0\u00b0/180\u00b0 (12 holes every 30\u00b0, first on +X).\n\nDimension chains: X extent = \u00d880 (radius 40 given in both TOP and SECTION); Y extent = \u00d880; Z extent = 5 (single overall). No chains to sum.\n\nFeature list:\n1. Base disc \u00d880 \u00d7 5 thick, axis along Z.\n2. 12\u00d7 \u00d84 blind holes, 2 mm deep from the top face, equally spaced (30\u00b0) on \u00d860 bolt circle (radius 30), starting on the +X axis.\nNo chamfers or fillets are called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- Dimensions read from the drawing ----------\ndisc_diameter = 80         # mm  overall diameter (FRONT \"\u230080\"; TOP & SECTION radius \"40\")\nplate_thickness = 5        # mm  disc thickness (FRONT view)\nhole_diameter = 4          # mm  hole diameter   (callout: 12\u00d7 \u23004)\nhole_depth = 2             # mm  blind hole depth (callout: \u2193 2)\nhole_count = 12            #     hole count      (callout: 12\u00d7)\nbolt_circle_diameter = 60  # mm  bolt circle     (callout: ON \u230060 BC)\n\n# ---------- Derived values ----------\ndisc_radius = disc_diameter / 2                # mm\nhole_radius = hole_diameter / 2                # mm\nbolt_circle_radius = bolt_circle_diameter / 2  # mm\n\nwith BuildPart() as bp:\n    # Base disc \u2014 axis along Z so the Top view is the XY plane\n    Cylinder(radius=disc_radius, height=plate_thickness)\n\n    # 12 blind holes drilled from the top face, equally spaced on the \u00d860 BC\n    top_face = bp.faces().sort_by(Axis.Z)[-1]\n    with Locations(top_face):\n        with PolarLocations(radius=bolt_circle_radius, count=hole_count):\n            Hole(radius=hole_radius, depth=hole_depth)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     5.0
+    ],
+    "volume_mm3": 24815.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 27,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 13,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.7,
+   "usage": {
+    "input_tokens": 6691,
+    "output_tokens": 631
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "104587fa-61ef-cd7d-02d5-4978341a3bf6",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 43.8,
+  "t_agentic_s": 53.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 6387
+  },
+  "total_tokens": {
+   "in": 10801,
+   "out": 7018
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

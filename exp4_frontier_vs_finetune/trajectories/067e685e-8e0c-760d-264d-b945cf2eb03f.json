@@ -1,0 +1,77 @@
+{
+ "uid": "067e685e-8e0c-760d-264d-b945cf2eb03f",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 353.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 22553
+   },
+   "plan": "**Views:** Top (XY) upper-left; Front (XZ) lower-left; Right (YZ) lower-right; ISO for form.\n\n**X axis (Top + Front):** Overall = 55 (given). Chain from left edge: 25 \u2192 left hole column; 35 \u2192 center of 1st boss; \"4\" \u2192 boss width (boss 1 spans 33\u201337); \"4\" \u2192 gap between bosses (37\u201341); 2nd boss 4 wide \u2192 spans 41\u201345; 45 \u2192 right hole column; 55 \u2192 right edge. Check: 33\u201337, gap 4, 41\u201345, holes at 25 & 45, all inside 0\u201355. \u2713 (Front view confirms 55 length and shows the two bosses on top.)\n\n**Y axis (Top + Right):** Overall = 30 (Right view). Chain from front edge (Right view): 5 \u2192 near hole row; 15 \u2192 boss centerline; 25 \u2192 far hole row (symmetric about 15). The \"3\" dims in the Top view are edge-to-hole tangent distances: 5 \u2212 \u23004/2 = 3. \u2713 Bosses are 4 wide in Y \u2192 span 13\u201317.\n\n**Z axis (Front + Right):** Plate thickness = 8. Bosses protrude above the plate; undimensioned, but front/right proportions match the 4 mm footprint \u2192 4\u00d74\u00d74 bosses. \"2\u00d7 R2.5\" appears in both Front and Right views at the upper corners \u2192 R2.5 round on the four top perimeter edges of the plate (each view sees 2 of them).\n\n**Features:**\n- Plate 55 \u00d7 30 \u00d7 8, top perimeter edges filleted R2.5.\n- 4\u00d7 \u23004 THRU holes at (25, 5), (25, 25), (45, 5), (45, 25).\n- 2 square bosses 4\u00d74\u00d74 on top face, centered at (35, 15) and (43, 15).",
+   "text": "<plan>\n**Views:** Top (XY) upper-left; Front (XZ) lower-left; Right (YZ) lower-right; ISO for form.\n\n**X axis (Top + Front):** Overall = 55 (given). Chain from left edge: 25 \u2192 left hole column; 35 \u2192 center of 1st boss; \"4\" \u2192 boss width (boss 1 spans 33\u201337); \"4\" \u2192 gap between bosses (37\u201341); 2nd boss 4 wide \u2192 spans 41\u201345; 45 \u2192 right hole column; 55 \u2192 right edge. Check: 33\u201337, gap 4, 41\u201345, holes at 25 & 45, all inside 0\u201355. \u2713 (Front view confirms 55 length and shows the two bosses on top.)\n\n**Y axis (Top + Right):** Overall = 30 (Right view). Chain from front edge (Right view): 5 \u2192 near hole row; 15 \u2192 boss centerline; 25 \u2192 far hole row (symmetric about 15). The \"3\" dims in the Top view are edge-to-hole tangent distances: 5 \u2212 \u23004/2 = 3. \u2713 Bosses are 4 wide in Y \u2192 span 13\u201317.\n\n**Z axis (Front + Right):** Plate thickness = 8. Bosses protrude above the plate; undimensioned, but front/right proportions match the 4 mm footprint \u2192 4\u00d74\u00d74 bosses. \"2\u00d7 R2.5\" appears in both Front and Right views at the upper corners \u2192 R2.5 round on the four top perimeter edges of the plate (each view sees 2 of them).\n\n**Features:**\n- Plate 55 \u00d7 30 \u00d7 8, top perimeter edges filleted R2.5.\n- 4\u00d7 \u23004 THRU holes at (25, 5), (25, 25), (45, 5), (45, 25).\n- 2 square bosses 4\u00d74\u00d74 on top face, centered at (35, 15) and (43, 15).\n</plan>\n\n```python\nfrom build123d import *\n\n# ================= dimensions read from the drawing =================\nplate_L  = 55     # mm  overall length (X) - top view / front view\nplate_W  = 30     # mm  overall depth  (Y) - right view\nplate_T  = 8      # mm  plate thickness (Z) - front view\n\nhole_d   = 4      # mm  callout \"4x \u00d84 THRU\"\nhole_x1  = 25     # mm  left hole column from left edge  (top view)\nhole_x2  = 45     # mm  right hole column from left edge (top view)\nhole_y1  = 5      # mm  near hole row from front edge (right view)\nhole_y2  = 25     # mm  far hole row from front edge  (right view)\n                  #     top view \"3\" = 5 - \u00d84/2 (edge-to-hole tangent check)\n\nboss_s   = 4      # mm  boss square footprint 4x4 (top view \"4\" dims)\nboss_h   = 4      # mm  boss height - 4x4x4 per front/right view proportions\nboss1_cx = 35     # mm  center of 1st boss from left edge (top view)\nboss_gap = 4      # mm  gap between the two bosses (top view)\nboss_cy  = 15     # mm  boss centerline from front edge (right view)\n\nedge_r   = 2.5    # mm  \"2x R2.5\" - round on top perimeter edges of plate\n\n# ================= derived values =================\n# boss 1 spans 33..37, gap 4, boss 2 spans 41..45 (right edge on the x=45 hole column)\nboss2_cx = boss1_cx + boss_s / 2 + boss_gap + boss_s / 2   # = 43 mm\n\nwith BuildPart() as bp:\n    # base plate, min corner at origin\n    Box(plate_L, plate_W, plate_T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # R2.5 round on the four top perimeter edges of the plate\n    fillet(bp.edges().group_by(Axis.Z)[-1], radius=edge_r)\n\n    # two square bosses standing on the top face\n    for cx in (boss1_cx, boss2_cx):\n        with Locations((cx - boss_s / 2, boss_cy - boss_s / 2, plate_T)):\n            Box(boss_s, boss_s, boss_h, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # 4x \u00d84 through holes\n    for x in (hole_x1, hole_x2):\n        for y in (hole_y1, hole_y2):\n            with Locations((x, y, -1)):\n                Cylinder(hole_d / 2, plate_T + 2,\n                         align=(Align.CENTER, Align.CENTER, Align.MIN),\n                         mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     55.0,
+     30.0,
+     12.0
+    ],
+    "volume_mm3": 12704.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 24,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 8,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.5,
+   "usage": {
+    "input_tokens": 7356,
+    "output_tokens": 540
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "067e685e-8e0c-760d-264d-b945cf2eb03f",
+  "ss_exec_ok": true,
+  "ss_iou": 0.4612,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4612,
+  "ag_final_cand": 1,
+  "best_iou": 0.4612,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 357.1,
+  "t_agentic_s": 366.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 22553
+  },
+  "total_tokens": {
+   "in": 11466,
+   "out": 23093
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.4612
+ }
+}

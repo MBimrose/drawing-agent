@@ -1,0 +1,89 @@
+{
+ "uid": "00d1e3d6-db1e-758d-94e6-76e246cf7349",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 35.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 4426
+   },
+   "plan": "**Views:** Top (plan) view upper-left: square plate with 5 holes in a horizontal row, section line A\u2013A through the hole row. Front view below: thin plate, thickness 6, C0.5 chamfer notes at top corners. Right-side view: plate edge with \"40\" dimension from edge to hole row centerline, C0.5 notes again. Section A\u2013A confirms the holes are blind (do not pass through). ISO shows a flat square plate with a beveled top perimeter and 5 blind holes.\n\n**Dimension chains:**\n- X (width): 16 (edge to 1st hole) + 4\u00d712 (hole spacings) + 16 (symmetric right margin) = **80 mm**\n- Y (depth): holes centered at 40 from edge \u2192 40 \u00d7 2 = **80 mm** (top view is square, consistent)\n- Z (thickness): **6 mm** (overall, front view)\n\n**Features:**\n- 5\u00d7 \u23005 blind holes, depth 4.5 from top face (leaving 1.5 mm floor), at X = 16, 28, 40, 52, 64 mm; Y = 40 mm (plate centerline)\n- C0.5 (0.5 mm \u00d7 45\u00b0) chamfer on the top perimeter edges (per leaders in front/right views and bevel visible in ISO); corners in plan stay sharp, so no vertical-edge chamfers",
+   "text": "<plan>\n**Views:** Top (plan) view upper-left: square plate with 5 holes in a horizontal row, section line A\u2013A through the hole row. Front view below: thin plate, thickness 6, C0.5 chamfer notes at top corners. Right-side view: plate edge with \"40\" dimension from edge to hole row centerline, C0.5 notes again. Section A\u2013A confirms the holes are blind (do not pass through). ISO shows a flat square plate with a beveled top perimeter and 5 blind holes.\n\n**Dimension chains:**\n- X (width): 16 (edge to 1st hole) + 4\u00d712 (hole spacings) + 16 (symmetric right margin) = **80 mm**\n- Y (depth): holes centered at 40 from edge \u2192 40 \u00d7 2 = **80 mm** (top view is square, consistent)\n- Z (thickness): **6 mm** (overall, front view)\n\n**Features:**\n- 5\u00d7 \u23005 blind holes, depth 4.5 from top face (leaving 1.5 mm floor), at X = 16, 28, 40, 52, 64 mm; Y = 40 mm (plate centerline)\n- C0.5 (0.5 mm \u00d7 45\u00b0) chamfer on the top perimeter edges (per leaders in front/right views and bevel visible in ISO); corners in plan stay sharp, so no vertical-edge chamfers\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing ----\nedge_to_first_hole = 16   # mm, left edge to first hole center (top view)\nhole_spacing = 12         # mm, \"4x 12\" spacing between the 5 holes\nhole_count = 5            # \"5x\" holes\nhole_diameter = 5         # mm, \u23005\nhole_depth = 4.5          # mm, blind depth from top face (\u2193 4.5)\nplate_thickness = 6       # mm, front view overall height\nhole_row_offset = 40      # mm, hole row from edge (right view)\nchamfer_len = 0.5         # mm, C0.5 chamfer on top perimeter edges\n\n# ---- derived overall sizes ----\nplate_width = 2 * edge_to_first_hole + (hole_count - 1) * hole_spacing  # 16+48+16 = 80 mm\nplate_depth = 2 * hole_row_offset                                       # 40*2 = 80 mm\n\n# hole X positions, plate centered on origin\nhole_xs = [edge_to_first_hole + i * hole_spacing - plate_width / 2\n           for i in range(hole_count)]  # -24, -12, 0, 12, 24\n\nwith BuildPart() as part:\n    # base plate 80 x 80 x 6\n    with BuildSketch():\n        Rectangle(plate_width, plate_depth)\n    extrude(amount=plate_thickness)\n\n    # 5 blind holes \u23005 x 4.5 deep from the top face\n    with Locations([(x, 0, plate_thickness) for x in hole_xs]):\n        Cylinder(radius=hole_diameter / 2,\n                 height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\n    # C0.5 chamfer on top perimeter edges (linear edges at top Z only)\n    top_edges = part.edges().filter_by(GeomType.LINE).group_by(Axis.Z)[-1]\n    chamfer(top_edges, length=chamfer_len)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.3,
+   "usage": {
+    "input_tokens": 5229,
+    "output_tokens": 778
+   },
+   "plan": "Reading is unchanged from before: 80 \u00d7 80 \u00d7 6 plate (X chain: 16 + 4\u00d712 + 16 = 80; Y: 40 \u00d7 2 = 80), 5\u00d7 \u23005 blind holes 4.5 deep from the top at X = 16/28/40/52/64 mm on the Y centerline, C0.5 chamfer on the top perimeter edges only.\n\nFix: the `with BuildPart() as part:` context manager object is not the solid \u2014 export must use the builder's `.part` attribute. Renamed the context to `bp` and bound the finished solid to `part = bp.part` before `export_step`.",
+   "text": "<plan>\nReading is unchanged from before: 80 \u00d7 80 \u00d7 6 plate (X chain: 16 + 4\u00d712 + 16 = 80; Y: 40 \u00d7 2 = 80), 5\u00d7 \u23005 blind holes 4.5 deep from the top at X = 16/28/40/52/64 mm on the Y centerline, C0.5 chamfer on the top perimeter edges only.\n\nFix: the `with BuildPart() as part:` context manager object is not the solid \u2014 export must use the builder's `.part` attribute. Renamed the context to `bp` and bound the finished solid to `part = bp.part` before `export_step`.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing ----\nedge_to_first_hole = 16   # mm, left edge to first hole center (top view)\nhole_spacing = 12         # mm, \"4x 12\" spacing between the 5 holes\nhole_count = 5            # \"5x\" holes\nhole_diameter = 5         # mm, \u23005\nhole_depth = 4.5          # mm, blind depth from top face (\u2193 4.5)\nplate_thickness = 6       # mm, front view overall height\nhole_row_offset = 40      # mm, hole row from edge (right view)\nchamfer_len = 0.5         # mm, C0.5 chamfer on top perimeter edges\n\n# ---- derived overall sizes ----\nplate_width = 2 * edge_to_first_hole + (hole_count - 1) * hole_spacing  # 16+48+16 = 80 mm\nplate_depth = 2 * hole_row_offset                                       # 40*2 = 80 mm\n\n# hole X positions, plate centered on origin\nhole_xs = [edge_to_first_hole + i * hole_spacing - plate_width / 2\n           for i in range(hole_count)]  # -24, -12, 0, 12, 24\n\nwith BuildPart() as bp:\n    # base plate 80 x 80 x 6\n    with BuildSketch():\n        Rectangle(plate_width, plate_depth)\n    extrude(amount=plate_thickness)\n\n    # 5 blind holes \u23005 x 4.5 deep from the top face\n    with Locations([(x, 0, plate_thickness) for x in hole_xs]):\n        Cylinder(radius=hole_diameter / 2,\n                 height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\n    # C0.5 chamfer on top perimeter edges (linear edges at top Z only)\n    top_edges = bp.edges().filter_by(GeomType.LINE).group_by(Axis.Z)[-1]\n    chamfer(top_edges, length=chamfer_len)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     6.0
+    ],
+    "volume_mm3": 37919.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 3.7,
+   "usage": {
+    "input_tokens": 7836,
+    "output_tokens": 377
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "00d1e3d6-db1e-758d-94e6-76e246cf7349",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9984,
+  "ag_final_cand": 2,
+  "best_iou": 0.9984,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 39.1,
+  "t_agentic_s": 54.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 4426
+  },
+  "total_tokens": {
+   "in": 17175,
+   "out": 5581
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.9984
+ }
+}

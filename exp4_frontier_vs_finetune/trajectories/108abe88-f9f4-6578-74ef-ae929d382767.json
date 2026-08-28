@@ -1,0 +1,87 @@
+{
+ "uid": "108abe88-f9f4-6578-74ef-ae929d382767",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 31.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 5959
+   },
+   "plan": "**View identification (third-angle):**\n- TOP view (upper left): T-shaped plan. Crossbar at the top of the sheet = back of part (+Y); stem points down on the sheet = front (\u2212Y). Four \"C1\" arrows point to the four outer corners of the crossbar (1 mm, 45\u00b0 chamfers on those vertical edges).\n- FRONT view (lower left): 50 wide \u00d7 80 tall rectangle; internal vertical lines at the stem edges (\"10\" dim, centered) and at the chamfer boundaries near the outer edges.\n- RIGHT view (right of front): 42 wide \u00d7 80 tall rectangle; \"12\" dim at top = crossbar depth in Y; internal vertical lines at the bar/chamfer boundaries confirm the bar sits at the back (high Y).\n- ISO view: confirms a T-profile prism extruded vertically, bar at the back, stem to the front.\n\n**Dimension chains:**\n- X: overall = 50 (given). Stem = 10, centered \u2192 side margins (50\u221210)/2 = 20 each.\n- Y: overall = 42 (given) = bar depth 12 + stem length 30 (derived: 42 \u2212 12 = 30).\n- Z: overall = 80 (given).\n- Cross-check: 50 appears on top/front, 80 on front/right, 42 on right matches top-view depth. Consistent.\n\n**Feature list:**\n1. T-profile prism: bar 50 (X) \u00d7 12 (Y) at back; stem 10 (X) \u00d7 30 (Y) centered, at front; height 80 (Z).\n2. Four C1 chamfers on the vertical edges at the crossbar's outer corners (|X| = 25).",
+   "text": "<plan>\n**View identification (third-angle):**\n- TOP view (upper left): T-shaped plan. Crossbar at the top of the sheet = back of part (+Y); stem points down on the sheet = front (\u2212Y). Four \"C1\" arrows point to the four outer corners of the crossbar (1 mm, 45\u00b0 chamfers on those vertical edges).\n- FRONT view (lower left): 50 wide \u00d7 80 tall rectangle; internal vertical lines at the stem edges (\"10\" dim, centered) and at the chamfer boundaries near the outer edges.\n- RIGHT view (right of front): 42 wide \u00d7 80 tall rectangle; \"12\" dim at top = crossbar depth in Y; internal vertical lines at the bar/chamfer boundaries confirm the bar sits at the back (high Y).\n- ISO view: confirms a T-profile prism extruded vertically, bar at the back, stem to the front.\n\n**Dimension chains:**\n- X: overall = 50 (given). Stem = 10, centered \u2192 side margins (50\u221210)/2 = 20 each.\n- Y: overall = 42 (given) = bar depth 12 + stem length 30 (derived: 42 \u2212 12 = 30).\n- Z: overall = 80 (given).\n- Cross-check: 50 appears on top/front, 80 on front/right, 42 on right matches top-view depth. Consistent.\n\n**Feature list:**\n1. T-profile prism: bar 50 (X) \u00d7 12 (Y) at back; stem 10 (X) \u00d7 30 (Y) centered, at front; height 80 (Z).\n2. Four C1 chamfers on the vertical edges at the crossbar's outer corners (|X| = 25).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from drawing ----\nbar_width = 50    # mm - overall X width of cross bar (top/front views)\ntotal_depth = 42  # mm - overall Y depth (right view)\nbar_depth = 12    # mm - Y thickness of cross bar (right view)\nstem_width = 10   # mm - X width of stem, centered (front view)\nheight = 80       # mm - overall Z height (front/right views)\nchamfer_len = 1   # mm - C1 chamfer on the four cross-bar corners\n\n# ---- Derived ----\nstem_depth = total_depth - bar_depth  # mm - stem length in Y = 42 - 12 = 30\n\nwith BuildPart() as part:\n    # T profile on the XY plane (top view): bar at back (+Y), stem at front (-Y)\n    with BuildSketch(Plane.XY):\n        with Locations((0, stem_depth + bar_depth / 2)):   # cross bar, Y in [30, 42]\n            Rectangle(bar_width, bar_depth)\n        with Locations((0, stem_depth / 2)):               # stem, Y in [0, 30]\n            Rectangle(stem_width, stem_depth)\n    extrude(amount=height)  # Z from 0 to 80\n\n    # C1 chamfers: the four vertical edges at the cross bar's outer corners (|X| = 25)\n    bar_corner_edges = [\n        e for e in part.edges().filter_by(Axis.Z)\n        if abs(abs(e.center().X) - bar_width / 2) < 1e-4\n    ]\n    chamfer(bar_corner_edges, chamfer_len)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.0,
+   "usage": {
+    "input_tokens": 5187,
+    "output_tokens": 930
+   },
+   "plan": "Reading unchanged (the failure was only a binding issue: the `with BuildPart() as part:` context variable is the builder, not the solid \u2014 `export_step` needs `part.part`).\n\n- TOP view (upper left): T-shaped plan; crossbar at back (+Y), stem toward front (\u2212Y); four \"C1\" callouts on the crossbar's outer corners.\n- FRONT view (lower left): 50 wide \u00d7 80 tall; stem 10 wide, centered \u2192 margins (50\u221210)/2 = 20.\n- RIGHT view: 42 deep \u00d7 80 tall; crossbar depth 12 at the back \u2192 stem length 42 \u2212 12 = 30.\n- Features: T-profile prism (bar 50\u00d712, stem 10\u00d730, height 80) + four C1 chamfers on the vertical edges at |X| = 25.\n\nFix: build inside `BuildPart() as bp`, then bind `part = bp.part` before exporting.",
+   "text": "<plan>\nReading unchanged (the failure was only a binding issue: the `with BuildPart() as part:` context variable is the builder, not the solid \u2014 `export_step` needs `part.part`).\n\n- TOP view (upper left): T-shaped plan; crossbar at back (+Y), stem toward front (\u2212Y); four \"C1\" callouts on the crossbar's outer corners.\n- FRONT view (lower left): 50 wide \u00d7 80 tall; stem 10 wide, centered \u2192 margins (50\u221210)/2 = 20.\n- RIGHT view: 42 deep \u00d7 80 tall; crossbar depth 12 at the back \u2192 stem length 42 \u2212 12 = 30.\n- Features: T-profile prism (bar 50\u00d712, stem 10\u00d730, height 80) + four C1 chamfers on the vertical edges at |X| = 25.\n\nFix: build inside `BuildPart() as bp`, then bind `part = bp.part` before exporting.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from drawing ----\nbar_width = 50    # mm - overall X width of cross bar (top/front views)\ntotal_depth = 42  # mm - overall Y depth (right view)\nbar_depth = 12    # mm - Y thickness of cross bar (right view)\nstem_width = 10   # mm - X width of stem, centered (front view)\nheight = 80       # mm - overall Z height (front/right views)\nchamfer_len = 1   # mm - C1 chamfer on the four cross-bar corners\n\n# ---- Derived ----\nstem_depth = total_depth - bar_depth  # mm - stem length in Y = 42 - 12 = 30\n\nwith BuildPart() as bp:\n    # T profile on the XY plane (top view): bar at back (+Y), stem at front (-Y)\n    with BuildSketch(Plane.XY):\n        with Locations((0, stem_depth + bar_depth / 2)):   # cross bar, Y in [30, 42]\n            Rectangle(bar_width, bar_depth)\n        with Locations((0, stem_depth / 2)):               # stem, Y in [0, 30]\n            Rectangle(stem_width, stem_depth)\n    extrude(amount=height)  # Z from 0 to 80\n\n    # C1 chamfers: the four vertical edges at the cross bar's outer corners (|X| = 25)\n    bar_corner_edges = [\n        e for e in bp.edges().filter_by(Axis.Z)\n        if abs(abs(e.center().X) - bar_width / 2) < 1e-4\n    ]\n    chamfer(bar_corner_edges, chamfer_len)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     50.0,
+     42.0,
+     80.0
+    ],
+    "volume_mm3": 71840.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 1.8,
+   "usage": {
+    "input_tokens": 9302,
+    "output_tokens": 171
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "108abe88-f9f4-6578-74ef-ae929d382767",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9989,
+  "ag_final_cand": 2,
+  "best_iou": 0.9989,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 34.9,
+  "t_agentic_s": 46.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 5959
+  },
+  "total_tokens": {
+   "in": 18599,
+   "out": 7060
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.9989
+ }
+}

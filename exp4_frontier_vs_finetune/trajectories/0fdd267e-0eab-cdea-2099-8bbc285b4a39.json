@@ -1,0 +1,108 @@
+{
+ "uid": "0fdd267e-0eab-cdea-2099-8bbc285b4a39",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 294.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 16239
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper long view, X\u2013Y): overall length **110** along X. Left end has C1 at both corners; right end has a concave **R6** quarter-round notch at the back-right corner (+X,+Y) and C1 at the front-right corner.\n- **FRONT view** (lower long view, X\u2013Z): length 110, height **8**. Two horizontal hidden lines run the full length = inner channel of a hollow tube; a vertical hidden line near the right end = tangent line of the R6 notch (confirming the notch cuts through the full height). C1 at all four end corners.\n- **RIGHT view** (small end view, Y\u2013Z): outer rectangle **15 wide \u00d7 8 high** with an inner rectangle \u2192 rectangular tube open at both ends; wall thickness \u2248 **2 mm** (inner channel 11 \u00d7 4, centered). C1 on all four outer corners.\n- **ISO (NTS):** confirms a thin-wall rectangular tube, open both ends, with a quarter-round scoop at one far corner.\n\n**Dimension chains:** no chains needed \u2014 each axis has a direct overall: X = 110, Y = 15, Z = 8.\n\n**Feature list:**\n1. Rectangular tube 110 \u00d7 15 \u00d7 8, wall 2 mm, through-channel 11 \u00d7 4 along X (open both ends).\n2. R6 concave quarter-round notch at corner (X=110, Y=15), full height (cylinder r6 tangent to the end face and back face).\n3. C1 (1 mm \u00d7 45\u00b0) chamfers on the outer perimeter edges of both end faces (8 edges; the R6 cut removes/interrupts the ones at its corner).",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper long view, X\u2013Y): overall length **110** along X. Left end has C1 at both corners; right end has a concave **R6** quarter-round notch at the back-right corner (+X,+Y) and C1 at the front-right corner.\n- **FRONT view** (lower long view, X\u2013Z): length 110, height **8**. Two horizontal hidden lines run the full length = inner channel of a hollow tube; a vertical hidden line near the right end = tangent line of the R6 notch (confirming the notch cuts through the full height). C1 at all four end corners.\n- **RIGHT view** (small end view, Y\u2013Z): outer rectangle **15 wide \u00d7 8 high** with an inner rectangle \u2192 rectangular tube open at both ends; wall thickness \u2248 **2 mm** (inner channel 11 \u00d7 4, centered). C1 on all four outer corners.\n- **ISO (NTS):** confirms a thin-wall rectangular tube, open both ends, with a quarter-round scoop at one far corner.\n\n**Dimension chains:** no chains needed \u2014 each axis has a direct overall: X = 110, Y = 15, Z = 8.\n\n**Feature list:**\n1. Rectangular tube 110 \u00d7 15 \u00d7 8, wall 2 mm, through-channel 11 \u00d7 4 along X (open both ends).\n2. R6 concave quarter-round notch at corner (X=110, Y=15), full height (cylinder r6 tangent to the end face and back face).\n3. C1 (1 mm \u00d7 45\u00b0) chamfers on the outer perimeter edges of both end faces (8 edges; the R6 cut removes/interrupts the ones at its corner).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nL = 110        # mm - overall length (X), top/front views\nW = 15         # mm - overall width  (Y), right-side view\nH = 8          # mm - overall height (Z), right-side view\nT = 2          # mm - tube wall thickness (inner 11 x 4 per end-view cross-section)\nR_NOTCH = 6    # mm - R6 concave quarter-round notch at the (+X,+Y) corner\nC1 = 1         # mm - C1 (45 deg) chamfers on end-face outer edges\n\nIN_W = W - 2 * T   # mm - inner channel width  = 11\nIN_H = H - 2 * T   # mm - inner channel height = 4\n\nwith BuildPart() as bp:\n    # Outer rectangular bar, centered on origin (X = length axis)\n    Box(L, W, H)\n\n    # C1 chamfers on the outer perimeter edges of both end faces:\n    # on a plain box the edges parallel to Y and to Z are exactly the\n    # 4 + 4 end-face edges (the long edges are parallel to X and stay sharp)\n    end_edges = bp.edges().filter_by(Axis.Y) + bp.edges().filter_by(Axis.Z)\n    chamfer(end_edges, length=C1)\n\n    # Through channel along X -> rectangular tube open at both ends\n    Box(L + 2, IN_W, IN_H, mode=Mode.SUBTRACT)\n\n    # R6 concave quarter-round notch at the (+X, +Y) corner, full height.\n    # Cylinder axis along Z, tangent to the end face (X=L/2) and back face (Y=W/2)\n    with Locations((L / 2 - R_NOTCH, W / 2 - R_NOTCH, 0)):\n        Cylinder(radius=R_NOTCH, height=H + 2, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     110.0,
+     15.0,
+     8.0
+    ],
+    "volume_mm3": 7819.2,
+    "watertight": false,
+    "n_mesh_components": 1,
+    "n_faces": 29,
+    "n_planar_faces": 27,
+    "n_cylindrical_faces": 2,
+    "n_solids": 2,
+    "cylindrical_radii_mm": [
+     6.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 131.4,
+   "usage": {
+    "input_tokens": 6318,
+    "output_tokens": 13421
+   },
+   "plan": "**Discrepancies found from the measurement feedback and renders:**\n1. **Top view shows a FULL circle** at the right end \u2014 my previous notch subtracted the entire r6 cylinder. The drawing shows only a *quarter-round* R6 notch: the arc is tangent to the back edge (Y=+7.5) and to the end face (X=110), removing only the corner material that lies *outside* the quarter disk.\n2. **\"solids: 2; watertight: False\"** \u2014 the full-cylinder cut detached the corner sliver (it stayed connected only along tangent lines). The correct cut must remove that corner sliver too, leaving a clean concave quarter-arc face.\n\n**Confirmed correct (kept unchanged):**\n- Extents: X = 110 (overall, direct), Y = 15, Z = 8 \u2014 bounding box already matches.\n- Tube: wall 2 mm \u2192 through channel 11 \u00d7 4 along X, open both ends (matches hidden lines in top/front views and inner rectangle in right view).\n- C1 chamfers on the 8 outer end-face edges (Y- and Z-parallel edges at X = \u00b155).\n- Notch location: corner (X=+110 end, Y=+15 back), per the R6 arrow in the top view.\n\n**Fix:** notch cutter = corner block (6 \u00d7 6 \u00d7 full height, spanning X\u2208[104,110]... i.e. [L/2\u22126, L/2], Y\u2208[W/2\u22126, W/2]) **minus** the r6 cylinder centered at the inner corner (L/2\u22126, W/2\u22126). Subtracting this cutter removes exactly the corner material outside the quarter disk, producing a single watertight solid with one cylindrical face, r = 6, tangent to both the back face and the end face.",
+   "text": "<plan>\n**Discrepancies found from the measurement feedback and renders:**\n1. **Top view shows a FULL circle** at the right end \u2014 my previous notch subtracted the entire r6 cylinder. The drawing shows only a *quarter-round* R6 notch: the arc is tangent to the back edge (Y=+7.5) and to the end face (X=110), removing only the corner material that lies *outside* the quarter disk.\n2. **\"solids: 2; watertight: False\"** \u2014 the full-cylinder cut detached the corner sliver (it stayed connected only along tangent lines). The correct cut must remove that corner sliver too, leaving a clean concave quarter-arc face.\n\n**Confirmed correct (kept unchanged):**\n- Extents: X = 110 (overall, direct), Y = 15, Z = 8 \u2014 bounding box already matches.\n- Tube: wall 2 mm \u2192 through channel 11 \u00d7 4 along X, open both ends (matches hidden lines in top/front views and inner rectangle in right view).\n- C1 chamfers on the 8 outer end-face edges (Y- and Z-parallel edges at X = \u00b155).\n- Notch location: corner (X=+110 end, Y=+15 back), per the R6 arrow in the top view.\n\n**Fix:** notch cutter = corner block (6 \u00d7 6 \u00d7 full height, spanning X\u2208[104,110]... i.e. [L/2\u22126, L/2], Y\u2208[W/2\u22126, W/2]) **minus** the r6 cylinder centered at the inner corner (L/2\u22126, W/2\u22126). Subtracting this cutter removes exactly the corner material outside the quarter disk, producing a single watertight solid with one cylindrical face, r = 6, tangent to both the back face and the end face.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nL = 110        # mm - overall length (X), top/front views\nW = 15         # mm - overall width  (Y), right-side view\nH = 8          # mm - overall height (Z), right-side view\nT = 2          # mm - tube wall thickness (inner channel 11 x 4 per end view)\nR_NOTCH = 6    # mm - R6 concave quarter-round notch at the (+X, +Y) corner\nC1 = 1         # mm - C1 (45 deg) chamfers on end-face outer edges\n\nIN_W = W - 2 * T   # mm - inner channel width  = 11\nIN_H = H - 2 * T   # mm - inner channel height = 4\n\n# R6 notch cutter: the 6x6 corner block MINUS the quarter cylinder that forms\n# the concave arc (cylinder tangent to the back face Y=W/2 and end face X=L/2).\n# Subtracting this removes only the corner material outside the quarter disk.\ncutter = (\n    Pos(L / 2 - R_NOTCH / 2, W / 2 - R_NOTCH / 2, 0) * Box(R_NOTCH, R_NOTCH, H + 2)\n    - Pos(L / 2 - R_NOTCH, W / 2 - R_NOTCH, 0) * Cylinder(radius=R_NOTCH, height=H + 2)\n)\n\nwith BuildPart() as bp:\n    # Outer rectangular bar, centered on origin (X = length axis)\n    Box(L, W, H)\n\n    # C1 chamfers on the outer perimeter edges of both end faces:\n    # on a plain box the edges parallel to Y and to Z are exactly the\n    # 4 + 4 end-face edges (the long edges are parallel to X and stay sharp)\n    end_edges = bp.edges().filter_by(Axis.Y) + bp.edges().filter_by(Axis.Z)\n    chamfer(end_edges, length=C1)\n\n    # Through channel along X -> rectangular tube open at both ends\n    Box(L + 2, IN_W, IN_H, mode=Mode.SUBTRACT)\n\n# Apply the R6 quarter-round corner notch (full height)\npart = bp.part - cutter\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     110.0,
+     15.0,
+     8.0
+    ],
+    "volume_mm3": 8269.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 18,
+    "n_planar_faces": 17,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     6.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 17.2,
+   "usage": {
+    "input_tokens": 7459,
+    "output_tokens": 2152
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0fdd267e-0eab-cdea-2099-8bbc285b4a39",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5824,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6098,
+  "ag_final_cand": 2,
+  "best_iou": 0.6098,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 297.9,
+  "t_agentic_s": 457.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 16239
+  },
+  "total_tokens": {
+   "in": 17887,
+   "out": 31812
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5824,
+  "2": 0.6098
+ }
+}

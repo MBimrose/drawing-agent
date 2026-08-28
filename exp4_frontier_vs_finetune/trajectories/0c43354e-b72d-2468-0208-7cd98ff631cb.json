@@ -1,0 +1,76 @@
+{
+ "uid": "0c43354e-b72d-2468-0208-7cd98ff631cb",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 98.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 16212
+   },
+   "plan": "Views (third\u2011angle): upper\u2011left = TOP (XY), lower\u2011left = FRONT (XZ), right of front = RIGHT (YZ). The part is an open\u2011top thin\u2011wall rectangular container with a central divider (two compartments), confirmed by the ISO.\n\nAxis chains (explicit arithmetic):\n- X (top & front share X): outer = 80. Interior chain from the \"1 / 2 / 1\" callouts plus the pocket size 38: 1 (wall) + 38 (pocket) + 2 (web) + 38 (pocket) + 1 (wall) = 80 \u2713. Compartment centres: left = 1+38/2 = 20, right = 1+38+2+38/2 = 60 (matches the \"20\" and \"60\" dims).\n- Y (top depth & right view): outer = 30 (right\u2011view width). Chain: 1 (front wall) + 28 (pocket) + 1 (back wall) = 30 \u2713; mid\u2011depth = 15 (the \"15\" dim).\n- Z (front & right share Z): outer = 60; pocket = 59 DEEP from the top, leaving floor = 60 \u2212 59 = 1 \u2713 (matches the \"59\"/\"60\" pair and the \"1\" floor).\n\nFeatures:\n- Outer box 80 (X) \u00d7 30 (Y) \u00d7 60 (Z).\n- Two identical pockets \"28 \u00d7 38 \u00d7 59 DEEP\": each 38 (X) \u00d7 28 (Y) \u00d7 59 (Z), opening at the top, leaving a 1 mm floor and a 2 mm central X\u2011web. Pocket A min\u2011corner (1,1,1); Pocket B min\u2011corner (41,1,1).\n- Holes \"3\u00d7 \u23004 THRU\": through the 1 mm floor, on the mid\u2011depth line y = 15; first hole at x = 20, pitch \"2\u00d7 15\" \u2192 x = 20, 35, 50 (all clear of the walls and the 39\u201341 web). No fillets/chamfers are called out.",
+   "text": "<plan>\nViews (third\u2011angle): upper\u2011left = TOP (XY), lower\u2011left = FRONT (XZ), right of front = RIGHT (YZ). The part is an open\u2011top thin\u2011wall rectangular container with a central divider (two compartments), confirmed by the ISO.\n\nAxis chains (explicit arithmetic):\n- X (top & front share X): outer = 80. Interior chain from the \"1 / 2 / 1\" callouts plus the pocket size 38: 1 (wall) + 38 (pocket) + 2 (web) + 38 (pocket) + 1 (wall) = 80 \u2713. Compartment centres: left = 1+38/2 = 20, right = 1+38+2+38/2 = 60 (matches the \"20\" and \"60\" dims).\n- Y (top depth & right view): outer = 30 (right\u2011view width). Chain: 1 (front wall) + 28 (pocket) + 1 (back wall) = 30 \u2713; mid\u2011depth = 15 (the \"15\" dim).\n- Z (front & right share Z): outer = 60; pocket = 59 DEEP from the top, leaving floor = 60 \u2212 59 = 1 \u2713 (matches the \"59\"/\"60\" pair and the \"1\" floor).\n\nFeatures:\n- Outer box 80 (X) \u00d7 30 (Y) \u00d7 60 (Z).\n- Two identical pockets \"28 \u00d7 38 \u00d7 59 DEEP\": each 38 (X) \u00d7 28 (Y) \u00d7 59 (Z), opening at the top, leaving a 1 mm floor and a 2 mm central X\u2011web. Pocket A min\u2011corner (1,1,1); Pocket B min\u2011corner (41,1,1).\n- Holes \"3\u00d7 \u23004 THRU\": through the 1 mm floor, on the mid\u2011depth line y = 15; first hole at x = 20, pitch \"2\u00d7 15\" \u2192 x = 20, 35, 50 (all clear of the walls and the 39\u201341 web). No fillets/chamfers are called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nL        = 80   # mm  overall X (top/front)\nW        = 30   # mm  overall Y depth (right view)\nH        = 60   # mm  overall Z height (front/right)\nt        = 1    # mm  outer wall / floor thickness (the \"1\" callouts)\nweb      = 2    # mm  central divider thickness in X (the \"2\" callout)\npkt_x    = 38   # mm  compartment size along X  (\"28 x 38 x 59 DEEP\")\npkt_y    = 28   # mm  compartment size along Y  (\"28 x 38 x 59 DEEP\")\npkt_d    = 59   # mm  compartment depth from top (\"... x 59 DEEP\")\nhole_d   = 4    # mm  3x dia4 THRU\nhole_x1  = 20   # mm  first hole from left edge (left compartment centre)\npitch    = 15   # mm  hole spacing (\"2x 15\")\nhole_y   = W / 2  # mm  holes on mid-depth line (= 15)\n\n# derived\nfloor = H - pkt_d            # = 1 mm (== t) bottom thickness under the pockets\nxB    = t + pkt_x + web      # = 41 mm, left wall of the right compartment\n# chain checks: t+pkt_x+web+pkt_x+t = 1+38+2+38+1 = 80 = L\n#               t+pkt_y+t           = 1+28+1       = 30 = W\n#               pkt_d + floor       = 59+1         = 60 = H\n\nwith BuildPart() as bp:\n    # outer solid, min corner at origin (X=80, Y=30, Z=60)\n    Box(L, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # two compartments, open at the top (z = H), floor at z = floor\n    with Locations((t, t, floor)):\n        Box(pkt_x, pkt_y, pkt_d,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n    with Locations((xB, t, floor)):\n        Box(pkt_x, pkt_y, pkt_d,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 3x dia4 THRU the bottom floor (x = 20, 35, 50 ; y = 15)\n    xs = [hole_x1, hole_x1 + pitch, hole_x1 + 2 * pitch]\n    with Locations(*[(x, hole_y, 0) for x in xs]):\n        Cylinder(radius=hole_d / 2, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     30.0,
+     60.0
+    ],
+    "volume_mm3": 18410.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.5,
+   "usage": {
+    "input_tokens": 7814,
+    "output_tokens": 318
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0c43354e-b72d-2468-0208-7cd98ff631cb",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7888,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7888,
+  "ag_final_cand": 1,
+  "best_iou": 0.7888,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 101.4,
+  "t_agentic_s": 107.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 16212
+  },
+  "total_tokens": {
+   "in": 11924,
+   "out": 16530
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7888
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "uid": "01f125ec-6a23-34bb-4690-90f202c96d13",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 138.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 18011
+   },
+   "plan": "Views: TOP (plan, XY) upper\u2011left; FRONT (XZ) directly below it; RIGHT (YZ) to the right of the front; ISO (NTS) pictorial.\n\nAxes / chains\n- X (top & front): overall = 80 (overall dim). Left leg width = 30 (top \"30\" and front \"30\" agree) \u21d2 L\u2011notch begins at X = 30.\n- Y (top & right): right view gives only a chain 30 + 10 + 30 = 70 and an overall 70 \u21d2 Y overall = 70. Bottom (right) arm height = first 30 \u21d2 notch removes Y 30\u219270 on the right side; the 10 (Y 30\u219240) and last 30 (Y 40\u219270) subdivide the left leg (pocket zone, etc.).\n- Z (front & right): thickness = 8.\n\nResulting L\u2011plate: base 80\u00d770\u00d78 with the upper\u2011right corner (X 30\u219280, Y 30\u219270) cut away. Arms: right arm 80\u00d730, left leg 30\u00d770.\n\nFeatures\n- 2\u00d7 \u00d86 THRU (vertical): hole A in left leg at X=15 (dim \"15\"), Y = 30 \u2212 7.5 = 22.5 (dim \"7.5\"); hole B in right arm at (30, 15) \u2014 diagonal pair as drawn.\n- Rectangular through\u2011slot in left leg next to inner corner: left edge X=10 (dim \"10\"), width 15 (X 10\u219225), height 8 (top\u2011view \"8\"), sitting in the Y 30\u219240 zone \u21d2 Y 32\u219240.\n- Semicircular edge scallops (the half\u2011round cutouts shown in plan and ISO): \u00d88 (R4, from the \"8\" callouts) through the plate, centered on the edges \u2014 left edge (Y 15, 45), bottom edge (X 20, 60), right edge (Y 15), and the two inner notch edges (X=30 at Y55; Y=30 at X55). A cylinder centered exactly on an edge removes a clean half\u2011round notch and does not change the 80\u00d770\u00d78 envelope.\n- No R/C chamfer or fillet callouts \u21d2 none added.",
+   "text": "<plan>\nViews: TOP (plan, XY) upper\u2011left; FRONT (XZ) directly below it; RIGHT (YZ) to the right of the front; ISO (NTS) pictorial.\n\nAxes / chains\n- X (top & front): overall = 80 (overall dim). Left leg width = 30 (top \"30\" and front \"30\" agree) \u21d2 L\u2011notch begins at X = 30.\n- Y (top & right): right view gives only a chain 30 + 10 + 30 = 70 and an overall 70 \u21d2 Y overall = 70. Bottom (right) arm height = first 30 \u21d2 notch removes Y 30\u219270 on the right side; the 10 (Y 30\u219240) and last 30 (Y 40\u219270) subdivide the left leg (pocket zone, etc.).\n- Z (front & right): thickness = 8.\n\nResulting L\u2011plate: base 80\u00d770\u00d78 with the upper\u2011right corner (X 30\u219280, Y 30\u219270) cut away. Arms: right arm 80\u00d730, left leg 30\u00d770.\n\nFeatures\n- 2\u00d7 \u00d86 THRU (vertical): hole A in left leg at X=15 (dim \"15\"), Y = 30 \u2212 7.5 = 22.5 (dim \"7.5\"); hole B in right arm at (30, 15) \u2014 diagonal pair as drawn.\n- Rectangular through\u2011slot in left leg next to inner corner: left edge X=10 (dim \"10\"), width 15 (X 10\u219225), height 8 (top\u2011view \"8\"), sitting in the Y 30\u219240 zone \u21d2 Y 32\u219240.\n- Semicircular edge scallops (the half\u2011round cutouts shown in plan and ISO): \u00d88 (R4, from the \"8\" callouts) through the plate, centered on the edges \u2014 left edge (Y 15, 45), bottom edge (X 20, 60), right edge (Y 15), and the two inner notch edges (X=30 at Y55; Y=30 at X55). A cylinder centered exactly on an edge removes a clean half\u2011round notch and does not change the 80\u00d770\u00d78 envelope.\n- No R/C chamfer or fillet callouts \u21d2 none added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing (mm) ----\nX_total   = 80   # mm  overall X (top/front)\ny1        = 30   # mm  right-arm height (side chain seg 1) -> notch starts at Y=30\ny2        = 10   # mm  middle zone of left leg (side chain seg 2)\ny3        = 30   # mm  upper zone of left leg (side chain seg 3)\nY_total   = y1 + y2 + y3   # mm = 30+10+30 = 70 overall Y (matches right-view 70)\nT         = 8    # mm  plate thickness (front/right views)\nleg_w     = 30   # mm  left-leg width in X (top \"30\" = front \"30\")\n\nstep_y    = y1                 # mm  top of right arm / bottom of corner notch (=30)\nnotch_w   = X_total - leg_w    # mm  notch width  = 80-30 = 50\nnotch_h   = Y_total - step_y   # mm  notch height = 70-30 = 40\n\nhole_d    = 6    # mm  \"2x \u00d86 THRU\"\nhole_r    = hole_d / 2\nholeA_x   = 15   # mm  dim \"15\" (left edge to hole A centre)\nholeA_y   = step_y - 7.5   # mm = 22.5 (dim \"7.5\" below the step)\nholeB_x   = leg_w          # mm = 30 (lower hole, in right arm)\nholeB_y   = y1 / 2         # mm = 15 (mid of 30-high arm)\n\nslot_x0   = 10   # mm  dim \"10\" (left edge to slot left side)\nslot_w    = 15   # mm  slot width in X (X 10 -> 25)\nslot_h    = 8    # mm  slot height in Y (top-view \"8\")\nslot_y1   = y1 + y2        # mm = 40 (top of the 10-wide zone)\nslot_y0   = slot_y1 - slot_h   # mm = 32\n\nsc_r      = 8 / 2  # mm  edge scallops \u00d88 -> R4 (the \"8\" callouts), through plate\n\nwith BuildPart() as bp:\n    # base plate and the upper-right corner notch (makes the L)\n    Box(X_total, Y_total, T, align=(Align.MIN, Align.MIN, Align.MIN))\n    with Locations((leg_w, step_y, 0)):\n        Box(notch_w, notch_h, T,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # rectangular through-slot next to the inner corner\n    with Locations((slot_x0, slot_y0, 0)):\n        Box(slot_w, slot_h, T,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 2x \u00d86 through holes\n    with Locations((holeA_x, holeA_y, 0), (holeB_x, holeB_y, 0)):\n        Cylinder(radius=hole_r, height=T,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\n    # semicircular edge scallops (\u00d88), cylinder centred on each edge\n    scallops = [\n        (0,       15,       0),   # left edge, lower\n        (0,       45,       0),   # left edge, upper\n        (20,      0,        0),   # bottom edge\n        (60,      0,        0),   # bottom edge\n        (X_total, 15,       0),   # right edge (arm tip)\n        (leg_w,   55,       0),   # inner vertical notch edge\n        (55,      step_y,   0),   # inner horizontal notch edge\n    ]\n    with Locations(*scallops):\n        Cylinder(radius=sc_r, height=T,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     70.0,
+     8.0
+    ],
+    "volume_mm3": 25985.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 28,
+    "n_planar_faces": 19,
+    "n_cylindrical_faces": 9,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 186.7,
+   "usage": {
+    "input_tokens": 7490,
+    "output_tokens": 1171
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "01f125ec-6a23-34bb-4690-90f202c96d13",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8342,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8342,
+  "ag_final_cand": 1,
+  "best_iou": 0.8342,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 142.0,
+  "t_agentic_s": 332.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 18011
+  },
+  "total_tokens": {
+   "in": 11600,
+   "out": 19182
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.8342
+ }
+}

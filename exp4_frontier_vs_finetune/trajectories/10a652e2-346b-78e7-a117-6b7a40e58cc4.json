@@ -1,0 +1,76 @@
+{
+ "uid": "10a652e2-346b-78e7-a117-6b7a40e58cc4",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 140.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 21859
+   },
+   "plan": "Views: the principal view (upper\u2011left) is the FRONT view (XZ plane) showing the true \"\u2514\" profile \u2014 a vertical leg on the left and a horizontal leg running to the right. The two lower rectangles are end/auxiliary views of the bar cross\u2011section. The ISO confirms an angle bracket: a long horizontal arm and a shorter vertical arm, both of rectangular section 20 \u00d7 10 with rounded edges.\n\nDimension chains / extents:\n- X (long leg): explicit OVERALL = 85 (front view). Consistency check: the leg's top face past the vertical leg = 85 \u2212 20 = 65, which matches the \"65\" used elsewhere \u2192 arm width 20 is coherent.\n- Z (short leg): = 65 (taken from the 65 mm auxiliary view; it is the shorter arm, matching the ISO where the upper arm is clearly shorter than the 85 arm). Overall height Z = 65.\n- Y (depth, out of the L plane): = 10 (end view is 10 wide \u00d7 20 tall, seen from +X \u2192 Y=10, Z=20). In\u2011plane leg width = 20. So bar section = 20 (in plane) \u00d7 10 (depth).\n\nFeatures: two rectangular legs 20 wide \u00d7 10 deep joined at 90\u00b0 with flush outer faces (shared 20\u00d720 corner). Edge treatment: \"6\u00d7 R2\" = the 6 corners of the L profile (5 convex + the re\u2011entrant elbow) and \"8\u00d7 R2\" = the rounded corners of the two 20\u00d710 leg sections \u2014 i.e. all outer edges (and the inside elbow) are radiused R2, exactly as the ISO shows (end faces are rounded rectangles). No holes are called out (no \u2300 dimensions); the small circles in the ISO are the R2 corner arcs, not drilled holes.\n\nModel: union of Box(85,10,20) and Box(20,10,65) with min corners at the origin, then fillet all edges R2. Overall result X=85, Y=10, Z=65.",
+   "text": "<plan>\nViews: the principal view (upper\u2011left) is the FRONT view (XZ plane) showing the true \"\u2514\" profile \u2014 a vertical leg on the left and a horizontal leg running to the right. The two lower rectangles are end/auxiliary views of the bar cross\u2011section. The ISO confirms an angle bracket: a long horizontal arm and a shorter vertical arm, both of rectangular section 20 \u00d7 10 with rounded edges.\n\nDimension chains / extents:\n- X (long leg): explicit OVERALL = 85 (front view). Consistency check: the leg's top face past the vertical leg = 85 \u2212 20 = 65, which matches the \"65\" used elsewhere \u2192 arm width 20 is coherent.\n- Z (short leg): = 65 (taken from the 65 mm auxiliary view; it is the shorter arm, matching the ISO where the upper arm is clearly shorter than the 85 arm). Overall height Z = 65.\n- Y (depth, out of the L plane): = 10 (end view is 10 wide \u00d7 20 tall, seen from +X \u2192 Y=10, Z=20). In\u2011plane leg width = 20. So bar section = 20 (in plane) \u00d7 10 (depth).\n\nFeatures: two rectangular legs 20 wide \u00d7 10 deep joined at 90\u00b0 with flush outer faces (shared 20\u00d720 corner). Edge treatment: \"6\u00d7 R2\" = the 6 corners of the L profile (5 convex + the re\u2011entrant elbow) and \"8\u00d7 R2\" = the rounded corners of the two 20\u00d710 leg sections \u2014 i.e. all outer edges (and the inside elbow) are radiused R2, exactly as the ISO shows (end faces are rounded rectangles). No holes are called out (no \u2300 dimensions); the small circles in the ISO are the R2 corner arcs, not drilled holes.\n\nModel: union of Box(85,10,20) and Box(20,10,65) with min corners at the origin, then fillet all edges R2. Overall result X=85, Y=10, Z=65.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL_long  = 85   # mm  overall length of the long (horizontal) leg, X\nL_short = 65   # mm  overall height of the short (vertical) leg, Z\nARM     = 20   # mm  leg width measured in the plane of the L (front view)\nTHK     = 10   # mm  leg thickness / depth out of the L plane (Y)\nR       = 2    # mm  edge fillet radius (\"6\u00d7 R2\" profile corners, \"8\u00d7 R2\" section corners)\n\n# derived extents (overall): X = L_long, Y = THK, Z = L_short\nwith BuildPart() as bp:\n    # long leg: X 0..85, Y 0..10, Z 0..20\n    Box(L_long, THK, ARM, align=(Align.MIN, Align.MIN, Align.MIN))\n    # short leg: X 0..20, Y 0..10, Z 0..65 (shares the 20x10x20 corner -> flush outer \"\u2514\")\n    Box(ARM, THK, L_short, align=(Align.MIN, Align.MIN, Align.MIN))\n    # R2 on the L-profile corners (incl. the re-entrant elbow) and the leg-section corners\n    fillet(bp.edges(), radius=R)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     85.0,
+     10.0,
+     65.0
+    ],
+    "volume_mm3": 25461.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 38,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 18,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.1,
+   "usage": {
+    "input_tokens": 7352,
+    "output_tokens": 1355
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "10a652e2-346b-78e7-a117-6b7a40e58cc4",
+  "ss_exec_ok": true,
+  "ss_iou": 0.0383,
+  "ag_exec_ok": true,
+  "ag_iou": 0.0383,
+  "ag_final_cand": 1,
+  "best_iou": 0.0383,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 143.8,
+  "t_agentic_s": 158.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 21859
+  },
+  "total_tokens": {
+   "in": 11462,
+   "out": 23214
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.0383
+ }
+}

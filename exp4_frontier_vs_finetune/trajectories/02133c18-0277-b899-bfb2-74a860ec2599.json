@@ -1,0 +1,77 @@
+{
+ "uid": "02133c18-0277-b899-bfb2-74a860ec2599",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 72.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 9181
+   },
+   "plan": "**View identification (third-angle):** The upper-left view with the rectangle and holes is the TOP (plan, XY). The thin strip below it is the FRONT (XZ), giving thickness. The thin strip to its right is the RIGHT view (YZ). ISO confirms a flat rectangular plate with 5 holes and beveled edges.\n\n**Dimension chains:**\n- X axis (top view): baseline chain from the \u2212X edge: 15 (left hole column), 45 (center hole), 75 (right hole column); overall 90 given directly. Checks: 90 \u2212 75 = 15 (symmetric margins), center 45 = 90/2, hole pitch 75 \u2212 15 = 60.\n- Y axis (right view): baseline chain from the \u2212Y edge: 15 (front hole row), 35 (center), 55 (back row); overall 70 given directly. Checks: 70 \u2212 55 = 15 (symmetric), center 35 = 70/2, hole pitch 55 \u2212 15 = 40.\n- Z axis (front view): thickness 5 (overall).\n\n**Features:**\n- Plate 90 \u00d7 70 \u00d7 5.\n- 1\u00d7 \u230010 THRU at the plate center (45, 35).\n- 4\u00d7 \u23006 THRU at (15, 15), (15, 55), (75, 15), (75, 55).\n- C0.5 chamfers called out on the top and bottom outer perimeter edges (leaders in all three views). The inner rectangle seen in the plan is the chamfer footprint line, and the plan corners remain square \u2014 so the vertical corner edges are NOT chamfered; only the 8 horizontal top/bottom edges get C0.5.",
+   "text": "<plan>\n**View identification (third-angle):** The upper-left view with the rectangle and holes is the TOP (plan, XY). The thin strip below it is the FRONT (XZ), giving thickness. The thin strip to its right is the RIGHT view (YZ). ISO confirms a flat rectangular plate with 5 holes and beveled edges.\n\n**Dimension chains:**\n- X axis (top view): baseline chain from the \u2212X edge: 15 (left hole column), 45 (center hole), 75 (right hole column); overall 90 given directly. Checks: 90 \u2212 75 = 15 (symmetric margins), center 45 = 90/2, hole pitch 75 \u2212 15 = 60.\n- Y axis (right view): baseline chain from the \u2212Y edge: 15 (front hole row), 35 (center), 55 (back row); overall 70 given directly. Checks: 70 \u2212 55 = 15 (symmetric), center 35 = 70/2, hole pitch 55 \u2212 15 = 40.\n- Z axis (front view): thickness 5 (overall).\n\n**Features:**\n- Plate 90 \u00d7 70 \u00d7 5.\n- 1\u00d7 \u230010 THRU at the plate center (45, 35).\n- 4\u00d7 \u23006 THRU at (15, 15), (15, 55), (75, 15), (75, 55).\n- C0.5 chamfers called out on the top and bottom outer perimeter edges (leaders in all three views). The inner rectangle seen in the plan is the chamfer footprint line, and the plan corners remain square \u2014 so the vertical corner edges are NOT chamfered; only the 8 horizontal top/bottom edges get C0.5.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (all mm) ----\nplate_X = 90.0      # overall length, X (top view, bottom dim)\nplate_Y = 70.0      # overall width, Y (right view, bottom dim)\nplate_Z = 5.0       # plate thickness (front view)\n\nx_hole1 = 15.0      # baseline dim: left hole column from -X edge\nx_holeC = 45.0      # baseline dim: centre hole from -X edge (= plate_X/2)\nx_hole2 = 75.0      # baseline dim: right hole column from -X edge\ny_hole1 = 15.0      # baseline dim: front hole row from -Y edge\ny_holeC = 35.0      # baseline dim: centre hole from -Y edge (= plate_Y/2)\ny_hole2 = 55.0      # baseline dim: back hole row from -Y edge\n\ndia_centre = 10.0   # \u230010 THRU at plate centre\ndia_corner = 6.0    # 4\u00d7 \u23006 THRU\n\ncham = 0.5          # C0.5 chamfer on top & bottom outer edges\n\n# ---- Derived positions relative to part centre ----\ncx = plate_X / 2\ncy = plate_Y / 2\ncorner_pts = [\n    (x_hole1 - cx, y_hole1 - cy),\n    (x_hole1 - cx, y_hole2 - cy),\n    (x_hole2 - cx, y_hole1 - cy),\n    (x_hole2 - cx, y_hole2 - cy),\n]\n\nwith BuildPart() as bp:\n    Box(plate_X, plate_Y, plate_Z)\n\n    # C0.5 chamfers on the top and bottom perimeter edges only\n    # (plan-view corners stay square, so vertical edges are excluded)\n    horiz_edges = [e for e in bp.edges() if abs(e.tangent_at(0).Z) < 1e-3]\n    chamfer(horiz_edges, length=cham)\n\n    # \u230010 THRU at centre\n    with Locations((x_holeC - cx, y_holeC - cy)):\n        Cylinder(radius=dia_centre / 2, height=plate_Z * 3, mode=Mode.SUBTRACT)\n\n    # 4\u00d7 \u23006 THRU\n    with Locations(corner_pts):\n        Cylinder(radius=dia_corner / 2, height=plate_Z * 3, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     90.0,
+     70.0,
+     5.0
+    ],
+    "volume_mm3": 30464.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.2,
+   "usage": {
+    "input_tokens": 6897,
+    "output_tokens": 682
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "02133c18-0277-b899-bfb2-74a860ec2599",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9005,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9005,
+  "ag_final_cand": 1,
+  "best_iou": 0.9005,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 75.1,
+  "t_agentic_s": 85.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 9181
+  },
+  "total_tokens": {
+   "in": 11007,
+   "out": 9863
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9005
+ }
+}

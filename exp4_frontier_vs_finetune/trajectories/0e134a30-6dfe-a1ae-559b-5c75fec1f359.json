@@ -1,0 +1,76 @@
+{
+ "uid": "0e134a30-6dfe-a1ae-559b-5c75fec1f359",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 68.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11361
+   },
+   "plan": "**Views:** Top (plan) = large upper-left view; Front = thin view below it; Right = thin view to the right of the front; ISO (NTS) confirms form: a plate with a centered rectangular recess, a raised central island pad inside the recess, and 4 through-holes inside the recess area.\n\n**Dimension chains / extents:**\n- X axis: overall 80 given directly (top & front views). Ordinate dims from left edge: 20 (left hole centre), 25 (pad left edge), 40 (part/pad centreline), 60 (right hole centre). Check: 40 = 80/2 \u2714; hole spacing 60\u221220 = 40; pad 25\u219255 = 30 wide (the \"30\" dim) \u2714.\n- Y axis: overall 60 given directly (right view). Ordinate dims from front edge: 15 (front hole row), 30 (centreline), 45 (back hole row). Check: 30 = 60/2 \u2714; hole row spacing 45\u221215 = 30; pad height (Y) = 16, centred \u2192 22\u219238.\n- Z axis: overall 15 (front view). Pocket \"50 \u00d7 70 \u00d7 4 DEEP\" \u2192 floor at 15\u22124 = 11.\n\n**Features:**\n1. Base plate 80 (X) \u00d7 60 (Y) \u00d7 15 (Z).\n2. Rectangular pocket 70 (X) \u00d7 50 (Y) \u00d7 4 deep, centred \u2192 uniform 5 mm rim ((80\u221270)/2 = (60\u221250)/2 = 5) \u2714 (70 must be X, else Y margin would be negative).\n3. Central island pad 30 (X) \u00d7 16 (Y), centred (X 25\u219255, Y 22\u219238). No separate height dimension exists, so the pad top is flush with the part top face: it stands on the pocket floor, height = pocket depth = 4 (Z 11\u219215).\n4. 4\u00d7 \u23005 THRU holes at (X,Y) = (20,15), (60,15), (20,45), (60,45) \u2014 a centred 40 \u00d7 30 pattern lying inside the pocket, clear of the pad.\n\nNo chamfers or fillets are called out.",
+   "text": "<plan>\n**Views:** Top (plan) = large upper-left view; Front = thin view below it; Right = thin view to the right of the front; ISO (NTS) confirms form: a plate with a centered rectangular recess, a raised central island pad inside the recess, and 4 through-holes inside the recess area.\n\n**Dimension chains / extents:**\n- X axis: overall 80 given directly (top & front views). Ordinate dims from left edge: 20 (left hole centre), 25 (pad left edge), 40 (part/pad centreline), 60 (right hole centre). Check: 40 = 80/2 \u2714; hole spacing 60\u221220 = 40; pad 25\u219255 = 30 wide (the \"30\" dim) \u2714.\n- Y axis: overall 60 given directly (right view). Ordinate dims from front edge: 15 (front hole row), 30 (centreline), 45 (back hole row). Check: 30 = 60/2 \u2714; hole row spacing 45\u221215 = 30; pad height (Y) = 16, centred \u2192 22\u219238.\n- Z axis: overall 15 (front view). Pocket \"50 \u00d7 70 \u00d7 4 DEEP\" \u2192 floor at 15\u22124 = 11.\n\n**Features:**\n1. Base plate 80 (X) \u00d7 60 (Y) \u00d7 15 (Z).\n2. Rectangular pocket 70 (X) \u00d7 50 (Y) \u00d7 4 deep, centred \u2192 uniform 5 mm rim ((80\u221270)/2 = (60\u221250)/2 = 5) \u2714 (70 must be X, else Y margin would be negative).\n3. Central island pad 30 (X) \u00d7 16 (Y), centred (X 25\u219255, Y 22\u219238). No separate height dimension exists, so the pad top is flush with the part top face: it stands on the pocket floor, height = pocket depth = 4 (Z 11\u219215).\n4. 4\u00d7 \u23005 THRU holes at (X,Y) = (20,15), (60,15), (20,45), (60,45) \u2014 a centred 40 \u00d7 30 pattern lying inside the pocket, clear of the pad.\n\nNo chamfers or fillets are called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Named parameters (read from drawing) ----\nL = 80.0              # mm  overall length (X) - top/front views\nW = 60.0              # mm  overall width  (Y) - top/right views\nH = 15.0              # mm  overall height (Z) - front view\n\nPOCKET_L = 70.0       # mm  recess length (X) - \"50 x 70 x 4 DEEP\"\nPOCKET_W = 50.0       # mm  recess width  (Y) - \"50 x 70 x 4 DEEP\"\nPOCKET_D = 4.0        # mm  recess depth      - \"50 x 70 x 4 DEEP\"\n\nBOSS_L = 30.0         # mm  central pad length (X) - top view\nBOSS_W = 16.0         # mm  central pad width  (Y) - top view\nBOSS_H = POCKET_D     # mm  pad stands on pocket floor, top flush with top face\n\nHOLE_D = 5.0          # mm  \"4x D5 THRU\"\nHOLE_X1 = 20.0        # mm  left  hole column centre from left edge\nHOLE_X2 = 60.0        # mm  right hole column centre from left edge\nHOLE_Y1 = 15.0        # mm  front hole row centre from front edge\nHOLE_Y2 = 45.0        # mm  back  hole row centre from front edge\n\n# ---- Derived values ----\nhole_xs = (HOLE_X1 - L / 2, HOLE_X2 - L / 2)   # -20, +20 (centred pattern)\nhole_ys = (HOLE_Y1 - W / 2, HOLE_Y2 - W / 2)   # -15, +15 (centred pattern)\nz_floor = H - POCKET_D                          # pocket floor at z = 11\n\nwith BuildPart() as model:\n    # Base plate 80 x 60 x 15\n    Box(L, W, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # Centred rectangular pocket, 4 deep from the top face\n    with Locations((0, 0, H)):\n        Box(POCKET_L, POCKET_W, POCKET_D,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # Central island pad on the pocket floor, flush with the top face\n    with Locations((0, 0, z_floor)):\n        Box(BOSS_L, BOSS_W, BOSS_H,\n            align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # 4x D5 through holes\n    with Locations([(x, y) for x in hole_xs for y in hole_ys]):\n        Cylinder(radius=HOLE_D / 2, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = model.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     15.0
+    ],
+    "volume_mm3": 59058.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.5,
+   "usage": {
+    "input_tokens": 7258,
+    "output_tokens": 659
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0e134a30-6dfe-a1ae-559b-5c75fec1f359",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9116,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9116,
+  "ag_final_cand": 1,
+  "best_iou": 0.9116,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 71.6,
+  "t_agentic_s": 79.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11361
+  },
+  "total_tokens": {
+   "in": 11368,
+   "out": 12020
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9116
+ }
+}

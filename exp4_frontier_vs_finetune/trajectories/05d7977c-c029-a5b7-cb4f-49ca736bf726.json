@@ -1,0 +1,78 @@
+{
+ "uid": "05d7977c-c029-a5b7-cb4f-49ca736bf726",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 322.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19248
+   },
+   "plan": "**Views** (third-angle): Top (plan) upper-left; Front below it; Right side to the right of the Front; ISO is NTS pictorial.\n\n**Dimension chains**\n- X: no overall given \u2014 top view dimensions 30 from the left edge to the vertical centreline \u21d2 overall X = 2 \u00d7 30 = **60**. (Confirmed: a \u00d842.4 bolt circle, r = 21.2, could not fit in a 30-wide plate.)\n- Y: right view gives the overall directly = **40**. (Consistent with the dashed \u00d842.4 BC slightly crossing the top/bottom edges in the top view, since 21.2 > 20.)\n- Z: front view chain = 12 overall with 2 boss above the plate \u21d2 plate = 12 \u2212 2 = **10**, boss = **2**.\n\n**Features**\n- Base plate 60 \u00d7 40 \u00d7 10.\n- Central boss \u00d820 \u00d7 2 high on the top face (\u00d820 callout in top view; \"20\" width confirmed in the right view).\n- Central through hole visible as the inner concentric circle in the top view and as the ring opening in the ISO; it carries no callout \u2014 scaled from the to-scale top view it is \u2248 0.6 \u00d7 boss \u21d2 **\u00d812 through** (also \u2248 2\u00d7 the \u00d86 holes).\n- 4\u00d7 \u00d86 THRU, equally spaced (90\u00b0) on \u00d842.4 BC, sitting on the diagonals \u21d2 (\u00b121.2\u00b7cos45\u00b0, \u00b121.2\u00b7sin45\u00b0) \u2248 (\u00b115, \u00b115).\n- C0.5 chamfers (45\u00b0 \u00d7 0.5) on the four vertical corner edges of the plate (leaders point to the four corners in the top view; confirmed in ISO).\n\n**Construction**: extrude plate \u2192 chamfer its 4 vertical edges \u2192 add boss \u2192 subtract centre hole through everything \u2192 subtract 4 bolt holes through the plate.",
+   "text": "<plan>\n**Views** (third-angle): Top (plan) upper-left; Front below it; Right side to the right of the Front; ISO is NTS pictorial.\n\n**Dimension chains**\n- X: no overall given \u2014 top view dimensions 30 from the left edge to the vertical centreline \u21d2 overall X = 2 \u00d7 30 = **60**. (Confirmed: a \u00d842.4 bolt circle, r = 21.2, could not fit in a 30-wide plate.)\n- Y: right view gives the overall directly = **40**. (Consistent with the dashed \u00d842.4 BC slightly crossing the top/bottom edges in the top view, since 21.2 > 20.)\n- Z: front view chain = 12 overall with 2 boss above the plate \u21d2 plate = 12 \u2212 2 = **10**, boss = **2**.\n\n**Features**\n- Base plate 60 \u00d7 40 \u00d7 10.\n- Central boss \u00d820 \u00d7 2 high on the top face (\u00d820 callout in top view; \"20\" width confirmed in the right view).\n- Central through hole visible as the inner concentric circle in the top view and as the ring opening in the ISO; it carries no callout \u2014 scaled from the to-scale top view it is \u2248 0.6 \u00d7 boss \u21d2 **\u00d812 through** (also \u2248 2\u00d7 the \u00d86 holes).\n- 4\u00d7 \u00d86 THRU, equally spaced (90\u00b0) on \u00d842.4 BC, sitting on the diagonals \u21d2 (\u00b121.2\u00b7cos45\u00b0, \u00b121.2\u00b7sin45\u00b0) \u2248 (\u00b115, \u00b115).\n- C0.5 chamfers (45\u00b0 \u00d7 0.5) on the four vertical corner edges of the plate (leaders point to the four corners in the top view; confirmed in ISO).\n\n**Construction**: extrude plate \u2192 chamfer its 4 vertical edges \u2192 add boss \u2192 subtract centre hole through everything \u2192 subtract 4 bolt holes through the plate.\n</plan>\n\n```python\nfrom build123d import *\nfrom math import cos, sin, radians\n\n# ---------- dimensions read from the drawing ----------\nhalf_length       = 30            # mm  top view: left edge to vertical centreline\nlength            = 2 * half_length  # mm  overall X (= 60)\nwidth             = 40            # mm  right view: overall Y\noverall_h         = 12            # mm  front view: overall height\nboss_h            = 2             # mm  front view: boss height above plate\nplate_t           = overall_h - boss_h  # mm  plate thickness (= 10)\nboss_dia          = 20            # mm  top view \u00d820 callout / right view \"20\"\ncentre_hole_dia   = 12            # mm  centre through hole (no callout; scaled from top view, ~0.6 x boss)\nbolt_hole_dia     = 6             # mm  4x \u00d86 THRU\nbolt_circle_dia   = 42.4          # mm  \u00d842.4 BC\ncorner_chamfer    = 0.5           # mm  C0.5 on the four plate corners\n\n# holes equally spaced on the bolt circle, on the diagonals (~\u00b115, \u00b115)\nbc_r = bolt_circle_dia / 2\nbolt_pts = [(bc_r * cos(radians(a)), bc_r * sin(radians(a)))\n            for a in (45, 135, 225, 315)]\n\nwith BuildPart() as bp:\n    # base plate 60 x 40 x 10\n    with BuildSketch():\n        Rectangle(length, width)\n    extrude(amount=plate_t)\n\n    # C0.5 chamfers on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), corner_chamfer)\n\n    # central boss \u00d820 x 2\n    with BuildSketch(Plane.XY.offset(plate_t)):\n        Circle(boss_dia / 2)\n    extrude(amount=boss_h)\n\n    # centre through hole (through boss and plate)\n    with BuildSketch(Plane.XY.offset(overall_h)):\n        Circle(centre_hole_dia / 2)\n    extrude(amount=-overall_h, mode=Mode.SUBTRACT)\n\n    # 4x \u00d86 through holes on \u00d842.4 BC\n    with BuildSketch(Plane.XY.offset(plate_t)):\n        with Locations(bolt_pts):\n            Circle(bolt_hole_dia / 2)\n    extrude(amount=-plate_t, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     40.0,
+     12.0
+    ],
+    "volume_mm3": 22140.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 17,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     6.0,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 11.1,
+   "usage": {
+    "input_tokens": 7185,
+    "output_tokens": 1406
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "05d7977c-c029-a5b7-cb4f-49ca736bf726",
+  "ss_exec_ok": true,
+  "ss_iou": 0.772,
+  "ag_exec_ok": true,
+  "ag_iou": 0.772,
+  "ag_final_cand": 1,
+  "best_iou": 0.772,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 325.1,
+  "t_agentic_s": 339.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19248
+  },
+  "total_tokens": {
+   "in": 11295,
+   "out": 20654
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.772
+ }
+}

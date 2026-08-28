@@ -1,0 +1,90 @@
+{
+ "uid": "0b144460-77a7-3e71-e475-aed973c42446",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1798.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 21730
+   },
+   "plan": "Views: the large rectangle with slots/holes is the TOP (plan, XY); the thin 80\u2011wide strip below it is the FRONT (XZ); the 60\u2011wide strip to its right is the RIGHT (YZ). ISO confirms a flat plate with recessed longitudinal slots and a hole grid.\n\nAxis chains / overalls:\n- X overall = 80 (front + top). Datum chain from left edge: 16 (first hole column), 32.5 (right edge of left wide slot), 40 (centre of middle slot), 47.5 (left edge of right wide slot); symmetry about 40 gives the right side (80\u221232.5=47.5, 80\u22127.5=72.5).\n- Y overall = 60 (right view). Slots are \"\u00d7 50\" long \u2192 centred, margin (60\u221250)/2 = 5 each end.\n- Z overall = 16 (vertical dim by front/right views). Slots are \"5 DEEP\" from the top (floor at z = 11).\n\nFeatures:\n- Corner fillets: 4\u00d7 R2 on the four vertical corner edges.\n- Pockets (all 50 long in Y, 5 deep from top): two wide 25 \u2192 X [7.5, 32.5] and [47.5, 72.5]; one narrow 10 \u2192 centred on 40, X [35, 45]. (Matches the 32.5 / 40 / 47.5 chain and the \"25\u00d750\u00d75\" \u00d72 + \"10\u00d750\u00d75\" \u00d71 callouts.)\n- Holes: \"20\u00d7 \u23006 THRU (4\u00d75)\" = 5 columns in X (\"4\u00d7 12\" \u2192 span 48, margin (80\u221248)/2 = 16) \u00d7 4 rows in Y (\"3\u00d7 12\" \u2192 span 36, margin (60\u221236)/2 = 12). Columns X = 16, 28, 40, 52, 64; rows Y = 12, 24, 36, 48; all lie inside the slots. Drilled through the full 16.",
+   "text": "<plan>\nViews: the large rectangle with slots/holes is the TOP (plan, XY); the thin 80\u2011wide strip below it is the FRONT (XZ); the 60\u2011wide strip to its right is the RIGHT (YZ). ISO confirms a flat plate with recessed longitudinal slots and a hole grid.\n\nAxis chains / overalls:\n- X overall = 80 (front + top). Datum chain from left edge: 16 (first hole column), 32.5 (right edge of left wide slot), 40 (centre of middle slot), 47.5 (left edge of right wide slot); symmetry about 40 gives the right side (80\u221232.5=47.5, 80\u22127.5=72.5).\n- Y overall = 60 (right view). Slots are \"\u00d7 50\" long \u2192 centred, margin (60\u221250)/2 = 5 each end.\n- Z overall = 16 (vertical dim by front/right views). Slots are \"5 DEEP\" from the top (floor at z = 11).\n\nFeatures:\n- Corner fillets: 4\u00d7 R2 on the four vertical corner edges.\n- Pockets (all 50 long in Y, 5 deep from top): two wide 25 \u2192 X [7.5, 32.5] and [47.5, 72.5]; one narrow 10 \u2192 centred on 40, X [35, 45]. (Matches the 32.5 / 40 / 47.5 chain and the \"25\u00d750\u00d75\" \u00d72 + \"10\u00d750\u00d75\" \u00d71 callouts.)\n- Holes: \"20\u00d7 \u23006 THRU (4\u00d75)\" = 5 columns in X (\"4\u00d7 12\" \u2192 span 48, margin (80\u221248)/2 = 16) \u00d7 4 rows in Y (\"3\u00d7 12\" \u2192 span 36, margin (60\u221236)/2 = 12). Columns X = 16, 28, 40, 52, 64; rows Y = 12, 24, 36, 48; all lie inside the slots. Drilled through the full 16.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing ----\nW = 80.0          # mm  overall X (top / front views)\nD = 60.0          # mm  overall Y (right view)\nH = 16.0          # mm  overall Z (vertical dim at front/right views)\ncorner_r = 2.0    # mm  4x R2 on the vertical corner edges\n\nslot_len = 50.0   # mm  slot length in Y  (\"x 50\")\nslot_depth = 5.0  # mm  slot depth        (\"5 DEEP\")\nwide_w = 25.0     # mm  \"25 x 50 x 5 DEEP\" (two slots)\nnarrow_w = 10.0   # mm  \"10 x 50 x 5 DEEP\" (one slot)\n\n# X locations from the top-view datum chain (left edge = 0)\ne_leftwide_right = 32.5   # mm  right edge of left wide slot\nc_narrow = 40.0           # mm  centre of middle (narrow) slot\ne_rightwide_left = 47.5   # mm  left edge of right wide slot\n\nslot_x = [\n    (e_leftwide_right - wide_w, e_leftwide_right),        # (7.5, 32.5)  wide\n    (c_narrow - narrow_w / 2, c_narrow + narrow_w / 2),   # (35, 45)     narrow\n    (e_rightwide_left, e_rightwide_left + wide_w),        # (47.5, 72.5) wide\n]\nslot_y0 = (D - slot_len) / 2                              # 5 mm, slots centred in Y\n\nhole_d = 6.0        # mm  20x dia6 THRU\nhole_pitch = 12.0   # mm  \"4x 12\" (X) and \"3x 12\" (Y)\n# 5 columns in X (4 gaps x 12 = 48) centred -> margin 16 ; 4 rows in Y (3 gaps x 12 = 36) centred -> margin 12\ncol_xs = [(W - 4 * hole_pitch) / 2 + i * hole_pitch for i in range(5)]  # 16,28,40,52,64\nrow_ys = [(D - 3 * hole_pitch) / 2 + j * hole_pitch for j in range(4)]  # 12,24,36,48\n\nwith BuildPart() as part:\n    # base plate\n    Box(W, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # 4x R2 on the vertical corner edges (before adding interior features)\n    fillet(edges().filter_by(Axis.Z), radius=corner_r)\n\n    # recessed slots, 5 deep from the top face\n    for (x0, x1) in slot_x:\n        with Locations((x0, slot_y0, H - slot_depth)):\n            Box(x1 - x0, slot_len, slot_depth,\n                align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 20 through-holes, dia 6\n    with Locations([(x, y, 0) for x in col_xs for y in row_ys]):\n        Cylinder(radius=hole_d / 2, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.1,
+   "usage": {
+    "input_tokens": 5678,
+    "output_tokens": 1098
+   },
+   "plan": "Reading unchanged: 80 \u00d7 60 \u00d7 16 plate; corner fillets 4\u00d7 R2; three top pockets 5 deep, 50 long in Y (wide 25 at X [7.5, 32.5] and [47.5, 72.5], narrow 10 at X [35, 45]); 20\u00d7 \u23006 through-holes on a 5\u00d74 grid pitched 12 (X = 16, 28, 40, 52, 64; Y = 12, 24, 36, 48).\n\nFix: the BuildPart context object is not a Shape \u2014 extract the solid with `bp.part`, bind it to `part`, then export.",
+   "text": "<plan>\nReading unchanged: 80 \u00d7 60 \u00d7 16 plate; corner fillets 4\u00d7 R2; three top pockets 5 deep, 50 long in Y (wide 25 at X [7.5, 32.5] and [47.5, 72.5], narrow 10 at X [35, 45]); 20\u00d7 \u23006 through-holes on a 5\u00d74 grid pitched 12 (X = 16, 28, 40, 52, 64; Y = 12, 24, 36, 48).\n\nFix: the BuildPart context object is not a Shape \u2014 extract the solid with `bp.part`, bind it to `part`, then export.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing ----\nW = 80.0          # mm  overall X (top / front views)\nD = 60.0          # mm  overall Y (right view)\nH = 16.0          # mm  overall Z (vertical dim at front/right views)\ncorner_r = 2.0    # mm  4x R2 on the vertical corner edges\n\nslot_len = 50.0   # mm  slot length in Y  (\"x 50\")\nslot_depth = 5.0  # mm  slot depth        (\"5 DEEP\")\nwide_w = 25.0     # mm  \"25 x 50 x 5 DEEP\" (two slots)\nnarrow_w = 10.0   # mm  \"10 x 50 x 5 DEEP\" (one slot)\n\n# X locations from the top-view datum chain (left edge = 0)\ne_leftwide_right = 32.5   # mm  right edge of left wide slot\nc_narrow = 40.0           # mm  centre of middle (narrow) slot\ne_rightwide_left = 47.5   # mm  left edge of right wide slot\n\nslot_x = [\n    (e_leftwide_right - wide_w, e_leftwide_right),        # (7.5, 32.5)  wide\n    (c_narrow - narrow_w / 2, c_narrow + narrow_w / 2),   # (35, 45)     narrow\n    (e_rightwide_left, e_rightwide_left + wide_w),        # (47.5, 72.5) wide\n]\nslot_y0 = (D - slot_len) / 2                              # 5 mm, slots centred in Y\n\nhole_d = 6.0        # mm  20x dia6 THRU\nhole_pitch = 12.0   # mm  \"4x 12\" (X) and \"3x 12\" (Y)\n# 5 columns in X (4 gaps x 12 = 48) centred -> margin 16 ; 4 rows in Y (3 gaps x 12 = 36) centred -> margin 12\ncol_xs = [(W - 4 * hole_pitch) / 2 + i * hole_pitch for i in range(5)]  # 16,28,40,52,64\nrow_ys = [(D - 3 * hole_pitch) / 2 + j * hole_pitch for j in range(4)]  # 12,24,36,48\n\nwith BuildPart() as bp:\n    # base plate\n    Box(W, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # 4x R2 on the vertical corner edges (before adding interior features)\n    fillet(edges().filter_by(Axis.Z), radius=corner_r)\n\n    # recessed slots, 5 deep from the top face\n    for (x0, x1) in slot_x:\n        with Locations((x0, slot_y0, H - slot_depth)):\n            Box(x1 - x0, slot_len, slot_depth,\n                align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 20 through-holes, dia 6\n    with Locations([(x, y, 0) for x in col_xs for y in row_ys]):\n        Cylinder(radius=hole_d / 2, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     16.0
+    ],
+    "volume_mm3": 55540.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 45,
+    "n_planar_faces": 21,
+    "n_cylindrical_faces": 24,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 14.2,
+   "usage": {
+    "input_tokens": 8645,
+    "output_tokens": 1661
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0b144460-77a7-3e71-e475-aed973c42446",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.417,
+  "ag_final_cand": 2,
+  "best_iou": 0.417,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 1802.0,
+  "t_agentic_s": 1828.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 21730
+  },
+  "total_tokens": {
+   "in": 18433,
+   "out": 24489
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.417
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "uid": "042c25e6-40b8-cd02-4c97-d42363f18b45",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1048.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17407
+   },
+   "plan": "Views (third\u2011angle): TOP = upper\u2011left (XY, seen from +Z); FRONT = lower\u2011left (XZ, seen from \u2011Y); RIGHT = to the right of front (YZ, seen from +X). ISO is NTS (form only).\n\nAxis chains / extents\n- X (width): overall 60 (front + top). Hole columns are baseline\u2011dimensioned from the left edge: 15 and 45. Check symmetry: left margin 15, right margin 60\u221245 = 15, column pitch 45\u221215 = 30 \u2192 columns at X = 15 and 45 (i.e. \u00b115 about centre 30). \n- Y (depth): overall 40 (right view). Hole rows baseline from the front edge: 10 and 30. Symmetry: margins 10 and 40\u221230 = 10, row pitch 30\u221210 = 20 \u2192 rows at Y = 10 and 30 (\u00b110 about centre 20). (10+30 = 40 and 15+45 = 60 are the symmetric baseline pairs, not two\u2011segment chains \u2014 there are two hole columns/rows.)\n- Z (height): overall 20 (front + right).\n\nFeatures\n- Rectangular plate 60 (X) \u00d7 40 (Y) \u00d7 20 (Z).\n- 4\u00d7 \u23006 THRU (vertical, through full 20): centres (X,Y) = (15,10),(15,30),(45,10),(45,30) from the left/front edges \u2192 (\u00b115, \u00b110) about the centre.\n- \"4\u00d7 R2\" is called on the four corners of EACH of the three views \u21d2 the 4 vertical edges (top view), the 4 Y\u2011parallel edges (front view) and the 4 X\u2011parallel edges (right view) are all filleted R2 = all 12 outer edges, radius 2. Holes are cut after filleting so their rims stay sharp (no callout). No other feature carries a dimension, so none is added.",
+   "text": "<plan>\nViews (third\u2011angle): TOP = upper\u2011left (XY, seen from +Z); FRONT = lower\u2011left (XZ, seen from \u2011Y); RIGHT = to the right of front (YZ, seen from +X). ISO is NTS (form only).\n\nAxis chains / extents\n- X (width): overall 60 (front + top). Hole columns are baseline\u2011dimensioned from the left edge: 15 and 45. Check symmetry: left margin 15, right margin 60\u221245 = 15, column pitch 45\u221215 = 30 \u2192 columns at X = 15 and 45 (i.e. \u00b115 about centre 30). \n- Y (depth): overall 40 (right view). Hole rows baseline from the front edge: 10 and 30. Symmetry: margins 10 and 40\u221230 = 10, row pitch 30\u221210 = 20 \u2192 rows at Y = 10 and 30 (\u00b110 about centre 20). (10+30 = 40 and 15+45 = 60 are the symmetric baseline pairs, not two\u2011segment chains \u2014 there are two hole columns/rows.)\n- Z (height): overall 20 (front + right).\n\nFeatures\n- Rectangular plate 60 (X) \u00d7 40 (Y) \u00d7 20 (Z).\n- 4\u00d7 \u23006 THRU (vertical, through full 20): centres (X,Y) = (15,10),(15,30),(45,10),(45,30) from the left/front edges \u2192 (\u00b115, \u00b110) about the centre.\n- \"4\u00d7 R2\" is called on the four corners of EACH of the three views \u21d2 the 4 vertical edges (top view), the 4 Y\u2011parallel edges (front view) and the 4 X\u2011parallel edges (right view) are all filleted R2 = all 12 outer edges, radius 2. Holes are cut after filleting so their rims stay sharp (no callout). No other feature carries a dimension, so none is added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 60.0        # mm  overall width  (X), front & top views\nW = 40.0        # mm  overall depth  (Y), right side view\nH = 20.0        # mm  overall height (Z), front & right side views\n\nhole_d = 6.0    # mm  4x dia6 THRU\nx1 = 15.0       # mm  left edge -> 1st hole column (top view, baseline)\nx2 = 45.0       # mm  left edge -> 2nd hole column (top view, baseline)\ny1 = 10.0       # mm  front edge -> 1st hole row (right view, baseline)\ny2 = 30.0       # mm  front edge -> 2nd hole row (right view, baseline)\n\nfillet_r = 2.0  # mm  4x R2 on the corners of every view -> all 12 outer edges\n\n# ---- derived: hole centres relative to the part centre (X,Y centred on origin) ----\nxc = (x1 - L / 2, x2 - L / 2)   # (-15, +15)\nyc = (y1 - W / 2, y2 - W / 2)   # (-10, +10)\nhole_xy = [(x, y) for x in xc for y in yc]\n\nwith BuildPart() as bp:\n    # plate, X/Y centred, bottom face on z=0\n    Box(L, W, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # R2 on all twelve outer edges (satisfies the \"4x R2\" note in all three views)\n    fillet(bp.edges(), radius=fillet_r)\n    # 4 through holes (cut after filleting so the hole rims stay sharp)\n    with Locations(*[(x, y, H / 2) for (x, y) in hole_xy]):\n        Cylinder(radius=hole_d / 2, height=H + 4,\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     40.0,
+     20.0
+    ],
+    "volume_mm3": 45340.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 30,
+    "n_planar_faces": 6,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.3,
+   "usage": {
+    "input_tokens": 7274,
+    "output_tokens": 525
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "042c25e6-40b8-cd02-4c97-d42363f18b45",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9134,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9134,
+  "ag_final_cand": 1,
+  "best_iou": 0.9134,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 1051.8,
+  "t_agentic_s": 1059.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17407
+  },
+  "total_tokens": {
+   "in": 11384,
+   "out": 17932
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9134
+ }
+}

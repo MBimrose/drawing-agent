@@ -1,0 +1,76 @@
+{
+ "uid": "0cfca2a4-82f2-1b33-7d3e-2b686d1df698",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 173.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25939
+   },
+   "plan": "**Views identified (third-angle):**\n- TOP view (above): XY outline, 80 long (X) \u00d7 25 wide (Y). The left (\u2212X) end is a **concave circular arc** spanning corner-to-corner (chord = full 25 width), bowing into the part. Two \"C0.5\" leaders point at the right-end corners (vertical edges of the end face).\n- FRONT view (below top): XZ, an 80 \u00d7 5 rectangle with a short full-height segment at the left separated by a vertical line \u2014 this is the tangent silhouette of the concave cylindrical (vertical-axis) end cut, confirming the scoop runs through the full 5 mm thickness. Two \"C0.5\" leaders point at the right end top/bottom edges.\n- RIGHT view (right of front): YZ rectangle, 25 wide \u00d7 5 high \u2014 confirms width and thickness.\n- ISO (NTS): flat plate with a scooped (concave) end at one side and chamfered edges at the other end; dashed lines are the hidden bottom edges.\n\n**Dimension chains (all axes have direct overalls):**\n- X: 80 (overall, left corners \u2192 right end face)\n- Y: 25 (overall)\n- Z: 5 (overall)\n\n**Features:**\n1. Base plate 80 \u00d7 25 \u00d7 5.\n2. Concave end cut at \u2212X: vertical-axis cylinder, full height; arc passes through both left corners (chord 25) and is shallow (sagitta \u2248 6\u20137 mm per the views, far less than a semicircle's 12.5) \u2192 radius R15, centre on the part centreline outside the left edge at X = \u2212\u221a(15\u00b2 \u2212 12.5\u00b2) \u2248 \u22128.29.\n3. C0.5 chamfers on all four edges of the right (+X) end face (two callouts in top view for the vertical edges, two in front view for the horizontal edges).",
+   "text": "<plan>\n**Views identified (third-angle):**\n- TOP view (above): XY outline, 80 long (X) \u00d7 25 wide (Y). The left (\u2212X) end is a **concave circular arc** spanning corner-to-corner (chord = full 25 width), bowing into the part. Two \"C0.5\" leaders point at the right-end corners (vertical edges of the end face).\n- FRONT view (below top): XZ, an 80 \u00d7 5 rectangle with a short full-height segment at the left separated by a vertical line \u2014 this is the tangent silhouette of the concave cylindrical (vertical-axis) end cut, confirming the scoop runs through the full 5 mm thickness. Two \"C0.5\" leaders point at the right end top/bottom edges.\n- RIGHT view (right of front): YZ rectangle, 25 wide \u00d7 5 high \u2014 confirms width and thickness.\n- ISO (NTS): flat plate with a scooped (concave) end at one side and chamfered edges at the other end; dashed lines are the hidden bottom edges.\n\n**Dimension chains (all axes have direct overalls):**\n- X: 80 (overall, left corners \u2192 right end face)\n- Y: 25 (overall)\n- Z: 5 (overall)\n\n**Features:**\n1. Base plate 80 \u00d7 25 \u00d7 5.\n2. Concave end cut at \u2212X: vertical-axis cylinder, full height; arc passes through both left corners (chord 25) and is shallow (sagitta \u2248 6\u20137 mm per the views, far less than a semicircle's 12.5) \u2192 radius R15, centre on the part centreline outside the left edge at X = \u2212\u221a(15\u00b2 \u2212 12.5\u00b2) \u2248 \u22128.29.\n3. C0.5 chamfers on all four edges of the right (+X) end face (two callouts in top view for the vertical edges, two in front view for the horizontal edges).\n</plan>\n\n```python\nfrom build123d import *\nimport math\n\n# ---- dimensions read from the drawing ----\nL = 80.0            # mm  overall length (X), top & front views\nW = 25.0            # mm  overall width (Y), right side view\nT = 5.0             # mm  overall thickness (Z), front & right views\nR_SCOOP = 15.0      # mm  radius of the concave end arc (passes through both\n                    #     left corners, chord = full 25 mm width)\nCHAM = 0.5          # mm  C0.5 chamfer on the right end face edges (4 callouts)\n\n# derived: scoop arc centre lies on the part centreline, outside the left edge,\n# at distance sqrt(R^2 - (W/2)^2) from the left-edge chord\nscoop_cx = -math.sqrt(R_SCOOP**2 - (W / 2) ** 2)   # mm, ~ -8.29\n\nwith BuildPart() as bp:\n    # base plate: X = length, Y = width, Z = thickness, corner at origin\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # concave cylindrical scoop through the full thickness at the -X end\n    with Locations((scoop_cx, W / 2, T / 2)):\n        Cylinder(radius=R_SCOOP, height=T + 2, mode=Mode.SUBTRACT)\n\n    # C0.5 chamfers on the four edges of the right (+X) end face\n    end_edges = [e for e in bp.edges() if abs(e.center().X - L) < 1e-6]\n    chamfer(end_edges, CHAM)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     25.0,
+     5.0
+    ],
+    "volume_mm3": 9404.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     15.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.3,
+   "usage": {
+    "input_tokens": 6563,
+    "output_tokens": 590
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0cfca2a4-82f2-1b33-7d3e-2b686d1df698",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9802,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9802,
+  "ag_final_cand": 1,
+  "best_iou": 0.9802,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 176.5,
+  "t_agentic_s": 185.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25939
+  },
+  "total_tokens": {
+   "in": 10673,
+   "out": 26529
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9802
+ }
+}

@@ -1,0 +1,76 @@
+{
+ "uid": "01854fac-2b62-88d1-11ce-99dc34837a7d",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 141.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19651
+   },
+   "plan": "Views (third\u2011angle): the detailed view is the TOP (plan, XY); the thin bar directly below it is the FRONT (XZ); the thin bar to the right of the front is the RIGHT (YZ). ISO is pictorial only.\n\nAxes / chains\n- X (top width = front width): OVERALL = 80. Feature chains both close on 80: edge\u2192hole column 16 + column pitch 48 (\"1\u00d7 48\") + 16 = 80; and edge\u2192slot 25 + slot 30 + 25 = 80. So columns at X = 16 and 64 (centre \u00b124), slot X \u2208 [25, 55] (width 30, centred).\n- Y (top height = right\u2011view length): OVERALL = 100 (right view). Chain: edge\u2192hole row 38 + 12 + 12 (\"2\u00d7 12\") + 38 = 100, so the three rows sit at Y = 38/50/62 (centre 0, \u00b112). The right view also gives the central opening length = 38, so slot Y \u2208 [31, 69] (centred). All centred/symmetric, matching the X side.\n- Z (thickness, front/right bars): = 5.\n\nFeatures\n- Plate 80 (X) \u00d7 100 (Y) \u00d7 5 (Z).\n- C1 callouts on all four outer corners \u2192 1 mm, 45\u00b0 chamfer of the four vertical corner edges (applied before any interior cut so only the outer corners are chamfered).\n- Central through\u2011opening: rectangle 30 (X) \u00d7 38 (Y), centred (drawn with rounded corners but no radius is called out, so it is cut sharp per the \"no un\u2011dimensioned fillets\" rule).\n- \"6\u00d7 \u23004 THRU (2\u00d73)\": six through holes \u23004 in 2 columns \u00d7 3 rows at (X,Y) = (\u00b124, \u221212/0/+12) in centred coordinates.\n\nBuild: centred Box \u2192 chamfer the 4 Z\u2011axis edges (length 1) \u2192 subtract an over\u2011long 30\u00d738 block (through) \u2192 subtract six over\u2011long \u23004 cylinders (through).",
+   "text": "<plan>\nViews (third\u2011angle): the detailed view is the TOP (plan, XY); the thin bar directly below it is the FRONT (XZ); the thin bar to the right of the front is the RIGHT (YZ). ISO is pictorial only.\n\nAxes / chains\n- X (top width = front width): OVERALL = 80. Feature chains both close on 80: edge\u2192hole column 16 + column pitch 48 (\"1\u00d7 48\") + 16 = 80; and edge\u2192slot 25 + slot 30 + 25 = 80. So columns at X = 16 and 64 (centre \u00b124), slot X \u2208 [25, 55] (width 30, centred).\n- Y (top height = right\u2011view length): OVERALL = 100 (right view). Chain: edge\u2192hole row 38 + 12 + 12 (\"2\u00d7 12\") + 38 = 100, so the three rows sit at Y = 38/50/62 (centre 0, \u00b112). The right view also gives the central opening length = 38, so slot Y \u2208 [31, 69] (centred). All centred/symmetric, matching the X side.\n- Z (thickness, front/right bars): = 5.\n\nFeatures\n- Plate 80 (X) \u00d7 100 (Y) \u00d7 5 (Z).\n- C1 callouts on all four outer corners \u2192 1 mm, 45\u00b0 chamfer of the four vertical corner edges (applied before any interior cut so only the outer corners are chamfered).\n- Central through\u2011opening: rectangle 30 (X) \u00d7 38 (Y), centred (drawn with rounded corners but no radius is called out, so it is cut sharp per the \"no un\u2011dimensioned fillets\" rule).\n- \"6\u00d7 \u23004 THRU (2\u00d73)\": six through holes \u23004 in 2 columns \u00d7 3 rows at (X,Y) = (\u00b124, \u221212/0/+12) in centred coordinates.\n\nBuild: centred Box \u2192 chamfer the 4 Z\u2011axis edges (length 1) \u2192 subtract an over\u2011long 30\u00d738 block (through) \u2192 subtract six over\u2011long \u23004 cylinders (through).\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing (mm) ----\nplate_x = 80        # mm  overall width  (X): top view = front view\nplate_y = 100       # mm  overall depth  (Y): right view overall\nplate_t = 5         # mm  thickness      (Z): front/right bars\n\nc1 = 1              # mm  C1 = 45 deg chamfer on the four outer corners\n\nslot_w = 30         # mm  central opening width (X): 25 + 30 + 25 = 80 (centred)\nslot_h = 38         # mm  central opening length (Y): right-view 38; 31 + 38 + 31 = 100 (centred)\n\nhole_d = 4          # mm  \"6x D4 THRU (2x3)\"\nhole_col_pitch = 48 # mm  \"1x 48\" between the 2 columns; edge margin = (80-48)/2 = 16\nhole_row_pitch = 12 # mm  \"2x 12\" between the 3 rows;   end margin = (100-2*12)/2 = 38\n\n# ---- derived centred coordinates ----\n# columns: X = 16 and 64 from the left edge  ->  +/-24 about centre\nxs = (-hole_col_pitch / 2, hole_col_pitch / 2)\n# rows: Y = 38, 50, 62 from the bottom edge  ->  -12, 0, +12 about centre\nys = (-hole_row_pitch, 0.0, hole_row_pitch)\n\nover = 4            # mm  extra length so every cutter passes fully through the 5 mm plate\n\nwith BuildPart() as bp:\n    # base plate, centred on the origin (Z from -2.5 to +2.5)\n    Box(plate_x, plate_y, plate_t)\n\n    # C1 on the four outer corners: at this stage the only Z-parallel edges\n    # are the four outer corner edges, so they are the ones chamfered.\n    chamfer(edges().filter_by(Axis.Z), length=c1)\n\n    # central through opening (30 x 38), centred\n    Box(slot_w, slot_h, plate_t + over, mode=Mode.SUBTRACT)\n\n    # six through holes D4, 2 columns x 3 rows\n    with Locations(*[(x, y, 0) for x in xs for y in ys]):\n        Cylinder(hole_d / 2, plate_t + over, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     100.0,
+     5.0
+    ],
+    "volume_mm3": 33914.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.3,
+   "usage": {
+    "input_tokens": 7195,
+    "output_tokens": 746
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "01854fac-2b62-88d1-11ce-99dc34837a7d",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9262,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9262,
+  "ag_final_cand": 1,
+  "best_iou": 0.9262,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 144.3,
+  "t_agentic_s": 154.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19651
+  },
+  "total_tokens": {
+   "in": 11305,
+   "out": 20397
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9262
+ }
+}

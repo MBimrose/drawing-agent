@@ -1,0 +1,76 @@
+{
+ "uid": "0a01a8f6-a78b-1b51-8435-ede6e4562a4d",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 134.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25948
+   },
+   "plan": "**View identification (third-angle):**\n- TOP view (upper left): L-shaped plan profile \u2014 long leg running right (X), short leg running up (Y) at the left end. Dimension 80 = overall X length. Leader \"5\u00d7 R2\" on the rounded leg end.\n- FRONT view (below top): plain 80 \u00d7 10 rectangle; hidden lines and a \"5\" component dimension at the left = the short leg (width 5 in X) lying behind the long leg. Leader \"6\u00d7 R2\" (6 rounded corners visible: 2 at X=0, 2 at X=80, 2 hidden at X=5).\n- RIGHT view (right of front): plain 30 \u00d7 10 rectangle; \"5\" segment at left = long leg's width in Y; \"30\" = overall Y length. Leader \"6\u00d7 R2\" again (2 at Y=0, 2 at Y=30, 2 hidden at Y=5).\n- ISO (NTS): flat L-bracket, bar taller (10) than its plan width (5) \u2014 consistent.\n\n**Dimension chains:**\n- X: overall given directly = 80 (long leg).\n- Y: overall given directly = 30 (short leg).\n- Z: overall given directly = 10 (bar height).\n- Bar plan width = 5 (component dim in front and right views; both legs).\n\n**Features:**\n- L-shaped prism: footprint = (80 \u00d7 5) long leg \u222a (5 \u00d7 30) short leg, height 10.\n- \"5\u00d7 R2\": fillet the 5 convex vertical edges of the L footprint; the re-entrant inner corner (5,5) stays sharp (5\u00d7, not 6\u00d7).\n- \"6\u00d7 R2\" (both side views): fillet the complete top and bottom rim edges R2 \u2014 these show as 6 rounded corners in each of the front and right views.\n- No holes, no chamfers.\n\n**Orientation:** long leg along +X, short leg along +Y at the X=0 end, height +Z \u2014 matches Top=XY, Front=XZ, Right=YZ.",
+   "text": "<plan>\n**View identification (third-angle):**\n- TOP view (upper left): L-shaped plan profile \u2014 long leg running right (X), short leg running up (Y) at the left end. Dimension 80 = overall X length. Leader \"5\u00d7 R2\" on the rounded leg end.\n- FRONT view (below top): plain 80 \u00d7 10 rectangle; hidden lines and a \"5\" component dimension at the left = the short leg (width 5 in X) lying behind the long leg. Leader \"6\u00d7 R2\" (6 rounded corners visible: 2 at X=0, 2 at X=80, 2 hidden at X=5).\n- RIGHT view (right of front): plain 30 \u00d7 10 rectangle; \"5\" segment at left = long leg's width in Y; \"30\" = overall Y length. Leader \"6\u00d7 R2\" again (2 at Y=0, 2 at Y=30, 2 hidden at Y=5).\n- ISO (NTS): flat L-bracket, bar taller (10) than its plan width (5) \u2014 consistent.\n\n**Dimension chains:**\n- X: overall given directly = 80 (long leg).\n- Y: overall given directly = 30 (short leg).\n- Z: overall given directly = 10 (bar height).\n- Bar plan width = 5 (component dim in front and right views; both legs).\n\n**Features:**\n- L-shaped prism: footprint = (80 \u00d7 5) long leg \u222a (5 \u00d7 30) short leg, height 10.\n- \"5\u00d7 R2\": fillet the 5 convex vertical edges of the L footprint; the re-entrant inner corner (5,5) stays sharp (5\u00d7, not 6\u00d7).\n- \"6\u00d7 R2\" (both side views): fillet the complete top and bottom rim edges R2 \u2014 these show as 6 rounded corners in each of the front and right views.\n- No holes, no chamfers.\n\n**Orientation:** long leg along +X, short leg along +Y at the X=0 end, height +Z \u2014 matches Top=XY, Front=XZ, Right=YZ.\n</plan>\n```python\nfrom build123d import *\n\n# ---------------- Dimensions from the drawing ----------------\nlen_x = 80      # mm - overall length of long leg (X), top view\nlen_y = 30      # mm - overall length of short leg (Y), right view\nleg_w = 5       # mm - plan width of the bar legs (front & right views)\nhgt_z = 10      # mm - height of the bar (Z), front & right views\nr2 = 2          # mm - fillet radius: \"5x R2\" (plan convex corners) and\n                #      \"6x R2\" (top/bottom rims per front/right views)\n\nTOL = 1e-3\n\nwith BuildPart() as bp:\n    # L footprint: long leg along X, short leg along Y at the X=0 end\n    Box(len_x, leg_w, hgt_z, align=(Align.MIN, Align.MIN, Align.MIN))  # long leg\n    Box(leg_w, len_y, hgt_z, align=(Align.MIN, Align.MIN, Align.MIN))  # short leg\n\n    # 5x R2 - fillet the five convex vertical edges;\n    # the re-entrant inner corner at (leg_w, leg_w) stays sharp\n    convex_vertical_edges = [\n        e for e in bp.edges().filter_by(Axis.Z)\n        if not (abs(e.center().X - leg_w) < TOL and abs(e.center().Y - leg_w) < TOL)\n    ]\n    fillet(convex_vertical_edges, radius=r2)\n\n    # 6x R2 - fillet the complete top and bottom rim edges\n    # (appears as 6 rounded corners in each of the front and right views)\n    rim_edges = [\n        e for e in bp.edges()\n        if abs(e.center().Z) < TOL or abs(e.center().Z - hgt_z) < TOL\n    ]\n    fillet(rim_edges, radius=r2)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     30.0,
+     10.0
+    ],
+    "volume_mm3": 4839.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 35,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 17,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.6,
+   "usage": {
+    "input_tokens": 6785,
+    "output_tokens": 607
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0a01a8f6-a78b-1b51-8435-ede6e4562a4d",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9978,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9978,
+  "ag_final_cand": 1,
+  "best_iou": 0.9978,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 137.4,
+  "t_agentic_s": 144.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25948
+  },
+  "total_tokens": {
+   "in": 10895,
+   "out": 26555
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9978
+ }
+}

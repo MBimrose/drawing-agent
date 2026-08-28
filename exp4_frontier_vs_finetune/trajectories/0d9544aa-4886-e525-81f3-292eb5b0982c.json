@@ -1,0 +1,76 @@
+{
+ "uid": "0d9544aa-4886-e525-81f3-292eb5b0982c",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 99.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14967
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper left): square outline with a \u23005 circle on the centre, centrelines crossing, cutting-plane line A\u2013A along the horizontal centreline, and the callout \"\u23005 \u21935\" (blind hole, 5 mm deep). The \"10\" dimension runs from the left edge to the vertical centreline \u2192 hole centre is 10 mm from the edge; the circle is centred, so overall X = 10 + 10 = **20 mm**.\n- **FRONT view** (below top): rectangle with hidden U-shaped lines at top centre (the blind hole) and \"18\" spanning the full height \u2192 overall Z = **18 mm**. Width aligns with top view = 20 mm.\n- **RIGHT view** (right of front): rectangle with the same hidden U; \"10\" from the front edge to the centreline \u2192 overall Y = 10 + 10 = **20 mm**.\n- **SECTION A\u2013A**: hatched 20 \u00d7 18 rectangle with a 5-wide, 5-deep rectangular recess at top centre \u2014 confirms the blind hole, not a pocket or boss (top view shows only the circle on the top face).\n\n**Dimension chains:**\n- X: 10 (edge\u2192centre) \u00d7 2 by symmetry = 20 mm\n- Y: 10 (edge\u2192centre) \u00d7 2 by symmetry = 20 mm\n- Z: 18 mm (direct overall)\n\n**Feature list:**\n1. Block 20 (X) \u00d7 20 (Y) \u00d7 18 (Z).\n2. Blind hole \u23005, 5 mm deep, centred (10, 10) on the top face (Z = 18 down to Z = 13).\n\nNo fillets/chamfers are called out.",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper left): square outline with a \u23005 circle on the centre, centrelines crossing, cutting-plane line A\u2013A along the horizontal centreline, and the callout \"\u23005 \u21935\" (blind hole, 5 mm deep). The \"10\" dimension runs from the left edge to the vertical centreline \u2192 hole centre is 10 mm from the edge; the circle is centred, so overall X = 10 + 10 = **20 mm**.\n- **FRONT view** (below top): rectangle with hidden U-shaped lines at top centre (the blind hole) and \"18\" spanning the full height \u2192 overall Z = **18 mm**. Width aligns with top view = 20 mm.\n- **RIGHT view** (right of front): rectangle with the same hidden U; \"10\" from the front edge to the centreline \u2192 overall Y = 10 + 10 = **20 mm**.\n- **SECTION A\u2013A**: hatched 20 \u00d7 18 rectangle with a 5-wide, 5-deep rectangular recess at top centre \u2014 confirms the blind hole, not a pocket or boss (top view shows only the circle on the top face).\n\n**Dimension chains:**\n- X: 10 (edge\u2192centre) \u00d7 2 by symmetry = 20 mm\n- Y: 10 (edge\u2192centre) \u00d7 2 by symmetry = 20 mm\n- Z: 18 mm (direct overall)\n\n**Feature list:**\n1. Block 20 (X) \u00d7 20 (Y) \u00d7 18 (Z).\n2. Blind hole \u23005, 5 mm deep, centred (10, 10) on the top face (Z = 18 down to Z = 13).\n\nNo fillets/chamfers are called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Parameters (dimensions read from the drawing) ----\nhole_ctr_from_edge = 10           # mm - hole centre from edge (top view X, right view Y)\nblock_w = 2 * hole_ctr_from_edge  # mm - overall X width  = 10 + 10 (symmetry)\nblock_d = 2 * hole_ctr_from_edge  # mm - overall Y depth  = 10 + 10 (symmetry)\nblock_h = 18                      # mm - overall height (front view)\nhole_dia = 5                      # mm - blind hole diameter (\u23005 callout)\nhole_depth = 5                    # mm - blind hole depth (\u21935 callout)\n\nwith BuildPart() as bp:\n    # Rectangular block, bottom face on Z = 0, centred in X/Y\n    Box(block_w, block_d, block_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # Blind hole from the centre of the top face, 5 mm down\n    with Locations((0, 0, block_h)):\n        Cylinder(\n            radius=hole_dia / 2,\n            height=hole_depth,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT,\n        )\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     20.0,
+     20.0,
+     18.0
+    ],
+    "volume_mm3": 7102.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 7,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.7,
+   "usage": {
+    "input_tokens": 7809,
+    "output_tokens": 119
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0d9544aa-4886-e525-81f3-292eb5b0982c",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5494,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5494,
+  "ag_final_cand": 1,
+  "best_iou": 0.5494,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 102.1,
+  "t_agentic_s": 107.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14967
+  },
+  "total_tokens": {
+   "in": 11919,
+   "out": 15086
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5494
+ }
+}

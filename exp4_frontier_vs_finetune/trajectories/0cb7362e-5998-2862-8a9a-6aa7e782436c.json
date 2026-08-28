@@ -1,0 +1,90 @@
+{
+ "uid": "0cb7362e-5998-2862-8a9a-6aa7e782436c",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 79.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 12817
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper left): 80 \u00d7 30 rectangle; C1 chamfer callouts on all four corners (vertical corner edges). A dash-dot centerline runs along the length through a hole near the right end. Callout: \"\u23004 THRU \u2334 \u23007 \u21932\" = \u23004 through hole with \u23007 counterbore 2 mm deep.\n- **FRONT view** (below top): thin 80 \u00d7 10 bar; hidden detail at the bottom of the right end (counterbore) and chamfer edge lines at the ends.\n- **RIGHT side view** (right of front): 30 wide \u00d7 10 tall; \"15\" dimension places the hole on the center plane (15 = 30/2); hidden counterbore detail at the bottom \u2192 counterbore opens on the **bottom** face (confirmed by SECTION A-A notch at the bottom and by the ISO, where the small \u23004 opening is on top and the larger \u23007 circles are at the bottom level).\n- **SECTION A-A**: cut along the top-view centerline through the hole axis; shows the \u23004 through slot and the \u23007 \u00d7 2 counterbore recess at the bottom, near the right end.\n\n**Dimension chains per axis:**\n- X: overall = **80** (given directly). Component 76 locates the hole center from the left end \u2192 hole is 80 \u2212 76 = **4 mm from the right end** (\u23007 counterbore then sits 0.5 mm from the end, matching the top view where the circle nearly touches the edge).\n- Y: overall = **30** (side view); hole centered at 15 (= 30/2).\n- Z: overall = **10** (front view); counterbore depth 2 from bottom.\n\n**Feature list:**\n1. Base bar 80 (X) \u00d7 30 (Y) \u00d7 10 (Z).\n2. \u23004 through hole at (X=76, Y=15).\n3. \u23007 \u00d7 2 mm counterbore from the bottom face, coaxial with the hole.\n4. C1 (1 mm \u00d7 45\u00b0) chamfers on the four vertical corner edges.",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper left): 80 \u00d7 30 rectangle; C1 chamfer callouts on all four corners (vertical corner edges). A dash-dot centerline runs along the length through a hole near the right end. Callout: \"\u23004 THRU \u2334 \u23007 \u21932\" = \u23004 through hole with \u23007 counterbore 2 mm deep.\n- **FRONT view** (below top): thin 80 \u00d7 10 bar; hidden detail at the bottom of the right end (counterbore) and chamfer edge lines at the ends.\n- **RIGHT side view** (right of front): 30 wide \u00d7 10 tall; \"15\" dimension places the hole on the center plane (15 = 30/2); hidden counterbore detail at the bottom \u2192 counterbore opens on the **bottom** face (confirmed by SECTION A-A notch at the bottom and by the ISO, where the small \u23004 opening is on top and the larger \u23007 circles are at the bottom level).\n- **SECTION A-A**: cut along the top-view centerline through the hole axis; shows the \u23004 through slot and the \u23007 \u00d7 2 counterbore recess at the bottom, near the right end.\n\n**Dimension chains per axis:**\n- X: overall = **80** (given directly). Component 76 locates the hole center from the left end \u2192 hole is 80 \u2212 76 = **4 mm from the right end** (\u23007 counterbore then sits 0.5 mm from the end, matching the top view where the circle nearly touches the edge).\n- Y: overall = **30** (side view); hole centered at 15 (= 30/2).\n- Z: overall = **10** (front view); counterbore depth 2 from bottom.\n\n**Feature list:**\n1. Base bar 80 (X) \u00d7 30 (Y) \u00d7 10 (Z).\n2. \u23004 through hole at (X=76, Y=15).\n3. \u23007 \u00d7 2 mm counterbore from the bottom face, coaxial with the hole.\n4. C1 (1 mm \u00d7 45\u00b0) chamfers on the four vertical corner edges.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions from the drawing ----------------\nL = 80           # mm  overall length (X)\nW = 30           # mm  overall width  (Y)\nT = 10           # mm  overall height (Z)\n\nhole_dia = 4     # mm  through hole: \u23004 THRU\ncbore_dia = 7    # mm  counterbore diameter: \u2334 \u23007\ncbore_depth = 2  # mm  counterbore depth: \u21932 (from the bottom face)\n\nhole_x = 76      # mm  hole centre from the left end (4 mm from the right end)\nhole_y = 15      # mm  hole centre from the front edge (centred in the 30 width)\n\ncham = 1         # mm  C1 chamfer on the four vertical corner edges\n\n# derived positions relative to the part centre\nhx = hole_x - L / 2   # = +36 mm\nhy = hole_y - W / 2   # = 0 (centred)\n\nwith BuildPart() as part:\n    # base bar\n    with BuildSketch(Plane.XY):\n        Rectangle(L, W)\n    extrude(amount=T)\n\n    # \u23004 through hole (oversized in Z for a clean cut)\n    with Locations((hx, hy, T / 2)):\n        Cylinder(hole_dia / 2, T + 2, mode=Mode.SUBTRACT)\n\n    # \u23007 \u00d7 2 counterbore from the bottom face\n    with Locations((hx, hy, cbore_depth / 2)):\n        Cylinder(cbore_dia / 2, cbore_depth, mode=Mode.SUBTRACT)\n\n    # C1 chamfers on the four vertical corner edges\n    chamfer(part.edges().filter_by(Axis.Z), length=cham)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.0,
+   "usage": {
+    "input_tokens": 5331,
+    "output_tokens": 875
+   },
+   "plan": "The geometry reading is unchanged; the failure was purely a binding issue: `export_step` received the `BuildPart` context object instead of the finished solid. Fix: name the context `bp` and bind `part = bp.part` after the block.\n\n**Views:** TOP = 80 \u00d7 30 rectangle, C1 on all four corners, centerline with \"\u23004 THRU \u2334 \u23007 \u21932\" hole near the right end (76 from the left \u2192 4 mm from the right end). FRONT = 80 \u00d7 10 bar. RIGHT = 30 \u00d7 10, hole centered at 15 (= 30/2). SECTION A-A shows the \u23004 through hole with \u23007 \u00d7 2 counterbore opening on the **bottom** face.\n\n**Chains:** X overall = 80 (given); hole at 76 from left (80 \u2212 76 = 4 from right). Y overall = 30 (given); hole at 15 (centered). Z overall = 10 (given); counterbore 2 deep from bottom.\n\n**Features:** 80 \u00d7 30 \u00d7 10 bar; \u23004 thru at (76, 15); coaxial \u23007 \u00d7 2 counterbore from bottom; C1 chamfers on the four vertical corner edges.",
+   "text": "<plan>\nThe geometry reading is unchanged; the failure was purely a binding issue: `export_step` received the `BuildPart` context object instead of the finished solid. Fix: name the context `bp` and bind `part = bp.part` after the block.\n\n**Views:** TOP = 80 \u00d7 30 rectangle, C1 on all four corners, centerline with \"\u23004 THRU \u2334 \u23007 \u21932\" hole near the right end (76 from the left \u2192 4 mm from the right end). FRONT = 80 \u00d7 10 bar. RIGHT = 30 \u00d7 10, hole centered at 15 (= 30/2). SECTION A-A shows the \u23004 through hole with \u23007 \u00d7 2 counterbore opening on the **bottom** face.\n\n**Chains:** X overall = 80 (given); hole at 76 from left (80 \u2212 76 = 4 from right). Y overall = 30 (given); hole at 15 (centered). Z overall = 10 (given); counterbore 2 deep from bottom.\n\n**Features:** 80 \u00d7 30 \u00d7 10 bar; \u23004 thru at (76, 15); coaxial \u23007 \u00d7 2 counterbore from bottom; C1 chamfers on the four vertical corner edges.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions from the drawing ----------------\nL = 80           # mm  overall length (X)\nW = 30           # mm  overall width  (Y)\nT = 10           # mm  overall height (Z)\n\nhole_dia = 4     # mm  through hole: \u23004 THRU\ncbore_dia = 7    # mm  counterbore diameter: \u2334 \u23007\ncbore_depth = 2  # mm  counterbore depth: \u21932 (from the bottom face)\n\nhole_x = 76      # mm  hole centre from the left end (4 mm from the right end)\nhole_y = 15      # mm  hole centre from the front edge (centred in the 30 width)\n\ncham = 1         # mm  C1 chamfer on the four vertical corner edges\n\n# derived positions relative to the part centre\nhx = hole_x - L / 2   # = +36 mm\nhy = hole_y - W / 2   # = 0 (centred)\n\nwith BuildPart() as bp:\n    # base bar\n    with BuildSketch(Plane.XY):\n        Rectangle(L, W)\n    extrude(amount=T)\n\n    # \u23004 through hole (oversized in Z for a clean cut)\n    with Locations((hx, hy, T / 2)):\n        Cylinder(hole_dia / 2, T + 2, mode=Mode.SUBTRACT)\n\n    # \u23007 \u00d7 2 counterbore from the bottom face\n    with Locations((hx, hy, cbore_depth / 2)):\n        Cylinder(cbore_dia / 2, cbore_depth, mode=Mode.SUBTRACT)\n\n    # C1 chamfers on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), length=cham)\n\n# bind the finished solid (not the BuildPart context) to `part`\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     30.0,
+     10.0
+    ],
+    "volume_mm3": 23803.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 13,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 2.7,
+   "usage": {
+    "input_tokens": 7820,
+    "output_tokens": 377
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0cb7362e-5998-2862-8a9a-6aa7e782436c",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 2,
+  "best_iou": 1.0,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 82.4,
+  "t_agentic_s": 95.3,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 12817
+  },
+  "total_tokens": {
+   "in": 17261,
+   "out": 14069
+  }
+ },
+ "per_candidate_iou": {
+  "2": 1.0
+ }
+}

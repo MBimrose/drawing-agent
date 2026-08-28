@@ -1,0 +1,89 @@
+{
+ "uid": "03dfa680-4b62-4f14-3b39-0b6431faee2a",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 164.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17098
+   },
+   "plan": "**Views:** Upper-left = TOP view (plan, XY); below it = FRONT view (XZ); to its right = SECTION A-A (cut along the horizontal centerline of the top view, same orientation as front); ISO is NTS.\n\n**Dimension chains:**\n- X: only a component dim \"40\" (left edge \u2192 centerline) in the top view and again over SECTION A-A \u2192 overall W = 40 + 40 = **80**.\n- Y: no chain given, but the top view outline is square (confirmed by ISO and the symmetric bolt circle) \u2192 D = **80**.\n- Z: plate thickness **4.4** (front view). Hole callout \"\u21936.1\" from the top of the corner pads \u21d2 pad tops sit at 6.1, so pad height = 6.1 \u2212 4.4 = **1.7** and the \u23003 holes break exactly through the bottom face (through holes). This is the only reading consistent with all callouts, since no pad height is dimensioned anywhere.\n\n**Features:**\n- Central square pocket: \"46 \u00d7 46 \u00d7 2 DEEP\", centered \u2192 46\u00d746, 2 deep from the plate top (floor at 2.4).\n- 4\u00d7 \u23003 holes, \"EQ SP ON \u230082.0 BC\", shown at the four plate corners in the top view \u2192 45\u00b0/135\u00b0/225\u00b0/315\u00b0 on r = 41 \u2192 centers at (\u00b128.99, \u00b128.99).\n- 4 square corner pads (with the X-marked hole centers) centered on the holes, rising 1.7 above the plate. Pad size is not dimensioned; scaled from the 1:2 views \u2248 **12\u00d712** (inner corner essentially meets the pocket corner, as seen in the ISO).\n- No chamfer/fillet callouts \u2192 sharp edges.",
+   "text": "<plan>\n**Views:** Upper-left = TOP view (plan, XY); below it = FRONT view (XZ); to its right = SECTION A-A (cut along the horizontal centerline of the top view, same orientation as front); ISO is NTS.\n\n**Dimension chains:**\n- X: only a component dim \"40\" (left edge \u2192 centerline) in the top view and again over SECTION A-A \u2192 overall W = 40 + 40 = **80**.\n- Y: no chain given, but the top view outline is square (confirmed by ISO and the symmetric bolt circle) \u2192 D = **80**.\n- Z: plate thickness **4.4** (front view). Hole callout \"\u21936.1\" from the top of the corner pads \u21d2 pad tops sit at 6.1, so pad height = 6.1 \u2212 4.4 = **1.7** and the \u23003 holes break exactly through the bottom face (through holes). This is the only reading consistent with all callouts, since no pad height is dimensioned anywhere.\n\n**Features:**\n- Central square pocket: \"46 \u00d7 46 \u00d7 2 DEEP\", centered \u2192 46\u00d746, 2 deep from the plate top (floor at 2.4).\n- 4\u00d7 \u23003 holes, \"EQ SP ON \u230082.0 BC\", shown at the four plate corners in the top view \u2192 45\u00b0/135\u00b0/225\u00b0/315\u00b0 on r = 41 \u2192 centers at (\u00b128.99, \u00b128.99).\n- 4 square corner pads (with the X-marked hole centers) centered on the holes, rising 1.7 above the plate. Pad size is not dimensioned; scaled from the 1:2 views \u2248 **12\u00d712** (inner corner essentially meets the pocket corner, as seen in the ISO).\n- No chamfer/fillet callouts \u2192 sharp edges.\n</plan>\n\n```python\nfrom build123d import *\nimport math\n\n# ---------------- dimensions from the drawing ----------------\nhalf_w = 40.0            # mm - edge->centerline dim (top view and SECTION A-A)\nplate_w = 2 * half_w     # mm - overall X width  = 40 + 40 = 80\nplate_d = 2 * half_w     # mm - overall Y depth  = 80 (square outline per top view / ISO)\nplate_t = 4.4            # mm - plate thickness (front view)\n\npocket_w = 46.0          # mm - central square pocket: \"46 x 46 x 2 DEEP\"\npocket_d = 46.0          # mm\npocket_z = 2.0           # mm - pocket depth from plate top\n\nhole_d = 3.0             # mm - \"4X \u23003\"\nhole_depth = 6.1         # mm - \"\u21936.1\" drilled from top of the corner pads\nbc_d = 82.0              # mm - \"EQ SP ON \u230082.0 BC\"\n# holes are drawn at the four plate corners -> 45/135/225/315 deg on the bolt circle\n\npad_h = hole_depth - plate_t  # mm - pad height above plate = 6.1 - 4.4 = 1.7\n                              # (pad top at 6.1, so the \u23003 holes pass through the bottom face)\npad_s = 12.0             # mm - square corner pads; not dimensioned, scaled from the 1:2 views\n\noff = (bc_d / 2) * math.cos(math.radians(45))   # mm - hole/pad center offset \u2248 28.99\ncorners = [(off, off), (-off, off), (-off, -off), (off, -off)]\n\nwith BuildPart() as part:\n    # base plate, bottom face on z = 0\n    with BuildSketch():\n        Rectangle(plate_w, plate_d)\n    extrude(amount=plate_t)\n\n    # four corner pads\n    with BuildSketch(Plane.XY.offset(plate_t)):\n        with Locations(corners):\n            Rectangle(pad_s, pad_s)\n    extrude(amount=pad_h)\n\n    # central pocket, 2 deep from the plate top\n    with BuildSketch(Plane.XY.offset(plate_t)):\n        Rectangle(pocket_w, pocket_d)\n    extrude(amount=-pocket_z, mode=Mode.SUBTRACT)\n\n    # four \u23003 holes, 6.1 deep from pad top (= through); +1 mm overcut for a clean exit\n    with BuildSketch(Plane.XY.offset(plate_t + pad_h)):\n        with Locations(corners):\n            Circle(hole_d / 2)\n    extrude(amount=-(hole_depth + 1), mode=Mode.SUBTRACT)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.8,
+   "usage": {
+    "input_tokens": 5467,
+    "output_tokens": 853
+   },
+   "plan": "Reading unchanged from before (plate 80\u00d780\u00d74.4; 46\u00d746\u00d72 central pocket; 4\u00d7 \u23003 holes at 45\u00b0 spacing on \u230082 BC \u2192 corner centers (\u00b128.99, \u00b128.99); 12\u00d712 pads, height 6.1\u22124.4 = 1.7; holes through). The only fix is the export: the `with BuildPart() as part` context object must be unwrapped via `part.part` before calling `export_step`.",
+   "text": "<plan>\nReading unchanged from before (plate 80\u00d780\u00d74.4; 46\u00d746\u00d72 central pocket; 4\u00d7 \u23003 holes at 45\u00b0 spacing on \u230082 BC \u2192 corner centers (\u00b128.99, \u00b128.99); 12\u00d712 pads, height 6.1\u22124.4 = 1.7; holes through). The only fix is the export: the `with BuildPart() as part` context object must be unwrapped via `part.part` before calling `export_step`.\n</plan>\n```python\nfrom build123d import *\nimport math\n\n# ---------------- dimensions from the drawing ----------------\nhalf_w = 40.0            # mm - edge->centerline dim (top view and SECTION A-A)\nplate_w = 2 * half_w     # mm - overall X width  = 40 + 40 = 80\nplate_d = 2 * half_w     # mm - overall Y depth  = 80 (square outline per top view / ISO)\nplate_t = 4.4            # mm - plate thickness (front view)\n\npocket_w = 46.0          # mm - central square pocket: \"46 x 46 x 2 DEEP\"\npocket_d = 46.0          # mm\npocket_z = 2.0           # mm - pocket depth from plate top\n\nhole_d = 3.0             # mm - \"4X \u23003\"\nhole_depth = 6.1         # mm - \"\u21936.1\" drilled from top of the corner pads\nbc_d = 82.0              # mm - \"EQ SP ON \u230082.0 BC\"\n# holes are drawn at the four plate corners -> 45/135/225/315 deg on the bolt circle\n\npad_h = hole_depth - plate_t  # mm - pad height above plate = 6.1 - 4.4 = 1.7\n                              # (pad top at 6.1, so the \u23003 holes pass through the bottom face)\npad_s = 12.0             # mm - square corner pads; not dimensioned, scaled from the 1:2 views\n\noff = (bc_d / 2) * math.cos(math.radians(45))   # mm - hole/pad center offset \u2248 28.99\ncorners = [(off, off), (-off, off), (-off, -off), (off, -off)]\n\nwith BuildPart() as bp:\n    # base plate, bottom face on z = 0\n    with BuildSketch():\n        Rectangle(plate_w, plate_d)\n    extrude(amount=plate_t)\n\n    # four corner pads\n    with BuildSketch(Plane.XY.offset(plate_t)):\n        with Locations(corners):\n            Rectangle(pad_s, pad_s)\n    extrude(amount=pad_h)\n\n    # central pocket, 2 deep from the plate top\n    with BuildSketch(Plane.XY.offset(plate_t)):\n        Rectangle(pocket_w, pocket_d)\n    extrude(amount=-pocket_z, mode=Mode.SUBTRACT)\n\n    # four \u23003 holes, 6.1 deep from pad top (= through); +1 mm overcut for a clean exit\n    with BuildSketch(Plane.XY.offset(plate_t + pad_h)):\n        with Locations(corners):\n            Circle(hole_d / 2)\n    extrude(amount=-(hole_depth + 1), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     6.1
+    ],
+    "volume_mm3": 24735.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 39,
+    "n_planar_faces": 35,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 1.2,
+   "usage": {
+    "input_tokens": 8188,
+    "output_tokens": 57
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "03dfa680-4b62-4f14-3b39-0b6431faee2a",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4304,
+  "ag_final_cand": 2,
+  "best_iou": 0.4304,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 166.8,
+  "t_agentic_s": 179.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17098
+  },
+  "total_tokens": {
+   "in": 17765,
+   "out": 18008
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.4304
+ }
+}

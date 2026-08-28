@@ -1,0 +1,76 @@
+{
+ "uid": "0979b252-eee8-3278-1a58-0188807a4b43",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 109.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14168
+   },
+   "plan": "**Views:** Top view = 80 \u00d7 30 rectangle (XY) containing two \u23005 circles, a central hexagon, and C0.5 notes at all four corners. Front view (below) = 80 \u00d7 8 strip with hidden lines for the through features \u2192 thickness Z = 8. Right view (right of front) = 30 \u00d7 8 with a \"15\" position dimension and hidden lines \u2192 depth Y = 30, features on the Y centre plane. ISO confirms: flat plate, two round through-holes, one hex through-hole, chamfered top perimeter.\n\n**Dimension chains:**\n- X: overall = 80 (given). Hole centres: 20 from left edge, and 60 from left edge \u2192 spacing 60 \u2212 20 = 40, symmetric (20 / 40 / 20). Hexagon centred at X = 40 (mid between holes = mid of part).\n- Y: overall = 30 (given); hole/hex centre plane at 15 = mid-depth.\n- Z: overall thickness = 8 (given).\n\n**Features:**\n- 2\u00d7 \u23005 THRU (vertical, through the 8 mm) at (20, 15) and (60, 15) measured from the left/front edges.\n- Hexagonal through-hole at part centre (40, 15), flat-top orientation (vertices left/right). It carries no callout; scaled from the 1:1 views it is \u230010 across corners (5 mm side).\n- C0.5 (0.5 mm \u00d7 45\u00b0) chamfer on the four top perimeter edges, matching the corner callouts and the chamfer border visible in the ISO view. Applied before cutting so only the outer top edges are selected.",
+   "text": "<plan>\n**Views:** Top view = 80 \u00d7 30 rectangle (XY) containing two \u23005 circles, a central hexagon, and C0.5 notes at all four corners. Front view (below) = 80 \u00d7 8 strip with hidden lines for the through features \u2192 thickness Z = 8. Right view (right of front) = 30 \u00d7 8 with a \"15\" position dimension and hidden lines \u2192 depth Y = 30, features on the Y centre plane. ISO confirms: flat plate, two round through-holes, one hex through-hole, chamfered top perimeter.\n\n**Dimension chains:**\n- X: overall = 80 (given). Hole centres: 20 from left edge, and 60 from left edge \u2192 spacing 60 \u2212 20 = 40, symmetric (20 / 40 / 20). Hexagon centred at X = 40 (mid between holes = mid of part).\n- Y: overall = 30 (given); hole/hex centre plane at 15 = mid-depth.\n- Z: overall thickness = 8 (given).\n\n**Features:**\n- 2\u00d7 \u23005 THRU (vertical, through the 8 mm) at (20, 15) and (60, 15) measured from the left/front edges.\n- Hexagonal through-hole at part centre (40, 15), flat-top orientation (vertices left/right). It carries no callout; scaled from the 1:1 views it is \u230010 across corners (5 mm side).\n- C0.5 (0.5 mm \u00d7 45\u00b0) chamfer on the four top perimeter edges, matching the corner callouts and the chamfer border visible in the ISO view. Applied before cutting so only the outer top edges are selected.\n</plan>\n\n```python\nfrom build123d import *\n\n# ============ dimensions read from the drawing ============\nL = 80.0                 # mm  overall length (X) - top/front views\nW = 30.0                 # mm  overall depth (Y) - right view\nT = 8.0                  # mm  overall thickness (Z) - front/right views\n\nhole_dia = 5.0           # mm  \"2x \u23005 THRU\"\nhole_x1 = 20.0           # mm  left hole centre from left edge (top view)\nhole_x2 = 60.0           # mm  right hole centre from left edge (top view)\nfeature_y = 15.0         # mm  hole/hex centre plane from front edge (right view)\n\nhex_across_corners = 10.0  # mm  hex through-hole across corners\n                           #     (no callout; scaled from the 1:1 views, 5 mm side)\n\nch = 0.5                 # mm  \"C0.5\" chamfer at the four top corners\n\n# ---- derived positions (part centred on the origin) ----\nx1 = hole_x1 - L / 2     # left hole X  = -20\nx2 = hole_x2 - L / 2     # right hole X = +20\nyc = feature_y - W / 2   # feature Y    = 0\n\nwith BuildPart() as bp:\n    # base plate, bottom face on the XY plane\n    with BuildSketch(Plane.XY):\n        Rectangle(L, W)\n    extrude(amount=T)\n\n    # C0.5 chamfer around the top perimeter (done before the cuts so the\n    # top group contains only the four outer edges)\n    chamfer(bp.edges().group_by(Axis.Z)[-1], length=ch)\n\n    # through features: two round holes + central hexagon (vertex on +X,\n    # i.e. flats top/bottom as drawn)\n    with BuildSketch(Plane.XY):\n        with Locations((x1, yc), (x2, yc)):\n            Circle(hole_dia / 2)\n        RegularPolygon(hex_across_corners / 2, 6)\n    extrude(amount=T, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     30.0,
+     8.0
+    ],
+    "volume_mm3": 18339.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 18,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.3,
+   "usage": {
+    "input_tokens": 6704,
+    "output_tokens": 597
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0979b252-eee8-3278-1a58-0188807a4b43",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9737,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9737,
+  "ag_final_cand": 1,
+  "best_iou": 0.9737,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 112.6,
+  "t_agentic_s": 120.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14168
+  },
+  "total_tokens": {
+   "in": 10814,
+   "out": 14765
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9737
+ }
+}

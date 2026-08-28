@@ -1,0 +1,79 @@
+{
+ "uid": "0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 152.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 24406
+   },
+   "plan": "Views (third\u2011angle): TOP = upper\u2011left detailed view (shows the four corner holes as circles, the central counterbored hole, and the tombstone\u2011shaped raised pad). FRONT = thin view directly below it (same width). RIGHT = thin view to the right of the front (the +X end / side profile). ISO confirms a slab with a raised central pad and a counterbored vertical hole.\n\nDimension chains\n- X (length): overall = 92 (top & front). Corner\u2011hole inset = 8 from each end \u2192 columns at X = 8 and X = 92\u22128 = 84. Central hole datum dimension = 50 from the left edge \u2192 X = 50.\n- Y (depth): overall = 60 (right view \"60\"). Hole rows: 8 from the front edge and 52 from the front edge (= 60\u22128) \u2192 rows at Y = 8 and Y = 52. Centre plane = 30 (the \"30\" dim) \u2192 central hole at Y = 30. Pad rectangular stem = 20 (the \"20\" dim) and pad width = 20 (radius 10).\n- Z (height): base slab = 26 (right view). Overall = 30 (front view) \u2192 raised pad height = 30 \u2212 26 = 4, which equals the counterbore depth \u21934 (counterbore floor at Z = 26, the \"26\" dim). Pocket centre heights = 7.5 and 19.\n\nFeatures\n- Slab 92 \u00d7 60 \u00d7 26.\n- Raised tombstone pad on top (Z 26\u219230): rectangle X[40,60]\u00b7Y[10,30] plus semicircle r10 centred (50,30) bulging to Y=40.\n- Central hole at (50,30): \u23006 THRU with counterbore \u230012 \u21934 (\u2334 symbol).\n- 4\u00d7 \u23004 THRU at (8,8),(8,52),(84,8),(84,52).\n- Two pockets \"5 \u00d7 5 \u00d7 3.3 DEEP\" on the +X end face, centred in Y (30), at Z centres 7.5 and 19, cut 3.3 into \u2212X.",
+   "text": "<plan>\nViews (third\u2011angle): TOP = upper\u2011left detailed view (shows the four corner holes as circles, the central counterbored hole, and the tombstone\u2011shaped raised pad). FRONT = thin view directly below it (same width). RIGHT = thin view to the right of the front (the +X end / side profile). ISO confirms a slab with a raised central pad and a counterbored vertical hole.\n\nDimension chains\n- X (length): overall = 92 (top & front). Corner\u2011hole inset = 8 from each end \u2192 columns at X = 8 and X = 92\u22128 = 84. Central hole datum dimension = 50 from the left edge \u2192 X = 50.\n- Y (depth): overall = 60 (right view \"60\"). Hole rows: 8 from the front edge and 52 from the front edge (= 60\u22128) \u2192 rows at Y = 8 and Y = 52. Centre plane = 30 (the \"30\" dim) \u2192 central hole at Y = 30. Pad rectangular stem = 20 (the \"20\" dim) and pad width = 20 (radius 10).\n- Z (height): base slab = 26 (right view). Overall = 30 (front view) \u2192 raised pad height = 30 \u2212 26 = 4, which equals the counterbore depth \u21934 (counterbore floor at Z = 26, the \"26\" dim). Pocket centre heights = 7.5 and 19.\n\nFeatures\n- Slab 92 \u00d7 60 \u00d7 26.\n- Raised tombstone pad on top (Z 26\u219230): rectangle X[40,60]\u00b7Y[10,30] plus semicircle r10 centred (50,30) bulging to Y=40.\n- Central hole at (50,30): \u23006 THRU with counterbore \u230012 \u21934 (\u2334 symbol).\n- 4\u00d7 \u23004 THRU at (8,8),(8,52),(84,8),(84,52).\n- Two pockets \"5 \u00d7 5 \u00d7 3.3 DEEP\" on the +X end face, centred in Y (30), at Z centres 7.5 and 19, cut 3.3 into \u2212X.\n</plan>\n```python\nfrom build123d import *\n\n# ---------- named dimensions (mm) ----------\nL        = 92    # mm  overall length (X), top & front views\nW        = 60    # mm  overall depth  (Y), right view\nT_base   = 26    # mm  base slab thickness (Z), right view\nT_total  = 30    # mm  overall height incl. raised pad (Z), front view\nboss_h   = T_total - T_base   # mm raised pad height (= 4 = counterbore depth)\n\nedge     = 8     # mm  corner-hole inset from each X/Y edge\ncx       = 50    # mm  central hole X (datum from left edge)\ncy       = W / 2 # mm  central hole Y (= 30, centre of depth)\n\nthru_d   = 6     # mm  central through hole\ncb_d     = 12    # mm  counterbore diameter\ncb_depth = 4     # mm  counterbore depth (\u2334 \u230012 \u21934)\ncorner_d = 4     # mm  4\u00d7 corner through holes\n\nR_boss   = 10    # mm  pad semicircle radius (pad width = 20)\nstem     = 20    # mm  pad rectangular stem length toward -Y\n\npk_w     = 5     # mm  pocket width  (Y)\npk_h     = 5     # mm  pocket height (Z)\npk_dep   = 3.3   # mm  pocket depth (into -X from +X face)\npk_z     = [7.5, 19]  # mm  pocket centre heights\n\n# derived\nx_cols = [edge, L - edge]          # [8, 84]\ny_rows = [edge, W - edge]          # [8, 52]\n\nwith BuildPart() as bp:\n    # base slab: X[0,92] Y[0,60] Z[0,26]\n    Box(L, W, T_base, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # raised tombstone pad on top, Z[26,30]\n    with BuildSketch(Plane.XY.offset(T_base)):\n        with Locations((cx, cy - stem / 2)):        # rectangle X[40,60] Y[10,30]\n            Rectangle(2 * R_boss, stem)\n        with Locations((cx, cy)):                   # circle r10 (lower half absorbed by stem)\n            Circle(R_boss)\n    extrude(amount=boss_h)                          # -> Z[26,30]\n\n    # central \u23006 through hole (full height)\n    with Locations((cx, cy, -1)):\n        Cylinder(thru_d / 2, T_total + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n    # counterbore \u230012, 4 deep from top (Z 30 -> 26)\n    with Locations((cx, cy, T_total - cb_depth)):\n        Cylinder(cb_d / 2, cb_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 4\u00d7 \u23004 corner through holes\n    pts = [(x, y, -1) for x in x_cols for y in y_rows]\n    with Locations(pts):\n        Cylinder(corner_d / 2, T_total + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\n    # two 5\u00d75\u00d73.3 pockets on the +X end face (X 92 -> 88.7), centred in Y\n    with Locations([(L - pk_dep, cy, z) for z in pk_z]):\n        Box(pk_dep, pk_w, pk_h,\n            align=(Align.MIN, Align.CENTER, Align.CENTER), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     92.0,
+     60.0,
+     30.0
+    ],
+    "volume_mm3": 143093.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 28,
+    "n_planar_faces": 21,
+    "n_cylindrical_faces": 7,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0,
+     6.0,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 43.8,
+   "usage": {
+    "input_tokens": 7541,
+    "output_tokens": 6957
+   },
+   "plan": null,
+   "text": "I compared the renders against the original drawing:\n\n- **Extents**: bbox 92 \u00d7 60 \u00d7 30 matches the chains exactly (92 overall; 60 overall; 26 base + 4 pad = 30).\n- **Top view**: four \u23004 corner holes at 8 mm insets, tombstone pad (rectangle X[40,60]\u00b7Y[10,30] + r10 semicircle bulging to Y=40) with concentric \u23006/\u230012 circles at (50,30), hidden pocket outline on the right edge \u2014 all match.\n- **Front view**: 26-tall slab with 4-tall \u00d7 20-wide pad at X[40,60], hidden lines for corner holes, central hole, and right-end pockets \u2014 matches.\n- **Right view**: 60-wide \u00d7 26-tall profile, pad spanning Y[10,40] (30 wide, centered), two 5\u00d75 pockets centered at Y=30 with Z centers 7.5 and 19 \u2014 matches (the faint mid-pad line is just the tangent seam between the stem end face and the cylindrical surface, not a geometry difference).\n- **Cylindrical radii** [2, 3, 6, 10] = \u23004 corners, \u23006 thru, \u230012 counterbore (4 deep, floor at Z=26), pad semicircle \u2014 all as called out.\n\nEvery dimensioned feature is present at the correct size and position.\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0b9e23e2-2daa-98fd-9f74-6f8dc08c0a79",
+  "ss_exec_ok": true,
+  "ss_iou": 0.724,
+  "ag_exec_ok": true,
+  "ag_iou": 0.724,
+  "ag_final_cand": 1,
+  "best_iou": 0.724,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 155.5,
+  "t_agentic_s": 203.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 24406
+  },
+  "total_tokens": {
+   "in": 11651,
+   "out": 31363
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.724
+ }
+}

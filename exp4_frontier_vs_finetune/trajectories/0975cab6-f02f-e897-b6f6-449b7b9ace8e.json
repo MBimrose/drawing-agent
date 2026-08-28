@@ -1,0 +1,76 @@
+{
+ "uid": "0975cab6-f02f-e897-b6f6-449b7b9ace8e",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 310.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17335
+   },
+   "plan": "Views: Top (XY) shows an 80-wide plate with a centered-ish inner rectangle (the pocket) and two \u23004 circles in a row along X. Front (XZ) is a thin strip with hidden lines \u2192 plate thickness 4, pocket on the top face, holes through. Right (YZ) shows the 48 overall depth and a \"20\" dimension from the front edge to the pocket centerline. ISO confirms: flat plate, shallow off-center pocket elongated in X, left hole inside the pocket, right hole straddling the pocket's right end wall.\n\nChains per axis:\n- X: overall given directly = 80. Baseline components from left edge: 32.5 (hole 1 center), 40 (pocket centerline = plate center), 55 (hole 2 center). Hole spacing = 55 \u2212 32.5 = 22.5.\n- Y: overall = 48; pocket center at 20 from the front edge (slightly toward the front, matching the top view and right view).\n- Z: overall = 4; pocket depth 2 (blind, from top).\n\nFeatures:\n- Plate 80 \u00d7 48 \u00d7 4.\n- Pocket \"15 \u00d7 29 \u00d7 2 DEEP\": 29 along X, 15 along Y, 2 deep from top face, centered at (40, 20) \u2192 spans X 25.5\u201354.5, Y 12.5\u201327.5.\n- \"2\u00d7 \u23004 THRU\" at (32.5, 20) and (55, 20); the second hole (X=55) cuts through the pocket's end wall (edge at 54.5), as shown in the ISO view.\n- No fillets/chamfers called out.",
+   "text": "<plan>\nViews: Top (XY) shows an 80-wide plate with a centered-ish inner rectangle (the pocket) and two \u23004 circles in a row along X. Front (XZ) is a thin strip with hidden lines \u2192 plate thickness 4, pocket on the top face, holes through. Right (YZ) shows the 48 overall depth and a \"20\" dimension from the front edge to the pocket centerline. ISO confirms: flat plate, shallow off-center pocket elongated in X, left hole inside the pocket, right hole straddling the pocket's right end wall.\n\nChains per axis:\n- X: overall given directly = 80. Baseline components from left edge: 32.5 (hole 1 center), 40 (pocket centerline = plate center), 55 (hole 2 center). Hole spacing = 55 \u2212 32.5 = 22.5.\n- Y: overall = 48; pocket center at 20 from the front edge (slightly toward the front, matching the top view and right view).\n- Z: overall = 4; pocket depth 2 (blind, from top).\n\nFeatures:\n- Plate 80 \u00d7 48 \u00d7 4.\n- Pocket \"15 \u00d7 29 \u00d7 2 DEEP\": 29 along X, 15 along Y, 2 deep from top face, centered at (40, 20) \u2192 spans X 25.5\u201354.5, Y 12.5\u201327.5.\n- \"2\u00d7 \u23004 THRU\" at (32.5, 20) and (55, 20); the second hole (X=55) cuts through the pocket's end wall (edge at 54.5), as shown in the ISO view.\n- No fillets/chamfers called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nplate_len = 80.0      # mm  overall length in X (top / front views)\nplate_wid = 48.0      # mm  overall width in Y (right view)\nplate_thk = 4.0       # mm  plate thickness in Z (front view)\n\npocket_len = 29.0     # mm  pocket length in X (callout \"15 x 29 x 2 DEEP\")\npocket_wid = 15.0     # mm  pocket width in Y  (callout)\npocket_dep = 2.0      # mm  pocket depth from top face (callout)\n\npocket_cx = 40.0      # mm  pocket centre from left edge (top view baseline dim)\npocket_cy = 20.0      # mm  pocket centre from front edge (right view dim)\n\nhole_dia = 4.0        # mm  \"2x D4 THRU\"\nhole_x1 = 32.5        # mm  first hole centre from left edge (top view)\nhole_x2 = 55.0        # mm  second hole centre from left edge (top view)\nhole_y = pocket_cy    # mm  holes lie on the pocket centreline\n\nwith BuildPart() as bp:\n    # base plate, front-left-bottom corner at the origin\n    Box(plate_len, plate_wid, plate_thk,\n        align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # shallow rectangular pocket cut into the top face\n    with Locations((pocket_cx, pocket_cy, plate_thk)):\n        Box(pocket_len, pocket_wid, pocket_dep,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # two through holes (second one breaks through the pocket end wall)\n    with Locations((hole_x1, hole_y, 0.0),\n                   (hole_x2, hole_y, 0.0)):\n        Cylinder(radius=hole_dia / 2, height=plate_thk,\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     48.0,
+     4.0
+    ],
+    "volume_mm3": 14439.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 12,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.6,
+   "usage": {
+    "input_tokens": 6736,
+    "output_tokens": 687
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0975cab6-f02f-e897-b6f6-449b7b9ace8e",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9957,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9957,
+  "ag_final_cand": 1,
+  "best_iou": 0.9957,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 313.3,
+  "t_agentic_s": 322.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17335
+  },
+  "total_tokens": {
+   "in": 10846,
+   "out": 18022
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9957
+ }
+}

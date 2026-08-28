@@ -1,0 +1,79 @@
+{
+ "uid": "0264f04e-9879-24a1-30c7-74b898c39e5c",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 269.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 12400
+   },
+   "plan": "**Views:** Plan (top) upper-left: concentric circles \u2014 outer \u230060 (solid), a dashed pitch circle, \u230040 (solid), \u230024 (solid); two small hole circles on the vertical centerline, top and bottom. Dimension \"30\" = left edge of \u230060 circle to centerline = radius, confirming \u230060. Callout \"2\u00d7 \u23005 THRU\" points to the holes.\nFront view (below plan): three-tier stepped cylinder \u2014 base \u230060, middle \u230040, top boss \u230024. Vertical chain on the right: 15 (base) + 15 (middle) + 20 (boss) = **50 total height**. Two hidden dashed vertical lines near the center of the base tier = the \u23005 holes projected at X\u22480, existing only in the base thickness (0\u201315).\nRight side view (right of front): same step profile. \"50\" spans the two hidden hole lines \u2192 hole pitch-circle = \u230050 (holes at Y = \u00b125). \"10\" = flange step width = (60\u221240)/2. Cross-check: 25 + 25 = 50 \u2713; holes at r=25 lie in the base flange annulus (r=20\u202630), so they pierce only the 15 mm base \u2713 (matches hidden lines in front view and ISO).\nISO: confirms 3-tier stepped cylinder with two flange holes.\n\n**Features:**\n- Base: \u230060 \u00d7 15 (z 0\u219215)\n- Middle: \u230040 \u00d7 15 (z 15\u219230)\n- Boss: \u230024 \u00d7 20 (z 30\u219250)\n- 2\u00d7 \u23005 through holes at (0, \u00b125), i.e. on \u230050 PCD, through the base flange\n- No chamfers/fillets called out.",
+   "text": "<plan>\n**Views:** Plan (top) upper-left: concentric circles \u2014 outer \u230060 (solid), a dashed pitch circle, \u230040 (solid), \u230024 (solid); two small hole circles on the vertical centerline, top and bottom. Dimension \"30\" = left edge of \u230060 circle to centerline = radius, confirming \u230060. Callout \"2\u00d7 \u23005 THRU\" points to the holes.\nFront view (below plan): three-tier stepped cylinder \u2014 base \u230060, middle \u230040, top boss \u230024. Vertical chain on the right: 15 (base) + 15 (middle) + 20 (boss) = **50 total height**. Two hidden dashed vertical lines near the center of the base tier = the \u23005 holes projected at X\u22480, existing only in the base thickness (0\u201315).\nRight side view (right of front): same step profile. \"50\" spans the two hidden hole lines \u2192 hole pitch-circle = \u230050 (holes at Y = \u00b125). \"10\" = flange step width = (60\u221240)/2. Cross-check: 25 + 25 = 50 \u2713; holes at r=25 lie in the base flange annulus (r=20\u202630), so they pierce only the 15 mm base \u2713 (matches hidden lines in front view and ISO).\nISO: confirms 3-tier stepped cylinder with two flange holes.\n\n**Features:**\n- Base: \u230060 \u00d7 15 (z 0\u219215)\n- Middle: \u230040 \u00d7 15 (z 15\u219230)\n- Boss: \u230024 \u00d7 20 (z 30\u219250)\n- 2\u00d7 \u23005 through holes at (0, \u00b125), i.e. on \u230050 PCD, through the base flange\n- No chamfers/fillets called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------------------------------------------------------------------\n# Dimensions read from the drawing (all mm)\n# ---------------------------------------------------------------------------\nbase_dia = 60.0   # base flange diameter  (front view \"\u230060\"; plan \"30\" = radius)\nbase_ht  = 15.0   # base flange thickness (front view vertical chain)\nmid_dia  = 40.0   # middle step diameter  (front view \"\u230040\")\nmid_ht   = 15.0   # middle step height    (front view vertical chain)\nboss_dia = 24.0   # top boss diameter     (front view \"\u230024\")\nboss_ht  = 20.0   # top boss height       (front view vertical chain)\nhole_dia = 5.0    # hole diameter         (callout \"2x \u23005 THRU\")\nhole_pcd = 50.0   # hole pitch-circle dia (side view \"50\" between hole hidden lines)\n\n# Derived values\ntotal_ht = base_ht + mid_ht + boss_ht   # overall height: 15 + 15 + 20 = 50\nhole_rad = hole_pcd / 2                 # holes at r = 25, on the plan's vertical axis\n\nwith BuildPart() as builder:\n    # Base flange\n    with BuildSketch():\n        Circle(base_dia / 2)\n    extrude(amount=base_ht)\n\n    # Middle step\n    with BuildSketch(Plane.XY.offset(base_ht)):\n        Circle(mid_dia / 2)\n    extrude(amount=mid_ht)\n\n    # Top boss\n    with BuildSketch(Plane.XY.offset(base_ht + mid_ht)):\n        Circle(boss_dia / 2)\n    extrude(amount=boss_ht)\n\n    # 2x \u23005 THRU holes on the Y axis (top & bottom in plan view)\n    with Locations((0, +hole_rad, 0), (0, -hole_rad, 0)):\n        Cylinder(radius=hole_dia / 2, height=total_ht,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     60.0,
+     50.0
+    ],
+    "volume_mm3": 69660.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 9,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     12.0,
+     20.0,
+     30.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 7.3,
+   "usage": {
+    "input_tokens": 7768,
+    "output_tokens": 928
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0264f04e-9879-24a1-30c7-74b898c39e5c",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9647,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9647,
+  "ag_final_cand": 1,
+  "best_iou": 0.9647,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 272.8,
+  "t_agentic_s": 283.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 12400
+  },
+  "total_tokens": {
+   "in": 11878,
+   "out": 13328
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9647
+ }
+}

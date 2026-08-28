@@ -1,0 +1,76 @@
+{
+ "uid": "0ae0be88-1a82-d8a5-8f97-6faea3587e95",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 503.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 21008
+   },
+   "plan": "Views (third-angle): upper-left L-shaped view = TOP (XY); lower-left rectangle below it = FRONT (XZ); rectangle to its right = RIGHT (YZ). ISO confirms a flat L-shaped plate of uniform thickness with two vertical through-holes, one per arm.\n\nAxis chains / extents:\n- X: overall = 80 (top view \"80\", matches front view width). Vertical arm X-width = 12 (front view \"12\", at the hidden step lines). Hole in vertical arm centred at X = 6 (top view \"6\", centred in the 12-wide arm). Hole in horizontal arm at X = 30 (top view \"30\" from the X=0 edge).\n- Y: overall = 55 (right view \"55\"). Horizontal arm Y-width = 12 (right view \"12\"). Hole in horizontal arm centred at Y = 6 (right view \"6\", centred in the 12-wide arm). Hole in vertical arm located by chain: 12 (arm width) + 20 (right view \"20\") = 32 from the Y=0 edge.\n- Z: thickness = 16 (front view \"16\", same height as right view).\n\nFeatures:\n- L-plate: horizontal arm 80 \u00d7 12, vertical arm 12 \u00d7 55, both 16 thick, outer corner at origin.\n- \"2\u00d7 \u23005 THRU\": hole 1 at (X=6, Y=32), hole 2 at (X=30, Y=6), both through the 16 mm thickness.\n- No fillets or chamfers called out.",
+   "text": "<plan>\nViews (third-angle): upper-left L-shaped view = TOP (XY); lower-left rectangle below it = FRONT (XZ); rectangle to its right = RIGHT (YZ). ISO confirms a flat L-shaped plate of uniform thickness with two vertical through-holes, one per arm.\n\nAxis chains / extents:\n- X: overall = 80 (top view \"80\", matches front view width). Vertical arm X-width = 12 (front view \"12\", at the hidden step lines). Hole in vertical arm centred at X = 6 (top view \"6\", centred in the 12-wide arm). Hole in horizontal arm at X = 30 (top view \"30\" from the X=0 edge).\n- Y: overall = 55 (right view \"55\"). Horizontal arm Y-width = 12 (right view \"12\"). Hole in horizontal arm centred at Y = 6 (right view \"6\", centred in the 12-wide arm). Hole in vertical arm located by chain: 12 (arm width) + 20 (right view \"20\") = 32 from the Y=0 edge.\n- Z: thickness = 16 (front view \"16\", same height as right view).\n\nFeatures:\n- L-plate: horizontal arm 80 \u00d7 12, vertical arm 12 \u00d7 55, both 16 thick, outer corner at origin.\n- \"2\u00d7 \u23005 THRU\": hole 1 at (X=6, Y=32), hole 2 at (X=30, Y=6), both through the 16 mm thickness.\n- No fillets or chamfers called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (all mm) ----\nlen_x = 80            # mm  overall X extent (top view / front view)\nlen_y = 55            # mm  overall Y extent (right view)\nthick = 16            # mm  plate thickness (front view height)\narm_w = 12            # mm  width of both L arms (front view \"12\" = vertical arm; right view \"12\" = horizontal arm)\nhole_dia = 5          # mm  callout \"2x \u23005 THRU\"\nhole1_x = 6           # mm  hole in vertical arm, centre from X=0 edge (top view, centred in 12-wide arm)\nhole1_y_off = 20      # mm  hole in vertical arm, centre past horizontal-arm edge (right view \"20\")\nhole2_x = 30          # mm  hole in horizontal arm, centre from X=0 edge (top view \"30\")\nhole2_y = 6           # mm  hole in horizontal arm, centre from Y=0 edge (right view, centred in 12-wide arm)\n\n# Derived values\nhole1_y = arm_w + hole1_y_off   # mm  chain: 12 + 20 = 32 from Y=0 edge\n\nwith BuildPart() as bp:\n    # L-shaped plate as union of the two arms (outer corner at origin)\n    Box(len_x, arm_w, thick, align=(Align.MIN, Align.MIN, Align.MIN))  # horizontal arm\n    Box(arm_w, len_y, thick, align=(Align.MIN, Align.MIN, Align.MIN))  # vertical arm\n    # Two through-holes (slightly oversized cylinders guarantee a clean THRU cut)\n    with Locations((hole1_x, hole1_y, thick / 2),\n                   (hole2_x, hole2_y, thick / 2)):\n        Cylinder(hole_dia / 2, thick + 2, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     55.0,
+     16.0
+    ],
+    "volume_mm3": 22989.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.8,
+   "usage": {
+    "input_tokens": 6864,
+    "output_tokens": 595
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0ae0be88-1a82-d8a5-8f97-6faea3587e95",
+  "ss_exec_ok": true,
+  "ss_iou": 0.611,
+  "ag_exec_ok": true,
+  "ag_iou": 0.611,
+  "ag_final_cand": 1,
+  "best_iou": 0.611,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 506.6,
+  "t_agentic_s": 515.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 21008
+  },
+  "total_tokens": {
+   "in": 10974,
+   "out": 21603
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.611
+ }
+}

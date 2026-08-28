@@ -1,0 +1,108 @@
+{
+ "uid": "061ae590-e223-ad36-4cd6-ac729031aba5",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1613.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19396
+   },
+   "plan": "Views (third\u2011angle): the large upper\u2011left view is the TOP (plan, XY); directly below it is the FRONT (XZ); to the right of the front is the RIGHT side (YZ). ISO confirms a flat plate with two large through\u2011holes on a diagonal and four small rectangular posts standing on the top face.\n\nAxes / chains\n- X (top view, horizontal): overall = 70. Component dims from the left edge: 10 (left hole centre), 20 (post column), 60 (right hole centre = 70\u221210, symmetric). So X overall = 70.\n- Y (right\u2011side view, horizontal = depth): overall = 60 (the \"60\" under the side view). Cross\u2011checks with the top\u2011view depth. So Y overall = 60.\n- Z (front view, vertical): single overall 24 from plate bottom to top of posts \u2192 total height = 24. Base plate read as 8 thick with posts rising the remaining 16 (front\u2011view proportion \u22481:2); POST_H = 24 \u2212 8 = 16.\n\nFeatures\n- Base plate 70 (X) \u00d7 60 (Y) \u00d7 8 (Z).\n- Corners: \"C1.5\" leaders at all four rectangle corners in the top view \u2192 45\u00b0 plan chamfer, leg 1.5, on the four vertical corner edges.\n- Holes: \"2\u00d7 \u230016 THRU\" \u2192 two through holes \u230016. Centres on the diagonal (ISO): left/front (10, 20) and right/back (60, 40) \u2014 X from the 10 and 60 dims, Y symmetric about 30.\n- Posts: four rectangular bosses on the top face, footprint 6 \u00d7 6 (the repeated \"6\" dims), height 16 (to Z = 24), arranged as a 2\u00d72 grid symmetric about the plate centre and kept clear of the \u230016 holes.",
+   "text": "<plan>\nViews (third\u2011angle): the large upper\u2011left view is the TOP (plan, XY); directly below it is the FRONT (XZ); to the right of the front is the RIGHT side (YZ). ISO confirms a flat plate with two large through\u2011holes on a diagonal and four small rectangular posts standing on the top face.\n\nAxes / chains\n- X (top view, horizontal): overall = 70. Component dims from the left edge: 10 (left hole centre), 20 (post column), 60 (right hole centre = 70\u221210, symmetric). So X overall = 70.\n- Y (right\u2011side view, horizontal = depth): overall = 60 (the \"60\" under the side view). Cross\u2011checks with the top\u2011view depth. So Y overall = 60.\n- Z (front view, vertical): single overall 24 from plate bottom to top of posts \u2192 total height = 24. Base plate read as 8 thick with posts rising the remaining 16 (front\u2011view proportion \u22481:2); POST_H = 24 \u2212 8 = 16.\n\nFeatures\n- Base plate 70 (X) \u00d7 60 (Y) \u00d7 8 (Z).\n- Corners: \"C1.5\" leaders at all four rectangle corners in the top view \u2192 45\u00b0 plan chamfer, leg 1.5, on the four vertical corner edges.\n- Holes: \"2\u00d7 \u230016 THRU\" \u2192 two through holes \u230016. Centres on the diagonal (ISO): left/front (10, 20) and right/back (60, 40) \u2014 X from the 10 and 60 dims, Y symmetric about 30.\n- Posts: four rectangular bosses on the top face, footprint 6 \u00d7 6 (the repeated \"6\" dims), height 16 (to Z = 24), arranged as a 2\u00d72 grid symmetric about the plate centre and kept clear of the \u230016 holes.\n</plan>\n```python\nfrom build123d import *\n\n# ---------------- dimensions (mm) ----------------\nL        = 70          # plate length X, overall (top view)\nW        = 60          # plate depth  Y, overall (right-side view \"60\")\nT        = 8           # base plate thickness (base bar in front view)\nH_TOTAL  = 24          # total height, plate bottom -> top of posts (front view)\nPOST_H   = H_TOTAL - T # post height above plate = 16\n\nCHAM     = 1.5         # C1.5 plan chamfer on the 4 plate corners\n\nHOLE_D   = 16          # 2x \u00d816 THRU\nHOLE_R   = HOLE_D / 2\nHOLE_X1  = 10          # left  hole centre X (top view \"10\")\nHOLE_X2  = 60          # right hole centre X (top view \"60\" = L-10, symmetric)\nHOLE_Y1  = 20          # left/front  hole centre Y\nHOLE_Y2  = W - HOLE_Y1 # right/back hole centre Y = 40 (symmetric about W/2)\n\nPOST_SX  = 6           # post footprint in X (the \"6\" dims)\nPOST_SY  = 6           # post footprint in Y\nPOST_COL_X = 22                 # post column centre X (clear of \u00d816 hole at X=10)\nPOST_COLS  = [POST_COL_X, L - POST_COL_X]   # two symmetric X columns: 22, 48\nPOST_ROW_Y = 15\nPOST_ROWS  = [POST_ROW_Y, W - POST_ROW_Y]   # two symmetric Y rows: 15, 45\n\nwith BuildPart() as bp:\n    # base plate, corner at origin, +X +Y +Z\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # C1.5 chamfer on the four vertical corner edges (plan chamfer)\n    chamfer(bp.part.edges().filter_by(Axis.Z), length=CHAM)\n\n    # four posts standing on the top face (2x2 grid)\n    for x in POST_COLS:\n        for y in POST_ROWS:\n            with Locations((x, y, T)):\n                Box(POST_SX, POST_SY, POST_H,\n                    align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # two \u00d816 through holes (diagonal pair)\n    for (hx, hy) in [(HOLE_X1, HOLE_Y1), (HOLE_X2, HOLE_Y2)]:\n        with Locations((hx, hy, -1)):\n            Cylinder(radius=HOLE_R, height=H_TOTAL + 2, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     60.0,
+     24.0
+    ],
+    "volume_mm3": 32659.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 32,
+    "n_planar_faces": 30,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 473.9,
+   "usage": {
+    "input_tokens": 7366,
+    "output_tokens": 16240
+   },
+   "plan": "Comparing my render to the original drawing, the overall extents (70 \u00d7 60 \u00d7 24), the two \u00d816 through\u2011holes on the diagonal, the C1.5 corner chamfers, and the four posts are all present and correct in form. However, re\u2011reading the dimension scheme I mis\u2011placed the post grid:\n\n- Top view X dims are a baseline chain from the left edge: 10 = left hole centre, **20 = left post column centre**, 60 = right hole centre, 70 = overall. Right post column is symmetric: 70 \u2212 20 = 50. (I had 22/48 \u2014 wrong.)\n- Right\u2011side view Y dims are a baseline chain from the front edge: **10 = front post row centre, 50 = back post row centre**, 60 = overall (10 and 50 are symmetric about 30). (I had 15/45 \u2014 wrong.)\n- The repeated \"3\"+\"3\" vertical dims bracket the post rows about their centrelines (3+3 = 6 post width), and the \"6\" dims give the post X size \u2192 post footprint 6 \u00d7 6. Height: 24 total \u2212 8 plate = 16.\n- Clearance check: post corner nearest a hole at (17,13) vs hole centre (10,20) r8 \u2192 distance \u221a98 \u2248 9.9 > 8, no intersection. \u2713\n\nRevised feature placement: posts 6\u00d76\u00d716 centred at (20,10), (20,50), (50,10), (50,50); holes \u00d816 thru at (10,20) and (60,40); plate 70\u00d760\u00d78 with C1.5 plan chamfers on the four vertical corner edges.",
+   "text": "<plan>\nComparing my render to the original drawing, the overall extents (70 \u00d7 60 \u00d7 24), the two \u00d816 through\u2011holes on the diagonal, the C1.5 corner chamfers, and the four posts are all present and correct in form. However, re\u2011reading the dimension scheme I mis\u2011placed the post grid:\n\n- Top view X dims are a baseline chain from the left edge: 10 = left hole centre, **20 = left post column centre**, 60 = right hole centre, 70 = overall. Right post column is symmetric: 70 \u2212 20 = 50. (I had 22/48 \u2014 wrong.)\n- Right\u2011side view Y dims are a baseline chain from the front edge: **10 = front post row centre, 50 = back post row centre**, 60 = overall (10 and 50 are symmetric about 30). (I had 15/45 \u2014 wrong.)\n- The repeated \"3\"+\"3\" vertical dims bracket the post rows about their centrelines (3+3 = 6 post width), and the \"6\" dims give the post X size \u2192 post footprint 6 \u00d7 6. Height: 24 total \u2212 8 plate = 16.\n- Clearance check: post corner nearest a hole at (17,13) vs hole centre (10,20) r8 \u2192 distance \u221a98 \u2248 9.9 > 8, no intersection. \u2713\n\nRevised feature placement: posts 6\u00d76\u00d716 centred at (20,10), (20,50), (50,10), (50,50); holes \u00d816 thru at (10,20) and (60,40); plate 70\u00d760\u00d78 with C1.5 plan chamfers on the four vertical corner edges.\n</plan>\n```python\nfrom build123d import *\n\n# ---------------- dimensions (mm) ----------------\nL        = 70            # plate length X, overall (top view)\nW        = 60            # plate depth  Y, overall (right-side view)\nT        = 8             # base plate thickness (base bar in front view)\nH_TOTAL  = 24            # total height, plate bottom -> top of posts (front view)\nPOST_H   = H_TOTAL - T   # post height above plate = 16\n\nCHAM     = 1.5           # C1.5 plan chamfer on the 4 plate corners\n\nHOLE_D   = 16            # 2x \u00d816 THRU\nHOLE_R   = HOLE_D / 2\nHOLE_X1  = 10            # left  hole centre X (top view, from left edge)\nHOLE_X2  = 60            # right hole centre X (top view, from left edge)\nHOLE_Y1  = 20            # left/front  hole centre Y\nHOLE_Y2  = W - HOLE_Y1   # right/back hole centre Y = 40 (symmetric diagonal)\n\nPOST_S   = 6             # post footprint 6 x 6 (\"6\" dims; \"3+3\" about centreline)\nPOST_X1  = 20            # left  post column centre X (top view \"20\")\nPOST_X2  = L - POST_X1   # right post column centre X = 50 (symmetric)\nPOST_Y1  = 10            # front post row centre Y (side view \"10\")\nPOST_Y2  = 50            # back  post row centre Y (side view \"50\") = W - 10\n\nwith BuildPart() as bp:\n    # base plate, corner at origin, +X +Y +Z\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # C1.5 chamfer on the four vertical corner edges (plan chamfer)\n    chamfer(bp.part.edges().filter_by(Axis.Z), length=CHAM)\n\n    # four posts standing on the top face (2x2 grid)\n    for x in (POST_X1, POST_X2):\n        for y in (POST_Y1, POST_Y2):\n            with Locations((x, y, T)):\n                Box(POST_S, POST_S, POST_H,\n                    align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # two \u00d816 through holes (diagonal pair)\n    for (hx, hy) in ((HOLE_X1, HOLE_Y1), (HOLE_X2, HOLE_Y2)):\n        with Locations((hx, hy, -1)):\n            Cylinder(radius=HOLE_R, height=H_TOTAL + 2, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     60.0,
+     24.0
+    ],
+    "volume_mm3": 32659.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 32,
+    "n_planar_faces": 30,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     8.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 81.1,
+   "usage": {
+    "input_tokens": 8580,
+    "output_tokens": 10106
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "061ae590-e223-ad36-4cd6-ac729031aba5",
+  "ss_exec_ok": true,
+  "ss_iou": 0.6953,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7013,
+  "ag_final_cand": 2,
+  "best_iou": 0.7013,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 1617.0,
+  "t_agentic_s": 2182.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19396
+  },
+  "total_tokens": {
+   "in": 20056,
+   "out": 45742
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.6953,
+  "2": 0.7013
+ }
+}

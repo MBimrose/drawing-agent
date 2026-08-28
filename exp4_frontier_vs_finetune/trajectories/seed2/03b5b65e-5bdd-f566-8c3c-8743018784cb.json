@@ -1,0 +1,77 @@
+{
+ "uid": "03b5b65e-5bdd-f566-8c3c-8743018784cb",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 161.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 20013
+   },
+   "plan": "Views: upper-left = TOP (XY); below it = FRONT (XZ); to the right of front = RIGHT (YZ). ISO is NTS.\n\nAxis chains (explicit arithmetic):\n- X (top view, horizontal): left margin 20 + \"3\u00d7 20\" (=60, three pitches \u2192 4 hole columns) + right margin 20 (symmetric; the \u230040 boss and hole pattern are centered) = 20 + 60 + 20 = 100 mm overall.\n- Y (top view \"2\u00d7 20\" = 40 for two pitches \u2192 3 hole rows; right view gives the end margin 15 and overall 70): 15 + 20 + 20 + 15 = 70 mm overall. Checks the right-view \"70\".\n- Z (front view): small step 3 on top, overall 11 \u2192 base plate = 11 \u2212 3 = 8 mm, raised features 3 mm (tops at Z=11).\n\nFeatures:\n- Base plate 100 (X) \u00d7 70 (Y) \u00d7 8 (Z).\n- Raised circular boss \u230040 \u00d7 3, centered (single circle in top view \u2192 solid pad, not a ring).\n- Two raised ribs carrying the outer hole columns at X = \u00b130; sized from the views to contain the \u23006 holes with ~2 mm ligament: 10 (X) \u00d7 50 (Y) \u00d7 3.\n- Holes \"12\u00d7 \u23006 THRU (3\u00d74)\": 4 columns \u00d7 3 rows. Columns X = \u221230, \u221210, +10, +30 (pitch 20, margin 20); rows Y = \u221220, 0, +20 (pitch 20, margin 15). Cut through the full 11 mm.\n- No chamfers/fillets are called out.",
+   "text": "<plan>\nViews: upper-left = TOP (XY); below it = FRONT (XZ); to the right of front = RIGHT (YZ). ISO is NTS.\n\nAxis chains (explicit arithmetic):\n- X (top view, horizontal): left margin 20 + \"3\u00d7 20\" (=60, three pitches \u2192 4 hole columns) + right margin 20 (symmetric; the \u230040 boss and hole pattern are centered) = 20 + 60 + 20 = 100 mm overall.\n- Y (top view \"2\u00d7 20\" = 40 for two pitches \u2192 3 hole rows; right view gives the end margin 15 and overall 70): 15 + 20 + 20 + 15 = 70 mm overall. Checks the right-view \"70\".\n- Z (front view): small step 3 on top, overall 11 \u2192 base plate = 11 \u2212 3 = 8 mm, raised features 3 mm (tops at Z=11).\n\nFeatures:\n- Base plate 100 (X) \u00d7 70 (Y) \u00d7 8 (Z).\n- Raised circular boss \u230040 \u00d7 3, centered (single circle in top view \u2192 solid pad, not a ring).\n- Two raised ribs carrying the outer hole columns at X = \u00b130; sized from the views to contain the \u23006 holes with ~2 mm ligament: 10 (X) \u00d7 50 (Y) \u00d7 3.\n- Holes \"12\u00d7 \u23006 THRU (3\u00d74)\": 4 columns \u00d7 3 rows. Columns X = \u221230, \u221210, +10, +30 (pitch 20, margin 20); rows Y = \u221220, 0, +20 (pitch 20, margin 15). Cut through the full 11 mm.\n- No chamfers/fillets are called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nhole_margin_x = 20      # mm  left edge -> 1st hole column (top view)\nhole_pitch_x  = 20      # mm  \"3x 20\" -> 3 pitches = 4 columns\nn_col         = 4       #     4 columns in X\nhole_margin_y = 15      # mm  edge -> 1st hole row (right view)\nhole_pitch_y  = 20      # mm  \"2x 20\" -> 2 pitches = 3 rows\nn_row         = 3       #     3 rows in Y\ntotal_h       = 11      # mm  overall height (front view)\nraise_h       = 3       # mm  raised-feature height above base (front view)\npad_dia       = 40      # mm  central raised boss (top view)\nhole_dia      = 6       # mm  \"12x D6 THRU (3x4)\"\nrib_w         = 10      # mm  rib width in X (from views; ~2 mm ligament around D6)\nrib_len       = 50      # mm  rib length in Y (from views; contains the 3 rows)\n\n# ---- derived ----\nW = 2*hole_margin_x + (n_col-1)*hole_pitch_x   # mm  = 20+60+20 = 100 (X overall)\nD = 2*hole_margin_y + (n_row-1)*hole_pitch_y   # mm  = 15+40+15 = 70  (Y overall)\nbase_thk = total_h - raise_h                   # mm  = 11-3 = 8\n\ncol_xs = [-W/2 + hole_margin_x + i*hole_pitch_x for i in range(n_col)]  # -30,-10,10,30\nrow_ys = [-D/2 + hole_margin_y + j*hole_pitch_y for j in range(n_row)]  # -20,0,20\nrib_xs = [col_xs[0], col_xs[-1]]                                        # outer columns \u00b130\nhole_pts = [(x, y, 0) for x in col_xs for y in row_ys]                  # 12 holes\n\nwith BuildPart() as bp:\n    # base plate (Z: 0 .. base_thk)\n    Box(W, D, base_thk, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # central raised boss (Z: base_thk .. total_h)\n    with Locations((0, 0, base_thk)):\n        Cylinder(radius=pad_dia/2, height=raise_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # two raised ribs on the outer hole columns\n    with Locations(*[(x, 0, base_thk) for x in rib_xs]):\n        Box(rib_w, rib_len, raise_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # 12 through-holes\n    with Locations(*hole_pts):\n        Cylinder(radius=hole_dia/2, height=total_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     100.0,
+     70.0,
+     11.0
+    ],
+    "volume_mm3": 59362.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 33,
+    "n_planar_faces": 17,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     20.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.3,
+   "usage": {
+    "input_tokens": 7047,
+    "output_tokens": 72
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "03b5b65e-5bdd-f566-8c3c-8743018784cb",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9498,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9498,
+  "ag_final_cand": 1,
+  "best_iou": 0.9498,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 164.4,
+  "t_agentic_s": 169.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 20013
+  },
+  "total_tokens": {
+   "in": 11157,
+   "out": 20085
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9498
+ }
+}

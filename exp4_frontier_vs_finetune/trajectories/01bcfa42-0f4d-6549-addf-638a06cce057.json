@@ -1,0 +1,76 @@
+{
+ "uid": "01bcfa42-0f4d-6549-addf-638a06cce057",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 8.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 1320
+   },
+   "plan": "Views: The upper-left view is the TOP view (XY): a rectangle with overall X = 80; a centerline at 40 from the left edge locates a hole, so the hole is centered in X (40 = 80/2). Callout \"\u23006 \u21932\" = blind hole, diameter 6, depth 2. The view below it is the FRONT view (XZ): plate 80 \u00d7 5 thick, hidden lines at center confirm the blind hole from the top. The view right of the front is the RIGHT view (YZ): overall Y = 60, hole centerline at 30 from the edge, so centered in Y (30 = 60/2). SECTION A-A (cut through the hole centerline) confirms a \u23006 blind recess 2 deep from the top face. ISO view agrees: flat rectangular plate with a small central blind hole.\n\nDimension chains:\n- X: overall 80 (given); hole at 40 (component, centered).\n- Y: overall 60 (given); hole at 30 (component, centered).\n- Z: overall thickness 5 (given); hole depth 2 (blind, from top).\n\nFeatures: 80 \u00d7 60 \u00d7 5 plate; one blind hole \u23006 \u00d7 2 deep, centered (40, 30), opening on the top (+Z) face. No fillets or chamfers are called out.",
+   "text": "<plan>\nViews: The upper-left view is the TOP view (XY): a rectangle with overall X = 80; a centerline at 40 from the left edge locates a hole, so the hole is centered in X (40 = 80/2). Callout \"\u23006 \u21932\" = blind hole, diameter 6, depth 2. The view below it is the FRONT view (XZ): plate 80 \u00d7 5 thick, hidden lines at center confirm the blind hole from the top. The view right of the front is the RIGHT view (YZ): overall Y = 60, hole centerline at 30 from the edge, so centered in Y (30 = 60/2). SECTION A-A (cut through the hole centerline) confirms a \u23006 blind recess 2 deep from the top face. ISO view agrees: flat rectangular plate with a small central blind hole.\n\nDimension chains:\n- X: overall 80 (given); hole at 40 (component, centered).\n- Y: overall 60 (given); hole at 30 (component, centered).\n- Z: overall thickness 5 (given); hole depth 2 (blind, from top).\n\nFeatures: 80 \u00d7 60 \u00d7 5 plate; one blind hole \u23006 \u00d7 2 deep, centered (40, 30), opening on the top (+Z) face. No fillets or chamfers are called out.\n</plan>\n```python\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nplate_len = 80      # mm, overall length (X), top & front views\nplate_wid = 60      # mm, overall width (Y), right view\nplate_thk = 5       # mm, overall thickness (Z), front view\nhole_dia = 6        # mm, blind hole diameter (callout: dia 6, depth 2)\nhole_depth = 2      # mm, blind hole depth from top face\nhole_x = 40         # mm, hole center from left edge (top view) -> centered\nhole_y = 30         # mm, hole center from front edge (right view) -> centered\n\nwith BuildPart() as bp:\n    # Base plate, centered on origin, top face at +Z = plate_thk/2\n    Box(plate_len, plate_wid, plate_thk)\n    # Blind hole from the top face, centered in plan\n    with Locations((hole_x - plate_len / 2, hole_y - plate_wid / 2, plate_thk / 2)):\n        Cylinder(\n            radius=hole_dia / 2,\n            height=hole_depth,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT,\n        )\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     5.0
+    ],
+    "volume_mm3": 23943.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 7,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 1.7,
+   "usage": {
+    "input_tokens": 6580,
+    "output_tokens": 129
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "01bcfa42-0f4d-6549-addf-638a06cce057",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 11.1,
+  "t_agentic_s": 16.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 1320
+  },
+  "total_tokens": {
+   "in": 10690,
+   "out": 1449
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

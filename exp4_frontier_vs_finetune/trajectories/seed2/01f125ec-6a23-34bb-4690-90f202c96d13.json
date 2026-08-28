@@ -1,0 +1,107 @@
+{
+ "uid": "01f125ec-6a23-34bb-4690-90f202c96d13",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 711.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 23223
+   },
+   "plan": "Views: TOP (plan, XY) is the large upper\u2011left view; FRONT (XZ) is the thin strip directly below it (thickness 8, \"30\" = left\u2011leg width); RIGHT (YZ) is the thin strip to the right of the front view (thickness 8, depth chain). ISO confirms a flat L\u2011plate of uniform thickness with edge scallops, two through holes and a rectangular through\u2011slot (no raised pads \u2014 both side strips are flat 8 mm).\n\nAxis chains\n- X (top + front): overall = 80. Left leg width = 30 (top \"30\" and front \"30\"); the full width is only present in the lower band.\n- Y (right view): 30 + 10 + 30 = 70 = overall depth. Read front\u2192back: 30 = full\u2011width base height; +10 locates the upper \u23006 hole center (Y = 40); +30 to the back edge (Y = 70). So footprint = base 80\u00d730 (Y 0\u201330) \u222a left leg 30\u00d740 (X 0\u201330, Y 30\u201370); inner corner at (30,30).\n- Z: thickness = 8 (front and right strips).\n\nLeft\u2011leg cross\u2011band (top view dims): leg width 30 = 7.5 + 15 + 7.5 \u2192 two facing semicircular scallops R7.5 leave a 15 mm neck; a rectangular through\u2011slot 10 (X) \u00d7 8 (Y, the long\u2011extension \"8\") is centered in that neck (slot X = 10\u201320). Slot/scallop band centered at Y = 50 (inside the upper 30 mm segment). Upper \u23006 hole at X = 30/2 = 15 (the \"15\"), Y = 40.\n\nFeatures\n- 2\u00d7 \u23006 THRU: A (15, 40), B (30, 15) \u2014 B sits in the full\u2011width base (material spans X 0\u201380 there).\n- Rectangular through\u2011slot 10\u00d78 at X 10\u201320, Y 46\u201354.\n- Semicircular edge scallops R7.5 (through): waist pair (0,50)/(30,50); left edge (0,15); bottom edge (30,0) and (65,0); right edge (80,15); top edge of right base (55,30). No dimensioned fillets/chamfers (inner corner radius omitted).",
+   "text": "<plan>\nViews: TOP (plan, XY) is the large upper\u2011left view; FRONT (XZ) is the thin strip directly below it (thickness 8, \"30\" = left\u2011leg width); RIGHT (YZ) is the thin strip to the right of the front view (thickness 8, depth chain). ISO confirms a flat L\u2011plate of uniform thickness with edge scallops, two through holes and a rectangular through\u2011slot (no raised pads \u2014 both side strips are flat 8 mm).\n\nAxis chains\n- X (top + front): overall = 80. Left leg width = 30 (top \"30\" and front \"30\"); the full width is only present in the lower band.\n- Y (right view): 30 + 10 + 30 = 70 = overall depth. Read front\u2192back: 30 = full\u2011width base height; +10 locates the upper \u23006 hole center (Y = 40); +30 to the back edge (Y = 70). So footprint = base 80\u00d730 (Y 0\u201330) \u222a left leg 30\u00d740 (X 0\u201330, Y 30\u201370); inner corner at (30,30).\n- Z: thickness = 8 (front and right strips).\n\nLeft\u2011leg cross\u2011band (top view dims): leg width 30 = 7.5 + 15 + 7.5 \u2192 two facing semicircular scallops R7.5 leave a 15 mm neck; a rectangular through\u2011slot 10 (X) \u00d7 8 (Y, the long\u2011extension \"8\") is centered in that neck (slot X = 10\u201320). Slot/scallop band centered at Y = 50 (inside the upper 30 mm segment). Upper \u23006 hole at X = 30/2 = 15 (the \"15\"), Y = 40.\n\nFeatures\n- 2\u00d7 \u23006 THRU: A (15, 40), B (30, 15) \u2014 B sits in the full\u2011width base (material spans X 0\u201380 there).\n- Rectangular through\u2011slot 10\u00d78 at X 10\u201320, Y 46\u201354.\n- Semicircular edge scallops R7.5 (through): waist pair (0,50)/(30,50); left edge (0,15); bottom edge (30,0) and (65,0); right edge (80,15); top edge of right base (55,30). No dimensioned fillets/chamfers (inner corner radius omitted).\n</plan>\n```python\nfrom build123d import *\n\n# ---------- named parameters (read from the drawing) ----------\nX_total   = 80   # mm  overall X (top view)\nbase_h    = 30   # mm  Y height of the full-width base (right-view chain segment)\nstep_h    = 10   # mm  right-view chain: base top -> upper hole center\ntop_seg   = 30   # mm  right-view chain: upper hole -> back edge\nY_total   = base_h + step_h + top_seg      # = 30 + 10 + 30 = 70 mm overall depth\nleg_w     = 30   # mm  left-leg width in X (top \"30\" and front \"30\")\nT         = 8    # mm  plate thickness (front and right views)\n\nhole_d    = 6    # mm  \"2x \u00d86 THRU\"\nhole_r    = hole_d / 2\n\nnotch_r   = 7.5  # mm  edge-scallop radius: leg_w = 7.5 + 15 + 7.5\nneck_w    = 15   # mm  waist neck width left between the facing scallops\nslot_w    = 10   # mm  rectangular through-slot, X size\nslot_h    = 8    # mm  rectangular through-slot, Y size (the \"8\" dim)\n\n# ---------- derived positions ----------\nleg_h      = Y_total - base_h              # = 40, left-only leg height in Y\nholeA_y    = base_h + step_h               # = 40\nband_cy    = 50                            # mm  Y center of slotted/waisted band (within top_seg)\nslot_x0    = leg_w/2 - slot_w/2            # = 10  (slot centered in leg -> left edge at 10)\nslot_y0    = band_cy - slot_h/2            # = 46\nover       = 1                             # mm  extra cut depth to guarantee through\n\nholeA = (leg_w/2, holeA_y)                 # (15, 40)\nholeB = (leg_w,   base_h/2)                # (30, 15) in the full-width base\n\n# scallop centers (radius notch_r), each centered on an outer edge\nscallops = [\n    (0,      band_cy),                     # left edge, waist (dimensioned pair)\n    (leg_w,  band_cy),                     # right edge of leg, waist (dimensioned pair)\n    (0,      base_h/2),                    # left edge, lower\n    (leg_w,  0),                           # bottom edge\n    (X_total - neck_w, 0),                 # bottom edge, right (65,0)\n    (X_total, base_h/2),                   # right edge of base\n    ((leg_w + X_total)/2, base_h),         # top edge of right base (55,30)\n]\n\nwith BuildPart() as bp:\n    # L-shaped footprint, uniform thickness T (base full width + left leg)\n    base = Pos(0, 0, 0) * Box(X_total, base_h, T,\n                              align=(Align.MIN, Align.MIN, Align.MIN))\n    leg  = Pos(0, base_h, 0) * Box(leg_w, leg_h, T,\n                              align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # 2x \u00d86 through holes\n    for hx, hy in (holeA, holeB):\n        Pos(hx, hy, -over) * Cylinder(hole_r, T + 2*over,\n            align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\n    # rectangular through-slot (centered in the waisted neck)\n    Pos(slot_x0, slot_y0, -over) * Box(slot_w, slot_h, T + 2*over,\n        align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # semicircular edge scallops (full cylinders centered on the edges)\n    for cx, cy in scallops:\n        Pos(cx, cy, -over) * Cylinder(notch_r, T + 2*over,\n            align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     40.0,
+     8.0
+    ],
+    "volume_mm3": 20960.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 91.8,
+   "usage": {
+    "input_tokens": 7365,
+    "output_tokens": 13125
+   },
+   "plan": "The previous solid is wrong: bbox came out 80 \u00d7 40 \u00d7 8 (Y must be 30 + 10 + 30 = 70), and all cylindrical features (2\u00d7 \u23006 holes, 7 edge scallops) plus the 10 \u00d7 8 slot are missing (0 cylindrical faces, only 10 planar). The geometry reading of the drawing is unchanged; the failure came from mixing algebra objects with `mode=Mode.SUBTRACT` inside the `BuildPart` context (auto-add/relocation interactions dropped or misplaced the cuts and the leg). Revision: build in pure algebra mode \u2014 fuse the two footprint boxes with `+`, then cut every feature with explicit `-=` on relocated cutters. No builder context.\n\nGeometry (unchanged reading):\n- L-plate, thickness 8: base 80 \u00d7 30 (Y 0\u201330) + left leg 30 \u00d7 40 (X 0\u201330, Y 30\u201370) \u2192 overall 80 \u00d7 70 \u00d7 8.\n- 2\u00d7 \u23006 THRU at (15, 40) and (30, 15).\n- Through-slot 10 (X) \u00d7 8 (Y) at X 10\u201320, Y 46\u201354 (centered in the 15 mm neck of the waisted band at Y = 50).\n- Semicircular edge scallops R7.5 (through) centered on edges at (0,50), (30,50) [the dimensioned waist pair: 30 = 7.5+15+7.5], (0,15), (30,0), (65,0), (80,15), (55,30).\n- No dimensioned fillets/chamfers.",
+   "text": "<plan>\nThe previous solid is wrong: bbox came out 80 \u00d7 40 \u00d7 8 (Y must be 30 + 10 + 30 = 70), and all cylindrical features (2\u00d7 \u23006 holes, 7 edge scallops) plus the 10 \u00d7 8 slot are missing (0 cylindrical faces, only 10 planar). The geometry reading of the drawing is unchanged; the failure came from mixing algebra objects with `mode=Mode.SUBTRACT` inside the `BuildPart` context (auto-add/relocation interactions dropped or misplaced the cuts and the leg). Revision: build in pure algebra mode \u2014 fuse the two footprint boxes with `+`, then cut every feature with explicit `-=` on relocated cutters. No builder context.\n\nGeometry (unchanged reading):\n- L-plate, thickness 8: base 80 \u00d7 30 (Y 0\u201330) + left leg 30 \u00d7 40 (X 0\u201330, Y 30\u201370) \u2192 overall 80 \u00d7 70 \u00d7 8.\n- 2\u00d7 \u23006 THRU at (15, 40) and (30, 15).\n- Through-slot 10 (X) \u00d7 8 (Y) at X 10\u201320, Y 46\u201354 (centered in the 15 mm neck of the waisted band at Y = 50).\n- Semicircular edge scallops R7.5 (through) centered on edges at (0,50), (30,50) [the dimensioned waist pair: 30 = 7.5+15+7.5], (0,15), (30,0), (65,0), (80,15), (55,30).\n- No dimensioned fillets/chamfers.\n</plan>\n```python\nfrom build123d import *\n\n# ---------------- named parameters (from the drawing) ----------------\nX_total = 80.0      # mm  overall X (top view)\nbase_h  = 30.0      # mm  full-width base height in Y (right-view chain segment 1)\nstep_h  = 10.0      # mm  chain segment 2: base top -> upper-hole centerline\ntop_seg = 30.0      # mm  chain segment 3: upper-hole centerline -> back edge\nY_total = base_h + step_h + top_seg     # 30 + 10 + 30 = 70 mm overall depth\nleg_w   = 30.0      # mm  left-leg width in X (top \"30\" and front \"30\")\nT       = 8.0       # mm  plate thickness (front and right views)\n\nhole_d  = 6.0       # mm  \"2x \u00d86 THRU\"\nnotch_r = 7.5       # mm  edge-scallop radius (leg_w = 7.5 + 15 + 7.5)\nslot_w  = 10.0      # mm  rectangular through-slot, X size\nslot_h  = 8.0       # mm  rectangular through-slot, Y size (the \"8\" dim)\n\n# ---------------- derived values ----------------\nleg_h    = Y_total - base_h             # 40 mm, leg height above the base\nband_cy  = 50.0                         # mm  Y center of slotted/waisted band (within top_seg)\nslot_x0  = leg_w/2 - slot_w/2           # 10 mm (slot centered in leg)\nslot_y0  = band_cy - slot_h/2           # 46 mm\ncut_z0   = -1.0                         # mm  cutters start below the plate\ncut_h    = T + 2.0                      # mm  cutters protrude above the plate\n\nholeA = (leg_w/2, base_h + step_h)      # (15, 40) upper hole\nholeB = (leg_w,   base_h/2)             # (30, 15) hole in the full-width base\n\n# scallop centers (radius notch_r), each centered on an outer edge\nsc_bottom_right_x = 65.0                # mm  bottom-edge right scallop X\nsc_step_x         = (leg_w + X_total)/2 # 55 mm, centered on exposed base top edge\nscallops = [\n    (0.0,   band_cy),                   # left edge of leg - waist (dimensioned pair)\n    (leg_w, band_cy),                   # right edge of leg - waist (dimensioned pair)\n    (0.0,   base_h/2),                  # left edge of base (0, 15)\n    (leg_w, 0.0),                       # bottom edge (30, 0)\n    (sc_bottom_right_x, 0.0),           # bottom edge, right (65, 0)\n    (X_total, base_h/2),                # right edge of base (80, 15)\n    (sc_step_x, base_h),                # step edge of base (55, 30)\n]\n\n# ---------------- solid (pure algebra mode) ----------------\nbase = Pos(0, 0, 0) * Box(X_total, base_h, T,\n                          align=(Align.MIN, Align.MIN, Align.MIN))\nleg  = Pos(0, base_h, 0) * Box(leg_w, leg_h, T,\n                          align=(Align.MIN, Align.MIN, Align.MIN))\npart = base + leg                       # L-shaped plate, 80 x 70 x 8\n\n# 2x \u00d86 through holes\nfor hx, hy in (holeA, holeB):\n    part -= Pos(hx, hy, cut_z0) * Cylinder(hole_d/2, cut_h,\n            align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n# rectangular through-slot (centered in the waisted neck)\npart -= Pos(slot_x0, slot_y0, cut_z0) * Box(slot_w, slot_h, cut_h,\n        align=(Align.MIN, Align.MIN, Align.MIN))\n\n# semicircular edge scallops (full cylinders centered on the edges)\nfor cx, cy in scallops:\n    part -= Pos(cx, cy, cut_z0) * Cylinder(notch_r, cut_h,\n            align=(Align.CENTER, Align.CENTER, Align.MIN))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     70.0,
+     8.0
+    ],
+    "volume_mm3": 22773.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 28,
+    "n_planar_faces": 19,
+    "n_cylindrical_faces": 9,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     7.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 111.8,
+   "usage": {
+    "input_tokens": 9084,
+    "output_tokens": 14416
+   },
+   "plan": "Verification of the current solid against the drawing:\n\nExtents \u2014 bbox 80 \u00d7 70 \u00d7 8 matches every chain: X overall 80 (top/front), Y = 30 + 10 + 30 = 70 (right-view chain), Z = 8 (front/right strips). \u2713\n\nFeatures \u2014 9 cylindrical faces with radii [3.0, 7.5]: exactly 2\u00d7 \u23006 through holes + 7 semicircular edge scallops R7.5; plus the 10 \u00d7 8 through-slot (planar faces). \u2713\n\nTop view render matches the original: L-footprint (base 80\u00d730 + left leg 30 wide rising to 70); waisted leg with facing R7.5 scallops leaving the 15 mm neck (7.5+15+7.5 = 30); slot 10\u00d78 centered in the neck at X 10\u201320; hole A at (15, 40) on the chain boundary; hole B at (30, 15) in the full-width base; scallops at (0,15), (30,0), (65,0), (80,15), (55,30) \u2014 the step-edge scallop sits just left of the bottom-right scallop, as in the drawing.\n\nFront view render: flat 80\u00d78 strip with solid tangent lines from the two bottom scallops (22.5/37.5 and 57.5/72.5), the step line at 30, and hidden lines for the slot (10\u201320), hole A (12\u201318), hole B (27\u201333) and step scallop (47.5\u201362.5) \u2014 same line pattern as the original front strip.\n\nRight view render: flat 70\u00d78 strip with solid tangent lines at 7.5/22.5 (right-edge and bottom scallops) and 42.5/57.5 (waist scallops), hidden lines for hole A (37\u201343) and slot (46\u201354) \u2014 matches the original right strip and the 30/10/30 chain witnesses.\n\nSingle watertight solid; no dimensioned fillets/chamfers to add. The solid matches the drawing.",
+   "text": "<plan>\nVerification of the current solid against the drawing:\n\nExtents \u2014 bbox 80 \u00d7 70 \u00d7 8 matches every chain: X overall 80 (top/front), Y = 30 + 10 + 30 = 70 (right-view chain), Z = 8 (front/right strips). \u2713\n\nFeatures \u2014 9 cylindrical faces with radii [3.0, 7.5]: exactly 2\u00d7 \u23006 through holes + 7 semicircular edge scallops R7.5; plus the 10 \u00d7 8 through-slot (planar faces). \u2713\n\nTop view render matches the original: L-footprint (base 80\u00d730 + left leg 30 wide rising to 70); waisted leg with facing R7.5 scallops leaving the 15 mm neck (7.5+15+7.5 = 30); slot 10\u00d78 centered in the neck at X 10\u201320; hole A at (15, 40) on the chain boundary; hole B at (30, 15) in the full-width base; scallops at (0,15), (30,0), (65,0), (80,15), (55,30) \u2014 the step-edge scallop sits just left of the bottom-right scallop, as in the drawing.\n\nFront view render: flat 80\u00d78 strip with solid tangent lines from the two bottom scallops (22.5/37.5 and 57.5/72.5), the step line at 30, and hidden lines for the slot (10\u201320), hole A (12\u201318), hole B (27\u201333) and step scallop (47.5\u201362.5) \u2014 same line pattern as the original front strip.\n\nRight view render: flat 70\u00d78 strip with solid tangent lines at 7.5/22.5 (right-edge and bottom scallops) and 42.5/57.5 (waist scallops), hidden lines for hole A (37\u201343) and slot (46\u201354) \u2014 matches the original right strip and the 30/10/30 chain witnesses.\n\nSingle watertight solid; no dimensioned fillets/chamfers to add. The solid matches the drawing.\n</plan>\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "01f125ec-6a23-34bb-4690-90f202c96d13",
+  "ss_exec_ok": true,
+  "ss_iou": 0.4025,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7535,
+  "ag_final_cand": 2,
+  "best_iou": 0.7535,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 715.0,
+  "t_agentic_s": 929.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 23223
+  },
+  "total_tokens": {
+   "in": 20559,
+   "out": 50764
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.4025,
+  "2": 0.7535
+ }
+}

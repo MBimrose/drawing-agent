@@ -1,0 +1,77 @@
+{
+ "uid": "0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 155.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25029
+   },
+   "plan": "Views: the large holed view is the TOP (plan, XY); the long thin view below (height 16) is the FRONT (XZ); the small view to its right (20 \u00d7 16 with internal lines) is the RIGHT side (YZ). ISO confirms a stepped flat bar.\n\nX axis (length): overall = 110 (given). Component chain for the holes: left end \u2192 hole1 = 15, then \"5\u00d7 12\" (five pitches among six holes) = 60, so holes at x = 15,27,39,51,63,75 (last hole = 15+60 = 75). The \"40\" locates the pocket (left end \u2192 pocket centre = 40). The full\u2011width body runs past the hole row and steps to a narrow neck just after the last hole (shoulder at x = 75 + 10 = 85; neck 85\u2192110 = 25 long).\n\nY axis (width): RIGHT view gives overall width = 20 (wide body) and the centred narrow neck = 10 (the visible right end face). So wide body y\u2208[\u221210,10] for x\u226485; neck y\u2208[\u22125,5] for x\u226585.\n\nZ axis (thickness): FRONT view = 16. Pocket callout \"10 \u00d7 18 \u00d7 4 DEEP\" = obround recess 18 (X) \u00d7 10 (Y), 4 mm down from the top face (z 12\u219216), centred at (40,0) with R5 ends. Holes: \"6\u00d7 \u23004 THRU\" = six \u23004 vertical through\u2011holes at the x positions above, y=0.\n\nChamfers: C1 (1 mm, 45\u00b0) on the six convex vertical outer edges \u2014 left end (2), the outer shoulder corners (2), and the narrow right end (2). The re\u2011entrant shoulder corners are not chamfered. I bake these 1 mm chamfers into the 2D profile and extrude 16 mm.",
+   "text": "<plan>\nViews: the large holed view is the TOP (plan, XY); the long thin view below (height 16) is the FRONT (XZ); the small view to its right (20 \u00d7 16 with internal lines) is the RIGHT side (YZ). ISO confirms a stepped flat bar.\n\nX axis (length): overall = 110 (given). Component chain for the holes: left end \u2192 hole1 = 15, then \"5\u00d7 12\" (five pitches among six holes) = 60, so holes at x = 15,27,39,51,63,75 (last hole = 15+60 = 75). The \"40\" locates the pocket (left end \u2192 pocket centre = 40). The full\u2011width body runs past the hole row and steps to a narrow neck just after the last hole (shoulder at x = 75 + 10 = 85; neck 85\u2192110 = 25 long).\n\nY axis (width): RIGHT view gives overall width = 20 (wide body) and the centred narrow neck = 10 (the visible right end face). So wide body y\u2208[\u221210,10] for x\u226485; neck y\u2208[\u22125,5] for x\u226585.\n\nZ axis (thickness): FRONT view = 16. Pocket callout \"10 \u00d7 18 \u00d7 4 DEEP\" = obround recess 18 (X) \u00d7 10 (Y), 4 mm down from the top face (z 12\u219216), centred at (40,0) with R5 ends. Holes: \"6\u00d7 \u23004 THRU\" = six \u23004 vertical through\u2011holes at the x positions above, y=0.\n\nChamfers: C1 (1 mm, 45\u00b0) on the six convex vertical outer edges \u2014 left end (2), the outer shoulder corners (2), and the narrow right end (2). The re\u2011entrant shoulder corners are not chamfered. I bake these 1 mm chamfers into the 2D profile and extrude 16 mm.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing ----\nL = 110.0            # mm  overall length (X), top view\nW = 20.0             # mm  overall width (Y), right view\nT = 16.0             # mm  thickness (Z), front view\nneck_W = 10.0        # mm  narrow neck width (Y), right view (centred)\n\nfirst_hole = 15.0    # mm  left end -> hole 1 centre\nhole_pitch = 12.0    # mm  \"5x 12\" pitch\nn_holes = 6          #     \"6x D4 THRU\"\nhole_d = 4.0         # mm  through-hole diameter\n\npocket_cx = 40.0     # mm  left end -> pocket centre (the \"40\" dim)\npocket_L = 18.0      # mm  pocket length (X)  } \"10 x 18 x 4 DEEP\"\npocket_W = 10.0      # mm  pocket width  (Y)  }\npocket_depth = 4.0   # mm  pocket depth from top face\n\nend_margin = 10.0    # mm  last hole -> width step (shoulder), from views\ncham = 1.0           # mm  C1 = 45 deg chamfer, 1 mm\n\n# ---- derived values ----\nhole_xs = [first_hole + i * hole_pitch for i in range(n_holes)]  # 15..75\nlast_hole_x = hole_xs[-1]                       # 75\nshoulder_x = last_hole_x + end_margin           # 85 : wide body -> neck\nhalf_W = W / 2                                  # 10\nhalf_neck = neck_W / 2                          # 5\nc = cham\n\n# 2D plan profile (CCW) with the six convex corners pre-chamfered by C1.\n# Convex corners: (0,\u00b110), (shoulder_x,\u00b110), (L,\u00b15). Re-entrant (shoulder_x,\u00b15) kept sharp.\npts = [\n    (0, -half_W + c), (c, -half_W),                       # left end, bottom\n    (shoulder_x - c, -half_W), (shoulder_x, -half_W + c), # shoulder outer (bottom)\n    (shoulder_x, -half_neck),                             # re-entrant (no chamfer)\n    (L - c, -half_neck), (L, -half_neck + c),             # right end, bottom\n    (L, half_neck - c), (L - c, half_neck),               # right end, top\n    (shoulder_x, half_neck),                              # re-entrant (no chamfer)\n    (shoulder_x, half_W - c), (shoulder_x - c, half_W),   # shoulder outer (top)\n    (c, half_W), (0, half_W - c),                         # left end, top\n]\npts.append(pts[0])  # close the wire\n\nwith BuildPart() as bp:\n    # base body: extrude the chamfered plan profile through the thickness\n    with BuildSketch():\n        with BuildLine():\n            Polyline(*pts)\n        make_face()\n    extrude(amount=T)\n\n    # top pocket: obround (stadium) 18 x 10, 4 deep from the top face (z = T-depth .. T)\n    straight = pocket_L - pocket_W          # 8 mm between the R5 end centres\n    r = pocket_W / 2                        # 5 mm end radius\n    with BuildSketch(Plane.XY.offset(T - pocket_depth)):\n        with Locations((pocket_cx, 0)):\n            Rectangle(straight, pocket_W)\n        with Locations((pocket_cx - straight / 2, 0), (pocket_cx + straight / 2, 0)):\n            Circle(r)\n    extrude(amount=pocket_depth, mode=Mode.SUBTRACT)\n\n    # six through-holes (D4) along the centreline\n    with BuildSketch(Plane.XY):\n        with Locations(*[(x, 0.0) for x in hole_xs]):\n            Circle(hole_d / 2)\n    extrude(amount=T, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     110.0,
+     20.0,
+     16.0
+    ],
+    "volume_mm3": 29365.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 28,
+    "n_planar_faces": 19,
+    "n_cylindrical_faces": 9,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 8.8,
+   "usage": {
+    "input_tokens": 7047,
+    "output_tokens": 1293
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0cd10c0c-4f2c-e43c-dea0-1d3cdff4a5d6",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5752,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5752,
+  "ag_final_cand": 1,
+  "best_iou": 0.5752,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 158.7,
+  "t_agentic_s": 171.3,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25029
+  },
+  "total_tokens": {
+   "in": 11157,
+   "out": 26322
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5752
+ }
+}

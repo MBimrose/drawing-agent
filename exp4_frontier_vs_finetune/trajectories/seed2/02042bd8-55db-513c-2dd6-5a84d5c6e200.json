@@ -1,0 +1,77 @@
+{
+ "uid": "02042bd8-55db-513c-2dd6-5a84d5c6e200",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 131.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25437
+   },
+   "plan": "Views (third\u2011angle): TOP = upper\u2011left (X right, Y up), FRONT = lower\u2011left (X right, Z up), RIGHT = middle (Y right, Z up). ISO confirms an open\u2011top tray.\n\nOverall extents (all given directly, no chain needed for the box):\n- X = 80 (top & front). Feature datum chain from the \u2212X edge: 10 (\u230012 hole) \u2192 40 (boss centre = 80/2) \u2192 70 (2nd \u230012 hole = 80\u221210); symmetric about 40.\n- Y = 60 (right view). Datum chain from \u2212Y edge: 10 (\u23004 hole), 50 (2nd \u23004 hole = 60\u221210); symmetric about 30. The \u230012/boss row is centred at Y = 60/2 = 30.\n- Z = 30 (front & right). Floor = 2; boss height = 5 (stands on the inner floor, z 2\u21927); \u23004 side holes centred low at z = 5.\n- Wall/floor thickness t = 2 (repeated \u201c2\u201d callouts on all sides). C1 chamfers on the four outer corners (vertical edges).\n\nFeatures:\n- Open\u2011top box: outer 80\u00d760\u00d730, cavity inset 2 on every side, open at z=30.\n- 2\u00d7 \u230012 THRU through the bottom floor (Z) at (10,30) and (70,30).\n- Rectangular boss on the inner floor: 10 (X) \u00d7 4 (Y) \u00d7 5 (Z), centred (40,30), z 2\u21927.\n- 2\u00d7 \u23004 THRU through the +X end wall at (y=10,z=5) and (y=50,z=5).\n- C1 (1 mm, 45\u00b0) on the four outer vertical edges.",
+   "text": "<plan>\nViews (third\u2011angle): TOP = upper\u2011left (X right, Y up), FRONT = lower\u2011left (X right, Z up), RIGHT = middle (Y right, Z up). ISO confirms an open\u2011top tray.\n\nOverall extents (all given directly, no chain needed for the box):\n- X = 80 (top & front). Feature datum chain from the \u2212X edge: 10 (\u230012 hole) \u2192 40 (boss centre = 80/2) \u2192 70 (2nd \u230012 hole = 80\u221210); symmetric about 40.\n- Y = 60 (right view). Datum chain from \u2212Y edge: 10 (\u23004 hole), 50 (2nd \u23004 hole = 60\u221210); symmetric about 30. The \u230012/boss row is centred at Y = 60/2 = 30.\n- Z = 30 (front & right). Floor = 2; boss height = 5 (stands on the inner floor, z 2\u21927); \u23004 side holes centred low at z = 5.\n- Wall/floor thickness t = 2 (repeated \u201c2\u201d callouts on all sides). C1 chamfers on the four outer corners (vertical edges).\n\nFeatures:\n- Open\u2011top box: outer 80\u00d760\u00d730, cavity inset 2 on every side, open at z=30.\n- 2\u00d7 \u230012 THRU through the bottom floor (Z) at (10,30) and (70,30).\n- Rectangular boss on the inner floor: 10 (X) \u00d7 4 (Y) \u00d7 5 (Z), centred (40,30), z 2\u21927.\n- 2\u00d7 \u23004 THRU through the +X end wall at (y=10,z=5) and (y=50,z=5).\n- C1 (1 mm, 45\u00b0) on the four outer vertical edges.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing (mm) ----\nL = 80        # mm  overall X (top & front views)\nW = 60        # mm  overall Y/depth (right view)\nH = 30        # mm  overall Z (front & right views)\nt = 2         # mm  wall and floor thickness (repeated \"2\" callouts)\n\nd12 = 12          # mm  \"2x \u230012 THRU\" through the bottom floor\nhole12_x1 = 10    # mm  first \u230012 centre from -X edge\nhole12_x2 = 70    # mm  second \u230012 centre from -X edge (= L-10, symmetric)\nhole12_y = W / 2  # mm  row centred in depth (=30)\n\nboss_lx = 10      # mm  boss size in X (top view)\nboss_ly = 4       # mm  boss size in Y (top view \"4\")\nboss_h = 5        # mm  boss height (front view \"5\"), stands on inner floor\nboss_x = 40       # mm  boss centre X (top view datum = L/2)\nboss_y = W / 2    # mm  boss centre Y (centred =30)\n\nd4 = 4            # mm  \"2x \u23004 THRU\" through the +X end wall\nhole4_y1 = 10     # mm  first \u23004 centre from -Y edge (right view)\nhole4_y2 = 50     # mm  second \u23004 centre from -Y edge (= W-10, symmetric)\nhole4_z = 5       # mm  \u23004 centre height on the wall (clear of the floor)\n\nc = 1             # mm  C1 chamfer (45\u00b0) on the four outer corners\ntol = 1e-4\n\nwith BuildPart() as bp:\n    # outer block, origin at the -X/-Y/-Z corner\n    Box(L, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # open-top cavity: inset t on all sides, floor t, open at z = H\n    with Locations((t, t, t)):\n        Box(L - 2 * t, W - 2 * t, H - t,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # rectangular boss standing on the inner floor (top of floor at z = t)\n    with Locations((boss_x, boss_y, t)):\n        Box(boss_lx, boss_ly, boss_h,\n            align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.ADD)\n\n    # 2x \u230012 through the bottom floor (axis along Z)\n    for hx in (hole12_x1, hole12_x2):\n        with Locations((hx, hole12_y, -1)):\n            Cylinder(d12 / 2, t + 2,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN),\n                     mode=Mode.SUBTRACT)\n\n    # 2x \u23004 through the +X end wall (axis along X); rotate cylinder Z-axis onto +X\n    for hy in (hole4_y1, hole4_y2):\n        with Locations(Pos(L - t - 1, hy, hole4_z) * Rot(0, 90, 0)):\n            Cylinder(d4 / 2, t + 2,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN),\n                     mode=Mode.SUBTRACT)\n\n    # C1 chamfers on the four outer vertical corner edges only\n    outer_vertical_edges = (\n        bp.edges()\n        .filter_by(Axis.Z)\n        .filter_by(lambda e: (min(abs(e.center().X), abs(e.center().X - L)) < tol)\n                             and (min(abs(e.center().Y), abs(e.center().Y - W)) < tol))\n    )\n    chamfer(outer_vertical_edges, c)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     30.0
+    ],
+    "volume_mm3": 24470.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 24,
+    "n_planar_faces": 20,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     6.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.6,
+   "usage": {
+    "input_tokens": 7633,
+    "output_tokens": 1083
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "02042bd8-55db-513c-2dd6-5a84d5c6e200",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9719,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9719,
+  "ag_final_cand": 1,
+  "best_iou": 0.9719,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 134.4,
+  "t_agentic_s": 143.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25437
+  },
+  "total_tokens": {
+   "in": 11743,
+   "out": 26520
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9719
+ }
+}

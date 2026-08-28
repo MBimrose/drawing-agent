@@ -1,0 +1,143 @@
+{
+ "uid": "03b5b65e-5bdd-f566-8c3c-8743018784cb",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 130.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 13459
+   },
+   "plan": "**Views:** Top (XY) upper-left; Front (XZ) directly below it; Right (YZ) to the right of the front view; ISO (NTS) confirms a flat plate with two side rails and a central round boss, all features on the top face.\n\n**Axis chains:**\n- X (top view): 20 (edge\u21921st hole column) + 3\u00d720 (4 hole columns) + 20 (symmetric right margin) = **100 mm overall**.\n- Y (right view): **70 mm overall**; hole rows: 15 (edge\u21921st row, dim'd in right view) + 2\u00d720 + 15 = 70 \u2713. Rows at Y = 15/35/55.\n- Z (front view): overall 11, raised features 3 \u2192 base plate = 11 \u2212 3 = **8 mm**.\n\n**Features:**\n- 12\u00d7 \u23006 THRU in a 4-column \u00d7 3-row grid: columns X = 20/40/60/80, rows Y = 15/35/55 (matches \"12\u00d7 \u23006 THRU (3\u00d74)\").\n- Central round boss \u230040, 3 mm high, centered at (50, 35) \u2014 single circle in top view, so solid pad.\n- Two raised rails on the outer hole columns (X = 20 and X = 80), 3 mm high. Width/length are not directly dimensioned; from the view proportions on the 20 mm grid: width = 10 (\u00bd pitch), length = 60 (3 pitches \u2192 5 mm end margins), centered at Y = 35.\n- No chamfers/fillets called out.",
+   "text": "<plan>\n**Views:** Top (XY) upper-left; Front (XZ) directly below it; Right (YZ) to the right of the front view; ISO (NTS) confirms a flat plate with two side rails and a central round boss, all features on the top face.\n\n**Axis chains:**\n- X (top view): 20 (edge\u21921st hole column) + 3\u00d720 (4 hole columns) + 20 (symmetric right margin) = **100 mm overall**.\n- Y (right view): **70 mm overall**; hole rows: 15 (edge\u21921st row, dim'd in right view) + 2\u00d720 + 15 = 70 \u2713. Rows at Y = 15/35/55.\n- Z (front view): overall 11, raised features 3 \u2192 base plate = 11 \u2212 3 = **8 mm**.\n\n**Features:**\n- 12\u00d7 \u23006 THRU in a 4-column \u00d7 3-row grid: columns X = 20/40/60/80, rows Y = 15/35/55 (matches \"12\u00d7 \u23006 THRU (3\u00d74)\").\n- Central round boss \u230040, 3 mm high, centered at (50, 35) \u2014 single circle in top view, so solid pad.\n- Two raised rails on the outer hole columns (X = 20 and X = 80), 3 mm high. Width/length are not directly dimensioned; from the view proportions on the 20 mm grid: width = 10 (\u00bd pitch), length = 60 (3 pitches \u2192 5 mm end margins), centered at Y = 35.\n- No chamfers/fillets called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\ncol_margin = 20      # mm  plate X edge -> first hole column\ncol_pitch  = 20      # mm  \"3x 20\" hole column spacing\nrow_margin = 15      # mm  plate Y edge -> first hole row (right view)\nrow_pitch  = 20      # mm  \"2x 20\" hole row spacing\nplate_Y    = 70      # mm  overall depth (right view)\ntotal_H    = 11      # mm  overall height (front view)\npad_H      = 3       # mm  raised feature height (front view)\nhole_D     = 6       # mm  12x \u23006 THRU (3x4)\nboss_D     = 40      # mm  central round boss \u230040\nrail_W     = 10      # mm  rail width  (undimensioned; = pitch/2 from view proportions)\nrail_L     = 60      # mm  rail length (undimensioned; = 3 x pitch from view proportions)\n\n# ---------- derived values ----------\nplate_X = 2 * col_margin + 3 * col_pitch        # 20 + 3*20 + 20 = 100 mm\nbase_H  = total_H - pad_H                       # 8 mm base plate thickness\ncols = [col_margin + i * col_pitch for i in range(4)]   # X = 20, 40, 60, 80\nrows = [row_margin + i * row_pitch for i in range(3)]   # Y = 15, 35, 55\ncx, cy = plate_X / 2, plate_Y / 2               # part centre (50, 35)\n\nwith BuildPart() as bp:\n    # base plate\n    Box(plate_X, plate_Y, base_H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # central \u230040 boss, 3 mm high\n    with Locations((cx, cy, base_H)):\n        Cylinder(boss_D / 2, pad_H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # two side rails on the outer hole columns\n    with Locations((cols[0], cy, base_H), (cols[-1], cy, base_H)):\n        Box(rail_W, rail_L, pad_H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # 12 through holes \u23006 (4 x 3 grid)\n    hole_pts = [(x, y) for x in cols for y in rows]\n    with Locations(hole_pts):\n        Cylinder(hole_D / 2, total_H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     100.0,
+     70.0,
+     11.0
+    ],
+    "volume_mm3": 59962.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 33,
+    "n_planar_faces": 17,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     20.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 55.8,
+   "usage": {
+    "input_tokens": 6908,
+    "output_tokens": 5893
+   },
+   "plan": "**Mismatch found:** In the original RIGHT view, the raised pad (the projection of the two rails, which extend past the \u230040 boss's Y-extent of 15\u201355) spans only ~50 mm of the 70 mm depth, leaving ~10 mm margins at each end \u2014 not 5 mm. Cross-checking the TOP view confirms this: the rail ends sit ~5 mm beyond the outer hole rows (Y=15 and Y=55), i.e. rails run from Y=10 to Y=60. My rails were 60 mm long (Y=5\u201365); they must be **50 mm long** (2\u00d720 pitch + 2\u00d75 end allowance), centered at Y=35.\n\nEverything else checks out: plate 100\u00d770 (chain 20+3\u00d720+20; right view 70), heights 8+3=11, 12\u00d7 \u23006 through holes at X=20/40/60/80 \u00d7 Y=15/35/55, \u230040 central boss 3 mm high, rail width 10 centered on the outer hole columns. Front view pad layout (15\u201325, 30\u201370, 75\u201385) matches.",
+   "text": "<plan>\n**Mismatch found:** In the original RIGHT view, the raised pad (the projection of the two rails, which extend past the \u230040 boss's Y-extent of 15\u201355) spans only ~50 mm of the 70 mm depth, leaving ~10 mm margins at each end \u2014 not 5 mm. Cross-checking the TOP view confirms this: the rail ends sit ~5 mm beyond the outer hole rows (Y=15 and Y=55), i.e. rails run from Y=10 to Y=60. My rails were 60 mm long (Y=5\u201365); they must be **50 mm long** (2\u00d720 pitch + 2\u00d75 end allowance), centered at Y=35.\n\nEverything else checks out: plate 100\u00d770 (chain 20+3\u00d720+20; right view 70), heights 8+3=11, 12\u00d7 \u23006 through holes at X=20/40/60/80 \u00d7 Y=15/35/55, \u230040 central boss 3 mm high, rail width 10 centered on the outer hole columns. Front view pad layout (15\u201325, 30\u201370, 75\u201385) matches.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\ncol_margin = 20      # mm  plate X edge -> first hole column\ncol_pitch  = 20      # mm  \"3x 20\" hole column spacing\nrow_margin = 15      # mm  plate Y edge -> first hole row (right view)\nrow_pitch  = 20      # mm  \"2x 20\" hole row spacing\nplate_Y    = 70      # mm  overall depth (right view)\ntotal_H    = 11      # mm  overall height (front view)\npad_H      = 3       # mm  raised feature height (front view)\nhole_D     = 6       # mm  12x \u23006 THRU (3x4)\nboss_D     = 40      # mm  central round boss \u230040\nrail_W     = 10      # mm  rail width  (undimensioned; = pitch/2 from view proportions)\nrail_end   = 5       # mm  rail end allowance beyond outer hole rows (top/right views)\n\n# ---------- derived values ----------\nplate_X = 2 * col_margin + 3 * col_pitch        # 20 + 3*20 + 20 = 100 mm\nbase_H  = total_H - pad_H                       # 8 mm base plate thickness\nrail_L  = 2 * row_pitch + 2 * rail_end          # 40 + 2*5 = 50 mm (Y = 10..60)\ncols = [col_margin + i * col_pitch for i in range(4)]   # X = 20, 40, 60, 80\nrows = [row_margin + i * row_pitch for i in range(3)]   # Y = 15, 35, 55\ncx, cy = plate_X / 2, plate_Y / 2               # part centre (50, 35)\n\nwith BuildPart() as bp:\n    # base plate\n    Box(plate_X, plate_Y, base_H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # central \u230040 boss, 3 mm high\n    with Locations((cx, cy, base_H)):\n        Cylinder(boss_D / 2, pad_H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # two side rails on the outer hole columns\n    with Locations((cols[0], cy, base_H), (cols[-1], cy, base_H)):\n        Box(rail_W, rail_L, pad_H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # 12 through holes \u23006 (4 x 3 grid)\n    hole_pts = [(x, y) for x in cols for y in rows]\n    with Locations(hole_pts):\n        Cylinder(hole_D / 2, total_H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     100.0,
+     70.0,
+     11.0
+    ],
+    "volume_mm3": 59362.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 33,
+    "n_planar_faces": 17,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     20.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 81.4,
+   "usage": {
+    "input_tokens": 8029,
+    "output_tokens": 8299
+   },
+   "plan": "**Mismatch found (rail length):** Comparing the attached RIGHT render against the original RIGHT view: my pad (the rails' projection) spans Y 10\u201360, leaving 10 mm margins at each end. In the original right view the pad spans nearly the full 70 mm depth \u2014 cross-checking with the internally consistent \"15\" dimension ruler (plate edge \u2192 first hidden hole line), the pad margins are only ~5 mm per side, i.e. the pad is ~60 mm long (Y \u2248 5\u201365). So the rails must be **60 mm long** (= 3 \u00d7 20 pitch), extending 10 mm beyond the outer hole rows (Y = 5\u201365). My previous change to 50 mm was wrong; reverting to 60 mm.\n\n**Everything else verified against the renders:** plate 100 \u00d7 70 (chain 20 + 3\u00d720 + 20; right view 70 with 15 + 2\u00d720 + 15 \u2713); heights 8 + 3 = 11 \u2713; 12\u00d7 \u23006 through holes at X = 20/40/60/80 \u00d7 Y = 15/35/55 \u2713 (cylindrical radii [3, 20] confirm only \u23006 holes + \u230040 boss); central \u230040 boss 3 mm high at (50, 35) \u2713; rails 10 mm wide centered on the outer hole columns \u2713; front view shows the three separated pads (15\u201325, 30\u201370, 75\u201385) exactly as drawn \u2713. No chamfers/fillets called out.",
+   "text": "<plan>\n**Mismatch found (rail length):** Comparing the attached RIGHT render against the original RIGHT view: my pad (the rails' projection) spans Y 10\u201360, leaving 10 mm margins at each end. In the original right view the pad spans nearly the full 70 mm depth \u2014 cross-checking with the internally consistent \"15\" dimension ruler (plate edge \u2192 first hidden hole line), the pad margins are only ~5 mm per side, i.e. the pad is ~60 mm long (Y \u2248 5\u201365). So the rails must be **60 mm long** (= 3 \u00d7 20 pitch), extending 10 mm beyond the outer hole rows (Y = 5\u201365). My previous change to 50 mm was wrong; reverting to 60 mm.\n\n**Everything else verified against the renders:** plate 100 \u00d7 70 (chain 20 + 3\u00d720 + 20; right view 70 with 15 + 2\u00d720 + 15 \u2713); heights 8 + 3 = 11 \u2713; 12\u00d7 \u23006 through holes at X = 20/40/60/80 \u00d7 Y = 15/35/55 \u2713 (cylindrical radii [3, 20] confirm only \u23006 holes + \u230040 boss); central \u230040 boss 3 mm high at (50, 35) \u2713; rails 10 mm wide centered on the outer hole columns \u2713; front view shows the three separated pads (15\u201325, 30\u201370, 75\u201385) exactly as drawn \u2713. No chamfers/fillets called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\ncol_margin = 20      # mm  plate X edge -> first hole column\ncol_pitch  = 20      # mm  \"3x 20\" hole column spacing\nrow_margin = 15      # mm  plate Y edge -> first hole row (right view)\nrow_pitch  = 20      # mm  \"2x 20\" hole row spacing\nplate_Y    = 70      # mm  overall depth (right view)\ntotal_H    = 11      # mm  overall height (front view)\npad_H      = 3       # mm  raised feature height (front view)\nhole_D     = 6       # mm  12x \u23006 THRU (3x4)\nboss_D     = 40      # mm  central round boss \u230040\nrail_W     = 10      # mm  rail width (undimensioned; = pitch/2 from view proportions)\nrail_end   = 10      # mm  rail extension beyond outer hole rows (right view: ~5 mm margins to plate edges)\n\n# ---------- derived values ----------\nplate_X = 2 * col_margin + 3 * col_pitch        # 20 + 3*20 + 20 = 100 mm\nbase_H  = total_H - pad_H                       # 8 mm base plate thickness\nrail_L  = 2 * row_pitch + 2 * rail_end          # 40 + 2*10 = 60 mm (Y = 5..65)\ncols = [col_margin + i * col_pitch for i in range(4)]   # X = 20, 40, 60, 80\nrows = [row_margin + i * row_pitch for i in range(3)]   # Y = 15, 35, 55\ncx, cy = plate_X / 2, plate_Y / 2               # part centre (50, 35)\n\nwith BuildPart() as bp:\n    # base plate\n    Box(plate_X, plate_Y, base_H, align=(Align.MIN, Align.MIN, Align.MIN))\n    # central \u230040 boss, 3 mm high\n    with Locations((cx, cy, base_H)):\n        Cylinder(boss_D / 2, pad_H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # two side rails on the outer hole columns\n    with Locations((cols[0], cy, base_H), (cols[-1], cy, base_H)):\n        Box(rail_W, rail_L, pad_H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # 12 through holes \u23006 (4 x 3 grid)\n    hole_pts = [(x, y) for x in cols for y in rows]\n    with Locations(hole_pts):\n        Cylinder(hole_D / 2, total_H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 3,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     100.0,
+     70.0,
+     11.0
+    ],
+    "volume_mm3": 59962.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 33,
+    "n_planar_faces": 17,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0,
+     20.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 4,
+   "t_call_s": 7.1,
+   "usage": {
+    "input_tokens": 9246,
+    "output_tokens": 616
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "03b5b65e-5bdd-f566-8c3c-8743018784cb",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9405,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9405,
+  "ag_final_cand": 3,
+  "best_iou": 0.9498,
+  "best_cand": 2,
+  "n_calls": 4,
+  "n_candidates": 3,
+  "stop_reason": "final",
+  "t_singleshot_s": 133.8,
+  "t_agentic_s": 297.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 13459
+  },
+  "total_tokens": {
+   "in": 28293,
+   "out": 28267
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9405,
+  "2": 0.9498,
+  "3": 0.9405
+ }
+}

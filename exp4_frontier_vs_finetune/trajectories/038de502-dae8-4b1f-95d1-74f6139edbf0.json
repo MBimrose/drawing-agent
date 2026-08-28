@@ -1,0 +1,77 @@
+{
+ "uid": "038de502-dae8-4b1f-95d1-74f6139edbf0",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 68.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 7682
+   },
+   "plan": "**Views:** Upper-left is the TOP view (XY): a square plate with rounded corners, a bolt circle of 8 holes, and a centered rectangular slot. The view below it is the FRONT view (a thin strip, thickness dimension 5). The view to its right is the RIGHT side view (thin strip, 40 from edge to centreline, thickness 5). ISO confirms: flat square plate, rounded corners, 8 holes on a circle, central rectangular through-slot.\n\n**Dimension chains:**\n- X (width): 40 + 40 = **80 mm** overall (left edge \u2192 vertical centreline \u2192 right edge). The \"20\" is centreline \u2192 slot edge, so slot width = 2 \u00d7 20 = **40 mm**, centered (also leaves 20 mm margin each side, consistent).\n- Y (depth): plate is square; side view shows 40 edge \u2192 centreline, so depth = 40 + 40 = **80 mm** (a \u230060 BC could not fit otherwise).\n- Z (thickness): **5 mm** (front/side views).\n- Slot height: **15 mm** (dimension spans the slot's top/bottom edges; ISO shows a ~2.7:1 slot, matching 40\u00d715).\n\n**Features:**\n- Plate 80 \u00d7 80 \u00d7 5, corner fillets 4\u00d7 R4 (note \"4\u00d7 R4\").\n- Central rectangular through-slot 40 (X) \u00d7 15 (Y).\n- 8\u00d7 \u23005 THRU, equally spaced on \u230060 BC (radius 30); holes sit on the axes and diagonals (0\u00b0, 45\u00b0, \u2026 315\u00b0) as drawn, callout arrow at the 3-o'clock hole.\n- Edge margin check: hole outer edge at 32.5 mm from centre < 40 mm half-width \u2014 consistent.\n\n**Construction:** single sketch on XY \u2014 rectangle, sketch-fillet all 4 corners R4, subtract centered slot rectangle, subtract 8 circles via PolarLocations \u2014 then extrude 5 mm in +Z.",
+   "text": "<plan>\n**Views:** Upper-left is the TOP view (XY): a square plate with rounded corners, a bolt circle of 8 holes, and a centered rectangular slot. The view below it is the FRONT view (a thin strip, thickness dimension 5). The view to its right is the RIGHT side view (thin strip, 40 from edge to centreline, thickness 5). ISO confirms: flat square plate, rounded corners, 8 holes on a circle, central rectangular through-slot.\n\n**Dimension chains:**\n- X (width): 40 + 40 = **80 mm** overall (left edge \u2192 vertical centreline \u2192 right edge). The \"20\" is centreline \u2192 slot edge, so slot width = 2 \u00d7 20 = **40 mm**, centered (also leaves 20 mm margin each side, consistent).\n- Y (depth): plate is square; side view shows 40 edge \u2192 centreline, so depth = 40 + 40 = **80 mm** (a \u230060 BC could not fit otherwise).\n- Z (thickness): **5 mm** (front/side views).\n- Slot height: **15 mm** (dimension spans the slot's top/bottom edges; ISO shows a ~2.7:1 slot, matching 40\u00d715).\n\n**Features:**\n- Plate 80 \u00d7 80 \u00d7 5, corner fillets 4\u00d7 R4 (note \"4\u00d7 R4\").\n- Central rectangular through-slot 40 (X) \u00d7 15 (Y).\n- 8\u00d7 \u23005 THRU, equally spaced on \u230060 BC (radius 30); holes sit on the axes and diagonals (0\u00b0, 45\u00b0, \u2026 315\u00b0) as drawn, callout arrow at the 3-o'clock hole.\n- Edge margin check: hole outer edge at 32.5 mm from centre < 40 mm half-width \u2014 consistent.\n\n**Construction:** single sketch on XY \u2014 rectangle, sketch-fillet all 4 corners R4, subtract centered slot rectangle, subtract 8 circles via PolarLocations \u2014 then extrude 5 mm in +Z.\n</plan>\n```python\nimport math\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nplate_w  = 80.0   # mm overall width  (X) = 40 + 40 (edge -> centreline -> edge)\nplate_d  = 80.0   # mm overall depth  (Y) = 40 + 40 (square plate, side view 40 to centreline)\nthk      = 5.0    # mm plate thickness (front / right views)\ncorner_r = 4.0    # mm corner fillets, note \"4x R4\"\nslot_w   = 40.0   # mm central slot width  = 2 x 20 (centred on vertical centreline)\nslot_h   = 15.0   # mm central slot height (dimension across slot edges)\nhole_d   = 5.0    # mm hole diameter, callout \"8x \u23005 THRU\"\nbc_d     = 60.0   # mm bolt-circle diameter, \"... EQ SP ON \u230060 BC\"\nn_holes  = 8      # eight holes, equally spaced (0\u00b0, 45\u00b0, ... as drawn)\n\nbc_r = bc_d / 2.0  # mm bolt-circle radius\n\nwith BuildPart() as bp:\n    with BuildSketch():\n        # plate outline with R4 rounded corners\n        Rectangle(plate_w, plate_d)\n        fillet(vertices(), radius=corner_r)\n        # central rectangular through-slot\n        Rectangle(slot_w, slot_h, mode=Mode.SUBTRACT)\n        # 8x \u23005 through-holes equally spaced on the \u230060 bolt circle\n        with PolarLocations(bc_r, n_holes):\n            Circle(hole_d / 2.0, mode=Mode.SUBTRACT)\n    extrude(amount=thk)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     5.0
+    ],
+    "volume_mm3": 28147.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 22,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 12,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.5,
+   "usage": {
+    "input_tokens": 6878,
+    "output_tokens": 238
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "038de502-dae8-4b1f-95d1-74f6139edbf0",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 72.2,
+  "t_agentic_s": 78.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 7682
+  },
+  "total_tokens": {
+   "in": 10988,
+   "out": 7920
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

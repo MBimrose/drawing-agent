@@ -1,0 +1,76 @@
+{
+ "uid": "000bc5ac-ffb4-009a-e213-ec6618d29e54",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 118.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19243
+   },
+   "plan": "Views (third\u2011angle): TOP = XY (upper left), FRONT = XZ (below top), RIGHT = YZ (right of front). ISO confirms a shallow rectangular tray with a raised perimeter rim, two top holes, and a single notch (gate) in the right\u2011hand wall.\n\nDimension chains / extents:\n- X: overall given directly = 60 (top view). Hole centres at 15 and 45 from the \u2212X edge (symmetric about X=30, i.e. 15 in from each end).\n- Y: overall = 40 (right view). Side gate width = 20, centred \u2192 gate spans Y = (40\u221220)/2 = 10 to 30.\n- Z: chain 2 (floor) + 6 (wall) = 8 (overall, matches front/right \"8\"). So floor thickness = 2, rim rises from Z=2 to Z=8.\n- Rim (wall) thickness = 2 on all four sides (front view \"2\", top\u2011view inner rectangle inset). Inner cavity = (60\u22122\u00b72) \u00d7 (40\u22122\u00b72) = 56 \u00d7 36, depth 8\u22122 = 6.\n\nFeatures:\n- Tray: outer 60\u00d740\u00d78; top pocket 56\u00d736 cut from Z=2 to Z=8 (leaves 2 mm floor, 2 mm walls).\n- Gate/notch through the +X wall only: X 58\u219260, Y 10\u219230, Z 2\u21928 (opens the wall down to the floor). Matches right view \"20\" and the ISO notch on one side.\n- Holes: \"2\u00d7 \u23005 THRU\" at (15, 20) and (45, 20), through the floor (Y centred by symmetry).\nNo fillets/chamfers are called out.",
+   "text": "<plan>\nViews (third\u2011angle): TOP = XY (upper left), FRONT = XZ (below top), RIGHT = YZ (right of front). ISO confirms a shallow rectangular tray with a raised perimeter rim, two top holes, and a single notch (gate) in the right\u2011hand wall.\n\nDimension chains / extents:\n- X: overall given directly = 60 (top view). Hole centres at 15 and 45 from the \u2212X edge (symmetric about X=30, i.e. 15 in from each end).\n- Y: overall = 40 (right view). Side gate width = 20, centred \u2192 gate spans Y = (40\u221220)/2 = 10 to 30.\n- Z: chain 2 (floor) + 6 (wall) = 8 (overall, matches front/right \"8\"). So floor thickness = 2, rim rises from Z=2 to Z=8.\n- Rim (wall) thickness = 2 on all four sides (front view \"2\", top\u2011view inner rectangle inset). Inner cavity = (60\u22122\u00b72) \u00d7 (40\u22122\u00b72) = 56 \u00d7 36, depth 8\u22122 = 6.\n\nFeatures:\n- Tray: outer 60\u00d740\u00d78; top pocket 56\u00d736 cut from Z=2 to Z=8 (leaves 2 mm floor, 2 mm walls).\n- Gate/notch through the +X wall only: X 58\u219260, Y 10\u219230, Z 2\u21928 (opens the wall down to the floor). Matches right view \"20\" and the ISO notch on one side.\n- Holes: \"2\u00d7 \u23005 THRU\" at (15, 20) and (45, 20), through the floor (Y centred by symmetry).\nNo fillets/chamfers are called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nL = 60.0        # mm  overall length (X), top/front views\nW = 40.0        # mm  overall width  (Y), right view\nH = 8.0         # mm  overall height (Z), front/right views\nt_floor = 2.0   # mm  bottom floor thickness (front/right \"2\")\nt_wall = 2.0    # mm  perimeter rim (wall) thickness (front \"2\", top inset)\ngate_w = 20.0   # mm  side notch width along Y (right view \"20\")\nd_hole = 5.0    # mm  through-hole diameter (\"2x dia5 THRU\")\nx_h1 = 15.0     # mm  first hole centre from -X edge\nx_h2 = 45.0     # mm  second hole centre from -X edge\ny_h = W / 2     # mm  holes centred across the width (=20, by symmetry)\n\n# ---- derived values ----\ncav_l = L - 2 * t_wall        # 56 mm inner cavity length (X)\ncav_w = W - 2 * t_wall        # 36 mm inner cavity width  (Y)\ncav_h = H - t_floor           # 6  mm cavity depth (Z=2..8)\ngate_y0 = (W - gate_w) / 2    # 10 mm gate start in Y (centred)\n\nwith BuildPart() as _bp:\n    # outer block 60 x 40 x 8 (corner at origin)\n    Box(L, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # hollow the top: leaves a 2 mm floor and 2 mm perimeter walls\n    with Locations((t_wall, t_wall, t_floor)):\n        Box(cav_l, cav_w, cav_h,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # gate (notch) through the +X wall only, down to the floor\n    with Locations((L - t_wall, gate_y0, t_floor)):\n        Box(t_wall, gate_w, cav_h,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # two through holes in the floor\n    with Locations((x_h1, y_h, 0.0), (x_h2, y_h, 0.0)):\n        Cylinder(radius=d_hole / 2, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = _bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     40.0,
+     8.0
+    ],
+    "volume_mm3": 6785.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 16,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.1,
+   "usage": {
+    "input_tokens": 7121,
+    "output_tokens": 500
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "000bc5ac-ffb4-009a-e213-ec6618d29e54",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9649,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9649,
+  "ag_final_cand": 1,
+  "best_iou": 0.9649,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 120.8,
+  "t_agentic_s": 128.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19243
+  },
+  "total_tokens": {
+   "in": 11231,
+   "out": 19743
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9649
+ }
+}

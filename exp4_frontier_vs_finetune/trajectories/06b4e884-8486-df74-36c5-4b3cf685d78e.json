@@ -1,0 +1,76 @@
+{
+ "uid": "06b4e884-8486-df74-36c5-4b3cf685d78e",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 324.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14521
+   },
+   "plan": "**Views identified:** Top (plan) at upper left, Front below it, Right side view to the right of the front view, plus ISO (NTS).\n\n**Axis chains:**\n- **X (length):** Top view gives overall **100** directly. Chain check: 20 (edge\u21921st column) + 3\u00d720 (column spacing) = 80 to last column, leaving a symmetric 20 mm right margin \u2192 20+60+20 = 100 \u2713\n- **Y (width):** No overall on the top view, but Right view gives overall **40**. Rows are \"1\u00d7 12\" apart and centered \u2192 14 + 12 + 14 = 40 \u2713 (rows at Y = 14, 26)\n- **Z (height):** Front view gives plate thickness **15**; a small boss protrudes below the bottom face (scaled \u2248 4 mm from the 1:1 views).\n\n**Features:**\n1. Plate 100 (X) \u00d7 40 (Y) \u00d7 15 (Z).\n2. Holes: \"8\u00d7 \u23005 THRU (4\u00d72)\" \u2014 columns at X = 20, 40, 60, 80; rows at Y = 14, 26; through the 15 mm plate.\n3. Bottom boss (solid rectangle below the plate in Front and Right views, hidden dashed rectangle in Top view): Y-width **14** (dimensioned on right view), X-width \u2248 10 (scaled), height \u2248 4 (scaled), centered at (50, 20) on the bottom face.\n4. Chamfer: C1 leaders point to both right corners in the Top view and both right corners in the Front view, and the Right view shows an inset rectangle on the end face \u2192 C1 (1 mm, 45\u00b0) on all four edges of the right end face (X = 100) only.",
+   "text": "<plan>\n**Views identified:** Top (plan) at upper left, Front below it, Right side view to the right of the front view, plus ISO (NTS).\n\n**Axis chains:**\n- **X (length):** Top view gives overall **100** directly. Chain check: 20 (edge\u21921st column) + 3\u00d720 (column spacing) = 80 to last column, leaving a symmetric 20 mm right margin \u2192 20+60+20 = 100 \u2713\n- **Y (width):** No overall on the top view, but Right view gives overall **40**. Rows are \"1\u00d7 12\" apart and centered \u2192 14 + 12 + 14 = 40 \u2713 (rows at Y = 14, 26)\n- **Z (height):** Front view gives plate thickness **15**; a small boss protrudes below the bottom face (scaled \u2248 4 mm from the 1:1 views).\n\n**Features:**\n1. Plate 100 (X) \u00d7 40 (Y) \u00d7 15 (Z).\n2. Holes: \"8\u00d7 \u23005 THRU (4\u00d72)\" \u2014 columns at X = 20, 40, 60, 80; rows at Y = 14, 26; through the 15 mm plate.\n3. Bottom boss (solid rectangle below the plate in Front and Right views, hidden dashed rectangle in Top view): Y-width **14** (dimensioned on right view), X-width \u2248 10 (scaled), height \u2248 4 (scaled), centered at (50, 20) on the bottom face.\n4. Chamfer: C1 leaders point to both right corners in the Top view and both right corners in the Front view, and the Right view shows an inset rectangle on the end face \u2192 C1 (1 mm, 45\u00b0) on all four edges of the right end face (X = 100) only.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions from the drawing ----------------\nL = 100          # mm - plate length (X), top view overall\nW = 40           # mm - plate width (Y), right view overall\nT = 15           # mm - plate thickness (Z), front view\n\nhole_d = 5       # mm - \"8x \u23005 THRU (4x2)\"\ncol_0 = 20       # mm - left edge to first hole column\ncol_pitch = 20   # mm - \"3x 20\" column spacing\nn_col = 4        #     - four columns\nrow_pitch = 12   # mm - \"1x 12\" row spacing, rows centered across W\n\nboss_L = 10      # mm - bottom boss X size (scaled from 1:1 views, centered)\nboss_W = 14      # mm - bottom boss Y size (\"14\" on right view, centered)\nboss_H = 4       # mm - bottom boss height below plate (scaled from 1:1 views)\n\nC1 = 1           # mm - 45\u00b0 chamfer on the right end face perimeter\n\nrow_0 = (W - row_pitch) / 2   # mm - lower row center Y (= 14), rows centered\n\nwith BuildPart() as bp:\n    # main plate, corner at origin\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # boss on the bottom face, centered in X and Y\n    with Locations((L / 2, W / 2, 0)):\n        Box(boss_L, boss_W, boss_H,\n            align=(Align.CENTER, Align.CENTER, Align.MAX))\n\n    # 8 through holes, 4 columns x 2 rows\n    pts = [(col_0 + i * col_pitch, row_0 + j * row_pitch, -1)\n           for i in range(n_col) for j in range(2)]\n    with Locations(*pts):\n        Cylinder(radius=hole_d / 2, height=T + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # C1 chamfer around the right end face (X = L)\n    end_face = bp.faces().sort_by(Axis.X)[-1]\n    chamfer(end_face.edges(), length=C1)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     100.0,
+     40.0,
+     19.0
+    ],
+    "volume_mm3": 58156.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 23,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 8,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.3,
+   "usage": {
+    "input_tokens": 6817,
+    "output_tokens": 564
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "06b4e884-8486-df74-36c5-4b3cf685d78e",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7935,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7935,
+  "ag_final_cand": 1,
+  "best_iou": 0.7935,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 327.3,
+  "t_agentic_s": 336.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14521
+  },
+  "total_tokens": {
+   "in": 10927,
+   "out": 15085
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7935
+ }
+}

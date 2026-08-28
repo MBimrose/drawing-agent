@@ -1,0 +1,112 @@
+{
+ "uid": "07d2049a-e04f-788b-343d-5455e5921446",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2337.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 18317
+   },
+   "plan": "**Views:** Third-angle layout \u2014 TOP (plan) upper-left, FRONT below it, RIGHT to the right of FRONT, plus an unscaled ISO.\n\n**TOP view (XY, from +Z):** Round flange outline; hidden (dashed) concentric circles for the \u230030 boss underneath and the \u230012 central hole; two solid \u23005 circles on the right side, vertically aligned (same X), called out \"2\u00d7 \u23005 THRU\". The 61.2 dimension runs from the left edge of the flange to the hole centreline \u2192 hole X = 61.2 \u2212 40 = **+21.2**.\n\n**FRONT view (XZ, from \u2212Y):** Flange \u230080 \u00d7 12.5 on top; central boss \u230030 protruding 12.5 below; \u230012 through hole shown dashed. Z-axis chain: 12.5 (flange) + 12.5 (boss) = **25 total height**. The \u23005 holes project as hidden lines at X \u2248 +21.2.\n\n**RIGHT view (YZ, from +X):** Two dimensions from the same (left) flange edge: 18.8 to the near hole centre \u2192 Y = \u221240 + 18.8 = **\u221221.2**; 61.2 to the far hole centre \u2192 Y = \u221240 + 61.2 = **+21.2**. So the holes are symmetric at Y = \u00b121.2.\n\n**Hole pattern check:** holes at (21.2, \u00b121.2) lie on a \u230060 bolt circle at \u00b145\u00b0 (30\u00b7cos45\u00b0 = 21.21 \u2248 21.2 \u2713); radial position \u2248 30 clears the \u230030 boss, so \"THRU\" = through the 12.5 flange only.\n\n**Features:** flange \u230080 \u00d7 12.5; boss \u230030 \u00d7 12.5 below it; central \u230012 through hole; 2\u00d7 \u23005 through holes at (21.2, \u00b121.2). No fillets/chamfers are dimensioned \u2192 none added.",
+   "text": "<plan>\n**Views:** Third-angle layout \u2014 TOP (plan) upper-left, FRONT below it, RIGHT to the right of FRONT, plus an unscaled ISO.\n\n**TOP view (XY, from +Z):** Round flange outline; hidden (dashed) concentric circles for the \u230030 boss underneath and the \u230012 central hole; two solid \u23005 circles on the right side, vertically aligned (same X), called out \"2\u00d7 \u23005 THRU\". The 61.2 dimension runs from the left edge of the flange to the hole centreline \u2192 hole X = 61.2 \u2212 40 = **+21.2**.\n\n**FRONT view (XZ, from \u2212Y):** Flange \u230080 \u00d7 12.5 on top; central boss \u230030 protruding 12.5 below; \u230012 through hole shown dashed. Z-axis chain: 12.5 (flange) + 12.5 (boss) = **25 total height**. The \u23005 holes project as hidden lines at X \u2248 +21.2.\n\n**RIGHT view (YZ, from +X):** Two dimensions from the same (left) flange edge: 18.8 to the near hole centre \u2192 Y = \u221240 + 18.8 = **\u221221.2**; 61.2 to the far hole centre \u2192 Y = \u221240 + 61.2 = **+21.2**. So the holes are symmetric at Y = \u00b121.2.\n\n**Hole pattern check:** holes at (21.2, \u00b121.2) lie on a \u230060 bolt circle at \u00b145\u00b0 (30\u00b7cos45\u00b0 = 21.21 \u2248 21.2 \u2713); radial position \u2248 30 clears the \u230030 boss, so \"THRU\" = through the 12.5 flange only.\n\n**Features:** flange \u230080 \u00d7 12.5; boss \u230030 \u00d7 12.5 below it; central \u230012 through hole; 2\u00d7 \u23005 through holes at (21.2, \u00b121.2). No fillets/chamfers are dimensioned \u2192 none added.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions from the drawing ----------------\nflange_dia = 80.0    # mm  flange OD                       (front view)\nflange_thk = 12.5    # mm  flange thickness                (front view)\nboss_dia   = 30.0    # mm  central boss OD                 (front view)\nboss_hgt   = 12.5    # mm  boss height below flange        (front view)\nhole_dia   = 12.0    # mm  central through hole            (front view)\nthru_dia   = 5.0     # mm  2x \u23005 THRU                      (top view callout)\ndim_61_2   = 61.2    # mm  flange edge -> hole centreline  (top view X / right view far hole Y)\ndim_18_8   = 18.8    # mm  flange edge -> near hole centre (right view Y)\n\n# ---------------- derived values ----------------\nflange_r = flange_dia / 2          # 40\nboss_r   = boss_dia / 2            # 15\ntotal_h  = flange_thk + boss_hgt   # 12.5 + 12.5 = 25\n\n# both \u23005 holes share the same X (right side of top view)\nhole_x = dim_61_2 - flange_r       # 61.2 - 40 = +21.2\n# and are symmetric about the X axis (right view dims from the same flange edge)\nhole_y = flange_r - dim_18_8       # 40 - 18.8 = 21.2  (check: dim_61_2 - flange_r = 21.2)\n# -> holes on \u230060 bolt circle at \u00b145\u00b0\n\nwith BuildPart() as bp:\n    # central boss, z = 0 .. boss_hgt\n    Cylinder(radius=boss_r, height=boss_hgt,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # flange on top of boss, z = boss_hgt .. total_h\n    Pos(0, 0, boss_hgt) * Cylinder(radius=flange_r, height=flange_thk,\n                                   align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # central \u230012 hole through the whole part\n    Cylinder(radius=hole_dia / 2, height=total_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN),\n             mode=Mode.SUBTRACT)\n    # 2x \u23005 holes through the flange\n    with Locations((hole_x,  hole_y, boss_hgt),\n                   (hole_x, -hole_y, boss_hgt)):\n        Cylinder(radius=thru_dia / 2, height=flange_thk,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     12.5
+    ],
+    "volume_mm3": 61380.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 4,
+    "n_planar_faces": 2,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     6.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 52.7,
+   "usage": {
+    "input_tokens": 7240,
+    "output_tokens": 6249
+   },
+   "plan": "**What the measurement shows:** the produced solid is only the washer \u2014 flange \u230080 \u00d7 12.5 with the \u230012 hole (bbox 80 \u00d7 80 \u00d7 12.5, 4 faces, radii 6/40). The \u230030 \u00d7 12.5 boss and both \u23005 holes are missing.\n\n**Cause:** inside the `BuildPart` context, `Pos(0,0,boss_hgt) * Cylinder(...)` registered the cylinder at the *origin* (z = 0\u201312.5) instead of on top of the boss, so the flange overlapped the boss (union height stayed 12.5). Consequently the \u23005 holes, placed at z = 12.5\u201325, missed all material and cut nothing.\n\n**Fix:** rebuild in pure algebra mode (no builder context), where `Pos * Cylinder` positioning is unambiguous, and put the flange at z = 0\u201312.5 with the boss hanging below at z = \u221212.5\u20130 (matches front view: boss protrudes downward). Then subtract the central \u230012 hole across the full 25 mm height and the two \u23005 holes through the flange at (21.2, \u00b121.2).\n\n**Geometry (unchanged from drawing):**\n- Flange \u230080 \u00d7 12.5; boss \u230030 \u00d7 12.5 below \u2192 total height chain 12.5 + 12.5 = 25.\n- Central \u230012 through hole.\n- 2\u00d7 \u23005 THRU at X = 61.2 \u2212 40 = +21.2, Y = \u00b1(40 \u2212 18.8) = \u00b121.2 (\u230060 bolt circle, \u00b145\u00b0), through the flange only.\n- No fillets/chamfers dimensioned \u2192 none.\n\n**Expected result:** bbox 80 \u00d7 80 \u00d7 25; volume \u2248 \u03c0\u00b740\u00b2\u00b712.5 + \u03c0\u00b715\u00b2\u00b712.5 \u2212 \u03c0\u00b76\u00b2\u00b725 \u2212 2\u00b7\u03c0\u00b72.5\u00b2\u00b712.5 \u2248 68349 mm\u00b3; 8 faces (3 planar, 5 cylindrical: r = 40, 15, 6, 2.5, 2.5).",
+   "text": "<plan>\n**What the measurement shows:** the produced solid is only the washer \u2014 flange \u230080 \u00d7 12.5 with the \u230012 hole (bbox 80 \u00d7 80 \u00d7 12.5, 4 faces, radii 6/40). The \u230030 \u00d7 12.5 boss and both \u23005 holes are missing.\n\n**Cause:** inside the `BuildPart` context, `Pos(0,0,boss_hgt) * Cylinder(...)` registered the cylinder at the *origin* (z = 0\u201312.5) instead of on top of the boss, so the flange overlapped the boss (union height stayed 12.5). Consequently the \u23005 holes, placed at z = 12.5\u201325, missed all material and cut nothing.\n\n**Fix:** rebuild in pure algebra mode (no builder context), where `Pos * Cylinder` positioning is unambiguous, and put the flange at z = 0\u201312.5 with the boss hanging below at z = \u221212.5\u20130 (matches front view: boss protrudes downward). Then subtract the central \u230012 hole across the full 25 mm height and the two \u23005 holes through the flange at (21.2, \u00b121.2).\n\n**Geometry (unchanged from drawing):**\n- Flange \u230080 \u00d7 12.5; boss \u230030 \u00d7 12.5 below \u2192 total height chain 12.5 + 12.5 = 25.\n- Central \u230012 through hole.\n- 2\u00d7 \u23005 THRU at X = 61.2 \u2212 40 = +21.2, Y = \u00b1(40 \u2212 18.8) = \u00b121.2 (\u230060 bolt circle, \u00b145\u00b0), through the flange only.\n- No fillets/chamfers dimensioned \u2192 none.\n\n**Expected result:** bbox 80 \u00d7 80 \u00d7 25; volume \u2248 \u03c0\u00b740\u00b2\u00b712.5 + \u03c0\u00b715\u00b2\u00b712.5 \u2212 \u03c0\u00b76\u00b2\u00b725 \u2212 2\u00b7\u03c0\u00b72.5\u00b2\u00b712.5 \u2248 68349 mm\u00b3; 8 faces (3 planar, 5 cylindrical: r = 40, 15, 6, 2.5, 2.5).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions from the drawing ----------------\nflange_dia = 80.0    # mm  flange OD                       (front view)\nflange_thk = 12.5    # mm  flange thickness                (front view)\nboss_dia   = 30.0    # mm  central boss OD                 (front view)\nboss_hgt   = 12.5    # mm  boss height below flange        (front view)\nhole_dia   = 12.0    # mm  central through hole            (front view)\nthru_dia   = 5.0     # mm  2x \u23005 THRU                      (top view callout)\ndim_61_2   = 61.2    # mm  flange edge -> hole centreline  (top view X / right view far hole Y)\ndim_18_8   = 18.8    # mm  flange edge -> near hole centre (right view Y)\n\n# ---------------- derived values ----------------\nflange_r = flange_dia / 2          # 40\nboss_r   = boss_dia / 2            # 15\ntotal_h  = flange_thk + boss_hgt   # 12.5 + 12.5 = 25\n\n# both \u23005 holes share the same X (right side of top view)\nhole_x = dim_61_2 - flange_r       # 61.2 - 40 = +21.2\n# and are symmetric about the X axis (right view dims from the same flange edge)\nhole_y = flange_r - dim_18_8       # 40 - 18.8 = 21.2  (check: dim_61_2 - flange_r = 21.2)\n# -> holes on \u230060 bolt circle at \u00b145\u00b0\n\n# ---------------- solid (algebra mode) ----------------\n# flange: z = 0 .. flange_thk\nflange = Cylinder(radius=flange_r, height=flange_thk,\n                  align=(Align.CENTER, Align.CENTER, Align.MIN))\n# boss below the flange: z = -boss_hgt .. 0\nboss = Pos(0, 0, -boss_hgt) * Cylinder(radius=boss_r, height=boss_hgt,\n                                       align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n# central \u230012 hole through the whole part (z = -boss_hgt .. flange_thk)\ncentral_hole = Pos(0, 0, -boss_hgt) * Cylinder(radius=hole_dia / 2, height=total_h,\n                                               align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n# \u23005 hole cutter spanning the flange (z = 0 .. flange_thk)\npin_hole = Cylinder(radius=thru_dia / 2, height=flange_thk,\n                    align=(Align.CENTER, Align.CENTER, Align.MIN))\n\npart = flange + boss - central_hole\npart -= Pos(hole_x,  hole_y, 0) * pin_hole\npart -= Pos(hole_x, -hole_y, 0) * pin_hole\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     25.0
+    ],
+    "volume_mm3": 68301.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 8,
+    "n_planar_faces": 3,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     6.0,
+     15.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 6.2,
+   "usage": {
+    "input_tokens": 8793,
+    "output_tokens": 635
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "07d2049a-e04f-788b-343d-5455e5921446",
+  "ss_exec_ok": true,
+  "ss_iou": 0.2975,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5169,
+  "ag_final_cand": 2,
+  "best_iou": 0.5169,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 2340.4,
+  "t_agentic_s": 2409.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 18317
+  },
+  "total_tokens": {
+   "in": 20143,
+   "out": 25201
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.2975,
+  "2": 0.5169
+ }
+}

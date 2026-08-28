@@ -1,0 +1,89 @@
+{
+ "uid": "0024c6d8-aa79-9abd-1584-78ed741bd77f",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 160.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 21438
+   },
+   "plan": "Views (third\u2011angle, per the sheet rule \"front below top, right of front\"):\n- TOP (plan, XY) = the L\u2011shaped view with the four circles. Leg A (front/base): X 0\u219270 (\"70\"), Y 0\u219216 (right\u2011side \"16\"). Leg B (left): X 0\u219220 (top \"20\"), Y 0\u219280. Overall X = 70, overall Y = 80 (matches the RIGHT view \"80\"). The four circles are vertical blind holes: \"4\u00d7 \u23005 \u21938\" (\u23005, 8 deep, not through). Spacing \"3\u00d7 12\" = span 36; with the 70 mm base this gives symmetric end margins (70\u221236)/2 = 17, so hole centers X = 17, 29, 41, 53 at Y = 16/2 = 8. The narrow rectangle on leg B is a through slot: width \"4\" (X) centered on the 20\u2011wide leg (center X = 10 \u2192 X 8\u219212), with the RIGHT view datum dims \"10\" and \"20\" giving its two Y edges \u2192 Y 10\u219220. \"C0.5\" marks 45\u00b0 chamfers on the outer convex corners.\n- FRONT (XZ, below plan) = flat 70 \u00d7 16 rectangle \u2192 confirms uniform thickness Z = 16 (the \"16\" at its right) and shows the holes/slot as hidden lines; \"10\" = slot centerline in X.\n- RIGHT (YZ) = flat 80 \u00d7 16 rectangle (\"80\" overall Y, height 16) with \"10\"/\"20\" locating the slot in Y.\n- SECTION A\u2011A (cut along the hole row) = hatched bar with four blind (non\u2011through) holes \u2192 confirms \u23005, depth 8 in a 16 thick plate.\n\nChain check: X overall = 70 (given). Y overall = 80 (given, = leg B length). Z = 16 (uniform). Hole span = 3\u00d712 = 36, margins = (70\u221236)/2 = 17.\n\nSolid: L\u2011plate = Box(70\u00d716\u00d716) \u222a Box(20\u00d780\u00d716); chamfer 0.5 on the five convex vertical edges (skip the re\u2011entrant corner at (20,16)); cut the 4\u00d712 through slot; cut four \u23005 blind holes 8 deep from the top face.",
+   "text": "<plan>\nViews (third\u2011angle, per the sheet rule \"front below top, right of front\"):\n- TOP (plan, XY) = the L\u2011shaped view with the four circles. Leg A (front/base): X 0\u219270 (\"70\"), Y 0\u219216 (right\u2011side \"16\"). Leg B (left): X 0\u219220 (top \"20\"), Y 0\u219280. Overall X = 70, overall Y = 80 (matches the RIGHT view \"80\"). The four circles are vertical blind holes: \"4\u00d7 \u23005 \u21938\" (\u23005, 8 deep, not through). Spacing \"3\u00d7 12\" = span 36; with the 70 mm base this gives symmetric end margins (70\u221236)/2 = 17, so hole centers X = 17, 29, 41, 53 at Y = 16/2 = 8. The narrow rectangle on leg B is a through slot: width \"4\" (X) centered on the 20\u2011wide leg (center X = 10 \u2192 X 8\u219212), with the RIGHT view datum dims \"10\" and \"20\" giving its two Y edges \u2192 Y 10\u219220. \"C0.5\" marks 45\u00b0 chamfers on the outer convex corners.\n- FRONT (XZ, below plan) = flat 70 \u00d7 16 rectangle \u2192 confirms uniform thickness Z = 16 (the \"16\" at its right) and shows the holes/slot as hidden lines; \"10\" = slot centerline in X.\n- RIGHT (YZ) = flat 80 \u00d7 16 rectangle (\"80\" overall Y, height 16) with \"10\"/\"20\" locating the slot in Y.\n- SECTION A\u2011A (cut along the hole row) = hatched bar with four blind (non\u2011through) holes \u2192 confirms \u23005, depth 8 in a 16 thick plate.\n\nChain check: X overall = 70 (given). Y overall = 80 (given, = leg B length). Z = 16 (uniform). Hole span = 3\u00d712 = 36, margins = (70\u221236)/2 = 17.\n\nSolid: L\u2011plate = Box(70\u00d716\u00d716) \u222a Box(20\u00d780\u00d716); chamfer 0.5 on the five convex vertical edges (skip the re\u2011entrant corner at (20,16)); cut the 4\u00d712 through slot; cut four \u23005 blind holes 8 deep from the top face.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing (mm) ----\nbase_len   = 70.0   # mm  X length of the front/base leg (plan \"70\")\nbase_w     = 16.0   # mm  Y width of the base leg (plan right-side \"16\")\nleg_w      = 20.0   # mm  X width of the left leg (plan top \"20\")\nleg_len    = 80.0   # mm  Y overall length of the left leg (RIGHT view \"80\")\nthick      = 16.0   # mm  uniform plate thickness Z (FRONT/RIGHT view \"16\")\n\nhole_d     = 5.0    # mm  \"4x D5 ...\"\nhole_depth = 8.0    # mm  \"... down 8\" (blind, from top face)\nhole_pitch = 12.0   # mm  \"3x 12\" spacing\nn_holes    = 4\nhole_y     = base_w / 2                       # centered in the 16 mm base width\nhole_x0    = (base_len - (n_holes - 1) * hole_pitch) / 2   # = (70-36)/2 = 17\nhole_xs    = [hole_x0 + i * hole_pitch for i in range(n_holes)]  # 17,29,41,53\n\nslot_w     = 4.0    # mm  slot width in X (plan \"4\")\nslot_cx    = leg_w / 2                      # = 10, centered on the 20 mm leg (\"10\")\nslot_y0    = 10.0   # mm  slot near edge in Y (RIGHT view \"10\")\nslot_y1    = 20.0   # mm  slot far  edge in Y (RIGHT view \"20\")\n\ncham       = 0.5    # mm  \"C0.5\" chamfers on outer convex corners\n\nwith BuildPart() as bp:\n    # base leg A: X[0,70]  Y[0,16]  Z[0,16]\n    with Locations((base_len / 2, base_w / 2, thick / 2)):\n        Box(base_len, base_w, thick)\n    # left leg B: X[0,20]  Y[0,80]  Z[0,16]  (unioned with A)\n    with Locations((leg_w / 2, leg_len / 2, thick / 2)):\n        Box(leg_w, leg_len, thick)\n\n    # C0.5 chamfers on the outer CONVEX vertical edges only\n    # (exclude the single re-entrant corner at (leg_w, base_w) = (20,16))\n    v_edges = bp.edges().filter_by(Axis.Z)\n    convex = [e for e in v_edges\n              if not (abs(e.center().X - leg_w) < 1e-3 and abs(e.center().Y - base_w) < 1e-3)]\n    chamfer(*convex, length=cham)\n\n    # through slot on leg B: X[8,12]  Y[10,20], through the 16 mm thickness\n    with Locations((slot_cx, (slot_y0 + slot_y1) / 2, thick / 2)):\n        Box(slot_w, slot_y1 - slot_y0, thick + 2.0, mode=Mode.SUBTRACT)\n\n    # four blind holes D5, 8 mm deep from the top face (bottom at Z = 16-8 = 8)\n    for x in hole_xs:\n        with Locations((x, hole_y, thick - hole_depth / 2)):\n            Cylinder(radius=hole_d / 2, height=hole_depth, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 7.9,
+   "usage": {
+    "input_tokens": 5654,
+    "output_tokens": 1534
+   },
+   "plan": "Reading unchanged: L\u2011plate = Box(70\u00d716\u00d716) \u222a Box(20\u00d780\u00d716), thickness 16; four blind holes \u23005 \u00d7 8 deep at X = 17, 29, 41, 53, Y = 8 (span 3\u00d712 = 36, margins (70\u221236)/2 = 17); through slot 4 \u00d7 10 at X 8\u219212, Y 10\u219220; C0.5 chamfers on the convex vertical edges (excluding the re\u2011entrant corner at (20,16)).\n\nFix: build123d's `chamfer(objects, length, ...)` takes the edge set as its first positional parameter, so `chamfer(*convex, length=cham)` bound the second edge to `length`. Pass the edge list as a single argument: `chamfer(convex, length=cham)`.",
+   "text": "<plan>\nReading unchanged: L\u2011plate = Box(70\u00d716\u00d716) \u222a Box(20\u00d780\u00d716), thickness 16; four blind holes \u23005 \u00d7 8 deep at X = 17, 29, 41, 53, Y = 8 (span 3\u00d712 = 36, margins (70\u221236)/2 = 17); through slot 4 \u00d7 10 at X 8\u219212, Y 10\u219220; C0.5 chamfers on the convex vertical edges (excluding the re\u2011entrant corner at (20,16)).\n\nFix: build123d's `chamfer(objects, length, ...)` takes the edge set as its first positional parameter, so `chamfer(*convex, length=cham)` bound the second edge to `length`. Pass the edge list as a single argument: `chamfer(convex, length=cham)`.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing (mm) ----\nbase_len   = 70.0   # mm  X length of the front/base leg (plan \"70\")\nbase_w     = 16.0   # mm  Y width of the base leg (plan right-side \"16\")\nleg_w      = 20.0   # mm  X width of the left leg (plan top \"20\")\nleg_len    = 80.0   # mm  Y overall length of the left leg (RIGHT view \"80\")\nthick      = 16.0   # mm  uniform plate thickness Z (FRONT/RIGHT view \"16\")\n\nhole_d     = 5.0    # mm  \"4x D5 ...\"\nhole_depth = 8.0    # mm  \"... down 8\" (blind, from top face)\nhole_pitch = 12.0   # mm  \"3x 12\" spacing\nn_holes    = 4\nhole_y     = base_w / 2                                   # centered in 16 mm base width\nhole_x0    = (base_len - (n_holes - 1) * hole_pitch) / 2  # = (70-36)/2 = 17\nhole_xs    = [hole_x0 + i * hole_pitch for i in range(n_holes)]  # 17,29,41,53\n\nslot_w     = 4.0    # mm  slot width in X (plan \"4\")\nslot_cx    = leg_w / 2   # = 10, centered on the 20 mm leg (\"10\")\nslot_y0    = 10.0   # mm  slot near edge in Y (RIGHT view \"10\")\nslot_y1    = 20.0   # mm  slot far  edge in Y (RIGHT view \"20\")\n\ncham       = 0.5    # mm  \"C0.5\" chamfers on outer convex corners\n\nwith BuildPart() as bp:\n    # base leg A: X[0,70]  Y[0,16]  Z[0,16]\n    with Locations((base_len / 2, base_w / 2, thick / 2)):\n        Box(base_len, base_w, thick)\n    # left leg B: X[0,20]  Y[0,80]  Z[0,16]  (unioned with A)\n    with Locations((leg_w / 2, leg_len / 2, thick / 2)):\n        Box(leg_w, leg_len, thick)\n\n    # C0.5 chamfers on the outer CONVEX vertical edges only\n    # (exclude the single re-entrant corner at (leg_w, base_w) = (20,16))\n    v_edges = bp.edges().filter_by(Axis.Z)\n    convex = [e for e in v_edges\n              if not (abs(e.center().X - leg_w) < 1e-3 and abs(e.center().Y - base_w) < 1e-3)]\n    chamfer(convex, length=cham)   # pass edge list as ONE argument\n\n    # through slot on leg B: X[8,12]  Y[10,20], through the 16 mm thickness\n    with Locations((slot_cx, (slot_y0 + slot_y1) / 2, thick / 2)):\n        Box(slot_w, slot_y1 - slot_y0, thick + 2.0, mode=Mode.SUBTRACT)\n\n    # four blind holes D5, 8 mm deep from the top face (bottom at Z = 16-8 = 8)\n    for x in hole_xs:\n        with Locations((x, hole_y, thick - hole_depth / 2)):\n            Cylinder(radius=hole_d / 2, height=hole_depth, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     80.0,
+     16.0
+    ],
+    "volume_mm3": 37123.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 25,
+    "n_planar_faces": 21,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 2.6,
+   "usage": {
+    "input_tokens": 8873,
+    "output_tokens": 292
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0024c6d8-aa79-9abd-1584-78ed741bd77f",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.3977,
+  "ag_final_cand": 2,
+  "best_iou": 0.3977,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 162.7,
+  "t_agentic_s": 179.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 21438
+  },
+  "total_tokens": {
+   "in": 18637,
+   "out": 23264
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.3977
+ }
+}

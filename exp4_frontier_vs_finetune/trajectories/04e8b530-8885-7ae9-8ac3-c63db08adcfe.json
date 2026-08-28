@@ -1,0 +1,77 @@
+{
+ "uid": "04e8b530-8885-7ae9-8ac3-c63db08adcfe",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2890.8,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 15468
+   },
+   "plan": "Views (third-angle): TOP = the circle (upper left, XY). FRONT = below it (lower left, XZ): horizontal \"\u00d880\" = outer diameter, leader \"\u00d870\" = inner through-hole (no depth callout \u21d2 thru), vertical \"49\" = body height (extension lines bracket the rectangular body; pins rise above). RIGHT = to the right of front (YZ): repeats the same triad 5 / 40 / 75.\n\nDimension chain (radial, confirmed identically on X in the top view and on Y in the right view):\n- wall = (\u00d880 \u2212 \u00d870)/2 = 5 mm  \u2192 the \"5\" dim.\n- outer radius = \u00d880/2 = 40 mm \u2192 the \"40\" dim (centerline to OD).\n- pin centre circle = mid-wall = (\u00d880 + \u00d870)/2 = 75 mm \u2192 the \"75\" dim (span of opposite pin centres, \u00b137.5). All three are mutually consistent.\n\nFeatures: annular body OD 80 / ID 70 (thru) \u00d7 49 high. On the top rim sit vertical rectangular pins. The FRONT view projects them as the clusters 1\u2013pair\u20131\u2013pair\u20131 (x = \u00b137.5, \u00b126.5, 0), which is exactly an 8-pin pattern every 45\u00b0 on the \u00d875 circle; the ISO view shows the same eight posts bridging the rim. Each pin spans the wall radially (ID\u2192OD = 5 mm) with tangential width 3 mm (the \"3\" callout). Pin protrusion above the rim is not separately dimensioned; set to 10 mm to match the ISO proportion. No fillets/chamfers are called out.",
+   "text": "<plan>\nViews (third-angle): TOP = the circle (upper left, XY). FRONT = below it (lower left, XZ): horizontal \"\u00d880\" = outer diameter, leader \"\u00d870\" = inner through-hole (no depth callout \u21d2 thru), vertical \"49\" = body height (extension lines bracket the rectangular body; pins rise above). RIGHT = to the right of front (YZ): repeats the same triad 5 / 40 / 75.\n\nDimension chain (radial, confirmed identically on X in the top view and on Y in the right view):\n- wall = (\u00d880 \u2212 \u00d870)/2 = 5 mm  \u2192 the \"5\" dim.\n- outer radius = \u00d880/2 = 40 mm \u2192 the \"40\" dim (centerline to OD).\n- pin centre circle = mid-wall = (\u00d880 + \u00d870)/2 = 75 mm \u2192 the \"75\" dim (span of opposite pin centres, \u00b137.5). All three are mutually consistent.\n\nFeatures: annular body OD 80 / ID 70 (thru) \u00d7 49 high. On the top rim sit vertical rectangular pins. The FRONT view projects them as the clusters 1\u2013pair\u20131\u2013pair\u20131 (x = \u00b137.5, \u00b126.5, 0), which is exactly an 8-pin pattern every 45\u00b0 on the \u00d875 circle; the ISO view shows the same eight posts bridging the rim. Each pin spans the wall radially (ID\u2192OD = 5 mm) with tangential width 3 mm (the \"3\" callout). Pin protrusion above the rim is not separately dimensioned; set to 10 mm to match the ISO proportion. No fillets/chamfers are called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nod          = 80.0   # mm  outer diameter  (\u00d880, front view)\nid_hole     = 70.0   # mm  inner through hole (\u00d870, front view - no depth => thru)\nbody_h      = 49.0   # mm  height of the annular body (front view vertical dim)\npin_pitch_d = 75.0   # mm  pin centre-circle diameter (\"75\" = mid-wall = (80+70)/2)\npin_count   = 8      #     pins equally spaced (every 45 deg): gives the 1-pair-1-pair-1\n                     #     clusters seen in the front view and the 8 posts in the ISO view\npin_tan     = 3.0    # mm  pin tangential width (\"3\" callout at the rim)\npin_h       = 10.0   # mm  pin protrusion above the rim (not separately dimensioned;\n                     #     set from the ISO proportion, pins rise above the 49 mm body)\n\n# ---- derived values ----\nwall       = (od - id_hole) / 2.0   # 5 mm  wall thickness (matches the \"5\" dim)\npin_r      = pin_pitch_d / 2.0      # 37.5 mm pin centre radius\npin_radial = wall                   # 5 mm  pin spans the wall from ID to OD\n\nwith BuildPart() as builder:\n    # annular body: OD 80 with \u00d870 through hole, 49 high (base on z=0)\n    with BuildSketch(Plane.XY):\n        Circle(od / 2.0)\n        Circle(id_hole / 2.0, mode=Mode.SUBTRACT)\n    extrude(amount=body_h)\n\n    # eight pins on the top rim, centred on the \u00d875 mid-wall circle.\n    # rotate=True makes local +X point radially outward, so the rectangle is\n    # pin_radial (5, ID->OD) by pin_tan (3, tangential).\n    with BuildSketch(Plane.XY.offset(body_h)):\n        with PolarLocations(pin_r, pin_count, start_angle=0.0, rotate=True):\n            Rectangle(pin_radial, pin_tan)\n    extrude(amount=pin_h)\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     59.0
+    ],
+    "volume_mm3": 58919.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 67,
+    "n_planar_faces": 65,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     35.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.8,
+   "usage": {
+    "input_tokens": 7640,
+    "output_tokens": 463
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "04e8b530-8885-7ae9-8ac3-c63db08adcfe",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5898,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5898,
+  "ag_final_cand": 1,
+  "best_iou": 0.5898,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 2894.4,
+  "t_agentic_s": 2904.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 15468
+  },
+  "total_tokens": {
+   "in": 11750,
+   "out": 15931
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5898
+ }
+}

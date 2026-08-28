@@ -1,0 +1,76 @@
+{
+ "uid": "03dfa680-4b62-4f14-3b39-0b6431faee2a",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 123.8,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17064
+   },
+   "plan": "**Views identified:**\n- TOP view (upper left): square plate outline; vertical centerline; the \"\u2190 40 \u2192\" dimension runs from the left edge to the centerline, so overall X = 40 + 40 = **80**. Faint \u230082 bolt-circle centerlines pass through the 4 corner hole marks (X) and bulge slightly past the plate edges \u2014 consistent with an 80 mm plate and \u230082 BC. Leader \"46 \u00d7 46 \u00d7 2 DEEP\" points to the central square pocket. Callout \"4\u00d7 \u23003 \u21936.1 EQ SP ON \u230082.0 BC\" for the corner holes.\n- FRONT view (below top): thin base plate with two raised corner pads; vertical dimension **4.1** = base plate thickness; hidden (dashed) lines show the pocket floor/walls.\n- RIGHT view (right of front): same edge-to-center \"\u2190 40 \u2192\" \u2192 overall Y = **80**; two pads visible.\n- SECTION A\u2013A (cut horizontally through the center of the top view): hatched plate with the 46-wide, 2-deep central recess open at the top and the corner pads visible beyond the cutting plane.\n- ISO: square plate, recessed square center, 4 raised corner pads with holes.\n\n**Dimension chains:**\n- X: 40 (edge\u2192center) + 40 (center\u2192edge) = **80 overall**\n- Y: 40 + 40 = **80 overall**\n- Z: base 4.1 + pad 2.0 = **6.1 total** (matches hole depth \u21936.1 \u2192 holes come out through)\n\n**Features:**\n1. Base plate 80 \u00d7 80 \u00d7 4.1.\n2. Central pocket 46 \u00d7 46, 2 deep (floor 2.1).\n3. 4 corner pads, height 6.1 \u2212 4.1 = 2; centered on the holes at (\u00b141/\u221a2, \u00b141/\u221a2) \u2248 (\u00b129, \u00b129); pad width derived so the inner faces are flush with the pocket: 2\u00b7(29 \u2212 23) \u2248 12 \u00d7 12 (outer faces then sit 5 mm from the plate edges \u2014 clean intent).\n4. 4\u00d7 \u23003 holes, 6.1 deep from pad top = through, equally spaced (90\u00b0) on \u230082 BC \u2192 corner positions.\n\nNo fillets/chamfers are dimensioned, so none are added.",
+   "text": "<plan>\n**Views identified:**\n- TOP view (upper left): square plate outline; vertical centerline; the \"\u2190 40 \u2192\" dimension runs from the left edge to the centerline, so overall X = 40 + 40 = **80**. Faint \u230082 bolt-circle centerlines pass through the 4 corner hole marks (X) and bulge slightly past the plate edges \u2014 consistent with an 80 mm plate and \u230082 BC. Leader \"46 \u00d7 46 \u00d7 2 DEEP\" points to the central square pocket. Callout \"4\u00d7 \u23003 \u21936.1 EQ SP ON \u230082.0 BC\" for the corner holes.\n- FRONT view (below top): thin base plate with two raised corner pads; vertical dimension **4.1** = base plate thickness; hidden (dashed) lines show the pocket floor/walls.\n- RIGHT view (right of front): same edge-to-center \"\u2190 40 \u2192\" \u2192 overall Y = **80**; two pads visible.\n- SECTION A\u2013A (cut horizontally through the center of the top view): hatched plate with the 46-wide, 2-deep central recess open at the top and the corner pads visible beyond the cutting plane.\n- ISO: square plate, recessed square center, 4 raised corner pads with holes.\n\n**Dimension chains:**\n- X: 40 (edge\u2192center) + 40 (center\u2192edge) = **80 overall**\n- Y: 40 + 40 = **80 overall**\n- Z: base 4.1 + pad 2.0 = **6.1 total** (matches hole depth \u21936.1 \u2192 holes come out through)\n\n**Features:**\n1. Base plate 80 \u00d7 80 \u00d7 4.1.\n2. Central pocket 46 \u00d7 46, 2 deep (floor 2.1).\n3. 4 corner pads, height 6.1 \u2212 4.1 = 2; centered on the holes at (\u00b141/\u221a2, \u00b141/\u221a2) \u2248 (\u00b129, \u00b129); pad width derived so the inner faces are flush with the pocket: 2\u00b7(29 \u2212 23) \u2248 12 \u00d7 12 (outer faces then sit 5 mm from the plate edges \u2014 clean intent).\n4. 4\u00d7 \u23003 holes, 6.1 deep from pad top = through, equally spaced (90\u00b0) on \u230082 BC \u2192 corner positions.\n\nNo fillets/chamfers are dimensioned, so none are added.\n</plan>\n```python\nfrom build123d import *\nfrom math import sqrt\n\n# ---- Dimensions read from the drawing ----\nhalf_extent = 40.0          # mm - edge-to-centre dimension (top view & right view)\noverall = 2 * half_extent   # mm - overall width & depth: 40 + 40 = 80\nbase_t = 4.1                # mm - base plate thickness (front view)\npocket_w = 46.0             # mm - central recess, 46 x 46 (callout)\npocket_d = 2.0              # mm - recess depth (\"2 DEEP\")\nhole_d = 3.0                # mm - hole diameter (\"4x \u23003\")\nhole_depth = 6.1            # mm - hole depth (\"\u21936.1\") = base + pad -> through\nbc_d = 82.0                 # mm - bolt circle (\"EQ SP ON \u230082.0 BC\")\n\n# ---- Derived values ----\npad_h = hole_depth - base_t              # mm - corner pad height = 6.1 - 4.1 = 2.0\nhole_off = (bc_d / 2) / sqrt(2)          # mm - hole centre offset from centre (~29.0)\npad_w = 2 * (hole_off - pocket_w / 2)    # mm - pad width, inner face flush with pocket (~12)\n\nwith BuildPart() as bp:\n    # Base plate 80 x 80 x 4.1\n    Box(overall, overall, base_t, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # Four raised corner pads (12 x 12 x 2), centred on the hole positions\n    corners = [(sx * hole_off, sy * hole_off) for sx in (1, -1) for sy in (1, -1)]\n    with Locations([(x, y, base_t) for x, y in corners]):\n        Box(pad_w, pad_w, pad_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # Central pocket 46 x 46 x 2 deep\n    with Locations((0, 0, base_t)):\n        Box(pocket_w, pocket_w, pocket_d,\n            align=(Align.CENTER, Align.CENTER, Align.MAX), mode=Mode.SUBTRACT)\n\n    # 4x \u23003 holes, 6.1 deep from the pad top (= through the whole part)\n    with Locations([(x, y, hole_depth) for x, y in corners]):\n        Cylinder(radius=hole_d / 2, height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     6.1
+    ],
+    "volume_mm3": 22984.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 35,
+    "n_planar_faces": 31,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 73.5,
+   "usage": {
+    "input_tokens": 7205,
+    "output_tokens": 8688
+   },
+   "plan": null,
+   "text": "Comparing my solid's renders against the original drawing:\n\n- **Extents:** Bounding box 80 \u00d7 80 \u00d7 6.1 mm matches the dimension chains exactly (X: 40+40 = 80; Y: 40+40 = 80; Z: 4.1 base + 2.0 pad = 6.1, consistent with the \u21936.1 hole depth coming out through).\n- **Top view:** 80 \u00d7 80 outline, central 46 \u00d7 46 recess, four corner pads whose inner faces are flush with the recess walls, each with a centered \u23003 hole on the \u230082 BC (hole centers at \u00b141/\u221a2 \u2248 \u00b129) \u2014 identical layout to the original, including the pads sitting 5 mm in from the plate edges.\n- **Front / Right views:** 4.1-thick base with two raised pads (2 mm tall) and hidden lines for the recess \u2014 matches the original, including the section A\u2013A information (recess open at top, floor at 2.1).\n- **Holes:** 4 cylindrical faces at radius 1.5 mm (\u23003), through the full 6.1 mm \u2014 matches \"4\u00d7 \u23003 \u21936.1 EQ SP ON \u230082.0 BC\".\n- **Volume** 22,984.7 mm\u00b3 agrees with hand calculation (26,240 \u2212 4,232 pocket + 1,153 pads \u2212 172 holes).\n- No fillets/chamfers are dimensioned, and none were added.\n\nEvery dimensioned feature, extent, and hole matches the drawing.\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "03dfa680-4b62-4f14-3b39-0b6431faee2a",
+  "ss_exec_ok": true,
+  "ss_iou": 0.4453,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4453,
+  "ag_final_cand": 1,
+  "best_iou": 0.4453,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 126.5,
+  "t_agentic_s": 203.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17064
+  },
+  "total_tokens": {
+   "in": 11315,
+   "out": 25752
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.4453
+ }
+}

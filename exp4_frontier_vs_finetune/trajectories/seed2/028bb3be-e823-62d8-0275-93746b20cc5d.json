@@ -1,0 +1,78 @@
+{
+ "uid": "028bb3be-e823-62d8-0275-93746b20cc5d",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 174.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 22302
+   },
+   "plan": "Views (third\u2011angle): the circular view on top is the TOP (plan) view; below it is the FRONT view; to its right is the RIGHT view. ISO is NTS (form only).\n\nAxis chains / extents:\n- X (top & front): FRONT gives the overall as \u00d880 \u2192 X extent = 80, so outer radius R = 40. In the TOP view the two horizontal dims share the left tangent of the \u00d880 circle as datum: 40 = left tangent \u2192 main axis (confirms R = 40), and 62 = left tangent \u2192 the small\u2011hole axis. Small\u2011hole offset from the main axis = 62 \u2212 40 = 22 mm along +X (the hole sits on the horizontal centerline, Y = 0).\n- Y (top & right): RIGHT view dimensions edge \u2192 center = 40 (only the radius is given because the full \u00d880 is already in the front view) \u2192 Y extent = 2 \u00d7 40 = 80. Consistent with the circular plan.\n- Z (front & right): the single vertical dimension 36 is the overall height of the cylinder \u2192 Z extent = 36.\n\nFeatures (all dimensioned; no chamfers/fillets are called out):\n- Solid cylinder (axis = Z): \u00d880 \u00d7 36.\n- \u230030 THRU through\u2011hole on the main axis (0, 0).\n- \u23002 THRU through\u2011hole at (X = +22, Y = 0).\nCross\u2011check: small hole (r = 22, edge at 22 \u00b1 1) clears the \u230030 hole (edge r = 15) and stays inside the \u00d880 outline (r = 40); it projects to X = +22 in the front view and to Y = 0 (center) in the right view, matching the hidden/dark lines in both.",
+   "text": "<plan>\nViews (third\u2011angle): the circular view on top is the TOP (plan) view; below it is the FRONT view; to its right is the RIGHT view. ISO is NTS (form only).\n\nAxis chains / extents:\n- X (top & front): FRONT gives the overall as \u00d880 \u2192 X extent = 80, so outer radius R = 40. In the TOP view the two horizontal dims share the left tangent of the \u00d880 circle as datum: 40 = left tangent \u2192 main axis (confirms R = 40), and 62 = left tangent \u2192 the small\u2011hole axis. Small\u2011hole offset from the main axis = 62 \u2212 40 = 22 mm along +X (the hole sits on the horizontal centerline, Y = 0).\n- Y (top & right): RIGHT view dimensions edge \u2192 center = 40 (only the radius is given because the full \u00d880 is already in the front view) \u2192 Y extent = 2 \u00d7 40 = 80. Consistent with the circular plan.\n- Z (front & right): the single vertical dimension 36 is the overall height of the cylinder \u2192 Z extent = 36.\n\nFeatures (all dimensioned; no chamfers/fillets are called out):\n- Solid cylinder (axis = Z): \u00d880 \u00d7 36.\n- \u230030 THRU through\u2011hole on the main axis (0, 0).\n- \u23002 THRU through\u2011hole at (X = +22, Y = 0).\nCross\u2011check: small hole (r = 22, edge at 22 \u00b1 1) clears the \u230030 hole (edge r = 15) and stays inside the \u00d880 outline (r = 40); it projects to X = +22 in the front view and to Y = 0 (center) in the right view, matching the hidden/dark lines in both.\n</plan>\n```python\nfrom build123d import *\n\n# --- Named dimensions read from the drawing (mm) ---\nD_out = 80            # mm  outer diameter (FRONT view \"\u00d880\")\nH = 36                # mm  overall height / thickness along Z (vertical dim)\nD_center = 30         # mm  center through-hole (\"\u00d830 THRU\")\nD_small = 2           # mm  small through-hole (\"\u00d82 THRU\")\ndatum_to_axis = 40    # mm  TOP view: left tangent of \u00d880 -> main axis (= R_out)\ndatum_to_small = 62   # mm  TOP view: left tangent of \u00d880 -> small-hole axis\n\n# --- Derived values ---\nR_out = D_out / 2                       # outer radius = 40\nsmall_offset = datum_to_small - datum_to_axis   # = 22 mm along +X from main axis\ncut_ext = 1                             # mm  extra length so holes cut cleanly THRU\n\nwith BuildPart() as bp:\n    # Main body: \u00d880 x 36 cylinder, axis = Z (Top view = XY plane)\n    Cylinder(radius=R_out, height=H,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # \u00d830 THRU center hole (extends past both faces)\n    with Locations((0, 0, -cut_ext)):\n        Cylinder(radius=D_center / 2, height=H + 2 * cut_ext,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # \u00d82 THRU small hole at (X=+22, Y=0)\n    with Locations((small_offset, 0, -cut_ext)):\n        Cylinder(radius=D_small / 2, height=H + 2 * cut_ext,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     36.0
+    ],
+    "volume_mm3": 155322.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 5,
+    "n_planar_faces": 2,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.0,
+     15.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.8,
+   "usage": {
+    "input_tokens": 7259,
+    "output_tokens": 283
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "028bb3be-e823-62d8-0275-93746b20cc5d",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5157,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5157,
+  "ag_final_cand": 1,
+  "best_iou": 0.5157,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 177.3,
+  "t_agentic_s": 183.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 22302
+  },
+  "total_tokens": {
+   "in": 11369,
+   "out": 22585
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5157
+ }
+}

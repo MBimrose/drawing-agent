@@ -1,0 +1,91 @@
+{
+ "uid": "09a06a3c-9e51-288f-de54-bc99ab136fb3",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 135.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 20692
+   },
+   "plan": "**View identification (third-angle):** TOP = upper-left view; FRONT = below it; RIGHT = middle view; SECTION A-A = hatched view to the right (cut along the horizontal centerline of the top view, viewed from the front).\n\n**Top view (XY):** Capsule/obround outline \u2014 overall length 66 (X), width \"16 A/F\" (Y) \u2192 semicircular ends R = 16/2 = 8, straight middle = 66 \u2212 2\u00d78 = 50. A \u23006 \u219313.5 blind hole (from top) sits at 33 from the left tip (= 66/2, i.e. centered). A small rectangular pocket outline surrounds the hole. Pairs of hidden lines to the right are the two \u23004 cross-holes.\n\n**Front view (XZ):** Length 66 with vertical tangent lines where the end radii meet the flats; height 16.5. Two \u23004 THRU holes (axes along Y) at mid-height, located 45 and 60 from the left end. Pocket/blind hole shown hidden at the top center.\n\n**Right view (YZ):** 16 (Y) \u00d7 16.5 (Z). The top pocket is 8 wide in Y, centered; hidden lines show the \u23006 blind hole (13.5 deep \u2192 3 mm remaining).\n\n**Section A-A:** Confirms a blind rectangular pocket at the top center and the two \u23004 holes cut square (circles in the cut plane \u2192 axes along Y), at 45 and 60 of the 66 length.\n\n**Dimension chains:** X: overall 66 given directly; features at 33 / 45 / 60 from left. Y: 16 (A/F). Z: 16.5. Pocket: Y-width = 8 dimensioned; X-length (\u224812) and depth (\u22484) are undimensioned and taken from the view proportions. Hole \u23006 depth 13.5 must be from the top face (from the pocket floor it would break through, and it is not marked THRU).\n\n**Features:** obround prism 66\u00d716\u00d716.5; top pocket 12\u00d78\u00d74 at center; \u23006 blind hole 13.5 deep at center; 2\u00d7 \u23004 thru holes along Y at X=45, 60, Z=8.25. No chamfers/fillets called out.",
+   "text": "<plan>\n**View identification (third-angle):** TOP = upper-left view; FRONT = below it; RIGHT = middle view; SECTION A-A = hatched view to the right (cut along the horizontal centerline of the top view, viewed from the front).\n\n**Top view (XY):** Capsule/obround outline \u2014 overall length 66 (X), width \"16 A/F\" (Y) \u2192 semicircular ends R = 16/2 = 8, straight middle = 66 \u2212 2\u00d78 = 50. A \u23006 \u219313.5 blind hole (from top) sits at 33 from the left tip (= 66/2, i.e. centered). A small rectangular pocket outline surrounds the hole. Pairs of hidden lines to the right are the two \u23004 cross-holes.\n\n**Front view (XZ):** Length 66 with vertical tangent lines where the end radii meet the flats; height 16.5. Two \u23004 THRU holes (axes along Y) at mid-height, located 45 and 60 from the left end. Pocket/blind hole shown hidden at the top center.\n\n**Right view (YZ):** 16 (Y) \u00d7 16.5 (Z). The top pocket is 8 wide in Y, centered; hidden lines show the \u23006 blind hole (13.5 deep \u2192 3 mm remaining).\n\n**Section A-A:** Confirms a blind rectangular pocket at the top center and the two \u23004 holes cut square (circles in the cut plane \u2192 axes along Y), at 45 and 60 of the 66 length.\n\n**Dimension chains:** X: overall 66 given directly; features at 33 / 45 / 60 from left. Y: 16 (A/F). Z: 16.5. Pocket: Y-width = 8 dimensioned; X-length (\u224812) and depth (\u22484) are undimensioned and taken from the view proportions. Hole \u23006 depth 13.5 must be from the top face (from the pocket floor it would break through, and it is not marked THRU).\n\n**Features:** obround prism 66\u00d716\u00d716.5; top pocket 12\u00d78\u00d74 at center; \u23006 blind hole 13.5 deep at center; 2\u00d7 \u23004 thru holes along Y at X=45, 60, Z=8.25. No chamfers/fillets called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ================= dimensions (mm) =================\nL = 66.0                # overall length (top view)\nW = 16.0                # width across flats (\"16 A/F\")\nH = 16.5                # overall height (front / right views)\nEND_R = W / 2           # semicircular end radius = 8\nFLAT_L = L - 2 * END_R  # straight middle length = 66 - 16 = 50\n\nC6_X = 33.0             # centre of \u23006 hole & pocket, from left end\nC6_DIA = 6.0            # \u23006 blind hole diameter\nC6_DEPTH = 13.5         # blind hole depth from top face\n\nPOCKET_L = 12.0         # pocket length along X (from views, undimensioned)\nPOCKET_W = 8.0          # pocket width along Y (\"8\" in right view)\nPOCKET_D = 4.0          # pocket depth (from views, undimensioned)\n\nH4_DIA = 4.0            # 2\u00d7 \u23004 THRU\nH4_X1 = 45.0            # first hole from left end\nH4_X2 = 60.0            # second hole from left end\nH4_Z = H / 2            # holes at mid height = 8.25\n\nX_LEFT = -L / 2         # keep part centred on origin in X\n\nwith BuildPart() as part:\n    # base body: capsule (obround) plan extruded to height H\n    Box(FLAT_L, W, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    with Locations((-FLAT_L / 2, 0, 0), (FLAT_L / 2, 0, 0)):\n        Cylinder(radius=END_R, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # rectangular pocket on top face, centred at mid length\n    with Locations((X_LEFT + C6_X, 0, H)):\n        Box(POCKET_L, POCKET_W, POCKET_D,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # \u23006 blind hole, 13.5 deep from the top face\n    with Locations((X_LEFT + C6_X, 0, H)):\n        Cylinder(radius=C6_DIA / 2, height=C6_DEPTH,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\n    # 2\u00d7 \u23004 through holes along Y at mid height\n    with Locations((X_LEFT + H4_X1, 0, H4_Z),\n                   (X_LEFT + H4_X2, 0, H4_Z)):\n        Cylinder(radius=H4_DIA / 2, height=W + 4,\n                 rotation=(90, 0, 0),\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.6,
+   "usage": {
+    "input_tokens": 5628,
+    "output_tokens": 1071
+   },
+   "plan": "Reading unchanged: obround prism 66 (X) \u00d7 16 (Y, \"16 A/F\") \u00d7 16.5 (Z); end radius 8, straight middle 50. Top pocket 12 \u00d7 8 (dimensioned width) \u00d7 4 deep at X = 33 (mid-length); \u23006 blind hole 13.5 deep from the top face at the same center; 2\u00d7 \u23004 THRU holes along Y at X = 45 and X = 60, Z = 8.25.\n\nFix: the `with BuildPart() as part:` context binds the *builder*, not the solid \u2014 `export_step` needs the resulting `Part`. Rename the builder and bind `part = builder.part` after the block before exporting.",
+   "text": "<plan>\nReading unchanged: obround prism 66 (X) \u00d7 16 (Y, \"16 A/F\") \u00d7 16.5 (Z); end radius 8, straight middle 50. Top pocket 12 \u00d7 8 (dimensioned width) \u00d7 4 deep at X = 33 (mid-length); \u23006 blind hole 13.5 deep from the top face at the same center; 2\u00d7 \u23004 THRU holes along Y at X = 45 and X = 60, Z = 8.25.\n\nFix: the `with BuildPart() as part:` context binds the *builder*, not the solid \u2014 `export_step` needs the resulting `Part`. Rename the builder and bind `part = builder.part` after the block before exporting.\n</plan>\n\n```python\nfrom build123d import *\n\n# ================= dimensions (mm) =================\nL = 66.0                # overall length (top view)\nW = 16.0                # width across flats (\"16 A/F\")\nH = 16.5                # overall height (front / right views)\nEND_R = W / 2           # semicircular end radius = 8\nFLAT_L = L - 2 * END_R  # straight middle length = 66 - 16 = 50\n\nC6_X = 33.0             # centre of \u23006 hole & pocket, from left end\nC6_DIA = 6.0            # \u23006 blind hole diameter\nC6_DEPTH = 13.5         # blind hole depth from top face\n\nPOCKET_L = 12.0         # pocket length along X (from views, undimensioned)\nPOCKET_W = 8.0          # pocket width along Y (\"8\" in right view)\nPOCKET_D = 4.0          # pocket depth (from views, undimensioned)\n\nH4_DIA = 4.0            # 2\u00d7 \u23004 THRU\nH4_X1 = 45.0            # first hole from left end\nH4_X2 = 60.0            # second hole from left end\nH4_Z = H / 2            # holes at mid height = 8.25\n\nX_LEFT = -L / 2         # keep part centred on origin in X\n\nwith BuildPart() as builder:\n    # base body: capsule (obround) plan extruded to height H\n    Box(FLAT_L, W, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    with Locations((-FLAT_L / 2, 0, 0), (FLAT_L / 2, 0, 0)):\n        Cylinder(radius=END_R, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # rectangular pocket on top face, centred at mid length\n    with Locations((X_LEFT + C6_X, 0, H)):\n        Box(POCKET_L, POCKET_W, POCKET_D,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # \u23006 blind hole, 13.5 deep from the top face\n    with Locations((X_LEFT + C6_X, 0, H)):\n        Cylinder(radius=C6_DIA / 2, height=C6_DEPTH,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\n    # 2\u00d7 \u23004 through holes along Y at mid height\n    with Locations((X_LEFT + H4_X1, 0, H4_Z),\n                   (X_LEFT + H4_X2, 0, H4_Z)):\n        Cylinder(radius=H4_DIA / 2, height=W + 4,\n                 rotation=(90, 0, 0),\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                 mode=Mode.SUBTRACT)\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     65.97,
+     16.0,
+     16.5
+    ],
+    "volume_mm3": 15464.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 15,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0,
+     8.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 10.2,
+   "usage": {
+    "input_tokens": 8402,
+    "output_tokens": 1189
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "09a06a3c-9e51-288f-de54-bc99ab136fb3",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7462,
+  "ag_final_cand": 2,
+  "best_iou": 0.7462,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 139.2,
+  "t_agentic_s": 161.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 20692
+  },
+  "total_tokens": {
+   "in": 18140,
+   "out": 22952
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.7462
+ }
+}

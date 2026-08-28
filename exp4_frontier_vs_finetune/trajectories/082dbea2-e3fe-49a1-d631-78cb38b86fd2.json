@@ -1,0 +1,77 @@
+{
+ "uid": "082dbea2-e3fe-49a1-d631-78cb38b86fd2",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 44.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 5169
+   },
+   "plan": "Views (third-angle): upper-left = TOP (plan, XY), below it = FRONT (XZ), to the right of front = RIGHT (YZ). ISO confirms a rectangular block with a vertical through-hole.\n\nAxis extents (all given directly, no chain to sum):\n- X: overall 30 (top view). Hole center at 15 from left = 30/2 \u2192 centered in X. Front view shares this 30 width.\n- Y: overall 20 (right view). Hole center at 10 = 20/2 \u2192 centered in Y. This is the plan depth; matches the top-view rectangle and ISO proportions (30:20).\n- Z: overall height 16 (front view), repeated by the right view height.\n\nFeatures:\n- \u23005 THRU hole along Z at the center (X=15, Y=10). Shown as a circle in plan and as hidden vertical dashed lines in front/right views; ISO shows it passing through the top face.\n- \"4\u00d7 R1\": the four plan corners are rounded, i.e. the four vertical (Z-parallel) corner edges get an R1 fillet. The solid vertical lines seen just inside the left/right edges of the front and right views are exactly the fillet tangent edges (inset 1 mm), confirming fillets on vertical edges only (no top/bottom edge fillets are called out).\n\nConstruction: centered Box(30 \u00d7 20 \u00d7 16), subtract a central \u23005 cylinder through the full height (slightly oversized for a clean thru boolean), then fillet the four Z-parallel edges with R1.",
+   "text": "<plan>\nViews (third-angle): upper-left = TOP (plan, XY), below it = FRONT (XZ), to the right of front = RIGHT (YZ). ISO confirms a rectangular block with a vertical through-hole.\n\nAxis extents (all given directly, no chain to sum):\n- X: overall 30 (top view). Hole center at 15 from left = 30/2 \u2192 centered in X. Front view shares this 30 width.\n- Y: overall 20 (right view). Hole center at 10 = 20/2 \u2192 centered in Y. This is the plan depth; matches the top-view rectangle and ISO proportions (30:20).\n- Z: overall height 16 (front view), repeated by the right view height.\n\nFeatures:\n- \u23005 THRU hole along Z at the center (X=15, Y=10). Shown as a circle in plan and as hidden vertical dashed lines in front/right views; ISO shows it passing through the top face.\n- \"4\u00d7 R1\": the four plan corners are rounded, i.e. the four vertical (Z-parallel) corner edges get an R1 fillet. The solid vertical lines seen just inside the left/right edges of the front and right views are exactly the fillet tangent edges (inset 1 mm), confirming fillets on vertical edges only (no top/bottom edge fillets are called out).\n\nConstruction: centered Box(30 \u00d7 20 \u00d7 16), subtract a central \u23005 cylinder through the full height (slightly oversized for a clean thru boolean), then fillet the four Z-parallel edges with R1.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing (mm) ----\nL = 30.0        # mm  overall X (top view; shared by front view)\nW = 20.0        # mm  overall Y / depth (right view)\nH = 16.0        # mm  overall Z height (front view, repeated in right view)\nhole_d = 5.0    # mm  \"\u23005 THRU\" vertical hole\nhole_x = 15.0   # mm  hole center from left edge (top view) = L/2\nhole_y = 10.0   # mm  hole center from front edge (right view) = W/2\ncorner_r = 1.0  # mm  \"4\u00d7 R1\" fillets on the four vertical corner edges\n\n# derived\nhole_r = hole_d / 2.0\ncut_h = H + 2.0  # oversize the cutter so the thru hole breaks both faces cleanly\n\nwith BuildPart() as bp:\n    Box(L, W, H)  # centered at origin -> hole lands at (0,0)\n    with Locations((hole_x - L / 2.0, hole_y - W / 2.0, 0)):\n        Cylinder(radius=hole_r, height=cut_h, mode=Mode.SUBTRACT)\n    # round only the four vertical (Z-parallel) corner edges, per \"4\u00d7 R1\"\n    fillet(bp.edges().filter_by(Axis.Z), radius=corner_r)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     30.0,
+     20.0,
+     16.0
+    ],
+    "volume_mm3": 9272.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 11,
+    "n_planar_faces": 6,
+    "n_cylindrical_faces": 5,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.0,
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.8,
+   "usage": {
+    "input_tokens": 7423,
+    "output_tokens": 317
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "082dbea2-e3fe-49a1-d631-78cb38b86fd2",
+  "ss_exec_ok": true,
+  "ss_iou": 0.625,
+  "ag_exec_ok": true,
+  "ag_iou": 0.625,
+  "ag_final_cand": 1,
+  "best_iou": 0.625,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 47.0,
+  "t_agentic_s": 53.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 5169
+  },
+  "total_tokens": {
+   "in": 11533,
+   "out": 5486
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.625
+ }
+}

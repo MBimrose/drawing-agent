@@ -1,0 +1,77 @@
+{
+ "uid": "082d1e48-2084-f5e6-e02a-5dde5f72e9df",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 35.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 4753
+   },
+   "plan": "**Views identified:** Top (plan) upper-left; Front below it; Right side view to the right of front; ISO (NTS) pictorial.\n\n**Overall extents & chains:**\n- X: Front view chain 15 + 50 + 15 = **80** \u2713 matches the 80 overall in the top view. The \"40\" in the top view confirms the pocket is centered in X (80/2).\n- Y: Right view chain 10 + 30 + 10 = **50** \u2713 matches the 50 overall in the right view.\n- Z: Overall **30** (front & right views). Pocket is 24 deep from the top, leaving a 6 mm floor.\n\n**Features:**\n1. Base block 80 (X) \u00d7 50 (Y) \u00d7 30 (Z).\n2. \"4\u00d7 R2\" \u2014 R2 fillets on the four vertical edges (corner callout in top view).\n3. Top pocket \"30 \u00d7 50 \u00d7 24 DEEP\": 50 (X) \u00d7 30 (Y), centered (15 mm from each X end, 10 mm from each Y side), 24 deep from top face.\n4. \"\u23008 THRU\": hole axis along X (circle seen in right view and on the end face in ISO), centered in Y at 25 (= 50/2), at height Z = 15 (= 30/2), passing through the full 80 mm length (it crosses the pocket void).",
+   "text": "<plan>\n**Views identified:** Top (plan) upper-left; Front below it; Right side view to the right of front; ISO (NTS) pictorial.\n\n**Overall extents & chains:**\n- X: Front view chain 15 + 50 + 15 = **80** \u2713 matches the 80 overall in the top view. The \"40\" in the top view confirms the pocket is centered in X (80/2).\n- Y: Right view chain 10 + 30 + 10 = **50** \u2713 matches the 50 overall in the right view.\n- Z: Overall **30** (front & right views). Pocket is 24 deep from the top, leaving a 6 mm floor.\n\n**Features:**\n1. Base block 80 (X) \u00d7 50 (Y) \u00d7 30 (Z).\n2. \"4\u00d7 R2\" \u2014 R2 fillets on the four vertical edges (corner callout in top view).\n3. Top pocket \"30 \u00d7 50 \u00d7 24 DEEP\": 50 (X) \u00d7 30 (Y), centered (15 mm from each X end, 10 mm from each Y side), 24 deep from top face.\n4. \"\u23008 THRU\": hole axis along X (circle seen in right view and on the end face in ISO), centered in Y at 25 (= 50/2), at height Z = 15 (= 30/2), passing through the full 80 mm length (it crosses the pocket void).\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nL = 80              # mm  overall length in X (top & front views)\nW = 50              # mm  overall depth in Y (right view)\nH = 30              # mm  overall height in Z (front & right views)\nEDGE_R = 2          # mm  \"4x R2\" fillets on the four vertical edges\n\nPOCKET_X_OFF = 15   # mm  pocket offset from each X end (front chain: 15+50+15 = 80)\nPOCKET_Y_OFF = 10   # mm  pocket offset from each Y side (right chain: 10+30+10 = 50)\nPOCKET_DEPTH = 24   # mm  pocket depth from top face (\"30 x 50 x 24 DEEP\")\nPOCKET_L = L - 2 * POCKET_X_OFF   # mm = 50, matches callout\nPOCKET_W = W - 2 * POCKET_Y_OFF   # mm = 30, matches callout\n\nHOLE_D = 8          # mm  \"\u00d88 THRU\", axis along X\nHOLE_Y = 25         # mm  hole centre from Y edge (right view) -> centred on 50\nHOLE_Z = 15         # mm  hole centre height (right view)\n\nwith BuildPart() as bp:\n    # Base block, centred in X/Y, bottom face on Z=0\n    Box(L, W, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # 4x R2 on the vertical edges\n    fillet(bp.edges().filter_by(Axis.Z), radius=EDGE_R)\n\n    # Rectangular pocket from the top face, centred in X and Y\n    with Locations((0, 0, H)):\n        Box(POCKET_L, POCKET_W, POCKET_DEPTH,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # \u00d88 through hole along X (slightly over-length to guarantee a clean thru cut)\n    with Locations((0, HOLE_Y - W / 2, HOLE_Z)):\n        Cylinder(radius=HOLE_D / 2, height=L + 2,\n                 rotation=(0, 90, 0), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     50.0,
+     30.0
+    ],
+    "volume_mm3": 82392.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 17,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.8,
+   "usage": {
+    "input_tokens": 7123,
+    "output_tokens": 495
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "082d1e48-2084-f5e6-e02a-5dde5f72e9df",
+  "ss_exec_ok": true,
+  "ss_iou": 0.991,
+  "ag_exec_ok": true,
+  "ag_iou": 0.991,
+  "ag_final_cand": 1,
+  "best_iou": 0.991,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 38.3,
+  "t_agentic_s": 46.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 4753
+  },
+  "total_tokens": {
+   "in": 11233,
+   "out": 5248
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.991
+ }
+}

@@ -1,0 +1,112 @@
+{
+ "uid": "10827958-85be-a385-bf99-7c456eb80835",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1598.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25428
+   },
+   "plan": "Views: the tall view (upper\u2011left) is the END profile (YZ) of a long bar; the long low view is the side (XZ) giving the length; the small view confirms the total height.\n\nAxis chains:\n- Y (width): OVERALL = 16.\n- Z (height): no single overall on the end view, but the profile is a rectangle of height 11 with a semicircular cap whose diameter = the 16 width, so cap radius = 16/2 = 8. Total height = 11 + 8 = 19 \u2014 exactly the separate \"19\" dimension. \u2714\n- X (length): OVERALL = 80.\n- Across the width the two \u00d85 holes are chained from the left edge: 4 (edge\u21921st centre) + 6 (centre\u2192centre) \u21d2 centres at Y = 4 and Y = 10; hole elevation = 10 (the \"10\" dim), shoulder at 11.\n\nFeatures:\n- Base solid: tombstone end profile (16 wide, rectangular body to Z=11, semicircular cap R8 to Z=19) extruded 80 along X.\n- \"2\u00d7 \u00d85 THRU\": two \u00d85 through\u2011holes running along X at (Y=4, Z=10) and (Y=10, Z=10).\n- \"\u00d86\": one \u00d86 through\u2011hole (vertical), centred across the width (Y=8), placed 10 mm from the far end (X = 80\u221210 = 70).\n- \"C0.5\" on the two bottom corners of the end profile \u21d2 0.5 mm \u00d7 45\u00b0 chamfers on the two lower longitudinal edges.\n- (The small rectangular pad sketched between the holes is not separately dimensioned for depth/direction, so it is omitted; sizes, hole set, form and chamfers are all captured.)",
+   "text": "<plan>\nViews: the tall view (upper\u2011left) is the END profile (YZ) of a long bar; the long low view is the side (XZ) giving the length; the small view confirms the total height.\n\nAxis chains:\n- Y (width): OVERALL = 16.\n- Z (height): no single overall on the end view, but the profile is a rectangle of height 11 with a semicircular cap whose diameter = the 16 width, so cap radius = 16/2 = 8. Total height = 11 + 8 = 19 \u2014 exactly the separate \"19\" dimension. \u2714\n- X (length): OVERALL = 80.\n- Across the width the two \u00d85 holes are chained from the left edge: 4 (edge\u21921st centre) + 6 (centre\u2192centre) \u21d2 centres at Y = 4 and Y = 10; hole elevation = 10 (the \"10\" dim), shoulder at 11.\n\nFeatures:\n- Base solid: tombstone end profile (16 wide, rectangular body to Z=11, semicircular cap R8 to Z=19) extruded 80 along X.\n- \"2\u00d7 \u00d85 THRU\": two \u00d85 through\u2011holes running along X at (Y=4, Z=10) and (Y=10, Z=10).\n- \"\u00d86\": one \u00d86 through\u2011hole (vertical), centred across the width (Y=8), placed 10 mm from the far end (X = 80\u221210 = 70).\n- \"C0.5\" on the two bottom corners of the end profile \u21d2 0.5 mm \u00d7 45\u00b0 chamfers on the two lower longitudinal edges.\n- (The small rectangular pad sketched between the holes is not separately dimensioned for depth/direction, so it is omitted; sizes, hole set, form and chamfers are all captured.)\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nW          = 16        # mm  overall width (Y) of the end profile\nbody_h     = 11        # mm  rectangular part height of the end profile\ncap_r      = W / 2     # mm  semicircular cap radius = 8  -> total height = 11 + 8 = 19 (the \"19\" dim)\nL          = 80        # mm  overall length (X)\nhole5_d    = 5         # mm  2x \u00d85 THRU (along the length)\nhole5_y1   = 4         # mm  left edge -> 1st \u00d85 centre  (chain 4 + 6)\nhole5_pitch= 6         # mm  1st -> 2nd \u00d85 centre\nhole5_z    = 10        # mm  elevation of the \u00d85 hole centres\nhole6_d    = 6         # mm  \u00d86 through hole (vertical)\nhole6_x    = L - 10    # mm  \u00d86 hole, 10 mm from the far end\ncham       = 0.5       # mm  C0.5 chamfers on the two lower corners\n\nhole5_y2   = hole5_y1 + hole5_pitch   # = 10\ntotal_h    = body_h + cap_r           # = 19\n\nwith BuildPart() as bp:\n    # tombstone end profile in the YZ plane, extruded along +X\n    with BuildSketch(Plane.YZ):\n        with BuildLine():\n            Line((0, 0), (W, 0))\n            Line((W, 0), (W, body_h))\n            ThreePointArc((W, body_h), (W / 2, total_h), (0, body_h))  # semicircular cap R8\n            Line((0, body_h), (0, 0))\n        make_face()\n    extrude(amount=L)\n\n    # 2x \u00d85 through holes along the length (X)\n    with Locations((L / 2, hole5_y1, hole5_z), (L / 2, hole5_y2, hole5_z)):\n        Cylinder(radius=hole5_d / 2, height=L, rotation=(0, 90, 0),\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER), mode=Mode.SUBTRACT)\n\n    # \u00d86 through hole (vertical), centred across the width\n    with Locations((hole6_x, W / 2, 0)):\n        Cylinder(radius=hole6_d / 2, height=total_h + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\n\n# C0.5 chamfers on the two lower longitudinal edges (the profile's bottom corners)\nlower_edges = [e for e in part.edges().filter_by(Axis.X) if abs(e.center().Z) < 1e-6]\npart = chamfer(lower_edges, cham)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     16.0,
+     19.0
+    ],
+    "volume_mm3": 18503.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 11,
+    "n_planar_faces": 7,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     3.0,
+     8.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 274.6,
+   "usage": {
+    "input_tokens": 7014,
+    "output_tokens": 17366
+   },
+   "plan": "Checking my solid against the drawing: extents 80 \u00d7 16 \u00d7 19 all match the chains (L=80; W=16; H = 11 + 16/2 = 19 \u2714). The 2\u00d7 \u00d85 longitudinal holes (Y = 4 and 4+6 = 10, Z = 10) and the C0.5 lower-edge chamfers match, and the tombstone profile in the RIGHT view matches the end view.\n\nOne discrepancy: the \u00d86 cross-hole. In the original long (front) view the \"10\" dimension and the \u00d86 callout sit at the LEFT end of the view, and the hidden vertical lines of that hole appear just inside the left end \u2014 i.e. the hole centre is 10 mm from the left end (X = 10). My first script placed it 10 mm from the right end (X = 70), which the renders confirm (circle/scallop near the right end in Top/Front). Everything else is unchanged.\n\nRevision: move the \u00d86 vertical through-hole to X = 10, still centred across the width (Y = 8), through the full height.",
+   "text": "<plan>\nChecking my solid against the drawing: extents 80 \u00d7 16 \u00d7 19 all match the chains (L=80; W=16; H = 11 + 16/2 = 19 \u2714). The 2\u00d7 \u00d85 longitudinal holes (Y = 4 and 4+6 = 10, Z = 10) and the C0.5 lower-edge chamfers match, and the tombstone profile in the RIGHT view matches the end view.\n\nOne discrepancy: the \u00d86 cross-hole. In the original long (front) view the \"10\" dimension and the \u00d86 callout sit at the LEFT end of the view, and the hidden vertical lines of that hole appear just inside the left end \u2014 i.e. the hole centre is 10 mm from the left end (X = 10). My first script placed it 10 mm from the right end (X = 70), which the renders confirm (circle/scallop near the right end in Top/Front). Everything else is unchanged.\n\nRevision: move the \u00d86 vertical through-hole to X = 10, still centred across the width (Y = 8), through the full height.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nW          = 16        # mm  overall width (Y) of the end profile\nbody_h     = 11        # mm  rectangular part height of the end profile\ncap_r      = W / 2     # mm  semicircular cap radius = 8  -> total height = 11 + 8 = 19 (the \"19\" dim)\nL          = 80        # mm  overall length (X)\nhole5_d    = 5         # mm  2x \u00d85 THRU (along the length)\nhole5_y1   = 4         # mm  left edge -> 1st \u00d85 centre  (chain 4 + 6)\nhole5_pitch= 6         # mm  1st -> 2nd \u00d85 centre\nhole5_z    = 10        # mm  elevation of the \u00d85 hole centres\nhole6_d    = 6         # mm  \u00d86 through hole (vertical)\nhole6_x    = 10        # mm  \u00d86 hole centre, 10 mm from the left end (per the \"10\" dim at the left of the long view)\ncham       = 0.5       # mm  C0.5 chamfers on the two lower corners\n\nhole5_y2   = hole5_y1 + hole5_pitch   # = 10\ntotal_h    = body_h + cap_r           # = 19\n\nwith BuildPart() as bp:\n    # tombstone end profile in the YZ plane, extruded along +X\n    with BuildSketch(Plane.YZ):\n        with BuildLine():\n            Line((0, 0), (W, 0))\n            Line((W, 0), (W, body_h))\n            ThreePointArc((W, body_h), (W / 2, total_h), (0, body_h))  # semicircular cap R8\n            Line((0, body_h), (0, 0))\n        make_face()\n    extrude(amount=L)\n\n    # 2x \u00d85 through holes along the length (X)\n    with Locations((L / 2, hole5_y1, hole5_z), (L / 2, hole5_y2, hole5_z)):\n        Cylinder(radius=hole5_d / 2, height=L, rotation=(0, 90, 0),\n                 align=(Align.CENTER, Align.CENTER, Align.CENTER), mode=Mode.SUBTRACT)\n\n    # \u00d86 through hole (vertical), centred across the width, 10 mm from the left end\n    with Locations((hole6_x, W / 2, 0)):\n        Cylinder(radius=hole6_d / 2, height=total_h + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\n\n# C0.5 chamfers on the two lower longitudinal edges (the profile's bottom corners)\nlower_edges = [e for e in part.edges().filter_by(Axis.X) if abs(e.center().Z) < 1e-6]\npart = chamfer(lower_edges, cham)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     16.0,
+     19.0
+    ],
+    "volume_mm3": 18503.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 11,
+    "n_planar_faces": 7,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     3.0,
+     8.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 11.0,
+   "usage": {
+    "input_tokens": 8178,
+    "output_tokens": 1721
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "10827958-85be-a385-bf99-7c456eb80835",
+  "ss_exec_ok": true,
+  "ss_iou": 0.0909,
+  "ag_exec_ok": true,
+  "ag_iou": 0.0909,
+  "ag_final_cand": 2,
+  "best_iou": 0.0909,
+  "best_cand": 1,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 1601.8,
+  "t_agentic_s": 1907.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25428
+  },
+  "total_tokens": {
+   "in": 19302,
+   "out": 44515
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.0909,
+  "2": 0.0909
+ }
+}

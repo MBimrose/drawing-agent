@@ -1,0 +1,76 @@
+{
+ "uid": "0ee24452-2025-7130-4abd-34aac0752476",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1085.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 27739
+   },
+   "plan": "View identification (third\u2011angle): the L\u2011shaped view at the top is the TOP (plan) view; the rectangle with the hole directly below it is the FRONT view; the 70\u2011long rectangle to the right of the front is the RIGHT view. The ISO confirms an L\u2011shaped corner bracket of uniform height.\n\nAxis chains / extents:\n- X (top view, horizontal arm): OVERALL = 60 (single dimension, outer face of the upright arm to the end of the X\u2011arm).\n- Y (right view): OVERALL = 70 (single dimension). Cross\u2011checks with the tall leg of the L in the top view.\n- Z (front view): OVERALL = 26; component 16 locates the hole centre from the bottom (26 \u2212 16 = 10 remaining to the top).\n- Arm (web) thickness in plan = 8, given in the front view (\"8\", outer corner to the hidden inner\u2011corner line at X=8) and repeated in the right view (\"8\", front face Y=0 to the shoulder at Y=8). So the footprint is: X\u2011arm [0,60]\u00d7[0,8] union Y\u2011arm [0,8]\u00d7[0,70], re\u2011entrant (inside) corner at (8,8); overall 60 \u00d7 70.\n\nFeatures:\n- One hole, callout \"\u23005 THRU\": centre at X = 10 (front view \"10\" from the outer corner), Z = 16 (front view \"16\" from the bottom). It passes through the front web (the 8 mm thickness, along Y). No countersink/counterbore, no chamfers or fillets are dimensioned, so none are added.",
+   "text": "<plan>\nView identification (third\u2011angle): the L\u2011shaped view at the top is the TOP (plan) view; the rectangle with the hole directly below it is the FRONT view; the 70\u2011long rectangle to the right of the front is the RIGHT view. The ISO confirms an L\u2011shaped corner bracket of uniform height.\n\nAxis chains / extents:\n- X (top view, horizontal arm): OVERALL = 60 (single dimension, outer face of the upright arm to the end of the X\u2011arm).\n- Y (right view): OVERALL = 70 (single dimension). Cross\u2011checks with the tall leg of the L in the top view.\n- Z (front view): OVERALL = 26; component 16 locates the hole centre from the bottom (26 \u2212 16 = 10 remaining to the top).\n- Arm (web) thickness in plan = 8, given in the front view (\"8\", outer corner to the hidden inner\u2011corner line at X=8) and repeated in the right view (\"8\", front face Y=0 to the shoulder at Y=8). So the footprint is: X\u2011arm [0,60]\u00d7[0,8] union Y\u2011arm [0,8]\u00d7[0,70], re\u2011entrant (inside) corner at (8,8); overall 60 \u00d7 70.\n\nFeatures:\n- One hole, callout \"\u23005 THRU\": centre at X = 10 (front view \"10\" from the outer corner), Z = 16 (front view \"16\" from the bottom). It passes through the front web (the 8 mm thickness, along Y). No countersink/counterbore, no chamfers or fillets are dimensioned, so none are added.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nlen_x = 60.0      # mm  overall X extent (top view: horizontal arm)\nlen_y = 70.0      # mm  overall Y extent (right view)\nheight = 26.0     # mm  overall Z height (front view)\narm_t = 8.0       # mm  plan thickness of each arm/web (front view \"8\"; right view \"8\")\nhole_d = 5.0      # mm  hole diameter, callout \"\u23005 THRU\"\nhole_x = 10.0     # mm  hole centre from the outer corner face (front view \"10\")\nhole_z = 16.0     # mm  hole centre from the bottom face (front view \"16\")\n\nhole_r = hole_d / 2.0\n# Drill the hole through the front web (thickness arm_t) along Y:\n# start 1 mm in front of the web and stop at the inner-corner plane y = arm_t.\nhole_len = arm_t + 1.0            # mm  cylinder length (spans y = -1 .. arm_t)\nhole_cy = (arm_t - 1.0) / 2.0     # mm  cylinder centre y so it covers [-1, arm_t]\n\nwith BuildPart() as bp:\n    # horizontal arm (along X): x in [0, len_x], y in [0, arm_t], z in [0, height]\n    Box(len_x, arm_t, height, align=(Align.MIN, Align.MIN, Align.MIN))\n    # upright arm (along Y): x in [0, arm_t], y in [0, len_y], z in [0, height]\n    Box(arm_t, len_y, height, align=(Align.MIN, Align.MIN, Align.MIN))\n    # \u23005 through-hole in the front web (axis along Y)\n    with Locations(Pos(hole_x, hole_cy, hole_z) * Rot(90, 0, 0)):\n        Cylinder(radius=hole_r, height=hole_len, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     70.0,
+     26.0
+    ],
+    "volume_mm3": 25219.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 2.2,
+   "usage": {
+    "input_tokens": 7380,
+    "output_tokens": 287
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0ee24452-2025-7130-4abd-34aac0752476",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7489,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7489,
+  "ag_final_cand": 1,
+  "best_iou": 0.7489,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 1088.7,
+  "t_agentic_s": 1094.8,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 27739
+  },
+  "total_tokens": {
+   "in": 11490,
+   "out": 28026
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7489
+ }
+}

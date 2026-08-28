@@ -1,0 +1,77 @@
+{
+ "uid": "053ba312-3046-9868-7133-6e4e4766e696",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2864.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 12872
+   },
+   "plan": "Views (third-angle): TOP = plan circle (upper-left); FRONT = rectangle below it (\u230080 wide \u00d7 60 high, leader \u230070 to the bore); RIGHT = rectangle to the right of front (dimension 40 from centreline to outer face = outer radius, confirming R40); ISO = finned cylindrical liner.\n\nAxis chains / cross-checks:\n- X (front width) = \u230080 overall; right view gives 40 = 80/2 (radius to centreline) \u2192 consistent, R_out = 40.\n- Z (height) = 60 overall (front and right agree).\n- Bore = \u230070 through (no depth callout \u2192 through; a blind depth is not dimensioned), R_in = 35, wall = 5.\n- Plan (top) internal-fin dimensions: 73 = diameter across opposite fin roots \u2192 r_root = 73/2 = 36.5 (sits inside the 35\u201340 wall, so fins merge with the wall); 7 = fin radial length \u2192 r_tip = 36.5 \u2212 7 = 29.5; 4 = fin (tangential) thickness; the 6 + 6 chain is a centred positional chain (= 12) and symmetry is evident, so fins are placed at 60\u00b0 intervals (6 fins) around the bore, full height.\n\nFeature list: outer cylinder \u230080 \u00d7 60; through bore \u230070; six axial internal fins (radial span r 29.5\u219236.5, thickness 4, height 60) at 0/60/120/180/240/300\u00b0. No chamfers/fillets are dimensioned \u2192 omitted.",
+   "text": "<plan>\nViews (third-angle): TOP = plan circle (upper-left); FRONT = rectangle below it (\u230080 wide \u00d7 60 high, leader \u230070 to the bore); RIGHT = rectangle to the right of front (dimension 40 from centreline to outer face = outer radius, confirming R40); ISO = finned cylindrical liner.\n\nAxis chains / cross-checks:\n- X (front width) = \u230080 overall; right view gives 40 = 80/2 (radius to centreline) \u2192 consistent, R_out = 40.\n- Z (height) = 60 overall (front and right agree).\n- Bore = \u230070 through (no depth callout \u2192 through; a blind depth is not dimensioned), R_in = 35, wall = 5.\n- Plan (top) internal-fin dimensions: 73 = diameter across opposite fin roots \u2192 r_root = 73/2 = 36.5 (sits inside the 35\u201340 wall, so fins merge with the wall); 7 = fin radial length \u2192 r_tip = 36.5 \u2212 7 = 29.5; 4 = fin (tangential) thickness; the 6 + 6 chain is a centred positional chain (= 12) and symmetry is evident, so fins are placed at 60\u00b0 intervals (6 fins) around the bore, full height.\n\nFeature list: outer cylinder \u230080 \u00d7 60; through bore \u230070; six axial internal fins (radial span r 29.5\u219236.5, thickness 4, height 60) at 0/60/120/180/240/300\u00b0. No chamfers/fillets are dimensioned \u2192 omitted.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nD_outer = 80.0      # mm  outer diameter (front view)\nD_inner = 70.0      # mm  through bore (front view leader)\nH       = 60.0      # mm  overall height (front/right views)\nR_half  = 40.0      # mm  right-view radius to centreline (= D_outer/2, check)\n\nfin_root_dia = 73.0 # mm  diameter across opposite fin roots (plan)\nfin_len      = 7.0  # mm  fin radial length (plan)\nfin_t        = 4.0  # mm  fin tangential thickness (plan, two callouts)\nseg_a        = 6.0  # mm  plan positional chain segment\nseg_b        = 6.0  # mm  plan positional chain segment (seg_a + seg_b = 12, centred)\n\n# ---- derived values ----\nR_out  = D_outer / 2.0            # 40  (matches R_half)\nR_in   = D_inner / 2.0            # 35\nr_root = fin_root_dia / 2.0       # 36.5 (fin outer/root radius, inside the wall)\nr_tip  = r_root - fin_len         # 29.5 (fin inner tip radius)\nfin_angles = [0, 60, 120, 180, 240, 300]  # six fins, symmetry evident in plan/ISO\n\nwith BuildPart() as bp:\n    # outer body, base on z=0, axis = Z\n    Cylinder(radius=R_out, height=H,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # through bore\n    Cylinder(radius=R_in, height=H,\n             align=(Align.CENTER, Align.CENTER, Align.MIN),\n             mode=Mode.SUBTRACT)\n    # six axial internal fins (radial plates, full height)\n    for ang in fin_angles:\n        with Locations(Rot(Z=ang) * Pos(r_tip, 0.0, 0.0)):\n            Box(fin_len, fin_t, H,\n                align=(Align.MIN, Align.CENTER, Align.MIN))\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     60.0
+    ],
+    "volume_mm3": 78532.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 27,
+    "n_planar_faces": 20,
+    "n_cylindrical_faces": 7,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     35.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 8.2,
+   "usage": {
+    "input_tokens": 7599,
+    "output_tokens": 730
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "053ba312-3046-9868-7133-6e4e4766e696",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9263,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9263,
+  "ag_final_cand": 1,
+  "best_iou": 0.9263,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 2868.1,
+  "t_agentic_s": 2880.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 12872
+  },
+  "total_tokens": {
+   "in": 11709,
+   "out": 13602
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9263
+ }
+}

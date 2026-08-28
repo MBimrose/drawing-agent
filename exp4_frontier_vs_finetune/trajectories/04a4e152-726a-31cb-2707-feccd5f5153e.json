@@ -1,0 +1,76 @@
+{
+ "uid": "04a4e152-726a-31cb-2707-feccd5f5153e",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1083.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 20665
+   },
+   "plan": "View identification (third\u2011angle, FRONT below TOP, RIGHT right of FRONT):\n- TOP (plan, XY) = upper view: X right = 50 (overall), Y up on sheet = depth. The apparent \"slope\" is the inclined leader of the \"6 \u00d7 8 \u00d7 6 DEEP\" callout, not a part edge \u2014 the outline is a plain rectangle. It carries the \u00d86 hole (circle) with centerlines, the \"25\" and \"5\" X\u2011location dims, the linear \"8\" (Y\u2011location of the hole/pocket centerline from the back edge), and the two pocket callouts.\n- FRONT (XZ) = rectangle directly below TOP: X = 50 (overall), Z = 12 (overall height). Plain outline \u2192 constant thickness 12; the dashed rectangles are the blind pockets seen edge\u2011on (hidden).\n- RIGHT (YZ) = view to the right of FRONT: vertical Z = 12 (matches front), horizontal Y = chain 5 + 25 = 30 (overall depth). Confirms depth Y = 30.\n- SECTION A\u2011A: transverse cut through the \u00d86 hole; outer rectangle = 30(Y) \u00d7 12(Z) section, inner rectangle = the blind hole (\u00d86 \u2192 6 wide, 8 deep, not through) \u2192 confirms a blind hole in a 12\u2011thick part (4 mm remaining).\n\nAxis chains: X overall = 50 (given). Y overall = 5 + 25 = 30 (chain summed). Z overall = 12 (given, constant \u2014 no feature exceeds 12, so all features are recesses from the top face).\n\nFeatures (all blind, cut downward from top face Z = 12):\n- \u00d86 hole, 8 deep (\"\u00d86 \u21938\"). Center: X = 5 (edge margin) + 3 (radius) = 8; Y = 30 \u2212 8 = 22 (the linear \"8\" from the back edge). \n- Pocket \"6 \u00d7 8 \u00d7 6 DEEP\": 6 (X) \u00d7 8 (Y), 6 deep. Centered on X = 25 (the \"25\" dim) and on the same Y centerline as the hole (Y = 22) \u2192 corner (22, 18).\n- Pocket \"5 \u00d7 6 \u00d7 6 DEEP\": 5 (X) \u00d7 6 (Y), 6 deep, at the front\u2011left \u2192 corner (5, 5).\nNo fillets/chamfers are called out.",
+   "text": "<plan>\nView identification (third\u2011angle, FRONT below TOP, RIGHT right of FRONT):\n- TOP (plan, XY) = upper view: X right = 50 (overall), Y up on sheet = depth. The apparent \"slope\" is the inclined leader of the \"6 \u00d7 8 \u00d7 6 DEEP\" callout, not a part edge \u2014 the outline is a plain rectangle. It carries the \u00d86 hole (circle) with centerlines, the \"25\" and \"5\" X\u2011location dims, the linear \"8\" (Y\u2011location of the hole/pocket centerline from the back edge), and the two pocket callouts.\n- FRONT (XZ) = rectangle directly below TOP: X = 50 (overall), Z = 12 (overall height). Plain outline \u2192 constant thickness 12; the dashed rectangles are the blind pockets seen edge\u2011on (hidden).\n- RIGHT (YZ) = view to the right of FRONT: vertical Z = 12 (matches front), horizontal Y = chain 5 + 25 = 30 (overall depth). Confirms depth Y = 30.\n- SECTION A\u2011A: transverse cut through the \u00d86 hole; outer rectangle = 30(Y) \u00d7 12(Z) section, inner rectangle = the blind hole (\u00d86 \u2192 6 wide, 8 deep, not through) \u2192 confirms a blind hole in a 12\u2011thick part (4 mm remaining).\n\nAxis chains: X overall = 50 (given). Y overall = 5 + 25 = 30 (chain summed). Z overall = 12 (given, constant \u2014 no feature exceeds 12, so all features are recesses from the top face).\n\nFeatures (all blind, cut downward from top face Z = 12):\n- \u00d86 hole, 8 deep (\"\u00d86 \u21938\"). Center: X = 5 (edge margin) + 3 (radius) = 8; Y = 30 \u2212 8 = 22 (the linear \"8\" from the back edge). \n- Pocket \"6 \u00d7 8 \u00d7 6 DEEP\": 6 (X) \u00d7 8 (Y), 6 deep. Centered on X = 25 (the \"25\" dim) and on the same Y centerline as the hole (Y = 22) \u2192 corner (22, 18).\n- Pocket \"5 \u00d7 6 \u00d7 6 DEEP\": 5 (X) \u00d7 6 (Y), 6 deep, at the front\u2011left \u2192 corner (5, 5).\nNo fillets/chamfers are called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing (mm) ----\nL = 50        # mm  overall length X (front/top views)\nW = 30        # mm  overall depth  Y = 5 + 25 chain (right view)\nT = 12        # mm  overall height Z (front & right views, constant)\n\nmargin = 5    # mm  the \"5\" location dim (edge margin)\nhole_d = 6    # mm  \"\u00d86\"\nhole_dep = 8  # mm  \"\u21938\" blind depth\nhole_cx = margin + hole_d / 2        # hole left tangent at the 5 mm margin\nhole_cy = W - 8                      # linear \"8\" from back edge to hole centerline\n\npb_sx, pb_sy, pb_dep = 6, 8, 6       # mm  \"6 \u00d7 8 \u00d7 6 DEEP\" pocket\npb_cx = 25                           # mm  \"25\" dim to pocket centerline\npb_cy = hole_cy                      # aligned with hole on the same centerline\npb_x0 = pb_cx - pb_sx / 2            # = 22\npb_y0 = pb_cy - pb_sy / 2            # = 18\n\nps_sx, ps_sy, ps_dep = 5, 6, 6       # mm  \"5 \u00d7 6 \u00d7 6 DEEP\" pocket (front-left)\nps_x0 = margin                       # = 5\nps_y0 = margin                       # = 5\n\nwith BuildPart() as bp:\n    # base block: X[0,50]  Y[0,30]  Z[0,12]\n    Box(L, W, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # blind rectangular pockets from the top face (top of cut at Z = T)\n    with Locations((pb_x0, pb_y0, T)):\n        Box(pb_sx, pb_sy, pb_dep,\n            align=(Align.MIN, Align.MIN, Align.MAX), mode=Mode.SUBTRACT)\n    with Locations((ps_x0, ps_y0, T)):\n        Box(ps_sx, ps_sy, ps_dep,\n            align=(Align.MIN, Align.MIN, Align.MAX), mode=Mode.SUBTRACT)\n\n    # blind \u00d86 hole, 8 deep, from the top face\n    with Locations((hole_cx, hole_cy, T)):\n        Cylinder(radius=hole_d / 2, height=hole_dep,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     50.0,
+     30.0,
+     12.0
+    ],
+    "volume_mm3": 17306.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 18,
+    "n_planar_faces": 17,
+    "n_cylindrical_faces": 1,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.7,
+   "usage": {
+    "input_tokens": 7416,
+    "output_tokens": 442
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "04a4e152-726a-31cb-2707-feccd5f5153e",
+  "ss_exec_ok": true,
+  "ss_iou": 0.479,
+  "ag_exec_ok": true,
+  "ag_iou": 0.479,
+  "ag_final_cand": 1,
+  "best_iou": 0.479,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 1086.3,
+  "t_agentic_s": 1093.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 20665
+  },
+  "total_tokens": {
+   "in": 11526,
+   "out": 21107
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.479
+ }
+}

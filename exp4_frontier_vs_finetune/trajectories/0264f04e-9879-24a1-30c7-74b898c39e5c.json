@@ -1,0 +1,79 @@
+{
+ "uid": "0264f04e-9879-24a1-30c7-74b898c39e5c",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 177.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25869
+   },
+   "plan": "**Views identified:** Top view upper-left (concentric circles), Front view below it (stepped profile), Right view to the right of front (same stepped profile, carries the hole-location dims), ISO (NTS) confirms a stepped solid of revolution with two through-holes in the flange.\n\n**Z axis (Front view chain, no single overall):** 15 (flange) + 15 (boss) + 20 (top boss) = **50 mm total**.\n\n**Diameters (Front view):** base flange \u00d860 \u00d7 15; middle boss \u00d840 \u00d7 15; top boss \u00d824 \u00d7 20. All coaxial (confirmed by concentric circles in Top view and by ISO).\n\n**Holes:** callout \"2\u00d7 \u23005 THRU\" in Top view; the two holes sit on the vertical centerline of the Top view (the Y axis, X = 0). The Top view \"30\" dims the centerline/hole axis at 30 mm from the flange edge (= radius of \u00d860, i.e. holes centered in X). The Right view locates them along Y: \"10\" from the flange edge to the near hole and \"50\" from the same edge to the far hole \u2192 hole centers at y = \u221230 + 10 = \u221220 and y = \u221230 + 50 = +20, i.e. **(0, \u00b120)**, 40 mm apart, symmetric about the axis (chain check: 10 + 40 + 10 = 60 \u2713). Holes pass through the whole part (THRU).\n\n**No fillets/chamfers called out.** No central bore or recess is dimensioned \u2014 hidden circles/lines are the far-side step edges and the hole projections.\n\n**Construction:** three stacked cylinders (align MIN) + two subtracted \u23005 cylinders at (0, \u00b120).",
+   "text": "<plan>\n**Views identified:** Top view upper-left (concentric circles), Front view below it (stepped profile), Right view to the right of front (same stepped profile, carries the hole-location dims), ISO (NTS) confirms a stepped solid of revolution with two through-holes in the flange.\n\n**Z axis (Front view chain, no single overall):** 15 (flange) + 15 (boss) + 20 (top boss) = **50 mm total**.\n\n**Diameters (Front view):** base flange \u00d860 \u00d7 15; middle boss \u00d840 \u00d7 15; top boss \u00d824 \u00d7 20. All coaxial (confirmed by concentric circles in Top view and by ISO).\n\n**Holes:** callout \"2\u00d7 \u23005 THRU\" in Top view; the two holes sit on the vertical centerline of the Top view (the Y axis, X = 0). The Top view \"30\" dims the centerline/hole axis at 30 mm from the flange edge (= radius of \u00d860, i.e. holes centered in X). The Right view locates them along Y: \"10\" from the flange edge to the near hole and \"50\" from the same edge to the far hole \u2192 hole centers at y = \u221230 + 10 = \u221220 and y = \u221230 + 50 = +20, i.e. **(0, \u00b120)**, 40 mm apart, symmetric about the axis (chain check: 10 + 40 + 10 = 60 \u2713). Holes pass through the whole part (THRU).\n\n**No fillets/chamfers called out.** No central bore or recess is dimensioned \u2014 hidden circles/lines are the far-side step edges and the hole projections.\n\n**Construction:** three stacked cylinders (align MIN) + two subtracted \u23005 cylinders at (0, \u00b120).\n</plan>\n```python\nfrom build123d import *\n\n# --- dimensions read from the drawing ---\nflange_dia = 60.0      # mm  base flange diameter  (front view \"\u00d860\")\nflange_h   = 15.0      # mm  base flange thickness (front view chain)\nboss_dia   = 40.0      # mm  middle boss diameter  (front view \"\u00d840\")\nboss_h     = 15.0      # mm  middle boss height    (front view chain)\ntop_dia    = 24.0      # mm  top boss diameter     (front view \"\u00d824\")\ntop_h      = 20.0      # mm  top boss height       (front view chain)\nhole_dia   = 5.0       # mm  through-hole diameter (\"2\u00d7 \u23005 THRU\")\nhole_from_edge = 10.0  # mm  near hole centre from flange edge (right view \"10\";\n                       #     far hole at \"50\" from the same edge)\n\n# --- derived values ---\nflange_r = flange_dia / 2                  # 30 mm (matches top view \"30\" edge-to-centre)\nhole_off = flange_r - hole_from_edge       # 30 - 10 = 20 mm from axis (far hole: 30 + 20 = 50 \u2713)\ntotal_h  = flange_h + boss_h + top_h       # 15 + 15 + 20 = 50 mm\n\nwith BuildPart() as bp:\n    # base flange \u00d860 x 15\n    Cylinder(radius=flange_r, height=flange_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # middle boss \u00d840 x 15\n    with Locations((0, 0, flange_h)):\n        Cylinder(radius=boss_dia / 2, height=boss_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # top boss \u00d824 x 20\n    with Locations((0, 0, flange_h + boss_h)):\n        Cylinder(radius=top_dia / 2, height=top_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # 2x \u00d85 through holes on the Y axis at (0, \u00b120)\n    with Locations((0, hole_off, 0), (0, -hole_off, 0)):\n        Cylinder(radius=hole_dia / 2, height=total_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     60.0,
+     50.0
+    ],
+    "volume_mm3": 69375.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 4,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     12.0,
+     20.0,
+     30.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 16.9,
+   "usage": {
+    "input_tokens": 7854,
+    "output_tokens": 2253
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0264f04e-9879-24a1-30c7-74b898c39e5c",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9854,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9854,
+  "ag_final_cand": 1,
+  "best_iou": 0.9854,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 180.2,
+  "t_agentic_s": 201.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25869
+  },
+  "total_tokens": {
+   "in": 11964,
+   "out": 28122
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9854
+ }
+}

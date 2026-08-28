@@ -1,0 +1,79 @@
+{
+ "uid": "028bb3be-e823-62d8-0275-93746b20cc5d",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 128.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 15744
+   },
+   "plan": "**Views identified:** Top (plan) = the circular view upper-left; Front = rectangular view below it; Right = rectangular view to the right of the front; ISO (NTS) confirms a thin disk with a central through hole and one small raised pin.\n\n**Dimension chains:**\n- X axis (Top + Front): overall = \u230080. Components: 40 (left edge \u2192 part centre = radius) and 62 (left edge \u2192 pin centre), so pin sits at X = 62 \u2212 40 = **+22 mm**.\n- Y axis (Top + Right): overall = 80; the 40 dim in the Right view (left edge \u2192 pin centreline) = half of 80 \u2192 pin centred at **Y = 0**.\n- Z axis (Front): single overall dim 36 from disk bottom to pin top. Disk thickness is not directly dimensioned; from the 1:2 scaled views the disk is **18 mm**, leaving an 18 mm pin standoff (18 + 18 = 36 \u2713).\n\n**Features:**\n1. Base disk \u230080 \u00d7 18 thick.\n2. Central hole \u230030 THRU (hidden lines in Front/Right, hole in Top).\n3. Pin/boss \u23008 (OD scaled from views) at (22, 0), rising to Z = 36 (no boss circle in Top view and flat tops in Front/Right confirm there is NO central boss \u2014 the ISO \"ring\" is the \u230030 hole wall).\n4. Hole \u23002 THRU coaxial with the pin, through the whole part.\n\nNo chamfers/fillets are called out.",
+   "text": "<plan>\n**Views identified:** Top (plan) = the circular view upper-left; Front = rectangular view below it; Right = rectangular view to the right of the front; ISO (NTS) confirms a thin disk with a central through hole and one small raised pin.\n\n**Dimension chains:**\n- X axis (Top + Front): overall = \u230080. Components: 40 (left edge \u2192 part centre = radius) and 62 (left edge \u2192 pin centre), so pin sits at X = 62 \u2212 40 = **+22 mm**.\n- Y axis (Top + Right): overall = 80; the 40 dim in the Right view (left edge \u2192 pin centreline) = half of 80 \u2192 pin centred at **Y = 0**.\n- Z axis (Front): single overall dim 36 from disk bottom to pin top. Disk thickness is not directly dimensioned; from the 1:2 scaled views the disk is **18 mm**, leaving an 18 mm pin standoff (18 + 18 = 36 \u2713).\n\n**Features:**\n1. Base disk \u230080 \u00d7 18 thick.\n2. Central hole \u230030 THRU (hidden lines in Front/Right, hole in Top).\n3. Pin/boss \u23008 (OD scaled from views) at (22, 0), rising to Z = 36 (no boss circle in Top view and flat tops in Front/Right confirm there is NO central boss \u2014 the ISO \"ring\" is the \u230030 hole wall).\n4. Hole \u23002 THRU coaxial with the pin, through the whole part.\n\nNo chamfers/fillets are called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\ndisk_dia   = 80.0   # mm  \u230080 base disk (front view)\ndisk_thk   = 18.0   # mm  disk thickness (from 1:2 scale; 36 total - 18 pin standoff)\noverall_h  = 36.0   # mm  overall height, disk bottom -> pin top (front view)\nctr_hole   = 30.0   # mm  \u230030 THRU central hole\npin_dia    = 8.0    # mm  pin OD (from 1:2 scale, not directly dimensioned)\npin_hole   = 2.0    # mm  \u23002 THRU hole through pin\ndim_to_pin = 62.0   # mm  left edge of disk -> pin centre (top view)\ndim_to_ctr = 40.0   # mm  left edge of disk -> part centre (top view)\n\n# derived positions\npin_x = dim_to_pin - dim_to_ctr   # mm  pin centre = +22 from part centre\npin_y = 0.0                       # mm  centred in Y (40 dim in right view = half of 80)\n\nwith BuildPart() as bp:\n    # base disk, bottom face on Z = 0\n    Cylinder(radius=disk_dia / 2, height=disk_thk,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # pin boss on top of disk, top at overall height\n    with Locations((pin_x, pin_y, 0.0)):\n        Cylinder(radius=pin_dia / 2, height=overall_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # central through hole \u230030\n    with Locations((0.0, 0.0, -1.0)):\n        Cylinder(radius=ctr_hole / 2, height=disk_thk + 2.0,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # \u23002 through hole in the pin (through whole part)\n    with Locations((pin_x, pin_y, -1.0)):\n        Cylinder(radius=pin_hole / 2, height=overall_h + 2.0,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     80.0,
+     36.0
+    ],
+    "volume_mm3": 78507.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 7,
+    "n_planar_faces": 3,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.0,
+     4.0,
+     15.0,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 7.2,
+   "usage": {
+    "input_tokens": 7330,
+    "output_tokens": 882
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "028bb3be-e823-62d8-0275-93746b20cc5d",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5957,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5957,
+  "ag_final_cand": 1,
+  "best_iou": 0.5957,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 130.9,
+  "t_agentic_s": 142.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 15744
+  },
+  "total_tokens": {
+   "in": 11440,
+   "out": 16626
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5957
+ }
+}

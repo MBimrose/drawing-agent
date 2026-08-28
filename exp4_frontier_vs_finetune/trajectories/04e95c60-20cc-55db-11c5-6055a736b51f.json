@@ -1,0 +1,76 @@
+{
+ "uid": "04e95c60-20cc-55db-11c5-6055a736b51f",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 103.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 10628
+   },
+   "plan": "Views (third\u2011angle): the square view with the circle is the TOP (plan); the wide low rectangle beneath it is the FRONT; the view to the right (with the \"40\" dim) is the RIGHT side; SECTION A\u2011A confirms the tray cross\u2011section. ISO shows an open rectangular pan/tray.\n\nDimension chains\n- X: top view gives a half dimension 41.5 from the vertical centerline to the outer edge \u2192 overall X = 2\u00b741.5 = 83. Front view shows 5 mm wall each side \u2192 inner X = 83 \u2212 5 \u2212 5 = 73.\n- Y: right view gives half depth 40 \u2192 overall Y = 2\u00b740 = 80 (must be \u2265 \u230064 bolt circle + walls; 40 cannot be the full depth). With 5 mm walls \u2192 inner Y = 80 \u2212 5 \u2212 5 = 70.\n- Z: front view chain 15 (pocket) + 5 (floor) = 20, which matches the separate overall \"20\". So floor = 5, open pocket depth = 15, overall height = 20.\n- Holes: callout \"4\u00d7 \u23003 \u21933 EQ SP ON \u230064 BC\" = four blind holes \u23003, 3 deep, equally spaced (90\u00b0) on a \u230064 bolt circle (r = 32). In the top view they sit on the horizontal/vertical centerlines \u2192 at 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0. They open into the pocket floor (z = 5) and go down 3 mm (bottom at z = 2), staying blind since floor is 5 mm. Check fit: r=32 + hole r 1.5 = 33.5 < inner half\u2011sizes 36.5 (X) and 35 (Y). OK.\n\nFeature list: outer block 83\u00d780\u00d720; through\u2011top pocket 73\u00d770\u00d715 leaving 5 mm walls and 5 mm floor; four \u23003\u00d73 blind holes on \u230064 BC at the cardinal points. No fillets/chamfers are called out.",
+   "text": "<plan>\nViews (third\u2011angle): the square view with the circle is the TOP (plan); the wide low rectangle beneath it is the FRONT; the view to the right (with the \"40\" dim) is the RIGHT side; SECTION A\u2011A confirms the tray cross\u2011section. ISO shows an open rectangular pan/tray.\n\nDimension chains\n- X: top view gives a half dimension 41.5 from the vertical centerline to the outer edge \u2192 overall X = 2\u00b741.5 = 83. Front view shows 5 mm wall each side \u2192 inner X = 83 \u2212 5 \u2212 5 = 73.\n- Y: right view gives half depth 40 \u2192 overall Y = 2\u00b740 = 80 (must be \u2265 \u230064 bolt circle + walls; 40 cannot be the full depth). With 5 mm walls \u2192 inner Y = 80 \u2212 5 \u2212 5 = 70.\n- Z: front view chain 15 (pocket) + 5 (floor) = 20, which matches the separate overall \"20\". So floor = 5, open pocket depth = 15, overall height = 20.\n- Holes: callout \"4\u00d7 \u23003 \u21933 EQ SP ON \u230064 BC\" = four blind holes \u23003, 3 deep, equally spaced (90\u00b0) on a \u230064 bolt circle (r = 32). In the top view they sit on the horizontal/vertical centerlines \u2192 at 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0. They open into the pocket floor (z = 5) and go down 3 mm (bottom at z = 2), staying blind since floor is 5 mm. Check fit: r=32 + hole r 1.5 = 33.5 < inner half\u2011sizes 36.5 (X) and 35 (Y). OK.\n\nFeature list: outer block 83\u00d780\u00d720; through\u2011top pocket 73\u00d770\u00d715 leaving 5 mm walls and 5 mm floor; four \u23003\u00d73 blind holes on \u230064 BC at the cardinal points. No fillets/chamfers are called out.\n</plan>\n```python\nfrom build123d import *\nfrom math import cos, sin, radians\n\n# ---- dimensions read from the drawing ----\nhalf_x   = 41.5   # mm  top view: vertical centerline to outer edge (X)\nhalf_y   = 40.0   # mm  right view: center plane to outer edge (Y)\nwall     = 5.0    # mm  side-wall thickness (front/right views)\nfloor_t  = 5.0    # mm  bottom (floor) thickness\npocket_d = 15.0   # mm  depth of the open pocket above the floor\nhole_d   = 3.0    # mm  blind-hole diameter (4x)\nhole_dep = 3.0    # mm  blind-hole depth (the \"down 3\" callout)\nbc_d     = 64.0   # mm  bolt-circle diameter\nn_holes  = 4      #     holes equally spaced on the BC\n\n# ---- derived sizes ----\nW = 2 * half_x                 # overall X = 83\nD = 2 * half_y                 # overall Y = 80\nH = floor_t + pocket_d         # overall Z = 20 (matches the \"20\" overall dim)\nin_w = W - 2 * wall            # pocket X = 73\nin_d = D - 2 * wall            # pocket Y = 70\nr_bc = bc_d / 2                # bolt-circle radius = 32\nhole_z0 = floor_t - hole_dep   # blind-hole bottom = 2 (3 < floor_t, stays blind)\n\nwith BuildPart() as bp:\n    # outer block, base on z=0, centered in X/Y\n    Box(W, D, H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # open pocket: leaves 5 mm walls all around and a 5 mm floor\n    with Locations((0, 0, floor_t)):\n        Box(in_w, in_d, pocket_d,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT)\n    # 4 blind holes on the bolt circle, on the centerlines (0/90/180/270 deg)\n    for i in range(n_holes):\n        a = radians(i * 360.0 / n_holes)\n        with Locations((r_bc * cos(a), r_bc * sin(a), hole_z0)):\n            Cylinder(radius=hole_d / 2, height=hole_dep,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN),\n                     mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     83.0,
+     80.0,
+     20.0
+    ],
+    "volume_mm3": 56065.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.3,
+   "usage": {
+    "input_tokens": 7265,
+    "output_tokens": 505
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "04e95c60-20cc-55db-11c5-6055a736b51f",
+  "ss_exec_ok": true,
+  "ss_iou": 0.1959,
+  "ag_exec_ok": true,
+  "ag_iou": 0.1959,
+  "ag_final_cand": 1,
+  "best_iou": 0.1959,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 106.9,
+  "t_agentic_s": 117.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 10628
+  },
+  "total_tokens": {
+   "in": 11375,
+   "out": 11133
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.1959
+ }
+}

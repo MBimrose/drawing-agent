@@ -1,0 +1,76 @@
+{
+ "uid": "00874eac-be8c-17f8-ad7b-6a035b6c40ae",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 91.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 15095
+   },
+   "plan": "Views (third\u2011angle): upper\u2011left = TOP (plan, XY); below it = FRONT (XZ); to the right of front = RIGHT (YZ). ISO confirms a shallow rectangular cover (open bottom) with 4 top holes.\n\nX axis (from TOP): baseline dimensions from the left edge \u2014 10 to hole column 1 and 70 to hole column 2; overall = 80. Check: right margin = 80 \u2212 70 = 10 (= left margin, symmetric); hole pitch = 70 \u2212 10 = 60. So hole columns at x = 10 and x = 70.\n\nY axis (from RIGHT): baseline dimensions from the front edge \u2014 10 to hole row 1 and 50 to hole row 2; overall = 60. Check: back margin = 60 \u2212 50 = 10 (symmetric); pitch = 50 \u2212 10 = 40. So hole rows at y = 10 and y = 50.\n\nZ axis (from FRONT): chain 28 (inner cavity height) + 2 (top wall) = 30 overall. Side walls = 2 each (the \"2\" callouts in FRONT and RIGHT), so inner cavity = (80 \u2212 2\u00b72) \u00d7 (60 \u2212 2\u00b72) = 76 \u00d7 56, height 28, open at the bottom (z = 0); top plate = 2 mm (z = 28\u219230). Only one 2 mm member in Z (30 \u2212 28 = 2) proves the bottom is open \u2014 it is a 5\u2011sided cover, not a closed box.\n\nFeatures: rectangular shell 80 \u00d7 60 \u00d7 30, wall/top = 2 mm; 4\u00d7 \u23004 THRU through the top plate at (10,10), (70,10), (10,50), (70,50); C1 (1 mm, 45\u00b0) chamfers called out on the four corners of the plan view = the four vertical outer corner edges (front/right silhouettes stay sharp, so it is not a top\u2011rim chamfer).",
+   "text": "<plan>\nViews (third\u2011angle): upper\u2011left = TOP (plan, XY); below it = FRONT (XZ); to the right of front = RIGHT (YZ). ISO confirms a shallow rectangular cover (open bottom) with 4 top holes.\n\nX axis (from TOP): baseline dimensions from the left edge \u2014 10 to hole column 1 and 70 to hole column 2; overall = 80. Check: right margin = 80 \u2212 70 = 10 (= left margin, symmetric); hole pitch = 70 \u2212 10 = 60. So hole columns at x = 10 and x = 70.\n\nY axis (from RIGHT): baseline dimensions from the front edge \u2014 10 to hole row 1 and 50 to hole row 2; overall = 60. Check: back margin = 60 \u2212 50 = 10 (symmetric); pitch = 50 \u2212 10 = 40. So hole rows at y = 10 and y = 50.\n\nZ axis (from FRONT): chain 28 (inner cavity height) + 2 (top wall) = 30 overall. Side walls = 2 each (the \"2\" callouts in FRONT and RIGHT), so inner cavity = (80 \u2212 2\u00b72) \u00d7 (60 \u2212 2\u00b72) = 76 \u00d7 56, height 28, open at the bottom (z = 0); top plate = 2 mm (z = 28\u219230). Only one 2 mm member in Z (30 \u2212 28 = 2) proves the bottom is open \u2014 it is a 5\u2011sided cover, not a closed box.\n\nFeatures: rectangular shell 80 \u00d7 60 \u00d7 30, wall/top = 2 mm; 4\u00d7 \u23004 THRU through the top plate at (10,10), (70,10), (10,50), (70,50); C1 (1 mm, 45\u00b0) chamfers called out on the four corners of the plan view = the four vertical outer corner edges (front/right silhouettes stay sharp, so it is not a top\u2011rim chamfer).\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 80          # mm overall length (X), TOP view\nW = 60          # mm overall width  (Y), RIGHT view\nH = 30          # mm overall height (Z), FRONT view\nwall = 2        # mm side-wall thickness (\"2\" callouts)\ncavity_h = 28   # mm inner cavity height (FRONT \"28\"); top plate = H - cavity_h = 2\nhole_d = 4      # mm \"4x \u00d84 THRU\"\nhole_x1 = 10    # mm left edge -> hole column 1\nhole_x2 = 70    # mm left edge -> hole column 2 (= L - 10, symmetric)\nhole_y1 = 10    # mm front edge -> hole row 1\nhole_y2 = 50    # mm front edge -> hole row 2 (= W - 10, symmetric)\ncham = 1        # mm \"C1\" chamfer on the four vertical outer corners\n\n# ---- derived ----\ntop_t = H - cavity_h          # mm top plate thickness (= 2)\ninner_L = L - 2 * wall        # mm cavity length (= 76)\ninner_W = W - 2 * wall        # mm cavity width  (= 56)\n\nwith BuildPart() as bp:\n    # outer solid, min corner at origin\n    Box(L, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # C1 chamfer on the four vertical outer corner edges (plan-view callout)\n    chamfer(bp.edges().filter_by(Axis.Z), length=cham)\n\n    # hollow interior, open at the bottom (z = 0); leaves 2 mm walls and 2 mm top\n    with Locations((wall, wall, 0)):\n        Box(inner_L, inner_W, cavity_h,\n            align=(Align.MIN, Align.MIN, Align.MIN), mode=Mode.SUBTRACT)\n\n    # 4x \u00d84 THRU through the top plate (columns x=10,70 ; rows y=10,50)\n    pts = [(hole_x1, hole_y1), (hole_x2, hole_y1),\n           (hole_x1, hole_y2), (hole_x2, hole_y2)]\n    with Locations([(x, y, -1) for (x, y) in pts]):\n        Cylinder(radius=hole_d / 2, height=H + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     30.0
+    ],
+    "volume_mm3": 24671.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.6,
+   "usage": {
+    "input_tokens": 7352,
+    "output_tokens": 491
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "00874eac-be8c-17f8-ad7b-6a035b6c40ae",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9977,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9977,
+  "ag_final_cand": 1,
+  "best_iou": 0.9977,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 94.4,
+  "t_agentic_s": 102.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 15095
+  },
+  "total_tokens": {
+   "in": 11462,
+   "out": 15586
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9977
+ }
+}

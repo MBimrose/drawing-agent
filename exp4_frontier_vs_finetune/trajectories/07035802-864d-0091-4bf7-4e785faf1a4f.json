@@ -1,0 +1,76 @@
+{
+ "uid": "07035802-864d-0091-4bf7-4e785faf1a4f",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 307.5,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14765
+   },
+   "plan": "**Views:** Top (plan) shows an 80 \u00d7 60 outline (base plate), a second rectangle inset 4 mm (raised frame), an inner rectangle (pocket), and 12 hole circles in a 4\u00d73 grid. Front view: 5 mm base plate, 17 mm total height, frame inset 4 mm from each base edge. Right view: 60 mm overall depth, 30 mm half-dimension, 6 mm hole edge distance, 4 mm frame inset. ISO confirms a flanged base with a rectangular ring frame, pocket floor holes, and wall holes tangent/breaking through the outer wall faces.\n\n**Dimension chains:**\n- X: 6 + 3\u00d722.7 + 6 \u2248 80 (overall 80 given; pattern centered \u2192 columns at x = \u00b111.35, \u00b134.05, edge 5.95\u22486)\n- Y: 6 + 2\u00d724 + 6 = 60 (rows at y = 0, \u00b124, edge exactly 6)\n- Z: 5 (base) + 12 (frame) = 17 (overall)\n\n**Features:**\n1. Base plate 80 \u00d7 60 \u00d7 5.\n2. Raised frame on base, inset 4 mm each side: (80\u22122\u00d74) \u00d7 (60\u22122\u00d74) = 72 \u00d7 52, height 17\u22125 = 12.\n3. Pocket \"42 \u00d7 60 \u00d7 12 DEEP\": 60 (X) \u00d7 42 (Y) cut through the frame down to the base top (walls 6 mm in X, 5 mm in Y).\n4. \"12\u00d7 \u23004 THRU (3\u00d74)\": 4 columns (3\u00d722.7) \u00d7 3 rows (2\u00d724), through the full part.\n5. C1 (1 mm, 45\u00b0) chamfers on the four vertical corner edges of the base plate (leaders point to outer plan corners).",
+   "text": "<plan>\n**Views:** Top (plan) shows an 80 \u00d7 60 outline (base plate), a second rectangle inset 4 mm (raised frame), an inner rectangle (pocket), and 12 hole circles in a 4\u00d73 grid. Front view: 5 mm base plate, 17 mm total height, frame inset 4 mm from each base edge. Right view: 60 mm overall depth, 30 mm half-dimension, 6 mm hole edge distance, 4 mm frame inset. ISO confirms a flanged base with a rectangular ring frame, pocket floor holes, and wall holes tangent/breaking through the outer wall faces.\n\n**Dimension chains:**\n- X: 6 + 3\u00d722.7 + 6 \u2248 80 (overall 80 given; pattern centered \u2192 columns at x = \u00b111.35, \u00b134.05, edge 5.95\u22486)\n- Y: 6 + 2\u00d724 + 6 = 60 (rows at y = 0, \u00b124, edge exactly 6)\n- Z: 5 (base) + 12 (frame) = 17 (overall)\n\n**Features:**\n1. Base plate 80 \u00d7 60 \u00d7 5.\n2. Raised frame on base, inset 4 mm each side: (80\u22122\u00d74) \u00d7 (60\u22122\u00d74) = 72 \u00d7 52, height 17\u22125 = 12.\n3. Pocket \"42 \u00d7 60 \u00d7 12 DEEP\": 60 (X) \u00d7 42 (Y) cut through the frame down to the base top (walls 6 mm in X, 5 mm in Y).\n4. \"12\u00d7 \u23004 THRU (3\u00d74)\": 4 columns (3\u00d722.7) \u00d7 3 rows (2\u00d724), through the full part.\n5. C1 (1 mm, 45\u00b0) chamfers on the four vertical corner edges of the base plate (leaders point to outer plan corners).\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions read from the drawing ----------------\nbase_L = 80.0        # mm  overall length (X), top view\nbase_W = 60.0        # mm  overall depth (Y), right view\nbase_t = 5.0         # mm  base plate thickness, front view\ntotal_H = 17.0       # mm  overall height, front view\nframe_inset = 4.0    # mm  frame set in from each base edge, front & right views\npocket_L = 60.0      # mm  pocket size in X  (\"42 x 60 x 12 DEEP\")\npocket_W = 42.0      # mm  pocket size in Y\npocket_depth = 12.0  # mm  pocket depth (= frame height, down to base top)\nhole_d = 4.0         # mm  \"12x \u00d84 THRU (3x4)\"\npitch_x = 22.7       # mm  \"3x 22.7\" column spacing\npitch_y = 24.0       # mm  \"2x 24\" row spacing\nc1 = 1.0             # mm  C1 chamfer on the four base corners\n\n# ---------------- derived values ----------------\nframe_H = total_H - base_t          # 12 mm\nframe_L = base_L - 2 * frame_inset  # 72 mm\nframe_W = base_W - 2 * frame_inset  # 52 mm\ncol_x = [-1.5 * pitch_x, -0.5 * pitch_x, 0.5 * pitch_x, 1.5 * pitch_x]  # \u00b134.05, \u00b111.35\nrow_y = [-pitch_y, 0.0, pitch_y]                                      # -24, 0, +24\n\nwith BuildPart() as bp:\n    # base plate 80 x 60 x 5\n    Box(base_L, base_W, base_t,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # raised frame 72 x 52 x 12 sitting on the base\n    with Locations((0, 0, base_t)):\n        Box(frame_L, frame_W, frame_H,\n            align=(Align.CENTER, Align.CENTER, Align.MIN))\n        # pocket 60 x 42, 12 deep (floor = top of base plate)\n        Box(pocket_L, pocket_W, pocket_depth + 1.0,\n            align=(Align.CENTER, Align.CENTER, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # 12x \u00d84 through holes, 4 columns x 3 rows\n    with Locations([(x, y, -1.0) for x in col_x for y in row_y]):\n        Cylinder(radius=hole_d / 2, height=total_H + 2.0,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # C1 chamfers on the four vertical corner edges of the base plate\n    corner_edges = (bp.edges()\n                      .filter_by(Axis.Z)\n                      .filter_by(lambda e: abs(abs(e.center().X) - base_L / 2) < 0.01\n                                 and abs(abs(e.center().Y) - base_W / 2) < 0.01))\n    chamfer(corner_edges, length=c1)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     17.0
+    ],
+    "volume_mm3": 36422.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 50,
+    "n_planar_faces": 38,
+    "n_cylindrical_faces": 12,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 9.9,
+   "usage": {
+    "input_tokens": 7302,
+    "output_tokens": 965
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "07035802-864d-0091-4bf7-4e785faf1a4f",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9028,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9028,
+  "ag_final_cand": 1,
+  "best_iou": 0.9028,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 311.0,
+  "t_agentic_s": 325.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14765
+  },
+  "total_tokens": {
+   "in": 11412,
+   "out": 15730
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9028
+ }
+}

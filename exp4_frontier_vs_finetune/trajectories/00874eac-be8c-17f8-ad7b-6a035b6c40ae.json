@@ -1,0 +1,89 @@
+{
+ "uid": "00874eac-be8c-17f8-ad7b-6a035b6c40ae",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 84.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11285
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper left, XY): rectangle 80 (X) \u00d7 60 (Y), C1 chamfer callouts at all 4 corners, 4 holes in a rectangular pattern. X datum dims: first hole column at 10 from left edge, second at 70 from left edge (10 + 70 = 80 \u2713 \u2192 symmetric 10 mm margins, 60 mm spacing).\n- **FRONT view** (below top, XZ): 80 wide, 30 overall height, 28 inner (cavity) height \u2192 floor thickness = 30 \u2212 28 = 2. Three \"2\" callouts = wall thickness. Hidden lines = inner cavity walls/floor. Form: open-top tray with uniform 2 mm walls.\n- **RIGHT view** (right of front, YZ): 60 overall width, hole rows at 10 and 50 from front edge (10 + 50 = 60 \u2713 \u2192 symmetric 10 mm margins, 40 mm spacing), \"2\" wall thickness, matching 30/28 heights.\n\n**Dimension chains:**\n- X: overall 80 given; holes at X = 10 and X = 70 (margins 10/10).\n- Y: overall 60 given; holes at Y = 10 and Y = 50 (margins 10/10).\n- Z: 28 (cavity depth) + 2 (floor) = 30 (overall).\n\n**Feature list:**\n- Open rectangular tray: 80 \u00d7 60 \u00d7 30, walls 2 mm, floor 2 mm; cavity 76 \u00d7 56 \u00d7 28 deep, open at top.\n- 4\u00d7 \u23004 THRU holes in the floor, centers inset 10 mm from every edge: (10,10), (10,50), (70,10), (70,50) from the front-left corner.\n- C1 (1 mm \u00d7 45\u00b0) chamfers on the 4 outer vertical edges.",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper left, XY): rectangle 80 (X) \u00d7 60 (Y), C1 chamfer callouts at all 4 corners, 4 holes in a rectangular pattern. X datum dims: first hole column at 10 from left edge, second at 70 from left edge (10 + 70 = 80 \u2713 \u2192 symmetric 10 mm margins, 60 mm spacing).\n- **FRONT view** (below top, XZ): 80 wide, 30 overall height, 28 inner (cavity) height \u2192 floor thickness = 30 \u2212 28 = 2. Three \"2\" callouts = wall thickness. Hidden lines = inner cavity walls/floor. Form: open-top tray with uniform 2 mm walls.\n- **RIGHT view** (right of front, YZ): 60 overall width, hole rows at 10 and 50 from front edge (10 + 50 = 60 \u2713 \u2192 symmetric 10 mm margins, 40 mm spacing), \"2\" wall thickness, matching 30/28 heights.\n\n**Dimension chains:**\n- X: overall 80 given; holes at X = 10 and X = 70 (margins 10/10).\n- Y: overall 60 given; holes at Y = 10 and Y = 50 (margins 10/10).\n- Z: 28 (cavity depth) + 2 (floor) = 30 (overall).\n\n**Feature list:**\n- Open rectangular tray: 80 \u00d7 60 \u00d7 30, walls 2 mm, floor 2 mm; cavity 76 \u00d7 56 \u00d7 28 deep, open at top.\n- 4\u00d7 \u23004 THRU holes in the floor, centers inset 10 mm from every edge: (10,10), (10,50), (70,10), (70,50) from the front-left corner.\n- C1 (1 mm \u00d7 45\u00b0) chamfers on the 4 outer vertical edges.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- Dimensions (mm) ----------------\nL = 80                  # overall length, X (top & front views)\nW = 60                  # overall width,  Y (top & right views)\nH = 30                  # overall height, Z (front view)\nwall = 2                # wall thickness (\"2\" callouts on front/right views)\ncavity_depth = 28       # inner cavity depth from top face (floor = H - cavity_depth = 2)\nhole_dia = 4            # 4x \u00d84 THRU (through the floor)\nhx1, hx2 = 10, 70       # hole column positions from left edge  (10 + 70 = 80)\nhy1, hy2 = 10, 50       # hole row positions from front edge   (10 + 50 = 60)\nc1 = 1                  # C1 chamfer on the 4 outer vertical edges\n\nwith BuildPart() as part:\n    # Outer solid block, bottom on Z=0\n    with BuildSketch(Plane.XY):\n        Rectangle(L, W)\n    extrude(amount=H)\n\n    # C1 chamfers on the four outer vertical edges (only vertical edges present at this stage)\n    chamfer(part.edges().filter_by(Axis.Z), length=c1)\n\n    # Inner cavity, open at the top, leaving the 2 mm floor\n    with BuildSketch(Plane.XY.offset(H)):\n        Rectangle(L - 2 * wall, W - 2 * wall)\n    extrude(amount=-cavity_depth, mode=Mode.SUBTRACT)\n\n    # 4x \u00d84 through holes in the floor (positions relative to part center)\n    hole_pts = [(hx - L / 2, hy - W / 2) for hx in (hx1, hx2) for hy in (hy1, hy2)]\n    with Locations(hole_pts):\n        Cylinder(radius=hole_dia / 2, height=H, mode=Mode.SUBTRACT)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.2,
+   "usage": {
+    "input_tokens": 5305,
+    "output_tokens": 1643
+   },
+   "plan": "Reading unchanged \u2014 the geometry was correct; only the export failed because the `with BuildPart() as part:` context manager object is not itself a `Part`. The finished solid must be retrieved as `.part` from the builder and rebound to `part` before `export_step`.\n\n- Tray: 80 (X) \u00d7 60 (Y) \u00d7 30 (Z), uniform 2 mm walls, cavity 76 \u00d7 56 \u00d7 28 deep open at top (floor = 30 \u2212 28 = 2).\n- 4\u00d7 \u23004 THRU holes through the floor at (10,10), (10,50), (70,10), (70,50) from the corner (margins 10/10 both axes; 10+70=80, 10+50=60 \u2713).\n- C1 chamfers on the 4 outer vertical edges.",
+   "text": "<plan>\nReading unchanged \u2014 the geometry was correct; only the export failed because the `with BuildPart() as part:` context manager object is not itself a `Part`. The finished solid must be retrieved as `.part` from the builder and rebound to `part` before `export_step`.\n\n- Tray: 80 (X) \u00d7 60 (Y) \u00d7 30 (Z), uniform 2 mm walls, cavity 76 \u00d7 56 \u00d7 28 deep open at top (floor = 30 \u2212 28 = 2).\n- 4\u00d7 \u23004 THRU holes through the floor at (10,10), (10,50), (70,10), (70,50) from the corner (margins 10/10 both axes; 10+70=80, 10+50=60 \u2713).\n- C1 chamfers on the 4 outer vertical edges.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- Dimensions (mm) ----------------\nL = 80                  # overall length, X (top & front views)\nW = 60                  # overall width,  Y (top & right views)\nH = 30                  # overall height, Z (front view)\nwall = 2                # wall thickness (\"2\" callouts on front/right views)\ncavity_depth = 28       # inner cavity depth from top face (floor = H - cavity_depth = 2)\nhole_dia = 4            # 4x \u00d84 THRU (through the floor)\nhx1, hx2 = 10, 70       # hole column positions from left edge  (10 + 70 = 80)\nhy1, hy2 = 10, 50       # hole row positions from front edge   (10 + 50 = 60)\nc1 = 1                  # C1 chamfer on the 4 outer vertical edges\n\nwith BuildPart() as bp:\n    # Outer solid block, bottom on Z=0\n    with BuildSketch(Plane.XY):\n        Rectangle(L, W)\n    extrude(amount=H)\n\n    # C1 chamfers on the four outer vertical edges (only vertical edges exist at this stage)\n    chamfer(bp.edges().filter_by(Axis.Z), length=c1)\n\n    # Inner cavity, open at the top, leaving the 2 mm floor\n    with BuildSketch(Plane.XY.offset(H)):\n        Rectangle(L - 2 * wall, W - 2 * wall)\n    extrude(amount=-cavity_depth, mode=Mode.SUBTRACT)\n\n    # 4x \u00d84 through holes in the floor (positions relative to part center)\n    hole_pts = [(hx - L / 2, hy - W / 2) for hx in (hx1, hx2) for hy in (hy1, hy2)]\n    with Locations(hole_pts):\n        Cylinder(radius=hole_dia / 2, height=H, mode=Mode.SUBTRACT)\n\n# Extract the actual Part solid from the builder context\npart = bp.part\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     30.0
+    ],
+    "volume_mm3": 24671.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 4.0,
+   "usage": {
+    "input_tokens": 8173,
+    "output_tokens": 484
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "00874eac-be8c-17f8-ad7b-6a035b6c40ae",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4908,
+  "ag_final_cand": 2,
+  "best_iou": 0.4908,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 87.4,
+  "t_agentic_s": 108.3,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11285
+  },
+  "total_tokens": {
+   "in": 17588,
+   "out": 13412
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.4908
+ }
+}

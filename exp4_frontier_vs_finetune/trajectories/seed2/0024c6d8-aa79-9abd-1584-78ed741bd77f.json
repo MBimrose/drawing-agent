@@ -1,0 +1,76 @@
+{
+ "uid": "0024c6d8-aa79-9abd-1584-78ed741bd77f",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 170.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 22985
+   },
+   "plan": "Views: Front (upper\u2011left) is the L\u2011profile in XZ; the view under it is the plan (XY); the long \"80\" view and the hatched SECTION A\u2011A (cut through the hole row) confirm the depth and the blind holes; ISO shows an L\u2011bracket with an upstanding leg at the left end and 4 blind holes in the base.\n\nDimension chains\n- X (length): upstand thickness 10 + base run 70 = 80 (overall). So the vertical leg occupies x\u2208[0,10], the base runs to x=80.\n- Y (depth/width): 20 (overall).\n- Z (height): base thickness 10; upstand rises 19 above the base \u2192 upstand top z = 10+19 = 29.\n- Features: a through slot across the upstand, width 4 (X), centred in the 10\u2011thick leg (x\u2208[3,7]), spanning z\u2208[10,29] (open at the top of the leg). Holes: 4\u00d7 \u23005, depth 8 (blind, into the 10\u2011thick base, leaving 2 mm), pitch \"3\u00d7 12\" = 12, row centred in the base run (centre x = 10+70/2 = 45) \u2192 x = 27, 39, 51, 63; y = 10 (mid\u2011depth); drilled from z=10 down to z=2.\n- Chamfers C0.5 on the outer convex corners (front/back perimeter edges).\n\nConstruction: extrude the L as two united boxes (base 80\u00d720\u00d710 + leg 10\u00d720\u00d729), subtract the 4\u2011wide through slot and the four \u23005\u00d78 blind holes, then apply the 0.5 chamfer to the outer convex edges that run along Y.",
+   "text": "<plan>\nViews: Front (upper\u2011left) is the L\u2011profile in XZ; the view under it is the plan (XY); the long \"80\" view and the hatched SECTION A\u2011A (cut through the hole row) confirm the depth and the blind holes; ISO shows an L\u2011bracket with an upstanding leg at the left end and 4 blind holes in the base.\n\nDimension chains\n- X (length): upstand thickness 10 + base run 70 = 80 (overall). So the vertical leg occupies x\u2208[0,10], the base runs to x=80.\n- Y (depth/width): 20 (overall).\n- Z (height): base thickness 10; upstand rises 19 above the base \u2192 upstand top z = 10+19 = 29.\n- Features: a through slot across the upstand, width 4 (X), centred in the 10\u2011thick leg (x\u2208[3,7]), spanning z\u2208[10,29] (open at the top of the leg). Holes: 4\u00d7 \u23005, depth 8 (blind, into the 10\u2011thick base, leaving 2 mm), pitch \"3\u00d7 12\" = 12, row centred in the base run (centre x = 10+70/2 = 45) \u2192 x = 27, 39, 51, 63; y = 10 (mid\u2011depth); drilled from z=10 down to z=2.\n- Chamfers C0.5 on the outer convex corners (front/back perimeter edges).\n\nConstruction: extrude the L as two united boxes (base 80\u00d720\u00d710 + leg 10\u00d720\u00d729), subtract the 4\u2011wide through slot and the four \u23005\u00d78 blind holes, then apply the 0.5 chamfer to the outer convex edges that run along Y.\n</plan>\n```python\nfrom build123d import *\n\n# ---- named dimensions read from the drawing ----\nW = 20          # mm  part depth (Y)\nL = 80          # mm  overall length (X)  [= leg_t + base_run]\nbase_run = 70   # mm  base length from leg inner face to far end (X)\nleg_t = L - base_run   # mm  upstand thickness in X = 80 - 70 = 10\nbase_t = 10     # mm  base (horizontal leg) thickness (Z)\nrise = 19       # mm  upstand height above the base top (Z)\nslot_w = 4      # mm  width of the through slot in the upstand (X)\nhole_d = 5      # mm  hole diameter (4x)\nhole_depth = 8  # mm  blind hole depth\nhole_pitch = 12 # mm  hole spacing (\"3x 12\")\nn_holes = 4     #     number of holes\ncham = 0.5      # mm  C0.5 chamfer\n\n# ---- derived values ----\nH_top = base_t + rise                 # upstand top z = 29\nslot_x0 = (leg_t - slot_w) / 2        # slot centred in leg -> x0 = 3\nrun_cx = leg_t + base_run / 2         # centre of the holed run = 45\nhole_xs = [run_cx + (i - (n_holes - 1) / 2) * hole_pitch for i in range(n_holes)]\n# -> [27, 39, 51, 63]\n\nwith BuildPart() as bp:\n    # horizontal base leg: x[0,80], y[0,20], z[0,10]\n    Box(L, W, base_t, align=(Align.MIN, Align.MIN, Align.MIN))\n    # vertical upstand at the left end: x[0,10], y[0,20], z[0,29]\n    Box(leg_t, W, H_top, align=(Align.MIN, Align.MIN, Align.MIN))\n    # through slot across the upstand: x[3,7], full depth, z[10,29]\n    with Locations((slot_x0, 0, base_t)):\n        Box(slot_w, W, rise, align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n    # 4x dia-5 blind holes, 8 deep from the base top (z=10 -> z=2)\n    with Locations(*[(x, W / 2, base_t) for x in hole_xs]):\n        Cylinder(radius=hole_d / 2, height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MAX),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\n\n# ---- C0.5 chamfers on the outer convex corners (edges running along Y) ----\nconvex = {(round(cx, 3), round(cz, 3)) for (cx, cz) in [\n    (0, 0), (L, 0), (L, base_t),                 # base outer corners\n    (0, H_top), (leg_t, H_top),                  # upstand top outer corners\n    (slot_x0, H_top), (slot_x0 + slot_w, H_top), # slot mouth corners\n]}\nsel = []\nfor e in part.edges():\n    p0, p1 = e.position_at(0), e.position_at(1)\n    v = p1 - p0\n    if v.length < 1e-6:            # closed (circular) edge -> skip\n        continue\n    d = v.normalized()\n    if not (abs(d.X) < 1e-6 and abs(d.Z) < 1e-6 and abs(abs(d.Y) - 1) < 1e-6):\n        continue                   # keep only edges parallel to Y\n    c = e.center()\n    if (round(c.X, 3), round(c.Z, 3)) in convex:\n        sel.append(e)\nif sel:\n    part = chamfer(sel, cham)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     20.0,
+     29.0
+    ],
+    "volume_mm3": 17635.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 27,
+    "n_planar_faces": 23,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.6,
+   "usage": {
+    "input_tokens": 7446,
+    "output_tokens": 585
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0024c6d8-aa79-9abd-1584-78ed741bd77f",
+  "ss_exec_ok": true,
+  "ss_iou": 0.007,
+  "ag_exec_ok": true,
+  "ag_iou": 0.007,
+  "ag_final_cand": 1,
+  "best_iou": 0.007,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 173.8,
+  "t_agentic_s": 182.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 22985
+  },
+  "total_tokens": {
+   "in": 11556,
+   "out": 23570
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.007
+ }
+}

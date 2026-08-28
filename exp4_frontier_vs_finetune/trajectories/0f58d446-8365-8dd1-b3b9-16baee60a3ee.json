@@ -1,0 +1,114 @@
+{
+ "uid": "0f58d446-8365-8dd1-b3b9-16baee60a3ee",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 99.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 16543
+   },
+   "plan": "Views: upper-left is the TOP (plan) view; directly below it is the FRONT view; to the right of the front view is the RIGHT side view (dims 20 / 40); further right is SECTION A\u2011A (taken on the horizontal centerline of the top view). ISO is NTS (form only).\n\nAxis chains:\n- X (top view): overall = 70 (single overall dim). Feature stations from the left edge: boss center at 15 (dim \"15\"), second hole center at 45 (dim \"45\"). Both lie on the A\u2011A centerline. Check: 15 and 45 are both inside 70. \u2713\n- Y: overall = 40 (from RIGHT view \"40\"); boss width 20 (RIGHT view) = \u230020 boss, centered in 40 \u2192 centerline at Y = 20. \u2713 (matches top view A\u2011A line at mid\u2011depth)\n- Z (front view): boss above plate = 12; plate bottom \u2192 boss top = 24 (overall). So plate thickness = 24 \u2212 12 = 12. Boss top at Z = 24.\n\nFeatures:\n- Base plate 70 (X) \u00d7 40 (Y) \u00d7 12 (Z); \"4\u00d7 R2\" \u2192 R2 fillets on the four vertical (plan) corner edges.\n- Cylindrical boss \u230020 \u00d7 12 high on top of the plate, centered at (X=15, Y=20), spanning Z = 12\u219224.\n- Hole callouts: \"2\u00d7 \u23006 THRU\" = two \u23006 through holes \u2014 one at the boss center (15,20) going through boss+plate, one at (45,20) through the plate. \"\u23008 \u21936\" = \u23008 counterbore 6 deep from the boss top (Z 24\u219218), coaxial with the \u23006 at (15,20).\n- No other chamfers/fillets are dimensioned (the small undimensioned underside/secondary marks carry no size, so they are not modeled).",
+   "text": "<plan>\nViews: upper-left is the TOP (plan) view; directly below it is the FRONT view; to the right of the front view is the RIGHT side view (dims 20 / 40); further right is SECTION A\u2011A (taken on the horizontal centerline of the top view). ISO is NTS (form only).\n\nAxis chains:\n- X (top view): overall = 70 (single overall dim). Feature stations from the left edge: boss center at 15 (dim \"15\"), second hole center at 45 (dim \"45\"). Both lie on the A\u2011A centerline. Check: 15 and 45 are both inside 70. \u2713\n- Y: overall = 40 (from RIGHT view \"40\"); boss width 20 (RIGHT view) = \u230020 boss, centered in 40 \u2192 centerline at Y = 20. \u2713 (matches top view A\u2011A line at mid\u2011depth)\n- Z (front view): boss above plate = 12; plate bottom \u2192 boss top = 24 (overall). So plate thickness = 24 \u2212 12 = 12. Boss top at Z = 24.\n\nFeatures:\n- Base plate 70 (X) \u00d7 40 (Y) \u00d7 12 (Z); \"4\u00d7 R2\" \u2192 R2 fillets on the four vertical (plan) corner edges.\n- Cylindrical boss \u230020 \u00d7 12 high on top of the plate, centered at (X=15, Y=20), spanning Z = 12\u219224.\n- Hole callouts: \"2\u00d7 \u23006 THRU\" = two \u23006 through holes \u2014 one at the boss center (15,20) going through boss+plate, one at (45,20) through the plate. \"\u23008 \u21936\" = \u23008 counterbore 6 deep from the boss top (Z 24\u219218), coaxial with the \u23006 at (15,20).\n- No other chamfers/fillets are dimensioned (the small undimensioned underside/secondary marks carry no size, so they are not modeled).\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nplate_L   = 70        # mm  X overall (top view)\nplate_W   = 40        # mm  Y overall (right view)\ntotal_h   = 24        # mm  plate bottom -> boss top (front view)\nboss_h    = 12        # mm  boss height above plate (front view)\nplate_T   = total_h - boss_h   # mm  = 12 plate thickness\n\nboss_d    = 20        # mm  boss outside diameter\nboss_x    = 15        # mm  left edge -> boss center (top view)\nhole2_x   = 45        # mm  left edge -> 2nd hole center (top view)\ncenter_y  = plate_W / 2        # mm  = 20 (A-A centerline, boss centered in 40)\n\nthru_d    = 6         # mm  \"2x \u23006 THRU\"\ncbore_d   = 8         # mm  \"\u23008 \u21936\" counterbore diameter\ncbore_dep = 6         # mm  counterbore depth\ncorner_r  = 2         # mm  \"4x R2\" plan corner fillets\n\nboss_r  = boss_d / 2\nthru_r  = thru_d / 2\ncbore_r = cbore_d / 2\n\nwith BuildPart() as bp:\n    # base plate: X 0..70, Y 0..40, Z 0..plate_T\n    add(Box(plate_L, plate_W, plate_T,\n            align=(Align.MIN, Align.MIN, Align.MIN)))\n    # round the four plan corners (vertical edges) R2\n    fillet(bp.edges().filter_by(Axis.Z), radius=corner_r)\n\n    # \u230020 boss on top of plate at (15, 20), Z plate_T..total_h\n    with Locations((boss_x, center_y, plate_T)):\n        add(Cylinder(boss_r, boss_h,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)))\n\n    # \u23006 THRU at boss center (through boss + plate)\n    with Locations((boss_x, center_y, -1)):\n        add(Cylinder(thru_r, total_h + 2,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)),\n            mode=Mode.SUBTRACT)\n    # \u23008 x 6 deep counterbore from boss top (floor at Z = total_h - cbore_dep)\n    with Locations((boss_x, center_y, total_h - cbore_dep)):\n        add(Cylinder(cbore_r, cbore_dep + 1,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)),\n            mode=Mode.SUBTRACT)\n\n    # second \u23006 THRU at (45, 20) through the plate\n    with Locations((hole2_x, center_y, -1)):\n        add(Cylinder(thru_r, plate_T + 2,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)),\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     50.0,
+     37.0
+    ],
+    "volume_mm3": 41053.0,
+    "watertight": true,
+    "n_mesh_components": 2,
+    "n_faces": 25,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 11,
+    "n_solids": 2,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0,
+     4.0,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 46.0,
+   "usage": {
+    "input_tokens": 7623,
+    "output_tokens": 7575
+   },
+   "plan": "The reported measurements (70 \u00d7 50 \u00d7 37, 2 solids) do not correspond to the script I submitted (which can only yield 70 \u00d7 40 \u00d7 24, one solid), so I re-derived everything from the original dimensioned sheet, which is the source of truth.\n\nRe-reading the original drawing:\n- TOP view: plate 70 (X) \u00d7 40 (Y, from RIGHT view). Boss center at X = 15 (dim \"15\"), second hole center at X = 45 (dim \"45\"), both on the A\u2013A centerline, i.e. Y = 20 (boss \u230020 centered in the 40 depth, RIGHT view \"20\"/\"40\"). \"4\u00d7 R2\" = R2 on the four plan corners. A DASHED small rectangle below the centerline (\u2248 X 27\u201333, Y 14\u201320) is a hidden feature.\n- FRONT view: plate 12 thick; boss rises 12 above it; overall 24 \u2192 plate_T = 24 \u2212 12 = 12. A small tab protrudes below the plate bottom at X \u2248 28\u201334 \u2014 this is the dashed rectangle of the top view: an underside pad (undimensioned, \u22486 \u00d7 6 \u00d7 3, centered \u2248 (30, 17) from the top/right views).\n- RIGHT view: confirms 40 depth, 20-wide boss centered, and the underside pad (\u22486 wide, \u22483 deep).\n- SECTION A\u2013A: \u23008 counterbore 6 deep from the boss top, coaxial \u23006 THRU through boss + plate; second \u23006 THRU at X = 45 through the plate.\n\nFeatures: plate 70\u00d740\u00d712 with R2 corners; boss \u230020\u00d712 at (15,20); counterbore \u23008\u21936 from Z=24; \u23006 thru at (15,20) and (45,20); underside pad \u22486\u00d76\u00d73 at (30,17) (undimensioned, taken from the views \u2014 this was missing before). All fused as a single solid.",
+   "text": "<plan>\nThe reported measurements (70 \u00d7 50 \u00d7 37, 2 solids) do not correspond to the script I submitted (which can only yield 70 \u00d7 40 \u00d7 24, one solid), so I re-derived everything from the original dimensioned sheet, which is the source of truth.\n\nRe-reading the original drawing:\n- TOP view: plate 70 (X) \u00d7 40 (Y, from RIGHT view). Boss center at X = 15 (dim \"15\"), second hole center at X = 45 (dim \"45\"), both on the A\u2013A centerline, i.e. Y = 20 (boss \u230020 centered in the 40 depth, RIGHT view \"20\"/\"40\"). \"4\u00d7 R2\" = R2 on the four plan corners. A DASHED small rectangle below the centerline (\u2248 X 27\u201333, Y 14\u201320) is a hidden feature.\n- FRONT view: plate 12 thick; boss rises 12 above it; overall 24 \u2192 plate_T = 24 \u2212 12 = 12. A small tab protrudes below the plate bottom at X \u2248 28\u201334 \u2014 this is the dashed rectangle of the top view: an underside pad (undimensioned, \u22486 \u00d7 6 \u00d7 3, centered \u2248 (30, 17) from the top/right views).\n- RIGHT view: confirms 40 depth, 20-wide boss centered, and the underside pad (\u22486 wide, \u22483 deep).\n- SECTION A\u2013A: \u23008 counterbore 6 deep from the boss top, coaxial \u23006 THRU through boss + plate; second \u23006 THRU at X = 45 through the plate.\n\nFeatures: plate 70\u00d740\u00d712 with R2 corners; boss \u230020\u00d712 at (15,20); counterbore \u23008\u21936 from Z=24; \u23006 thru at (15,20) and (45,20); underside pad \u22486\u00d76\u00d73 at (30,17) (undimensioned, taken from the views \u2014 this was missing before). All fused as a single solid.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions from the drawing (mm) ----\nplate_L   = 70            # mm  X overall (top view)\nplate_W   = 40            # mm  Y overall (right view)\ntotal_h   = 24            # mm  plate bottom -> boss top (front view, overall)\nboss_h    = 12            # mm  boss height above plate (front view)\nplate_T   = total_h - boss_h   # mm  = 12, plate thickness\n\nboss_d    = 20            # mm  boss OD (\u230020 callout; matches \"20\" in right view)\nboss_x    = 15            # mm  left edge -> boss center (top view)\nhole2_x   = 45            # mm  left edge -> 2nd hole center (top view)\ncenter_y  = plate_W / 2   # mm  = 20, A-A centerline (boss centered in 40)\n\nthru_d    = 6             # mm  \"2x \u23006 THRU\"\ncbore_d   = 8             # mm  \"\u23008 \u21936\" counterbore diameter\ncbore_dep = 6             # mm  counterbore depth from boss top\ncorner_r  = 2             # mm  \"4x R2\" plan corner fillets\n\n# underside pad \u2014 undimensioned; size/position read from top (dashed rect),\n# front and right views\npad_w     = 6             # mm  X size (\u2248 X 27..33 in top view)\npad_d     = 6             # mm  Y size (\u2248 Y 14..20 in top view)\npad_h     = 3             # mm  protrusion below plate (front/right views)\npad_x     = 30            # mm  pad center X\npad_y     = 17            # mm  pad center Y (below the A-A line)\n\nwith BuildPart() as bp:\n    # base plate: X 0..70, Y 0..40, Z 0..plate_T\n    add(Box(plate_L, plate_W, plate_T,\n            align=(Align.MIN, Align.MIN, Align.MIN)))\n    # R2 on the four vertical (plan) corner edges\n    fillet(bp.edges().filter_by(Axis.Z), radius=corner_r)\n\n    # \u230020 boss on top of plate at (15, 20), Z plate_T..total_h\n    with Locations((boss_x, center_y, plate_T)):\n        add(Cylinder(boss_d / 2, boss_h,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)))\n\n    # small pad on the underside of the plate\n    with Locations((pad_x, pad_y, 0)):\n        add(Box(pad_w, pad_d, pad_h,\n                align=(Align.CENTER, Align.CENTER, Align.MAX)))\n\n    # \u23006 THRU at boss center (through counterbore, boss and plate)\n    with Locations((boss_x, center_y, -1)):\n        add(Cylinder(thru_d / 2, total_h + 2,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)),\n            mode=Mode.SUBTRACT)\n    # \u23008 x 6 deep counterbore from boss top (floor at Z = total_h - cbore_dep)\n    with Locations((boss_x, center_y, total_h - cbore_dep)):\n        add(Cylinder(cbore_d / 2, cbore_dep + 1,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)),\n            mode=Mode.SUBTRACT)\n\n    # second \u23006 THRU at (45, 20) through the plate only\n    with Locations((hole2_x, center_y, -1)):\n        add(Cylinder(thru_d / 2, plate_T + 2,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)),\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     50.0,
+     39.0
+    ],
+    "volume_mm3": 41269.0,
+    "watertight": true,
+    "n_mesh_components": 2,
+    "n_faces": 35,
+    "n_planar_faces": 24,
+    "n_cylindrical_faces": 11,
+    "n_solids": 2,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0,
+     4.0,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 48.4,
+   "usage": {
+    "input_tokens": 9222,
+    "output_tokens": 6574
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0f58d446-8365-8dd1-b3b9-16baee60a3ee",
+  "ss_exec_ok": true,
+  "ss_iou": 0.1545,
+  "ag_exec_ok": true,
+  "ag_iou": 0.2006,
+  "ag_final_cand": 2,
+  "best_iou": 0.2006,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 102.5,
+  "t_agentic_s": 207.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 16543
+  },
+  "total_tokens": {
+   "in": 20955,
+   "out": 30692
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.1545,
+  "2": 0.2006
+ }
+}

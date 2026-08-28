@@ -1,0 +1,78 @@
+{
+ "uid": "07832ef6-5dde-b57e-7f3f-37d19b242f35",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 20.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 2940
+   },
+   "plan": "**Views identified:**\n- **Top view** (upper left): circle = flange OD; hidden dashed circle = stem OD below; 4 small circles equally spaced (0\u00b0/90\u00b0/180\u00b0/270\u00b0) on a \u230040 bolt circle. Callout: \"4\u00d7 \u23005 \u219310 EQ SP ON \u230040 BC\" \u2192 four blind holes, \u23005, 10 mm deep. The \"38\" dimension runs from the left edge to the centerline = radius (38 = 76/2).\n- **Front view** (lower left): T-shape. Flange \u230076 \u00d7 20 thick on top; stem \u230016 below; overall height 60. Hidden lines show the blind holes from the top face.\n- **Right view**: same T-shape; \"38\" again confirms the flange radius. Section A\u2013A (cut along the horizontal centerline of the top view) confirms the two blind holes at \u00b120 mm from center and a solid stem.\n\n**Dimension chains:**\n- X / Y: overall = \u230076 (given directly; radius 38 confirms 76/2 = 38).\n- Z: overall = 60 (given); components: flange 20 + stem 60 \u2212 20 = 40.\n\n**Feature list:**\n1. Flange: cylinder \u230076 \u00d7 20 mm, top of part (z = 40 \u2192 60).\n2. Stem: cylinder \u230016 \u00d7 40 mm, coaxial, below flange (z = 0 \u2192 40).\n3. Holes: 4\u00d7 \u23005 blind, 10 mm deep from the top face (z = 60 down to 50), on \u230040 BC (r = 20), at 0\u00b0/90\u00b0/180\u00b0/270\u00b0.\nNo chamfers/fillets are called out.",
+   "text": "<plan>\n**Views identified:**\n- **Top view** (upper left): circle = flange OD; hidden dashed circle = stem OD below; 4 small circles equally spaced (0\u00b0/90\u00b0/180\u00b0/270\u00b0) on a \u230040 bolt circle. Callout: \"4\u00d7 \u23005 \u219310 EQ SP ON \u230040 BC\" \u2192 four blind holes, \u23005, 10 mm deep. The \"38\" dimension runs from the left edge to the centerline = radius (38 = 76/2).\n- **Front view** (lower left): T-shape. Flange \u230076 \u00d7 20 thick on top; stem \u230016 below; overall height 60. Hidden lines show the blind holes from the top face.\n- **Right view**: same T-shape; \"38\" again confirms the flange radius. Section A\u2013A (cut along the horizontal centerline of the top view) confirms the two blind holes at \u00b120 mm from center and a solid stem.\n\n**Dimension chains:**\n- X / Y: overall = \u230076 (given directly; radius 38 confirms 76/2 = 38).\n- Z: overall = 60 (given); components: flange 20 + stem 60 \u2212 20 = 40.\n\n**Feature list:**\n1. Flange: cylinder \u230076 \u00d7 20 mm, top of part (z = 40 \u2192 60).\n2. Stem: cylinder \u230016 \u00d7 40 mm, coaxial, below flange (z = 0 \u2192 40).\n3. Holes: 4\u00d7 \u23005 blind, 10 mm deep from the top face (z = 60 down to 50), on \u230040 BC (r = 20), at 0\u00b0/90\u00b0/180\u00b0/270\u00b0.\nNo chamfers/fillets are called out.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from drawing ----\nflange_dia = 76.0      # mm  flange OD (\u230076; radius dim 38 = 76/2 confirms)\nflange_thk = 20.0      # mm  flange thickness\noverall_h = 60.0       # mm  overall height\nstem_dia = 16.0        # mm  stem OD (\u230016)\nhole_dia = 5.0         # mm  blind hole diameter (\u23005)\nhole_depth = 10.0      # mm  blind hole depth (\u219310)\nbc_dia = 40.0          # mm  bolt circle diameter (\u230040 BC)\nn_holes = 4            #     4\u00d7 EQ SP\n\n# ---- derived ----\nstem_len = overall_h - flange_thk   # mm  stem length below flange = 40\n\nwith BuildPart() as bp:\n    # stem: z = 0 -> stem_len\n    Cylinder(radius=stem_dia / 2, height=stem_len,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # flange: z = stem_len -> overall_h\n    with Locations((0, 0, stem_len)):\n        Cylinder(radius=flange_dia / 2, height=flange_thk,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # 4 blind holes from the top face, on the \u230040 bolt circle\n    with Locations((0, 0, overall_h)):\n        with PolarLocations(radius=bc_dia / 2, count=n_holes, start_angle=0):\n            Cylinder(radius=hole_dia / 2, height=hole_depth,\n                     align=(Align.CENTER, Align.CENTER, Align.MAX),\n                     mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     76.0,
+     76.0,
+     60.0
+    ],
+    "volume_mm3": 97907.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 13,
+    "n_planar_faces": 7,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     8.0,
+     38.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.3,
+   "usage": {
+    "input_tokens": 7595,
+    "output_tokens": 463
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "07832ef6-5dde-b57e-7f3f-37d19b242f35",
+  "ss_exec_ok": true,
+  "ss_iou": 0.3756,
+  "ag_exec_ok": true,
+  "ag_iou": 0.3756,
+  "ag_final_cand": 1,
+  "best_iou": 0.3756,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 22.8,
+  "t_agentic_s": 30.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 2940
+  },
+  "total_tokens": {
+   "in": 11705,
+   "out": 3403
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.3756
+ }
+}

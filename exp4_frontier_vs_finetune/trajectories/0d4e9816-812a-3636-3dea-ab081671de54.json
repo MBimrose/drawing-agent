@@ -1,0 +1,90 @@
+{
+ "uid": "0d4e9816-812a-3636-3dea-ab081671de54",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 101.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14838
+   },
+   "plan": "**View identification:** Upper-left = TOP view (XY); directly below it = FRONT view (XZ); lower-right = RIGHT side view (YZ); ISO pictorial (NTS) confirms a flat plate with two countersunk holes and a central obround through-slot.\n\n**Dimension chains per axis:**\n- X (top + front views): overall = 80. Chain check: 25.8 + 28.4 + 25.8 = 80 \u2713 (slot is centered). Hole centers at X = 15 and X = 65 \u2192 symmetric about X = 40, 50 apart \u2713.\n- Y (right view): overall = 50; the \"25\" dimension puts the hole/slot centerline at mid-depth (Y = 25). The \"6\" in the top view is the slot width, centered on the same line.\n- Z (front + right views): overall = 16.\n\n**Feature list:**\n1. Base plate 80 \u00d7 50 \u00d7 16.\n2. Through slot: stadium/obround, overall length 28.4 (X) \u00d7 width 6 (Y), semicircular ends R3, centered at (40, 25). Hidden lines in front/right views confirm it passes through.\n3. 2\u00d7 \u23004.5 THRU holes with countersink \u23008.6 \u00d7 90\u00b0 on the TOP face (taper visible at top in front view, circles on top in ISO), at (15, 25) and (65, 25).\n4. C0.8 chamfers (0.8 \u00d7 45\u00b0) called out on all four corners of the top view \u2192 the four vertical edges.\n\n**Coordinate setup:** plate centered at origin \u2192 holes at (\u00b125, 0), slot centered at (0, 0), countersinks placed on the top face z = +8.",
+   "text": "<plan>\n**View identification:** Upper-left = TOP view (XY); directly below it = FRONT view (XZ); lower-right = RIGHT side view (YZ); ISO pictorial (NTS) confirms a flat plate with two countersunk holes and a central obround through-slot.\n\n**Dimension chains per axis:**\n- X (top + front views): overall = 80. Chain check: 25.8 + 28.4 + 25.8 = 80 \u2713 (slot is centered). Hole centers at X = 15 and X = 65 \u2192 symmetric about X = 40, 50 apart \u2713.\n- Y (right view): overall = 50; the \"25\" dimension puts the hole/slot centerline at mid-depth (Y = 25). The \"6\" in the top view is the slot width, centered on the same line.\n- Z (front + right views): overall = 16.\n\n**Feature list:**\n1. Base plate 80 \u00d7 50 \u00d7 16.\n2. Through slot: stadium/obround, overall length 28.4 (X) \u00d7 width 6 (Y), semicircular ends R3, centered at (40, 25). Hidden lines in front/right views confirm it passes through.\n3. 2\u00d7 \u23004.5 THRU holes with countersink \u23008.6 \u00d7 90\u00b0 on the TOP face (taper visible at top in front view, circles on top in ISO), at (15, 25) and (65, 25).\n4. C0.8 chamfers (0.8 \u00d7 45\u00b0) called out on all four corners of the top view \u2192 the four vertical edges.\n\n**Coordinate setup:** plate centered at origin \u2192 holes at (\u00b125, 0), slot centered at (0, 0), countersinks placed on the top face z = +8.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions read from the drawing ----------------\nplate_L = 80.0        # mm  overall length (X) - top & front views\nplate_W = 50.0        # mm  overall depth  (Y) - right side view\nplate_H = 16.0        # mm  overall height (Z) - front & right views\n\nhole_dia = 4.5        # mm  2x \u00d84.5 THRU\ncsink_dia = 8.6       # mm  countersink \u00d88.6\ncsink_angle = 90.0    # deg countersink included angle\nhole_x_left = 15.0    # mm  left hole centre from left edge (top view)\nhole_x_right = 65.0   # mm  right hole centre from left edge (top view)\nhole_y = 25.0         # mm  hole centreline (right view, = W/2)\n\nslot_len = 28.4       # mm  through-slot overall length (X)\nslot_wid = 6.0        # mm  through-slot width (Y)\nslot_x = 25.8         # mm  slot left end from left edge (25.8 + 28.4 + 25.8 = 80)\nslot_y = 25.0         # mm  slot centreline (= W/2)\n\ncorner_chamfer = 0.8  # mm  C0.8 on the four vertical edges\n\n# ---------------- derived positions (part centred on origin) ----------------\nhx1 = hole_x_left - plate_L / 2            # -25\nhx2 = hole_x_right - plate_L / 2           # +25\nhy = hole_y - plate_W / 2                  # 0\nsx = slot_x + slot_len / 2 - plate_L / 2   # 0\nsy = slot_y - plate_W / 2                  # 0\nslot_r = slot_wid / 2                      # semicircular end radius R3\nslot_body = slot_len - slot_wid            # straight portion length\n\nwith BuildPart() as bp:\n    # base plate\n    Box(plate_L, plate_W, plate_H)\n\n    # obround through slot (rectangle + two semicircular ends)\n    with Locations((sx, sy, 0)):\n        Box(slot_body, slot_wid, plate_H + 2, mode=Mode.SUBTRACT)\n        with Locations((-slot_body / 2, 0, 0), (slot_body / 2, 0, 0)):\n            Cylinder(slot_r, plate_H + 2, mode=Mode.SUBTRACT)\n\n    # 2x \u00d84.5 through holes with \u00d88.6 x 90\u00b0 countersink on the top face\n    with Locations((hx1, hy, plate_H / 2), (hx2, hy, plate_H / 2)):\n        CounterSinkHole(hole_dia / 2, csink_dia / 2, csink_angle, depth=None)\n\n    # C0.8 chamfers on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), length=corner_chamfer)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 35.4,
+   "usage": {
+    "input_tokens": 5377,
+    "output_tokens": 5854
+   },
+   "plan": "Reading unchanged: plate 80 (X) \u00d7 50 (Y) \u00d7 16 (Z); chain check 25.8 + 28.4 + 25.8 = 80 (slot centered); holes at X = 15 and 65 (\u00b125 about center), Y = 25 (mid-depth); obround through-slot 28.4 \u00d7 6 (R3 ends) centered; 2\u00d7 \u23004.5 THRU with \u23008.6 \u00d7 90\u00b0 countersink on the top face; C0.8 on the four vertical edges.\n\n**Fix for the failure:** this environment's `CounterSinkHole` rejects the `depth` keyword, so I drop that class entirely and build the countersink manually \u2014 a through `Cylinder` (\u23004.5) plus a subtractive `Cone` (apex down, top radius 4.3, height = 4.3 / tan(45\u00b0) = 4.3) placed so its wide end is flush with the top face. This is version-proof and geometrically identical.",
+   "text": "<plan>\nReading unchanged: plate 80 (X) \u00d7 50 (Y) \u00d7 16 (Z); chain check 25.8 + 28.4 + 25.8 = 80 (slot centered); holes at X = 15 and 65 (\u00b125 about center), Y = 25 (mid-depth); obround through-slot 28.4 \u00d7 6 (R3 ends) centered; 2\u00d7 \u23004.5 THRU with \u23008.6 \u00d7 90\u00b0 countersink on the top face; C0.8 on the four vertical edges.\n\n**Fix for the failure:** this environment's `CounterSinkHole` rejects the `depth` keyword, so I drop that class entirely and build the countersink manually \u2014 a through `Cylinder` (\u23004.5) plus a subtractive `Cone` (apex down, top radius 4.3, height = 4.3 / tan(45\u00b0) = 4.3) placed so its wide end is flush with the top face. This is version-proof and geometrically identical.\n</plan>\n\n```python\nimport math\nfrom build123d import *\n\n# ---------------- dimensions read from the drawing ----------------\nplate_L = 80.0        # mm  overall length (X) - top & front views\nplate_W = 50.0        # mm  overall depth  (Y) - right side view\nplate_H = 16.0        # mm  overall height (Z) - front & right views\n\nhole_dia = 4.5        # mm  2x \u00d84.5 THRU\ncsink_dia = 8.6       # mm  countersink \u00d88.6\ncsink_angle = 90.0    # deg countersink included angle\nhole_x_left = 15.0    # mm  left hole centre from left edge (top view)\nhole_x_right = 65.0   # mm  right hole centre from left edge (top view)\nhole_y = 25.0         # mm  hole centreline (right view, = W/2)\n\nslot_len = 28.4       # mm  through-slot overall length (X)\nslot_wid = 6.0        # mm  through-slot width (Y)\nslot_x = 25.8         # mm  slot left end from left edge (25.8 + 28.4 + 25.8 = 80)\nslot_y = 25.0         # mm  slot centreline (= W/2)\n\ncorner_chamfer = 0.8  # mm  C0.8 on the four vertical edges\n\n# ---------------- derived values (part centred on origin) ----------------\nhx1 = hole_x_left - plate_L / 2            # -25\nhx2 = hole_x_right - plate_L / 2           # +25\nhy = hole_y - plate_W / 2                  # 0\nsx = slot_x + slot_len / 2 - plate_L / 2   # 0\nsy = slot_y - plate_W / 2                  # 0\nslot_r = slot_wid / 2                      # semicircular end radius R3\nslot_body = slot_len - slot_wid            # straight portion length\ncsink_depth = (csink_dia / 2) / math.tan(math.radians(csink_angle / 2))  # 4.3\n\nwith BuildPart() as bp:\n    # base plate\n    Box(plate_L, plate_W, plate_H)\n\n    # obround through slot (rectangle + two semicircular ends)\n    with Locations((sx, sy, 0)):\n        Box(slot_body, slot_wid, plate_H + 2, mode=Mode.SUBTRACT)\n        with Locations((-slot_body / 2, 0, 0), (slot_body / 2, 0, 0)):\n            Cylinder(slot_r, plate_H + 2, mode=Mode.SUBTRACT)\n\n    # 2x \u00d84.5 through holes\n    with Locations((hx1, hy, 0), (hx2, hy, 0)):\n        Cylinder(hole_dia / 2, plate_H + 2, mode=Mode.SUBTRACT)\n\n    # \u00d88.6 x 90\u00b0 countersinks on the top face (cone, apex down)\n    with Locations(\n        (hx1, hy, plate_H / 2 - csink_depth / 2),\n        (hx2, hy, plate_H / 2 - csink_depth / 2),\n    ):\n        Cone(0.0, csink_dia / 2, csink_depth, mode=Mode.SUBTRACT)\n\n    # C0.8 chamfers on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), length=corner_chamfer)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     50.0,
+     16.0
+    ],
+    "volume_mm3": 60793.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 18,
+    "n_planar_faces": 12,
+    "n_cylindrical_faces": 4,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.25,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 10.0,
+   "usage": {
+    "input_tokens": 8394,
+    "output_tokens": 1292
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0d4e9816-812a-3636-3dea-ab081671de54",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5861,
+  "ag_final_cand": 2,
+  "best_iou": 0.5861,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 104.6,
+  "t_agentic_s": 156.3,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14838
+  },
+  "total_tokens": {
+   "in": 17881,
+   "out": 21984
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.5861
+ }
+}

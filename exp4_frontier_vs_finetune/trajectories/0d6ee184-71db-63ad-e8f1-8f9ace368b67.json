@@ -1,0 +1,77 @@
+{
+ "uid": "0d6ee184-71db-63ad-e8f1-8f9ace368b67",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 343.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 27553
+   },
+   "plan": "Views (third-angle): upper-left = TOP (XY) \u2014 stepped outline with 3 holes; the thin rectangle directly below it = FRONT (XZ), 70 wide \u00d7 10 thick; the thin rectangle to the right of the front = RIGHT (YZ) carrying the depth dims; ISO is NTS.\n\nX axis (top view, baseline dimensions from the left edge): hole centers at 20, 35, 50; overall width = 70. The rear stepped portion width = 50, centered in X, so each shoulder is inset (70 \u2212 50)/2 = 10 \u2192 narrow part spans X = 10\u202660 (shoulders at X = 10 and X = 60). Note 35 = 70/2 (middle hole on the centerline) and 50 = 70 \u2212 20 (right hole symmetric to the left hole).\n\nY axis (right view, from the front edge): front hole row at 15; rear hole at 36 (= 15 + 21); overall depth = 42, so rear margin = 42 \u2212 36 = 6. The shoulder plane is fixed by the evident centering intent: wide front portion depth = 2\u00b715 = 30 (front row centered at Y = 15); narrow rear portion depth = 42 \u2212 30 = 12 with the rear hole centered (30 + 6 = 36, 6 mm each side). So the step is at Y = 30: wide part Y = 0\u202630 (70 wide), narrow part Y = 30\u202642 (50 wide).\n\nZ axis: uniform plate thickness = 10 (front/right views).\n\nFeatures: stepped flat plate (70\u00d730 front + 50\u00d712 rear, overall 70\u00d742\u00d710); 3\u00d7 \u23005 THRU at (20,15), (50,15), (35,36); \"6\u00d7 R2\" = R2 fillets on exactly the six convex plan corners (0,0),(70,0),(70,30),(60,42),(10,42),(0,30) \u2014 the two re-entrant shoulder corners (10,30),(60,30) stay sharp. No chamfers called out.",
+   "text": "<plan>\nViews (third-angle): upper-left = TOP (XY) \u2014 stepped outline with 3 holes; the thin rectangle directly below it = FRONT (XZ), 70 wide \u00d7 10 thick; the thin rectangle to the right of the front = RIGHT (YZ) carrying the depth dims; ISO is NTS.\n\nX axis (top view, baseline dimensions from the left edge): hole centers at 20, 35, 50; overall width = 70. The rear stepped portion width = 50, centered in X, so each shoulder is inset (70 \u2212 50)/2 = 10 \u2192 narrow part spans X = 10\u202660 (shoulders at X = 10 and X = 60). Note 35 = 70/2 (middle hole on the centerline) and 50 = 70 \u2212 20 (right hole symmetric to the left hole).\n\nY axis (right view, from the front edge): front hole row at 15; rear hole at 36 (= 15 + 21); overall depth = 42, so rear margin = 42 \u2212 36 = 6. The shoulder plane is fixed by the evident centering intent: wide front portion depth = 2\u00b715 = 30 (front row centered at Y = 15); narrow rear portion depth = 42 \u2212 30 = 12 with the rear hole centered (30 + 6 = 36, 6 mm each side). So the step is at Y = 30: wide part Y = 0\u202630 (70 wide), narrow part Y = 30\u202642 (50 wide).\n\nZ axis: uniform plate thickness = 10 (front/right views).\n\nFeatures: stepped flat plate (70\u00d730 front + 50\u00d712 rear, overall 70\u00d742\u00d710); 3\u00d7 \u23005 THRU at (20,15), (50,15), (35,36); \"6\u00d7 R2\" = R2 fillets on exactly the six convex plan corners (0,0),(70,0),(70,30),(60,42),(10,42),(0,30) \u2014 the two re-entrant shoulder corners (10,30),(60,30) stay sharp. No chamfers called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- parameters (all mm, read from the drawing) ----\nW_total      = 70            # mm  overall width (X) - top & front views\nD_total      = 42            # mm  overall depth (Y) - right view\nT            = 10            # mm  plate thickness (Z) - front/right views\nstep_w       = 50            # mm  width of narrower rear portion - top view\nfront_hole_y = 15            # mm  front edge to front hole row - right view\nrear_hole_y  = 36            # mm  front edge to rear hole (=15+21) - right view\nhole_x_left  = 20            # mm  left hole X (baseline from left edge) - top view\nhole_x_mid   = 35            # mm  middle hole X (= W_total/2) - top view\nhole_x_right = 50            # mm  right hole X (= W_total-20) - top view\nhole_d       = 5             # mm  3x dia5 THRU\nfillet_r     = 2             # mm  6x R2 on convex plan corners\n\n# ---- derived values ----\nside_step = (W_total - step_w) / 2     # mm  shoulder inset per side = 10\nstep_y    = 2 * front_hole_y           # mm  shoulder plane = 30 (front row centered in wide part)\nwide_d    = step_y                     # mm  wide front portion depth = 30\nnarrow_d  = D_total - step_y           # mm  narrow rear portion depth = 12 (rear hole centered: 30+6=36)\nhole_r    = hole_d / 2\n\nx0, x1 = 0, W_total                    # 0, 70\nxa, xb = side_step, W_total - side_step  # 10, 60  (shoulders)\ny0, ys, y2 = 0, step_y, D_total        # 0, 30, 42\nconvex_corners = {(x0, y0), (x1, y0), (x1, ys), (xb, y2), (xa, y2), (x0, ys)}  # 6 convex corners\n\nwith BuildPart() as bp:\n    # wide front portion: X[0,70], Y[0,30], Z[0,10]\n    Box(W_total, wide_d, T, align=(Align.MIN, Align.MIN, Align.MIN))\n    # narrow rear portion (centered in X): X[10,60], Y[30,42], Z[0,10]\n    with Locations((xa, ys, 0)):\n        Box(step_w, narrow_d, T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # 6x R2 : fillet only the six convex vertical edges (re-entrant shoulder edges stay sharp)\n    vedges = edges().filter_by(Axis.Z)\n    sel = [e for e in vedges\n           if (int(round(e.center().X)), int(round(e.center().Y))) in convex_corners]\n    fillet(sel, radius=fillet_r)\n\n    # 3x dia5 through holes\n    hole_pts = [(hole_x_left, front_hole_y),\n                (hole_x_right, front_hole_y),\n                (hole_x_mid, rear_hole_y)]\n    with Locations(*[(x, y, T / 2) for (x, y) in hole_pts]):\n        Cylinder(radius=hole_r, height=T + 4, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     70.0,
+     42.0,
+     10.0
+    ],
+    "volume_mm3": 26360.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 9,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.4,
+   "usage": {
+    "input_tokens": 7301,
+    "output_tokens": 467
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0d6ee184-71db-63ad-e8f1-8f9ace368b67",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9779,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9779,
+  "ag_final_cand": 1,
+  "best_iou": 0.9779,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 346.3,
+  "t_agentic_s": 353.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 27553
+  },
+  "total_tokens": {
+   "in": 11411,
+   "out": 28020
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9779
+ }
+}

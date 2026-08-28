@@ -1,0 +1,77 @@
+{
+ "uid": "087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 133.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14064
+   },
+   "plan": "Views: upper-left = TOP (XY), lower-left = FRONT (XZ), small view to the right = RIGHT cross-section (YZ). ISO confirms a hollow rectangular tube, open at both ends, split lengthwise by a central web into two channels, with a row of blind holes on the front face.\n\nAxis chains:\n- X (length): overall 100 (given directly).\n- Z (height): overall 20 (given); wall chain 2 (top) + 16 (cavity) + 2 (bottom) = 20.\n- Y (width): overall 30 (given); cross-section chain 2 (side wall) + 10 (cavity) + 6 (central web) + 10 (cavity) + 2 (side wall) = 30, so each cavity = (30 \u2212 2\u00b72 \u2212 6)/2 = 10, cavity height = 20 \u2212 2\u00b72 = 16. Central web thickness = 6, side/top/bottom walls = 2.\n\nFeatures:\n- Tube: 100 (X) \u00d7 30 (Y) \u00d7 20 (Z), wall 2, central longitudinal web 6 thick (Y) running full length/inner height \u2192 two 10 \u00d7 16 channels. Inner channel corners filleted R1 (\"4\u00d7 R1\").\n- Holes: \"4\u00d7 \u23004 \u219318\" on the front (\u2212Y) face, seen as circles in the FRONT view (axis along Y) and as the mid-height hidden line in the RIGHT view. Depth check: 2 (front wall) + 10 (front cavity) + 6 (web) = 18 \u2192 blind, ending at the rear cavity (back wall stays intact). Spacing \"3\u00d7 15\" = 45 across 4 holes; pattern unlocated \u2192 centered on the 100 length: X = \u221222.5, \u22127.5, +7.5, +22.5; Z = 0 (mid-height).",
+   "text": "<plan>\nViews: upper-left = TOP (XY), lower-left = FRONT (XZ), small view to the right = RIGHT cross-section (YZ). ISO confirms a hollow rectangular tube, open at both ends, split lengthwise by a central web into two channels, with a row of blind holes on the front face.\n\nAxis chains:\n- X (length): overall 100 (given directly).\n- Z (height): overall 20 (given); wall chain 2 (top) + 16 (cavity) + 2 (bottom) = 20.\n- Y (width): overall 30 (given); cross-section chain 2 (side wall) + 10 (cavity) + 6 (central web) + 10 (cavity) + 2 (side wall) = 30, so each cavity = (30 \u2212 2\u00b72 \u2212 6)/2 = 10, cavity height = 20 \u2212 2\u00b72 = 16. Central web thickness = 6, side/top/bottom walls = 2.\n\nFeatures:\n- Tube: 100 (X) \u00d7 30 (Y) \u00d7 20 (Z), wall 2, central longitudinal web 6 thick (Y) running full length/inner height \u2192 two 10 \u00d7 16 channels. Inner channel corners filleted R1 (\"4\u00d7 R1\").\n- Holes: \"4\u00d7 \u23004 \u219318\" on the front (\u2212Y) face, seen as circles in the FRONT view (axis along Y) and as the mid-height hidden line in the RIGHT view. Depth check: 2 (front wall) + 10 (front cavity) + 6 (web) = 18 \u2192 blind, ending at the rear cavity (back wall stays intact). Spacing \"3\u00d7 15\" = 45 across 4 holes; pattern unlocated \u2192 centered on the 100 length: X = \u221222.5, \u22127.5, +7.5, +22.5; Z = 0 (mid-height).\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 100          # mm  overall length (X)\nW = 30           # mm  overall width  (Y)\nH = 20           # mm  overall height (Z)\nt = 2            # mm  outer wall thickness (sides, top, bottom)\nweb = 6          # mm  central longitudinal web thickness (Y)\nhole_d = 4       # mm  hole diameter (4x)\nhole_depth = 18  # mm  blind-hole depth from the front (-Y) face\nhole_pitch = 15  # mm  hole spacing (3x 15 across 4 holes)\nn_holes = 4      #     number of holes\nr_in = 1         # mm  internal corner fillet (4x R1)\n\n# ---- derived values ----\ncav_w = (W - 2 * t - web) / 2   # mm  width of each channel (Y) = (30-4-6)/2 = 10\ncav_h = H - 2 * t               # mm  channel height (Z) = 20-4 = 16\ncav_off = web / 2 + cav_w / 2   # mm  channel centre offset from mid-plane (Y) = 3+5 = 8\ny_hole = -W / 2 + hole_depth / 2  # mm  hole-cylinder centre in Y = -15+9 = -6 (spans -15..+3)\nxs = [(i - (n_holes - 1) / 2) * hole_pitch for i in range(n_holes)]  # -22.5,-7.5,7.5,22.5\n\nwith BuildPart() as bp:\n    # YZ cross-section extruded along X (centred): outer tube minus two rounded channels\n    with BuildSketch(Plane.YZ):\n        Rectangle(W, H)  # outer 30 (Y) x 20 (Z)\n        for s in (-1, 1):\n            with Locations((s * cav_off, 0)):\n                RectangleRounded(cav_w, cav_h, r_in, mode=Mode.SUBTRACT)\n    extrude(amount=L / 2, both=True)  # X from -50 to +50\n\n    # 4 blind holes from the front (-Y) face, depth 18 (through front wall + web, stop at rear cavity)\n    for x in xs:\n        with Locations((x, y_hole, 0)):\n            Cylinder(radius=hole_d / 2, height=hole_depth,\n                     rotation=(90, 0, 0), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     100.0,
+     30.0,
+     20.0
+    ],
+    "volume_mm3": 27771.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 30,
+    "n_planar_faces": 14,
+    "n_cylindrical_faces": 16,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.0,
+     2.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.4,
+   "usage": {
+    "input_tokens": 6862,
+    "output_tokens": 546
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "087bbb7a-c871-f9b6-b640-7e8ce9aa5dbf",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9726,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9726,
+  "ag_final_cand": 1,
+  "best_iou": 0.9726,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 136.3,
+  "t_agentic_s": 146.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14064
+  },
+  "total_tokens": {
+   "in": 10972,
+   "out": 14610
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9726
+ }
+}

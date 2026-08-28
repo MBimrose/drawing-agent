@@ -1,0 +1,76 @@
+{
+ "uid": "014e0c04-50a5-9b2b-5d15-048cc68be62e",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 694.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 20698
+   },
+   "plan": "Views: upper\u2011left = TOP (XY, holes seen as circles \u21d2 hole axis = Z); lower\u2011left = FRONT (XZ); lower\u2011right = RIGHT (YZ). ISO confirms two pads (one plate) joined by a central raised rib that runs in Y and overhangs the plate front/back.\n\nX chain (overall 80 taken from the FRONT view; the TOP view gives the component chain from the left edge): edge\u2192hole 15; edge\u2192rib\u2011left 37; edge\u2192rib\u2011right 43 \u21d2 rib width = 43\u221237 = 6, rib centre = (37+43)/2 = 40 = 80/2 (centred); edge\u2192right hole = 65, so right hole is 80\u221265 = 15 from the right edge (symmetric with the left hole at 15). Holes therefore sit at x = \u00b1(80/2 \u2212 15) = \u00b125 about the centre; rib at x = \u00b13.\n\nY chain (RIGHT view): overall depth = 70 (the rib), plate width = 35 centred \u21d2 margins (70\u221235)/2 = 17.5 each side; the rib runs the full 70.\n\nZ (FRONT view): plate = 6, total = 9 \u21d2 rib stands 9\u22126 = 3 above the plate.\n\nFeatures: plate 80\u00d735\u00d76; raised rib 6 (X) \u00d7 70 (Y) \u00d7 3 on top (Z 6\u21929), centred in X; 2\u00d7 \u00d85 through\u2011holes at (\u00b125, 0); C0.5 (45\u00b0, 0.5 mm) on the four vertical corner edges of the plate only.",
+   "text": "<plan>\nViews: upper\u2011left = TOP (XY, holes seen as circles \u21d2 hole axis = Z); lower\u2011left = FRONT (XZ); lower\u2011right = RIGHT (YZ). ISO confirms two pads (one plate) joined by a central raised rib that runs in Y and overhangs the plate front/back.\n\nX chain (overall 80 taken from the FRONT view; the TOP view gives the component chain from the left edge): edge\u2192hole 15; edge\u2192rib\u2011left 37; edge\u2192rib\u2011right 43 \u21d2 rib width = 43\u221237 = 6, rib centre = (37+43)/2 = 40 = 80/2 (centred); edge\u2192right hole = 65, so right hole is 80\u221265 = 15 from the right edge (symmetric with the left hole at 15). Holes therefore sit at x = \u00b1(80/2 \u2212 15) = \u00b125 about the centre; rib at x = \u00b13.\n\nY chain (RIGHT view): overall depth = 70 (the rib), plate width = 35 centred \u21d2 margins (70\u221235)/2 = 17.5 each side; the rib runs the full 70.\n\nZ (FRONT view): plate = 6, total = 9 \u21d2 rib stands 9\u22126 = 3 above the plate.\n\nFeatures: plate 80\u00d735\u00d76; raised rib 6 (X) \u00d7 70 (Y) \u00d7 3 on top (Z 6\u21929), centred in X; 2\u00d7 \u00d85 through\u2011holes at (\u00b125, 0); C0.5 (45\u00b0, 0.5 mm) on the four vertical corner edges of the plate only.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Parameters (all mm, read from the drawing) ----\nplate_L  = 80            # mm  overall X (FRONT view)\nplate_W  = 35            # mm  plate width in Y (RIGHT view)\nplate_T  = 6             # mm  plate thickness (FRONT view)\ntotal_H  = 9             # mm  total height to top of rib (FRONT view)\nrib_H    = total_H - plate_T   # mm  rib height above plate = 9 - 6 = 3\nrib_W    = 43 - 37       # mm  rib width in X (TOP chain) = 6, centred at 40 = 80/2\nrib_L    = 70            # mm  rib length in Y = overall depth (RIGHT view)\nhole_D   = 5             # mm  2x \u00d85 THRU\nedge_CL  = 15            # mm  hole centre from each plate end (TOP view)\ncham     = 0.5           # mm  C0.5 on the four plate corners\n\nhole_off = plate_L / 2 - edge_CL   # mm  hole centre from part centre = 40 - 15 = 25\ncut_extra = 2            # mm  overtravel so the thru cut fully clears the plate\n\n# ---- Base plate 80 x 35 x 6 (Z = 0..6), centred in XY ----\nbase = Box(plate_L, plate_W, plate_T,\n           align=(Align.CENTER, Align.CENTER, Align.MIN))\n# C0.5 chamfer on the four vertical corner edges of the plate only\nbase = chamfer(base.edges().filter_by(Axis.Z), cham)\n\n# ---- Raised rib 6 (X) x 70 (Y) x 3, sitting on top of the plate (Z = 6..9) ----\nrib = Box(rib_W, rib_L, rib_H,\n          align=(Align.CENTER, Align.CENTER, Align.MIN)).move(Location((0, 0, plate_T)))\n\npart = base + rib\n\n# ---- 2x \u00d85 through-holes at x = +/-25, y = 0 ----\nfor x in (-hole_off, hole_off):\n    part -= Cylinder(hole_D / 2, plate_T + 2 * cut_extra,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN)\n                     ).move(Location((x, 0, -cut_extra)))\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     70.0,
+     9.0
+    ],
+    "volume_mm3": 17822.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 18,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.3,
+   "usage": {
+    "input_tokens": 6985,
+    "output_tokens": 440
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "014e0c04-50a5-9b2b-5d15-048cc68be62e",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8752,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8752,
+  "ag_final_cand": 1,
+  "best_iou": 0.8752,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 698.0,
+  "t_agentic_s": 705.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 20698
+  },
+  "total_tokens": {
+   "in": 11095,
+   "out": 21138
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.8752
+ }
+}

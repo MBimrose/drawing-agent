@@ -1,0 +1,77 @@
+{
+ "uid": "103a4b9c-3e82-6cb0-123d-ec6e878d94cf",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 336.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25683
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper left): plan outline 75 (X) \u00d7 30 (Y). \u23004 THRU hole shown as a circle at X = 35 from the left edge, centred in Y. Small rectangular tab protrudes beyond the right (+X) end, centred in Y. Small semicircular notch in the front (\u2013Y) edge at X \u2248 35. Dashed rectangle inside = hidden bottom pocket.\n- **FRONT view** (lower left): 75 (X) \u00d7 26 (Z) overall; tab protruding at the right end at mid-height; hidden lines of the bottom pocket (open at Z = 0) and of the vertical hole.\n- **RIGHT view** (middle, YZ from +X): outer 30 (Y) \u00d7 26 (Z); centred inner rectangle = tab end face, height **12**, centred at **15** (= 30/2); small centred rectangle with leader \"3 \u00d7 8 \u00d7 2.5 DEEP\" = recess in the tab end face, 8 wide (Y) \u00d7 3 high (Z) \u00d7 2.5 deep (X). The \"12\" is a component (tab height); body height 26 comes from the front view \u2014 consistent with ISO proportions.\n\n**Dimension chains:** X: overall 75 given directly (tab protrudes ~5 beyond, undimensioned). Y: overall 30 given; centreline 15 = 30/2. Z: overall 26 given; tab height 12.\n\n**Feature list:**\n1. Body 75 \u00d7 30 \u00d7 26.\n2. End tab: 12 high (dimensioned), centred in Y and Z; length \u22485, width \u224810 (undimensioned, from view proportions; must clear the 8-wide, 2.5-deep recess).\n3. Recess in tab end face: 8 (Y) \u00d7 3 (Z) \u00d7 2.5 deep, centred (Y=15, Z=13).\n4. \u23004 through hole (vertical) at (35, 15).\n5. Bottom pocket (hidden lines only, undimensioned): \u224840 (X) \u00d7 14 (Y) \u00d7 8 deep, X 20\u201360, centred in Y.\n6. Semicircular notch on front edge at X=35, full height, R\u22483 (undimensioned, from proportions).\n\nNo chamfer/fillet callouts \u2192 none added.",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper left): plan outline 75 (X) \u00d7 30 (Y). \u23004 THRU hole shown as a circle at X = 35 from the left edge, centred in Y. Small rectangular tab protrudes beyond the right (+X) end, centred in Y. Small semicircular notch in the front (\u2013Y) edge at X \u2248 35. Dashed rectangle inside = hidden bottom pocket.\n- **FRONT view** (lower left): 75 (X) \u00d7 26 (Z) overall; tab protruding at the right end at mid-height; hidden lines of the bottom pocket (open at Z = 0) and of the vertical hole.\n- **RIGHT view** (middle, YZ from +X): outer 30 (Y) \u00d7 26 (Z); centred inner rectangle = tab end face, height **12**, centred at **15** (= 30/2); small centred rectangle with leader \"3 \u00d7 8 \u00d7 2.5 DEEP\" = recess in the tab end face, 8 wide (Y) \u00d7 3 high (Z) \u00d7 2.5 deep (X). The \"12\" is a component (tab height); body height 26 comes from the front view \u2014 consistent with ISO proportions.\n\n**Dimension chains:** X: overall 75 given directly (tab protrudes ~5 beyond, undimensioned). Y: overall 30 given; centreline 15 = 30/2. Z: overall 26 given; tab height 12.\n\n**Feature list:**\n1. Body 75 \u00d7 30 \u00d7 26.\n2. End tab: 12 high (dimensioned), centred in Y and Z; length \u22485, width \u224810 (undimensioned, from view proportions; must clear the 8-wide, 2.5-deep recess).\n3. Recess in tab end face: 8 (Y) \u00d7 3 (Z) \u00d7 2.5 deep, centred (Y=15, Z=13).\n4. \u23004 through hole (vertical) at (35, 15).\n5. Bottom pocket (hidden lines only, undimensioned): \u224840 (X) \u00d7 14 (Y) \u00d7 8 deep, X 20\u201360, centred in Y.\n6. Semicircular notch on front edge at X=35, full height, R\u22483 (undimensioned, from proportions).\n\nNo chamfer/fillet callouts \u2192 none added.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read directly from the drawing ----\nL = 75.0        # mm  body length (X) - top view overall\nW = 30.0        # mm  body depth  (Y) - right view overall\nH = 26.0        # mm  body height (Z) - front view overall\nHOLE_X = 35.0   # mm  hole centre from left edge - top view\nHOLE_D = 4.0    # mm  \u23004 THRU (vertical through hole)\nCTR_Y = 15.0    # mm  feature centreline in Y - right view (= W/2)\nTAB_H = 12.0    # mm  end-tab height (Z) - right view\nSLOT_W = 8.0    # mm  tab-end recess width  (Y) - \"3 x 8 x 2.5 DEEP\"\nSLOT_H = 3.0    # mm  tab-end recess height (Z) - \"3 x 8 x 2.5 DEEP\"\nSLOT_D = 2.5    # mm  tab-end recess depth  (X) - \"3 x 8 x 2.5 DEEP\"\n\n# ---- Features shown in the views but not dimensioned (sized from view proportions) ----\nTAB_L = 5.0      # mm  tab protrusion beyond the 75 mm body\nTAB_W = 10.0     # mm  tab width (Y), centred\nPOCKET_L = 40.0  # mm  bottom pocket length (X) - hidden lines\nPOCKET_W = 14.0  # mm  bottom pocket width  (Y) - hidden lines\nPOCKET_D = 8.0   # mm  bottom pocket depth  (Z) - hidden lines\nPOCKET_X = 20.0  # mm  pocket start in X\nNOTCH_R = 3.0    # mm  radius of semicircular notch on front edge at X = 35\n\nwith BuildPart() as bp:\n    # main body, min corner at origin\n    Box(L, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # tab on +X end, centred in Y and Z\n    with Locations((L, (W - TAB_W) / 2, (H - TAB_H) / 2)):\n        Box(TAB_L, TAB_W, TAB_H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # \u23004 through hole at (35, 15)\n    with Locations((HOLE_X, CTR_Y, 0)):\n        Cylinder(HOLE_D / 2, H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # rectangular pocket open on the bottom face, centred in Y\n    with Locations((POCKET_X, (W - POCKET_W) / 2, 0)):\n        Box(POCKET_L, POCKET_W, POCKET_D,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # recess in the tab end face: 8 (Y) x 3 (Z) x 2.5 deep, centred\n    with Locations((L + TAB_L - SLOT_D, (W - SLOT_W) / 2, (H - SLOT_H) / 2)):\n        Box(SLOT_D, SLOT_W, SLOT_H,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # semicircular notch on the front (-Y) edge at X = 35, full height\n    with Locations((HOLE_X, 0, 0)):\n        Cylinder(NOTCH_R, H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     30.0,
+     26.0
+    ],
+    "volume_mm3": 53967.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 24,
+    "n_planar_faces": 22,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 21.4,
+   "usage": {
+    "input_tokens": 7514,
+    "output_tokens": 3340
+   },
+   "plan": "Comparison of my renders against the original drawing:\n\n- **Extents:** Bounding box 80 \u00d7 30 \u00d7 26 = body 75 (dimensioned) + tab protrusion 5 (undimensioned, protrudes past the 75 as shown) \u00d7 30 \u00d7 26. \u2713\n- **TOP view:** outline, hidden pocket rectangle (X 20\u201360, Y 8\u201322), \u23004 hole circle at (35, 15), tab on +X edge centred in Y with hidden recess lines, semicircular notch on front edge at X=35 \u2014 all present and matching. \u2713\n- **FRONT view:** 75 \u00d7 26 outline, tab at right at mid-height (Z 7\u201319), two solid vertical lines at X=32/38 from the full-height notch, hidden lines for the pocket (Z=8) and the hole \u2014 matches the original. \u2713\n- **RIGHT view:** 30 \u00d7 26 outline, tab end face 12 high centred (centreline at 15 = 30/2), recess 8 \u00d7 3 centred, hidden lines for pocket and hole \u2014 matches. \u2713\n- **Cylindrical radii [2.0, 3.0]** = \u23004 hole and R3 notch. \u2713\n- **Volume check:** 58500 (body) + 600 (tab) \u2212 327 (hole) \u2212 4480 (pocket) \u2212 60 (recess) \u2212 368 (notch) + 101 (hole\u2229pocket overlap) \u2248 53966 mm\u00b3 vs measured 53967.8. \u2713\n\nAll dimensioned features (75, 30, 26, 35, 15, 12, \u23004, 8\u00d73\u00d72.5) are exact; undimensioned features (tab, pocket, notch) match the view proportions and hidden-line layouts in all three views. No revision needed.",
+   "text": "<plan>\nComparison of my renders against the original drawing:\n\n- **Extents:** Bounding box 80 \u00d7 30 \u00d7 26 = body 75 (dimensioned) + tab protrusion 5 (undimensioned, protrudes past the 75 as shown) \u00d7 30 \u00d7 26. \u2713\n- **TOP view:** outline, hidden pocket rectangle (X 20\u201360, Y 8\u201322), \u23004 hole circle at (35, 15), tab on +X edge centred in Y with hidden recess lines, semicircular notch on front edge at X=35 \u2014 all present and matching. \u2713\n- **FRONT view:** 75 \u00d7 26 outline, tab at right at mid-height (Z 7\u201319), two solid vertical lines at X=32/38 from the full-height notch, hidden lines for the pocket (Z=8) and the hole \u2014 matches the original. \u2713\n- **RIGHT view:** 30 \u00d7 26 outline, tab end face 12 high centred (centreline at 15 = 30/2), recess 8 \u00d7 3 centred, hidden lines for pocket and hole \u2014 matches. \u2713\n- **Cylindrical radii [2.0, 3.0]** = \u23004 hole and R3 notch. \u2713\n- **Volume check:** 58500 (body) + 600 (tab) \u2212 327 (hole) \u2212 4480 (pocket) \u2212 60 (recess) \u2212 368 (notch) + 101 (hole\u2229pocket overlap) \u2248 53966 mm\u00b3 vs measured 53967.8. \u2713\n\nAll dimensioned features (75, 30, 26, 35, 15, 12, \u23004, 8\u00d73\u00d72.5) are exact; undimensioned features (tab, pocket, notch) match the view proportions and hidden-line layouts in all three views. No revision needed.\n</plan>\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "103a4b9c-3e82-6cb0-123d-ec6e878d94cf",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7066,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7066,
+  "ag_final_cand": 1,
+  "best_iou": 0.7066,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 340.1,
+  "t_agentic_s": 365.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25683
+  },
+  "total_tokens": {
+   "in": 11624,
+   "out": 29023
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7066
+ }
+}

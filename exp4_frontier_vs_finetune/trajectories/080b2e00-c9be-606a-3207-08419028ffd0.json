@@ -1,0 +1,77 @@
+{
+ "uid": "080b2e00-c9be-606a-3207-08419028ffd0",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 852.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 14586
+   },
+   "plan": "**Views identified:** TOP = rounded-rectangle plate (upper left); FRONT = thin 60 \u00d7 5 bar below it; RIGHT = thin 45 \u00d7 5 bar to the right of the front; ISO confirms a flat plate with a central rectangular through-slot and two through-holes.\n\n**Dimension chains:**\n- X (top & front views): overall = 60. Baseline chain from left edge: 15 \u2192 slot left edge; 20 \u2192 left hole center; 40 \u2192 right hole center; slot width 30 \u2192 slot spans 15\u202645 (centered: 15+30+15 = 60 \u2713). Holes at X = 20 and 40 (spacing 20, symmetric about center \u2713).\n- Y (top & right views): overall = 45 (right view \"45\"). Slot width 10, no position dim \u2192 centered: (45\u221210)/2 = 17.5 each side. Right view \"15\" locates hole centers 15 from the front edge.\n- Z: thickness = 5 (front/right views).\n\n**Features:**\n- Base plate 60 \u00d7 45 \u00d7 5 with 4\u00d7 R4 corner fillets (vertical edges, in plan).\n- C0.8 chamfers called out on the top perimeter edges (both ends in front and right views, ISO shows chamfered top rim; bottom edges sharp).\n- Rectangular through-slot 30 \u00d7 10, centered (ISO shows hidden lines below it \u2192 through; no depth callout).\n- 2\u00d7 \u23004 THRU holes at (20, 15) and (40, 15) from the left/front edges.\n\nBuild order: sketch plate with R4 corners \u2192 extrude 5 \u2192 chamfer top outer perimeter (before openings, so slot/hole edges stay sharp) \u2192 subtract slot \u2192 subtract holes. Part centered on origin: holes land at (\u00b110, \u22127.5).",
+   "text": "<plan>\n**Views identified:** TOP = rounded-rectangle plate (upper left); FRONT = thin 60 \u00d7 5 bar below it; RIGHT = thin 45 \u00d7 5 bar to the right of the front; ISO confirms a flat plate with a central rectangular through-slot and two through-holes.\n\n**Dimension chains:**\n- X (top & front views): overall = 60. Baseline chain from left edge: 15 \u2192 slot left edge; 20 \u2192 left hole center; 40 \u2192 right hole center; slot width 30 \u2192 slot spans 15\u202645 (centered: 15+30+15 = 60 \u2713). Holes at X = 20 and 40 (spacing 20, symmetric about center \u2713).\n- Y (top & right views): overall = 45 (right view \"45\"). Slot width 10, no position dim \u2192 centered: (45\u221210)/2 = 17.5 each side. Right view \"15\" locates hole centers 15 from the front edge.\n- Z: thickness = 5 (front/right views).\n\n**Features:**\n- Base plate 60 \u00d7 45 \u00d7 5 with 4\u00d7 R4 corner fillets (vertical edges, in plan).\n- C0.8 chamfers called out on the top perimeter edges (both ends in front and right views, ISO shows chamfered top rim; bottom edges sharp).\n- Rectangular through-slot 30 \u00d7 10, centered (ISO shows hidden lines below it \u2192 through; no depth callout).\n- 2\u00d7 \u23004 THRU holes at (20, 15) and (40, 15) from the left/front edges.\n\nBuild order: sketch plate with R4 corners \u2192 extrude 5 \u2192 chamfer top outer perimeter (before openings, so slot/hole edges stay sharp) \u2192 subtract slot \u2192 subtract holes. Part centered on origin: holes land at (\u00b110, \u22127.5).\n</plan>\n\n```python\nfrom build123d import *\n\n# ================= Dimensions (from drawing) =================\nplate_X = 60.0      # mm - overall width (top & front views)\nplate_Y = 45.0      # mm - overall depth (right view)\nplate_Z = 5.0       # mm - plate thickness (front & right views)\ncorner_R = 4.0      # mm - 4x R4 corner fillets (plan)\ntop_chamfer = 0.8   # mm - C0.8 chamfer on top perimeter edges\n\nslot_X = 30.0       # mm - through-slot length (X), spans 15..45 -> centered\nslot_Y = 10.0       # mm - through-slot width (Y), centered: (45-10)/2 = 17.5/side\n\nhole_dia = 4.0      # mm - 2x \u00d84 THRU\nhole_1_x = 20.0     # mm - left hole center from left edge\nhole_2_x = 40.0     # mm - right hole center from left edge\nhole_y = 15.0       # mm - hole centers from front edge (right view)\n\n# Derived positions (part centered on origin)\nhx1 = hole_1_x - plate_X / 2   # -10\nhx2 = hole_2_x - plate_X / 2   # +10\nhy = hole_y - plate_Y / 2      # -7.5 (toward front, -Y)\n\nwith BuildPart() as bp:\n    # Base plate 60 x 45 with R4 rounded corners\n    with BuildSketch():\n        Rectangle(plate_X, plate_Y)\n        fillet(vertices(), radius=corner_R)\n    extrude(amount=plate_Z)\n\n    # C0.8 chamfer on top outer perimeter (before openings are cut)\n    chamfer(edges().group_by(Axis.Z)[-1], length=top_chamfer)\n\n    # 30 x 10 through-slot, centered in X and Y\n    with Locations((0, 0, plate_Z / 2)):\n        Box(slot_X, slot_Y, plate_Z + 2, mode=Mode.SUBTRACT)\n\n    # 2x \u00d84 through-holes\n    with Locations((hx1, hy, 0), (hx2, hy, 0)):\n        Cylinder(radius=hole_dia / 2, height=plate_Z + 2, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     45.0,
+     5.0
+    ],
+    "volume_mm3": 11778.8,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 26,
+    "n_planar_faces": 16,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 6.6,
+   "usage": {
+    "input_tokens": 7042,
+    "output_tokens": 700
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "080b2e00-c9be-606a-3207-08419028ffd0",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8773,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8773,
+  "ag_final_cand": 1,
+  "best_iou": 0.8773,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 856.0,
+  "t_agentic_s": 866.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 14586
+  },
+  "total_tokens": {
+   "in": 11152,
+   "out": 15286
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.8773
+ }
+}

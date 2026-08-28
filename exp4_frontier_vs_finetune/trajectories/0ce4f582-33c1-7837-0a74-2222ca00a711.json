@@ -1,0 +1,78 @@
+{
+ "uid": "0ce4f582-33c1-7837-0a74-2222ca00a711",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 339.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 25252
+   },
+   "plan": "**Views (third-angle):** TOP view upper-left (XY from +Z): a \u230080 circle with two counterbored holes on the horizontal centerline (the A\u2013A cutting plane) and a small rectangular rim notch at the left and right extremes. FRONT view below it (XZ from \u2212Y): rectangle \u230080 wide \u00d7 20 high, hidden lines for the holes/counterbores and thin edge lines of the rim notches at both ends. RIGHT view to the right of front: a half side-view of the symmetric puck, dimensioned 40 = 80/2 (centreline to rim) \u2014 confirms the radius, adds no geometry. SECTION A\u2013A (full section on the Y=0 plane): hatched puck showing two through-holes, each with a shallow counterbore opening at the TOP face, plus the 2 mm-deep rim notches visible at both ends.\n\n**Dimension chains:**\n- X: overall = \u230080 (front view). Hole centres from left rim: 29.6 and 49.6 \u2192 X = \u221240+29.6 = **\u221210.4** and \u221240+49.6 = **+9.6**; hole spacing = 49.6 \u2212 29.6 = 20.0.\n- Y: overall = 80 (same cylinder; right view shows 40 = half of 80).\n- Z: overall height = **20** (front view); counterbore depth 1.4 from top.\n\n**Features:**\n1. Base solid: cylinder \u230080 \u00d7 20.\n2. \"2\u00d7 \u23008.5 \u21931.4\": two counterbored holes at (\u221210.4, 0) and (+9.6, 0) \u2014 counterbore \u23008.5 \u00d7 1.4 deep from the top face; the through portion is the narrower hole shown in SECTION A\u2013A (\u22480.6 \u00d7 8.5 \u2192 \u23005 THRU).\n3. \"4 A/F\": two rectangular rim notches at the \u00b1X extremes, centred on Y=0, 4 mm wide (Y) \u00d7 2 mm deep (X, read from the top view and the section edge steps), full height.\nNo fillet/chamfer callouts \u2192 none added.",
+   "text": "<plan>\n**Views (third-angle):** TOP view upper-left (XY from +Z): a \u230080 circle with two counterbored holes on the horizontal centerline (the A\u2013A cutting plane) and a small rectangular rim notch at the left and right extremes. FRONT view below it (XZ from \u2212Y): rectangle \u230080 wide \u00d7 20 high, hidden lines for the holes/counterbores and thin edge lines of the rim notches at both ends. RIGHT view to the right of front: a half side-view of the symmetric puck, dimensioned 40 = 80/2 (centreline to rim) \u2014 confirms the radius, adds no geometry. SECTION A\u2013A (full section on the Y=0 plane): hatched puck showing two through-holes, each with a shallow counterbore opening at the TOP face, plus the 2 mm-deep rim notches visible at both ends.\n\n**Dimension chains:**\n- X: overall = \u230080 (front view). Hole centres from left rim: 29.6 and 49.6 \u2192 X = \u221240+29.6 = **\u221210.4** and \u221240+49.6 = **+9.6**; hole spacing = 49.6 \u2212 29.6 = 20.0.\n- Y: overall = 80 (same cylinder; right view shows 40 = half of 80).\n- Z: overall height = **20** (front view); counterbore depth 1.4 from top.\n\n**Features:**\n1. Base solid: cylinder \u230080 \u00d7 20.\n2. \"2\u00d7 \u23008.5 \u21931.4\": two counterbored holes at (\u221210.4, 0) and (+9.6, 0) \u2014 counterbore \u23008.5 \u00d7 1.4 deep from the top face; the through portion is the narrower hole shown in SECTION A\u2013A (\u22480.6 \u00d7 8.5 \u2192 \u23005 THRU).\n3. \"4 A/F\": two rectangular rim notches at the \u00b1X extremes, centred on Y=0, 4 mm wide (Y) \u00d7 2 mm deep (X, read from the top view and the section edge steps), full height.\nNo fillet/chamfer callouts \u2192 none added.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nD = 80.0              # mm  overall diameter (front view: \u230080)\nH = 20.0              # mm  overall height (front view: 20)\nR = D / 2             # mm  outer radius (right view half-dimension 40 confirms)\n\nhole_dia = 5.0        # mm  through-hole diameter (narrow hole in SECTION A-A)\ncbore_dia = 8.5       # mm  counterbore diameter (callout: 2x \u23008.5 \u21931.4)\ncbore_depth = 1.4     # mm  counterbore depth from top face\n\ndim_h1 = 29.6         # mm  left rim -> hole 1 centre (top view)\ndim_h2 = 49.6         # mm  left rim -> hole 2 centre (top view)\nhole1_x = -R + dim_h1   # = -10.4 mm\nhole2_x = -R + dim_h2   # = +9.6 mm  (spacing = 49.6 - 29.6 = 20.0)\n\nnotch_w = 4.0         # mm  rim notch width, \"4 A/F\" (top view)\nnotch_depth = 2.0     # mm  rim notch depth (top view / SECTION A-A end steps)\n\nwith BuildPart() as bp:\n    # main puck\n    Cylinder(radius=R, height=H, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # two rim notches at the +/-X extremes, centred on Y=0, full height\n    with Locations((R - notch_depth / 2, 0, H / 2),\n                   (-(R - notch_depth / 2), 0, H / 2)):\n        Box(notch_depth, notch_w, H, mode=Mode.SUBTRACT)\n\n    # two counterbored holes on the X axis (Y = 0)\n    with Locations((hole1_x, 0, 0), (hole2_x, 0, 0)):\n        Cylinder(radius=hole_dia / 2, height=H,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n        with Locations((0, 0, H - cbore_depth)):\n            Cylinder(radius=cbore_dia / 2, height=cbore_depth,\n                     align=(Align.CENTER, Align.CENTER, Align.MIN),\n                     mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     79.9,
+     79.96,
+     20.0
+    ],
+    "volume_mm3": 99264.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 16,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     4.25,
+     40.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 13.6,
+   "usage": {
+    "input_tokens": 7305,
+    "output_tokens": 2049
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0ce4f582-33c1-7837-0a74-2222ca00a711",
+  "ss_exec_ok": true,
+  "ss_iou": 0.9804,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9804,
+  "ag_final_cand": 1,
+  "best_iou": 0.9804,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 341.9,
+  "t_agentic_s": 359.1,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 25252
+  },
+  "total_tokens": {
+   "in": 11415,
+   "out": 27301
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.9804
+ }
+}

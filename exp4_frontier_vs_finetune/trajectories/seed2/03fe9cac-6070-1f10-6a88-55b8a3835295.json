@@ -1,0 +1,78 @@
+{
+ "uid": "03fe9cac-6070-1f10-6a88-55b8a3835295",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2522.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 23707
+   },
+   "plan": "**Views identified:** Top view (upper left), Front view (below it), Right view (right of front), plus ISO (NTS).\n\n**Reading the views:**\n- **Top view (XY):** A \u230020 circle (vertical post) at left; a long rectangle (horizontal pipe seen from above) running to the right; an olive square (base plate) under the post; a small circle on the pipe centreline = the \"\u23004 THRU\" callout (a *vertical* through-hole in the pipe). Dimensions: \"30\" from the post's left tangent to the \u23004 hole centre; \"70\" from the post's left tangent to the pipe's free end.\n- **Front view (XZ):** Post = rectangle 20 wide \u00d7 80 tall; pipe = horizontal rectangle whose left end shows the pointed cylinder-intersection convention; hidden (dashed) lines just right of the junction = the \u23004 hole; olive base plate at bottom, wider than the post. Two vertical dimension lines both read 80 \u2192 post height = overall height = 80 (post passes through the thin plate to z=0, matching the dashed bottom ellipse in the ISO).\n- **Right view (YZ):** Post = rectangle 20 wide; pipe seen end-on as a circle; base plate at bottom dimensioned 30 wide (Y); the \"15\" dimension spans the circle \u2192 pipe OD = 15; dashed vertical lines inside the circle = the hidden \u23004 hole. Height 80 confirmed.\n\n**Chains / arithmetic:**\n- Z: overall = 80 (given directly, twice).\n- X: hole at 30 \u2212 10 (post radius) = 20 mm from post axis; pipe end at 70 \u2212 10 = 60 mm from post axis.\n- Y: plate = 30 (given); post = 20; pipe = 15.\n- Undimensioned (scaled from the 1:1 orthographic views): plate = 30 \u00d7 30 \u00d7 5 thick, centred on post axis; pipe centreline at mid-height z = 40.\n\n**Feature list:**\n1. Vertical post: \u230020 \u00d7 80, axis at origin, z = 0\u202680.\n2. Base plate: 30 (X) \u00d7 30 (Y) \u00d7 5, centred on post axis, z = 0\u20265.\n3. Horizontal pipe: \u230015, axis along +X at y=0, z=40, from x=0 (embedded in post) to x=60.\n4. Through-hole: \u23004, vertical (Z), at (x=20, y=0), through the pipe.\nNo fillets/chamfers are dimensioned \u2192 none added.",
+   "text": "<plan>\n**Views identified:** Top view (upper left), Front view (below it), Right view (right of front), plus ISO (NTS).\n\n**Reading the views:**\n- **Top view (XY):** A \u230020 circle (vertical post) at left; a long rectangle (horizontal pipe seen from above) running to the right; an olive square (base plate) under the post; a small circle on the pipe centreline = the \"\u23004 THRU\" callout (a *vertical* through-hole in the pipe). Dimensions: \"30\" from the post's left tangent to the \u23004 hole centre; \"70\" from the post's left tangent to the pipe's free end.\n- **Front view (XZ):** Post = rectangle 20 wide \u00d7 80 tall; pipe = horizontal rectangle whose left end shows the pointed cylinder-intersection convention; hidden (dashed) lines just right of the junction = the \u23004 hole; olive base plate at bottom, wider than the post. Two vertical dimension lines both read 80 \u2192 post height = overall height = 80 (post passes through the thin plate to z=0, matching the dashed bottom ellipse in the ISO).\n- **Right view (YZ):** Post = rectangle 20 wide; pipe seen end-on as a circle; base plate at bottom dimensioned 30 wide (Y); the \"15\" dimension spans the circle \u2192 pipe OD = 15; dashed vertical lines inside the circle = the hidden \u23004 hole. Height 80 confirmed.\n\n**Chains / arithmetic:**\n- Z: overall = 80 (given directly, twice).\n- X: hole at 30 \u2212 10 (post radius) = 20 mm from post axis; pipe end at 70 \u2212 10 = 60 mm from post axis.\n- Y: plate = 30 (given); post = 20; pipe = 15.\n- Undimensioned (scaled from the 1:1 orthographic views): plate = 30 \u00d7 30 \u00d7 5 thick, centred on post axis; pipe centreline at mid-height z = 40.\n\n**Feature list:**\n1. Vertical post: \u230020 \u00d7 80, axis at origin, z = 0\u202680.\n2. Base plate: 30 (X) \u00d7 30 (Y) \u00d7 5, centred on post axis, z = 0\u20265.\n3. Horizontal pipe: \u230015, axis along +X at y=0, z=40, from x=0 (embedded in post) to x=60.\n4. Through-hole: \u23004, vertical (Z), at (x=20, y=0), through the pipe.\nNo fillets/chamfers are dimensioned \u2192 none added.\n</plan>\n\n```python\nfrom build123d import *\n\n# ================= dimensions from the drawing =================\npost_dia   = 20.0   # mm  vertical post diameter          (\u230020 callout, top view)\noverall_h  = 80.0   # mm  overall height                  (80 dims, front & right views)\npipe_dia   = 15.0   # mm  horizontal pipe diameter        (15 dim, right view)\npipe_reach = 70.0   # mm  pipe free end from post left tangent (70 dim, top view)\nhole_dia   = 4.0    # mm  vertical through-hole in pipe   (\u23004 THRU callout, top view)\nhole_off   = 30.0   # mm  hole centre from post left tangent   (30 dim, top view)\nplate_y    = 30.0   # mm  base plate width  (Y)           (30 dim, right view)\nplate_x    = 30.0   # mm  base plate length (X)           (scaled from views: square plate)\nplate_t    = 5.0    # mm  base plate thickness            (scaled from views)\npipe_z     = 40.0   # mm  pipe centreline height          (mid height, scaled from views)\n\n# ================= derived values =================\npost_r = post_dia / 2.0\npipe_r = pipe_dia / 2.0\nhole_r = hole_dia / 2.0\npipe_end_x = pipe_reach - post_r      # 70 - 10 = 60 mm from post axis\nhole_x     = hole_off   - post_r      # 30 - 10 = 20 mm from post axis\nhole_z0    = pipe_z - pipe_r - 5.0    # start below pipe bottom\nhole_depth = 2.0 * pipe_r + 10.0      # pass fully through the pipe\n\nwith BuildPart() as bp:\n    # vertical post, axis on origin, base at z = 0\n    Cylinder(radius=post_r, height=overall_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # base plate centred on the post axis\n    Box(plate_x, plate_y, plate_t,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # horizontal pipe along +X, centreline at y = 0, z = pipe_z\n    with Locations(Pos(0, 0, pipe_z) * Rot(0, 90, 0)):\n        Cylinder(radius=pipe_r, height=pipe_end_x,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN))\n    # \u23004 vertical through-hole in the pipe\n    with Locations((hole_x, 0, hole_z0)):\n        Cylinder(radius=hole_r, height=hole_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     75.0,
+     30.0,
+     80.0
+    ],
+    "volume_mm3": 36776.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 11,
+    "n_planar_faces": 8,
+    "n_cylindrical_faces": 3,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     7.5,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 223.0,
+   "usage": {
+    "input_tokens": 8361,
+    "output_tokens": 7460
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "03fe9cac-6070-1f10-6a88-55b8a3835295",
+  "ss_exec_ok": true,
+  "ss_iou": 0.6627,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6627,
+  "ag_final_cand": 1,
+  "best_iou": 0.6627,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 2525.7,
+  "t_agentic_s": 2753.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 23707
+  },
+  "total_tokens": {
+   "in": 12471,
+   "out": 31167
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.6627
+ }
+}

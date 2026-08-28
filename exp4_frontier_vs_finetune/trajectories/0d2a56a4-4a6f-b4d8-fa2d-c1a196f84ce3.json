@@ -1,0 +1,78 @@
+{
+ "uid": "0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1631.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 27453
+   },
+   "plan": "Views: TOP (XY) upper-left; FRONT (XZ) below it; RIGHT (YZ) to the right of front; ISO (NTS) confirms a base plate with two raised longitudinal ribs forming a central channel.\n\nX axis (from TOP/FRONT): overall = 80 (given). Chain: pad starts at 15.8, pad length 48.4 \u2192 pad ends 15.8+48.4 = 64.2; pad center = 15.8 + 48.4/2 = 40 (matches the \"40\" dim); \u23008 hole center at 70 (matches \"70\"); right end 80. So raised feature X\u2208[15.8, 64.2].\n\nY axis (from RIGHT/TOP): overall = 30 (RIGHT view). Raised band = 14 (from \"14 \u00d7 48.4\"), central channel = 6 (the \"6\" dim) \u2192 each rib = (14\u22126)/2 = 4; outer margins = (30\u221214)/2 = 8. Check: 8+4+6+4+8 = 30. Band centered \u2192 ribs at Y\u2208[3,7] and [\u22127,\u22123], channel Y\u2208[\u22123,3].\n\nZ axis (from FRONT/RIGHT): overall = 14; raised ribs stand 4 above the base (\"\u2026\u00d7 4 DEEP\", channel cut through the 4\u2011tall ribs) \u2192 base = 14\u22124 = 10; 2\u00d7\u23004 hole centerline at z = 5 (the \"5\" dim). RIGHT view (base tall, two small top bumps) and FRONT view (raised middle X\u2208[15.8,64.2]) both confirm base=10, ribs=4.\n\nFeatures: base 80\u00d730\u00d710; two ribs 48.4(X)\u00d74(Y)\u00d74(Z) on top (z 10\u219214) leaving a 6\u2011wide channel; \u23008 THRU (vertical) at (70, 0); 2\u00d7 \u23004 THRU along Y at (x=12, z=5) and (x=37, z=5); C1 chamfers on the left end top & bottom edges (two callouts); R0.8 on the raised\u2011rib corners.",
+   "text": "<plan>\nViews: TOP (XY) upper-left; FRONT (XZ) below it; RIGHT (YZ) to the right of front; ISO (NTS) confirms a base plate with two raised longitudinal ribs forming a central channel.\n\nX axis (from TOP/FRONT): overall = 80 (given). Chain: pad starts at 15.8, pad length 48.4 \u2192 pad ends 15.8+48.4 = 64.2; pad center = 15.8 + 48.4/2 = 40 (matches the \"40\" dim); \u23008 hole center at 70 (matches \"70\"); right end 80. So raised feature X\u2208[15.8, 64.2].\n\nY axis (from RIGHT/TOP): overall = 30 (RIGHT view). Raised band = 14 (from \"14 \u00d7 48.4\"), central channel = 6 (the \"6\" dim) \u2192 each rib = (14\u22126)/2 = 4; outer margins = (30\u221214)/2 = 8. Check: 8+4+6+4+8 = 30. Band centered \u2192 ribs at Y\u2208[3,7] and [\u22127,\u22123], channel Y\u2208[\u22123,3].\n\nZ axis (from FRONT/RIGHT): overall = 14; raised ribs stand 4 above the base (\"\u2026\u00d7 4 DEEP\", channel cut through the 4\u2011tall ribs) \u2192 base = 14\u22124 = 10; 2\u00d7\u23004 hole centerline at z = 5 (the \"5\" dim). RIGHT view (base tall, two small top bumps) and FRONT view (raised middle X\u2208[15.8,64.2]) both confirm base=10, ribs=4.\n\nFeatures: base 80\u00d730\u00d710; two ribs 48.4(X)\u00d74(Y)\u00d74(Z) on top (z 10\u219214) leaving a 6\u2011wide channel; \u23008 THRU (vertical) at (70, 0); 2\u00d7 \u23004 THRU along Y at (x=12, z=5) and (x=37, z=5); C1 chamfers on the left end top & bottom edges (two callouts); R0.8 on the raised\u2011rib corners.\n</plan>\n```python\nfrom build123d import *\n\n# ---------------- named dimensions (mm) ----------------\nL        = 80.0    # mm  overall length (X), TOP/FRONT\nW        = 30.0    # mm  overall width  (Y), RIGHT view\nH_total  = 14.0    # mm  overall height (Z), FRONT/RIGHT\nrib_h    = 4.0     # mm  raised rib height (\"14 x 48.4 x 4 DEEP\" -> ribs stand 4 proud)\nH_base   = H_total - rib_h   # mm  base thickness = 10\nhole4_z  = 5.0     # mm  centre height of the 2x dia-4 through holes\n\npad_x0   = 15.8    # mm  raised pad start from left end (X)\npad_len  = 48.4    # mm  raised pad length (X) -> ends 64.2, centre = 40\nband_w   = 14.0    # mm  raised band width (Y)\nslot_w   = 6.0     # mm  central channel width (Y)\nrib_w    = (band_w - slot_w) / 2.0      # mm  each rib width = 4\nrib_y    = (slot_w + rib_w) / 2.0       # mm  rib centre |y| = 5 (ribs span y +/-[3..7])\n\nd8       = 8.0     # mm  dia-8 through hole (vertical)\nd8_x     = 70.0    # mm  dia-8 hole centre X (y = 0, centred)\nd4       = 4.0     # mm  dia-4 through holes (along Y)\nd4_x1    = 12.0    # mm  first dia-4 hole X\nd4_x2    = 37.0    # mm  second dia-4 hole X\n\nend_cham = 1.0     # mm  C1 chamfers on the left end (top & bottom edges)\ncorner_r = 0.8     # mm  R0.8 on raised-feature corners\n\nwith BuildPart() as bp:\n    # base plate: X 0..80, Y -15..15, Z 0..10\n    Box(L, W, H_base, align=(Align.MIN, Align.CENTER, Align.MIN))\n\n    # two raised ribs on top of the base (Z 10..14), central 6-wide channel between them\n    for ys in (+rib_y, -rib_y):\n        with Locations((pad_x0, ys, H_base)):\n            Box(pad_len, rib_w, rib_h,\n                align=(Align.MIN, Align.CENTER, Align.MIN))\n\n    # dia-8 THRU (vertical) at (70, 0)\n    with Locations((d8_x, 0.0, 0.0)):\n        Cylinder(d8 / 2, H_total,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # 2x dia-4 THRU along Y at z = 5\n    for xh in (d4_x1, d4_x2):\n        with Locations(Pos(xh, 0.0, hole4_z) * Rot(X=90)):\n            Cylinder(d4 / 2, W + 4.0,\n                     align=(Align.CENTER, Align.CENTER, Align.CENTER),\n                     mode=Mode.SUBTRACT)\n\npart = bp.part\n\n# R0.8 fillets on the raised-rib vertical corners (edges with centre z between base top and rib top)\nrib_edges = [e for e in part.edges()\n             if (H_base + 0.1) < e.center().Z < (H_total - 0.1)\n             and (pad_x0 - 1e-6) <= e.center().X <= (pad_x0 + pad_len + 1e-6)\n             and abs(e.center().Y) <= (band_w / 2 + 1e-6)]\npart = fillet(rib_edges, radius=corner_r)\n\n# C1 chamfers on the left end (x = 0) top and bottom edges (the two edges parallel to Y)\nleft_face = part.faces().sort_by(Axis.X)[0]\ncham_edges = [e for e in left_face.edges() if abs(e.center().Y) < 1e-6]\npart = chamfer(cham_edges, length=end_cham)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     30.0,
+     14.0
+    ],
+    "volume_mm3": 24261.1,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 29,
+    "n_planar_faces": 18,
+    "n_cylindrical_faces": 11,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     0.8,
+     2.0,
+     4.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.7,
+   "usage": {
+    "input_tokens": 7426,
+    "output_tokens": 1449
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0d2a56a4-4a6f-b4d8-fa2d-c1a196f84ce3",
+  "ss_exec_ok": true,
+  "ss_iou": 0.7652,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7652,
+  "ag_final_cand": 1,
+  "best_iou": 0.7652,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 1634.4,
+  "t_agentic_s": 1649.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 27453
+  },
+  "total_tokens": {
+   "in": 11536,
+   "out": 28902
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.7652
+ }
+}

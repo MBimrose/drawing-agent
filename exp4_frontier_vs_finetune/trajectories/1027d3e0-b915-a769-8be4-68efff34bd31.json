@@ -1,0 +1,74 @@
+{
+ "uid": "1027d3e0-b915-a769-8be4-68efff34bd31",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 18.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 2980
+   },
+   "plan": "**Views identified:**\n- TOP view (upper left): rectangle 80 long (X) \u00d7 8 deep (Y). Inside is a dashed rectangle inset ~2 mm from all four sides \u2014 hidden edges of a feature on the bottom face.\n- FRONT view (below top): rectangle 80 (X) \u00d7 40 (Z). A thin visible line runs along the bottom (top edge of a chamfer band), and \"C2\" leaders point to both bottom corners.\n- RIGHT view (right of front): narrow rectangle 8 wide (Y) \u00d7 40 tall (Z), with a visible 45\u00b0 cut at the bottom corners and \"C2\" leaders pointing to them.\n- ISO view: flat plate standing on edge, bottom perimeter beveled \u2014 consistent with a C2 chamfer around all four bottom edges.\n\n**Dimension chains:**\n- X: overall = 80 (given directly).\n- Z: overall = 40 (given directly).\n- Y: overall = 8 (given directly).\nNo component chains needed.\n\n**Feature list:**\n1. Base plate: 80 (X) \u00d7 8 (Y) \u00d7 40 (Z).\n2. C2 (45\u00b0 \u00d7 2 mm) chamfer on all four bottom perimeter edges. This produces: the dashed inset rectangle in the top view (bottom face shrinks to 76 \u00d7 4, hidden from above), the chamfer band line in the front view, and the corner cuts in the front/right views. No holes, no fillets.\n\n**Construction:** one Box, then chamfer the four edges of the bottom (-Z) face with length 2.",
+   "text": "<plan>\n**Views identified:**\n- TOP view (upper left): rectangle 80 long (X) \u00d7 8 deep (Y). Inside is a dashed rectangle inset ~2 mm from all four sides \u2014 hidden edges of a feature on the bottom face.\n- FRONT view (below top): rectangle 80 (X) \u00d7 40 (Z). A thin visible line runs along the bottom (top edge of a chamfer band), and \"C2\" leaders point to both bottom corners.\n- RIGHT view (right of front): narrow rectangle 8 wide (Y) \u00d7 40 tall (Z), with a visible 45\u00b0 cut at the bottom corners and \"C2\" leaders pointing to them.\n- ISO view: flat plate standing on edge, bottom perimeter beveled \u2014 consistent with a C2 chamfer around all four bottom edges.\n\n**Dimension chains:**\n- X: overall = 80 (given directly).\n- Z: overall = 40 (given directly).\n- Y: overall = 8 (given directly).\nNo component chains needed.\n\n**Feature list:**\n1. Base plate: 80 (X) \u00d7 8 (Y) \u00d7 40 (Z).\n2. C2 (45\u00b0 \u00d7 2 mm) chamfer on all four bottom perimeter edges. This produces: the dashed inset rectangle in the top view (bottom face shrinks to 76 \u00d7 4, hidden from above), the chamfer band line in the front view, and the corner cuts in the front/right views. No holes, no fillets.\n\n**Construction:** one Box, then chamfer the four edges of the bottom (-Z) face with length 2.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nL  = 80  # mm \u2014 overall length (X), from top/front views\nT  = 8   # mm \u2014 overall thickness (Y), from right side view\nH  = 40  # mm \u2014 overall height (Z), from front/right views\nC2 = 2   # mm \u2014 45\u00b0 chamfer called out \"C2\" on all bottom perimeter edges\n\nwith BuildPart() as bp:\n    # Base plate centered on origin (orientation: X = length, Y = thickness, Z = height)\n    Box(L, T, H)\n\n    # C2 chamfer around the entire bottom edge perimeter\n    bottom_face = bp.faces().sort_by(Axis.Z)[0]\n    chamfer(bottom_face.edges(), length=C2)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     8.0,
+     40.0
+    ],
+    "volume_mm3": 25258.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 10,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.1,
+   "usage": {
+    "input_tokens": 6713,
+    "output_tokens": 524
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "1027d3e0-b915-a769-8be4-68efff34bd31",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 21.2,
+  "t_agentic_s": 28.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 2980
+  },
+  "total_tokens": {
+   "in": 10823,
+   "out": 3504
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

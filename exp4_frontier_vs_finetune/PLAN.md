@@ -72,3 +72,9 @@ harness-vs-fine-tuning on this task?
   unsolved part (05f14712: 0.890 vs 0.000); max(kimi_ag, champ_dep) = 0.919 ≈ champ
   oracle ceiling; on 18 champ-hard parts Kimi passes the 0.8 STaR gate on 6.
 - seed2 variance probe (24 parts, independent run) + last errored part in flight.
+- **DONE 2026-08-28: 96/96 + seed2 24/24 scored, 0 errors. Final: kimi ss 0.549 /
+  agentic 0.724 vs champ 0.787 greedy / 0.876 deployed / 0.922 oracle — fine-tune wins
+  its home benchmark decisively; Kimi+loop beats deployed on the champ-hard bucket
+  (0.612 vs 0.560), solves the champion's only unsolved part, and max(kimi, champ) =
+  0.919 ≈ oracle ceiling. RESULTS.md has the full verdict; 45+15 accepted
+  trajectories under trajectories/.**

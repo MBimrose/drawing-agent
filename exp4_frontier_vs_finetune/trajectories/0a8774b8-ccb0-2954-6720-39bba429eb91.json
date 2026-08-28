@@ -1,0 +1,90 @@
+{
+ "uid": "0a8774b8-ccb0-2954-6720-39bba429eb91",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 70.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11028
+   },
+   "plan": "**Views:** The large upper-left view is the TOP view (XY). The thin strip below it is the FRONT view (XZ, 80 \u00d7 8). The thin strip to its right is the RIGHT view (YZ, 60 \u00d7 8). ISO confirms a flat plate with chamfered vertical corners, 4 large corner holes and a 6-hole cluster on the right.\n\n**Dimension chains:**\n- X (top/front): overall = 80. Hole columns: 10 (\u23005 left col), 50 (\u23004 first col), 70 = 80\u221210 (\u23005 right col), 2\u00d712 pitch \u2192 \u23004 cols at 50, 62, 74.\n- Y (top/right): overall = 60. Hole rows: 10 (\u23005 front row), 40 (\u23004 first row), 50 = 60\u221210 (\u23005 back row), 1\u00d712 pitch \u2192 \u23004 rows at 40, 52.\n- Z: thickness = 8.\n\n**Features:**\n- Plate 80 \u00d7 60 \u00d7 8.\n- C2 chamfer (called out at all four corners of the top view) on the four vertical corner edges.\n- 4\u00d7 \u23005 THRU at (10,10), (70,10), (10,50), (70,50) \u2014 10 mm from each edge.\n- 6\u00d7 \u23004 THRU in 2\u00d73 array: columns x = 50, 62, 74; rows y = 40, 52.",
+   "text": "<plan>\n**Views:** The large upper-left view is the TOP view (XY). The thin strip below it is the FRONT view (XZ, 80 \u00d7 8). The thin strip to its right is the RIGHT view (YZ, 60 \u00d7 8). ISO confirms a flat plate with chamfered vertical corners, 4 large corner holes and a 6-hole cluster on the right.\n\n**Dimension chains:**\n- X (top/front): overall = 80. Hole columns: 10 (\u23005 left col), 50 (\u23004 first col), 70 = 80\u221210 (\u23005 right col), 2\u00d712 pitch \u2192 \u23004 cols at 50, 62, 74.\n- Y (top/right): overall = 60. Hole rows: 10 (\u23005 front row), 40 (\u23004 first row), 50 = 60\u221210 (\u23005 back row), 1\u00d712 pitch \u2192 \u23004 rows at 40, 52.\n- Z: thickness = 8.\n\n**Features:**\n- Plate 80 \u00d7 60 \u00d7 8.\n- C2 chamfer (called out at all four corners of the top view) on the four vertical corner edges.\n- 4\u00d7 \u23005 THRU at (10,10), (70,10), (10,50), (70,50) \u2014 10 mm from each edge.\n- 6\u00d7 \u23004 THRU in 2\u00d73 array: columns x = 50, 62, 74; rows y = 40, 52.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- Dimensions read from the drawing ----------\nplate_L = 80        # mm  overall length (X) - top & front views\nplate_W = 60        # mm  overall width  (Y) - top & right views\nplate_T = 8         # mm  thickness (Z) - front & right views\ncorner_chamfer = 2  # mm  C2 chamfer on the four vertical corner edges\n\n# 4x dia5 THRU corner holes, 10 mm from each edge\nh5_dia = 5          # mm\nh5_off = 10         # mm  edge offset (dims 10, 70=80-10, 50=60-10)\n\n# 6x dia4 THRU holes in a 2x3 array\nh4_dia = 4          # mm\nh4_x0 = 50          # mm  first column from left edge (dim 50)\nh4_dx = 12          # mm  column pitch (dim 2x12) -> x = 50, 62, 74\nh4_y0 = 40          # mm  first row from front edge (dim 40)\nh4_dy = 12          # mm  row pitch (dim 1x12) -> y = 40, 52\n\n# ---------- Derived hole positions (part centered on origin) ----------\npts5 = [(x, y)\n        for x in (-plate_L/2 + h5_off, plate_L/2 - h5_off)\n        for y in (-plate_W/2 + h5_off, plate_W/2 - h5_off)]\n\npts4 = [(h4_x0 + i * h4_dx - plate_L/2,\n         h4_y0 + j * h4_dy - plate_W/2)\n        for i in range(3) for j in range(2)]\n\n# ---------- Build ----------\nwith BuildPart() as part:\n    with BuildSketch():\n        Rectangle(plate_L, plate_W)\n        with Locations(pts5):\n            Circle(h5_dia / 2, mode=Mode.SUBTRACT)   # 4x dia5 THRU\n        with Locations(pts4):\n            Circle(h4_dia / 2, mode=Mode.SUBTRACT)   # 6x dia4 THRU (2x3)\n    extrude(amount=plate_T)\n    # C2 chamfer on the four vertical corner edges\n    chamfer(part.edges().filter_by(Axis.Z), length=corner_chamfer)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.0,
+   "usage": {
+    "input_tokens": 5326,
+    "output_tokens": 974
+   },
+   "plan": "Reading unchanged: plate 80 \u00d7 60 \u00d7 8; C2 chamfers on the four vertical corner edges; 4\u00d7 \u23005 THRU at 10 mm from each edge \u2014 (10,10), (70,10), (10,50), (70,50); 6\u00d7 \u23004 THRU in a 2\u00d73 array at x = 50, 62, 74 (pitch 12) and y = 40, 52 (pitch 12).\n\nFix: the previous script passed the `BuildPart` builder itself to `export_step`; the builder's solid must be extracted via `.part`. The builder is now named `bp`, and the finished solid is bound to `part` before export.",
+   "text": "<plan>\nReading unchanged: plate 80 \u00d7 60 \u00d7 8; C2 chamfers on the four vertical corner edges; 4\u00d7 \u23005 THRU at 10 mm from each edge \u2014 (10,10), (70,10), (10,50), (70,50); 6\u00d7 \u23004 THRU in a 2\u00d73 array at x = 50, 62, 74 (pitch 12) and y = 40, 52 (pitch 12).\n\nFix: the previous script passed the `BuildPart` builder itself to `export_step`; the builder's solid must be extracted via `.part`. The builder is now named `bp`, and the finished solid is bound to `part` before export.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- Dimensions read from the drawing ----------\nplate_L = 80        # mm  overall length (X) - top & front views\nplate_W = 60        # mm  overall width  (Y) - top & right views\nplate_T = 8         # mm  thickness (Z) - front & right views\ncorner_chamfer = 2  # mm  C2 chamfer on the four vertical corner edges\n\n# 4x dia5 THRU corner holes, 10 mm from each edge\nh5_dia = 5          # mm\nh5_off = 10         # mm  edge offset (dims 10, 70=80-10, 50=60-10)\n\n# 6x dia4 THRU holes in a 2x3 array\nh4_dia = 4          # mm\nh4_x0 = 50          # mm  first column from left edge (dim 50)\nh4_dx = 12          # mm  column pitch (dim 2x12) -> x = 50, 62, 74\nh4_y0 = 40          # mm  first row from front edge (dim 40)\nh4_dy = 12          # mm  row pitch (dim 1x12) -> y = 40, 52\n\n# ---------- Derived hole positions (part centered on origin) ----------\npts5 = [(x, y)\n        for x in (-plate_L/2 + h5_off, plate_L/2 - h5_off)\n        for y in (-plate_W/2 + h5_off, plate_W/2 - h5_off)]\n\npts4 = [(h4_x0 + i * h4_dx - plate_L/2,\n         h4_y0 + j * h4_dy - plate_W/2)\n        for i in range(3) for j in range(2)]\n\n# ---------- Build ----------\nwith BuildPart() as bp:\n    with BuildSketch():\n        Rectangle(plate_L, plate_W)\n        with Locations(pts5):\n            Circle(h5_dia / 2, mode=Mode.SUBTRACT)   # 4x dia5 THRU\n        with Locations(pts4):\n            Circle(h4_dia / 2, mode=Mode.SUBTRACT)   # 6x dia4 THRU (2x3)\n    extrude(amount=plate_T)\n    # C2 chamfer on the four vertical corner edges\n    chamfer(bp.edges().filter_by(Axis.Z), length=corner_chamfer)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     8.0
+    ],
+    "volume_mm3": 37088.5,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 22,
+    "n_planar_faces": 10,
+    "n_cylindrical_faces": 10,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 15.0,
+   "usage": {
+    "input_tokens": 7920,
+    "output_tokens": 1950
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0a8774b8-ccb0-2954-6720-39bba429eb91",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9995,
+  "ag_final_cand": 2,
+  "best_iou": 0.9995,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 74.1,
+  "t_agentic_s": 100.6,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11028
+  },
+  "total_tokens": {
+   "in": 17356,
+   "out": 13952
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.9995
+ }
+}

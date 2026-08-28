@@ -1,0 +1,74 @@
+{
+ "uid": "0120e88c-df7c-c3a2-4533-3b9d33302e59",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 120.7,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17187
+   },
+   "plan": "**Views identified:** Upper-left = TOP view (XY, slot visible on top face); lower-left = FRONT view (XZ, slot shown hidden/dashed); view to its right = RIGHT view (YZ); ISO confirms a flat plate with a small blind slot on the top face near the back edge.\n\n**Dimension chains (all axes have direct overalls \u2014 no chains to sum):**\n- X: overall 80 (top & front views agree)\n- Y: overall 60 (right view)\n- Z: overall 5 (front/right views)\n\n**Features:**\n1. Base plate 80 (X) \u00d7 60 (Y) \u00d7 5 (Z).\n2. Blind slot on top face, callout \"2 \u00d7 20 \u00d7 2.5 DEEP\": 20 long (X) \u00d7 2 wide (Y) \u00d7 2.5 deep from the top surface (floor at Z = 2.5). Position: center at X = 40 (dimensioned from left edge in top view), center at Y = 52.5 (dimensioned from front edge in right view). Hidden lines in front/right views confirm it is a blind interior pocket, not through, not breaking any edge.\n3. Chamfers: exactly four \"C1\" notes \u2014 two in the top view at the two front corners (vertical edges at X=0/Y=0 and X=80/Y=0) and two in the front view at the left end (top-front edge at Z=5/Y=0 and bottom-front edge at Z=0/Y=0). Together these are the four edges of the front face (Y=0) perimeter, chamfered 1 mm \u00d7 45\u00b0. No other chamfers/fillets are called out.\n\n**Construction:** Box (MIN-aligned at origin) \u2192 subtract a 20\u00d72\u00d72.5 box at (40, 52.5) from the top \u2192 select the four edges with center Y = 0 and apply C1 chamfer.",
+   "text": "<plan>\n**Views identified:** Upper-left = TOP view (XY, slot visible on top face); lower-left = FRONT view (XZ, slot shown hidden/dashed); view to its right = RIGHT view (YZ); ISO confirms a flat plate with a small blind slot on the top face near the back edge.\n\n**Dimension chains (all axes have direct overalls \u2014 no chains to sum):**\n- X: overall 80 (top & front views agree)\n- Y: overall 60 (right view)\n- Z: overall 5 (front/right views)\n\n**Features:**\n1. Base plate 80 (X) \u00d7 60 (Y) \u00d7 5 (Z).\n2. Blind slot on top face, callout \"2 \u00d7 20 \u00d7 2.5 DEEP\": 20 long (X) \u00d7 2 wide (Y) \u00d7 2.5 deep from the top surface (floor at Z = 2.5). Position: center at X = 40 (dimensioned from left edge in top view), center at Y = 52.5 (dimensioned from front edge in right view). Hidden lines in front/right views confirm it is a blind interior pocket, not through, not breaking any edge.\n3. Chamfers: exactly four \"C1\" notes \u2014 two in the top view at the two front corners (vertical edges at X=0/Y=0 and X=80/Y=0) and two in the front view at the left end (top-front edge at Z=5/Y=0 and bottom-front edge at Z=0/Y=0). Together these are the four edges of the front face (Y=0) perimeter, chamfered 1 mm \u00d7 45\u00b0. No other chamfers/fillets are called out.\n\n**Construction:** Box (MIN-aligned at origin) \u2192 subtract a 20\u00d72\u00d72.5 box at (40, 52.5) from the top \u2192 select the four edges with center Y = 0 and apply C1 chamfer.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------- dimensions read from the drawing ----------\nplate_L = 80.0   # mm \u2014 overall length (X), top & front views\nplate_W = 60.0   # mm \u2014 overall width (Y), right view\nplate_T = 5.0    # mm \u2014 overall thickness (Z), front & right views\n\nslot_l = 20.0    # mm \u2014 slot length (X), callout \"2 x 20 x 2.5 DEEP\"\nslot_w = 2.0     # mm \u2014 slot width (Y)\nslot_d = 2.5     # mm \u2014 slot depth from top face (blind)\nslot_x = 40.0    # mm \u2014 slot centre from left edge (top view)\nslot_y = 52.5    # mm \u2014 slot centre from front edge (right view)\n\nc1 = 1.0         # mm \u2014 C1 (45\u00b0) chamfer on the four edges of the front face\n\nwith BuildPart() as bp:\n    # base plate: X 0..80, Y 0..60, Z 0..5\n    Box(plate_L, plate_W, plate_T, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # blind slot milled into the top face (Z from plate_T-slot_d to plate_T)\n    with Locations((slot_x, slot_y, plate_T)):\n        Box(slot_l, slot_w, slot_d,\n            align=(Align.CENTER, Align.CENTER, Align.MAX),\n            mode=Mode.SUBTRACT)\n\n    # C1 chamfer on the front-face perimeter (the four edges lying at Y = 0)\n    front_edges = [e for e in bp.edges() if abs(e.center().Y) < 1e-6]\n    chamfer(front_edges, c1)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     5.0
+    ],
+    "volume_mm3": 23816.3,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 15,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.8,
+   "usage": {
+    "input_tokens": 6803,
+    "output_tokens": 1397
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0120e88c-df7c-c3a2-4533-3b9d33302e59",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 123.3,
+  "t_agentic_s": 137.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17187
+  },
+  "total_tokens": {
+   "in": 10913,
+   "out": 18584
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

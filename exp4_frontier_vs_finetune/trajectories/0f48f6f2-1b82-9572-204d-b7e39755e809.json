@@ -1,0 +1,74 @@
+{
+ "uid": "0f48f6f2-1b82-9572-204d-b7e39755e809",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 242.4,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 9823
+   },
+   "plan": "Views (third\u2011angle): upper\u2011left = TOP (plan), lower\u2011left = FRONT, right of front = RIGHT side; ISO confirms an open\u2011top rectangular tray.\n\nAxis chains / cross\u2011checks:\n- X (length): TOP shows overall 80; FRONT width matches = 80 (overall).\n- Y (depth): RIGHT shows overall 50; TOP depth matches = 50 (overall).\n- Z (height): RIGHT shows overall 30; FRONT shares this height = 30 (overall). FRONT gives one component: from the bottom up to the hidden cavity floor = 13, so the solid base is 13 thick and the top pocket depth = 30 \u2212 13 = 17.\n- Wall thickness = 3, given three times (RIGHT top \"3\" = side\u2011wall thickness in Y; FRONT bottom \"3\" at left end and \"3\" at right end = end\u2011wall thickness in X). So the top opening is inset 3 on every side: (80\u22122\u00b73) \u00d7 (50\u22122\u00b73) = 74 \u00d7 44, cut from Z=13 to Z=30.\n- C2 callouts point to the top outer rim corners (plan corners stay sharp, so the vertical corner edges are not chamfered). Apply a 2 mm 45\u00b0 chamfer to the four top outer perimeter edges only (done on the solid block before pocketing so the 3\u2011wide rim is not consumed: chamfer reach 2 < wall 3).\n\nFeature list: solid base 80\u00d750\u00d713; perimeter wall 3 thick rising to Z=30 (pocket 74\u00d744\u00d717 from the top); C2 chamfer on the top outer edge loop. No holes.",
+   "text": "<plan>\nViews (third\u2011angle): upper\u2011left = TOP (plan), lower\u2011left = FRONT, right of front = RIGHT side; ISO confirms an open\u2011top rectangular tray.\n\nAxis chains / cross\u2011checks:\n- X (length): TOP shows overall 80; FRONT width matches = 80 (overall).\n- Y (depth): RIGHT shows overall 50; TOP depth matches = 50 (overall).\n- Z (height): RIGHT shows overall 30; FRONT shares this height = 30 (overall). FRONT gives one component: from the bottom up to the hidden cavity floor = 13, so the solid base is 13 thick and the top pocket depth = 30 \u2212 13 = 17.\n- Wall thickness = 3, given three times (RIGHT top \"3\" = side\u2011wall thickness in Y; FRONT bottom \"3\" at left end and \"3\" at right end = end\u2011wall thickness in X). So the top opening is inset 3 on every side: (80\u22122\u00b73) \u00d7 (50\u22122\u00b73) = 74 \u00d7 44, cut from Z=13 to Z=30.\n- C2 callouts point to the top outer rim corners (plan corners stay sharp, so the vertical corner edges are not chamfered). Apply a 2 mm 45\u00b0 chamfer to the four top outer perimeter edges only (done on the solid block before pocketing so the 3\u2011wide rim is not consumed: chamfer reach 2 < wall 3).\n\nFeature list: solid base 80\u00d750\u00d713; perimeter wall 3 thick rising to Z=30 (pocket 74\u00d744\u00d717 from the top); C2 chamfer on the top outer edge loop. No holes.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL = 80        # mm  overall length (X), top & front views\nW = 50        # mm  overall depth  (Y), right view\nH = 30        # mm  overall height (Z), right view\nbase_h = 13   # mm  solid base height: bottom -> hidden cavity floor (front view)\nwall = 3      # mm  wall thickness (the three \"3\" callouts)\ncham = 2      # mm  C2 = 45 deg chamfer, 2 mm (top outer rim edges)\n\n# derived\npocket_d = H - base_h          # mm  pocket depth from top = 30 - 13 = 17\npocket_L = L - 2 * wall        # mm  pocket length = 74\npocket_W = W - 2 * wall        # mm  pocket width  = 44\n\nwith BuildPart() as bp:\n    # outer solid block, min corner at origin\n    Box(L, W, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # C2 chamfer on the four top outer perimeter edges (Z == H) only,\n    # done before pocketing so the 3 mm rim is not consumed (chamfer reach 2 < wall 3)\n    top_edges = [e for e in bp.edges() if abs(e.center().Z - H) < 1e-6]\n    chamfer(top_edges, length=cham)\n\n    # cut the top pocket: inset `wall` on all sides, floor at Z = base_h\n    with Locations((wall, wall, base_h)):\n        Box(pocket_L, pocket_W, pocket_d,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     50.0,
+     30.0
+    ],
+    "volume_mm3": 64138.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 15,
+    "n_planar_faces": 15,
+    "n_cylindrical_faces": 0,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.2,
+   "usage": {
+    "input_tokens": 7061,
+    "output_tokens": 539
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "0f48f6f2-1b82-9572-204d-b7e39755e809",
+  "ss_exec_ok": true,
+  "ss_iou": 0.83,
+  "ag_exec_ok": true,
+  "ag_iou": 0.83,
+  "ag_final_cand": 1,
+  "best_iou": 0.83,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 245.7,
+  "t_agentic_s": 253.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 9823
+  },
+  "total_tokens": {
+   "in": 11171,
+   "out": 10362
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.83
+ }
+}

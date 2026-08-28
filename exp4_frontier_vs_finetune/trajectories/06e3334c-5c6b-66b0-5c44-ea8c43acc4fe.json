@@ -1,0 +1,90 @@
+{
+ "uid": "06e3334c-5c6b-66b0-5c44-ea8c43acc4fe",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 701.8,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17467
+   },
+   "plan": "**Views identified:** Top-left = TOP (plan): triangle with vertical base edge on the left, apex pointing +X (right); section line A\u2013A through the hole centre. Below it = FRONT (XZ): thin full-width flange on top, inset body below, hidden (dashed) hole in the middle; overall height 13. To its right = RIGHT (YZ): overall width 94.3, with 47.1 to the boss centre (= 94.3/2 = 47.15, so boss is centred in Y). SECTION A\u2013A confirms: flange + inset body + central boss with blind hole. ISO shows a triangular cap: full-outline flange, recessed triangular body, cylindrical boss on the underside with the hole.\n\n**Dimension chains:**\n- X: overall = 81.6 (base edge \u2192 apex). Boss/hole centre at 27.5 from base edge.\n- Y: overall = 94.3 (equilateral check: 94.3\u00b7\u221a3/2 = 81.66 \u2248 81.6 \u2713); centre = 47.1.\n- Z: overall = 13. Hole \u230012 \u219310 from the boss (bottom) face \u21d2 13 \u2212 10 = 3 mm top flange remains; boss 3 + body 7 = 10 (hole stops exactly at the flange underside). Inferred from views: flange_t = 3, body_t = 7, boss_h = 3, boss \u230020 (4 mm wall on \u230012 hole), body inset 3 mm from flange outline.\n\n**Features:** equilateral-ish triangular flange (94.3 base \u00d7 81.6); inset triangular body (3 mm per side \u2192 vertices (3, \u00b141.95), (75.6, 0)); central boss \u230020 at (27.5, 0); blind hole \u230012 \u00d7 10 deep from the bottom.",
+   "text": "<plan>\n**Views identified:** Top-left = TOP (plan): triangle with vertical base edge on the left, apex pointing +X (right); section line A\u2013A through the hole centre. Below it = FRONT (XZ): thin full-width flange on top, inset body below, hidden (dashed) hole in the middle; overall height 13. To its right = RIGHT (YZ): overall width 94.3, with 47.1 to the boss centre (= 94.3/2 = 47.15, so boss is centred in Y). SECTION A\u2013A confirms: flange + inset body + central boss with blind hole. ISO shows a triangular cap: full-outline flange, recessed triangular body, cylindrical boss on the underside with the hole.\n\n**Dimension chains:**\n- X: overall = 81.6 (base edge \u2192 apex). Boss/hole centre at 27.5 from base edge.\n- Y: overall = 94.3 (equilateral check: 94.3\u00b7\u221a3/2 = 81.66 \u2248 81.6 \u2713); centre = 47.1.\n- Z: overall = 13. Hole \u230012 \u219310 from the boss (bottom) face \u21d2 13 \u2212 10 = 3 mm top flange remains; boss 3 + body 7 = 10 (hole stops exactly at the flange underside). Inferred from views: flange_t = 3, body_t = 7, boss_h = 3, boss \u230020 (4 mm wall on \u230012 hole), body inset 3 mm from flange outline.\n\n**Features:** equilateral-ish triangular flange (94.3 base \u00d7 81.6); inset triangular body (3 mm per side \u2192 vertices (3, \u00b141.95), (75.6, 0)); central boss \u230020 at (27.5, 0); blind hole \u230012 \u00d7 10 deep from the bottom.\n</plan>\n\n```python\nimport math\nfrom build123d import *\n\n# ===== Dimensions read from the drawing =====\ntri_base = 94.3        # mm  overall Y width (right view)\ntri_len = 81.6         # mm  base edge to apex, X (top view)\nboss_x = 27.5          # mm  boss/hole centre from base edge (top view)\nhole_dia = 12.0        # mm  hole callout \u230012\nhole_depth = 10.0      # mm  hole callout \u219310\nheight = 13.0          # mm  overall height (front view)\n\n# ===== Values inferred from view proportions (not directly dimensioned) =====\nflange_t = height - hole_depth          # mm  top flange = 3 (blind hole stops here)\nboss_h = 3.0                            # mm  boss height below body\nbody_t = height - flange_t - boss_h     # mm  mid body = 7\nboss_dia = 20.0                         # mm  boss OD (4 mm wall around \u230012 hole)\nwall = 3.0                              # mm  body inset from flange outline\n\nhalf_base = tri_base / 2                # 47.15 (right view: 47.1 to centre)\n\n# Inset (offset -wall) triangular body outline:\n# slanted edge line: half_base*x + tri_len*y = half_base*tri_len\nslant = math.hypot(half_base, tri_len)              # slanted edge length\nc = half_base * tri_len - wall * slant              # inset slanted-edge constant\ny_side = (c - half_base * wall) / tri_len           # body half-width at base \u2248 41.95\nx_tip = c / half_base                               # body apex x \u2248 75.60\n\nwith BuildPart() as part:\n    # Top flange: full triangle, Z = 10..13\n    with BuildSketch(Plane.XY.offset(height - flange_t)):\n        Polygon((0, -half_base), (0, half_base), (tri_len, 0))\n    extrude(amount=flange_t)\n\n    # Mid body: inset triangle, Z = 3..10\n    with BuildSketch(Plane.XY.offset(boss_h)):\n        Polygon((wall, -y_side), (wall, y_side), (x_tip, 0))\n    extrude(amount=body_t)\n\n    # Central boss, Z = 0..3\n    with BuildSketch():\n        with Locations((boss_x, 0)):\n            Circle(boss_dia / 2)\n    extrude(amount=boss_h)\n\n    # Blind hole \u230012 x 10 deep from the boss (bottom) face, Z = 0..10\n    with BuildSketch():\n        with Locations((boss_x, 0)):\n            Circle(hole_dia / 2)\n    extrude(amount=hole_depth, mode=Mode.SUBTRACT)\n\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.7,
+   "usage": {
+    "input_tokens": 5483,
+    "output_tokens": 968
+   },
+   "plan": "Reading unchanged: equilateral-ish triangular flange (94.3 base \u00d7 81.6 long, 3 mm thick at top, Z = 10\u201313) over an inset triangular body (3 mm inset per side, 7 mm thick, Z = 3\u201310) with a central \u230020 boss (3 mm, Z = 0\u20133) at x = 27.5 from the base edge; blind hole \u230012 \u00d7 10 deep from the boss face (stops at the flange underside, 13 \u2212 10 = 3). Overall height 13.\n\nFix: the `with BuildPart() as part:` context binds the *builder*, not the solid \u2014 `export_step` needs the finished Part. Bind the builder to `bp` and set `part = bp.part` before exporting.",
+   "text": "<plan>\nReading unchanged: equilateral-ish triangular flange (94.3 base \u00d7 81.6 long, 3 mm thick at top, Z = 10\u201313) over an inset triangular body (3 mm inset per side, 7 mm thick, Z = 3\u201310) with a central \u230020 boss (3 mm, Z = 0\u20133) at x = 27.5 from the base edge; blind hole \u230012 \u00d7 10 deep from the boss face (stops at the flange underside, 13 \u2212 10 = 3). Overall height 13.\n\nFix: the `with BuildPart() as part:` context binds the *builder*, not the solid \u2014 `export_step` needs the finished Part. Bind the builder to `bp` and set `part = bp.part` before exporting.\n</plan>\n\n```python\nimport math\nfrom build123d import *\n\n# ===== Dimensions read from the drawing =====\ntri_base = 94.3        # mm  overall Y width (right view)\ntri_len = 81.6         # mm  base edge to apex, X (top view)\nboss_x = 27.5          # mm  boss/hole centre from base edge (top view)\nhole_dia = 12.0        # mm  hole callout \u230012\nhole_depth = 10.0      # mm  hole callout \u219310\nheight = 13.0          # mm  overall height (front view)\n\n# ===== Values inferred from view proportions (not directly dimensioned) =====\nflange_t = height - hole_depth          # mm  top flange = 3 (blind hole stops here)\nboss_h = 3.0                            # mm  boss height below body\nbody_t = height - flange_t - boss_h     # mm  mid body = 7\nboss_dia = 20.0                         # mm  boss OD (4 mm wall around \u230012 hole)\nwall = 3.0                              # mm  body inset from flange outline\n\nhalf_base = tri_base / 2                # 47.15 (right view: 47.1 to centre)\n\n# Inset (offset -wall) triangular body outline:\n# slanted edge line: half_base*x + tri_len*y = half_base*tri_len\nslant = math.hypot(half_base, tri_len)              # slanted edge length\nc = half_base * tri_len - wall * slant              # inset slanted-edge constant\ny_side = (c - half_base * wall) / tri_len           # body half-width at base \u2248 41.95\nx_tip = c / half_base                               # body apex x \u2248 75.60\n\nwith BuildPart() as bp:\n    # Top flange: full triangle, Z = 10..13\n    with BuildSketch(Plane.XY.offset(height - flange_t)):\n        Polygon((0, -half_base), (0, half_base), (tri_len, 0))\n    extrude(amount=flange_t)\n\n    # Mid body: inset triangle, Z = 3..10\n    with BuildSketch(Plane.XY.offset(boss_h)):\n        Polygon((wall, -y_side), (wall, y_side), (x_tip, 0))\n    extrude(amount=body_t)\n\n    # Central boss, Z = 0..3\n    with BuildSketch():\n        with Locations((boss_x, 0)):\n            Circle(boss_dia / 2)\n    extrude(amount=boss_h)\n\n    # Blind hole \u230012 x 10 deep from the boss (bottom) face, Z = 0..10\n    with BuildSketch():\n        with Locations((boss_x, 0)):\n            Circle(hole_dia / 2)\n    extrude(amount=hole_depth, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     81.6,
+     94.3,
+     13.0
+    ],
+    "volume_mm3": 32799.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 15,
+    "n_planar_faces": 13,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     6.0,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 532.8,
+   "usage": {
+    "input_tokens": 8382,
+    "output_tokens": 16958
+   },
+   "plan": null,
+   "text": "Checking the renders against the drawing:\n\n- **Extents:** bbox 81.6 \u00d7 94.3 \u00d7 13.0 mm \u2014 exactly matches the dimension chains (81.6 base\u2192apex, 94.3 overall width with 47.1 to centre, 13 overall height). \u2713\n- **Features present:** full triangular top flange, inset triangular mid body (faint inner triangle visible in Top), central cylindrical boss below the body, and the blind hole \u2014 all visible in the renders with correct relative sizes. \u2713\n- **Hole/boss:** cylindrical radii 6.0 mm (\u230012 hole) and 10.0 mm (\u230020 boss) as called out/inferred; blind hole stops at the flange underside (13 \u2212 10 = 3 mm of top material), matching SECTION A\u2013A. \u2713\n- **Position:** boss/hole centre at 27.5 mm from the base edge and centred in Y (47.1), per the top-view dimension and section line A\u2013A. \u2713\n- Volume (32799.6 mm\u00b3) matches hand calculation (flange 11542 + body 21319 + boss 943 \u2212 hole 1131 \u2248 32673, within faceting/rounding tolerance), and the mesh is watertight.\n\nThe solid matches every dimensioned feature of the drawing.\n\nFINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "06e3334c-5c6b-66b0-5c44-ea8c43acc4fe",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.7151,
+  "ag_final_cand": 2,
+  "best_iou": 0.7151,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 705.0,
+  "t_agentic_s": 1249.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17467
+  },
+  "total_tokens": {
+   "in": 17975,
+   "out": 35393
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.7151
+ }
+}

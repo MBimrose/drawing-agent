@@ -1,0 +1,77 @@
+{
+ "uid": "02b4260a-2c89-b076-eed5-bd1a05cc4df7",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 47.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 7083
+   },
+   "plan": "**Views identified:** The large detailed view is the TOP view (XY, 80 \u00d7 60 plate with holes and central circle). Below it is the FRONT view (thin rectangle, 7 thick, hidden lines for holes/recess). To its right is the RIGHT side view (60 deep, 7 thick, with 30/15 locating the recess) and a SECTION A\u2013A view (cut along the horizontal centerline A\u2013A marked in the top view), confirming a shallow central recess in the top face.\n\n**Dimension chains:**\n- X (length): OVERALL 80 given directly. Hole columns: 10 (edge) + 3\u00d7 20 pitch = columns at 10/30/50/70 from left edge \u2192 X = \u221230, \u221210, +10, +30 about center. Recess center at 40 from left = centered.\n- Y (width): OVERALL 60 (from side view). Rows: \"1\u00d7 30\" between the two hole rows, symmetric \u2192 Y = \u00b115.\n- Z (thickness): OVERALL 7 (front view).\n\n**Features:**\n- Base plate 80 \u00d7 60 \u00d7 7.\n- 8\u00d7 \u23005 THRU holes, 2 rows \u00d7 4 columns at (\u00b110, \u00b115) and (\u00b130, \u00b115).\n- Central recess \u230030, depth 2 (\u21932) from top face, centered (cross-checked: section A\u2013A shows shallow top pocket; side view dims 30/15).\n- C0.5 chamfers called out at the four corners of the top view \u2192 45\u00b0 chamfers on the four vertical corner edges.\n- Hole clearance check: nearest holes at (\u00b110,\u00b115) are 18.0 from center; recess edge at 15 + hole radius 2.5 = 17.5 \u2192 no interference, matches drawing.",
+   "text": "<plan>\n**Views identified:** The large detailed view is the TOP view (XY, 80 \u00d7 60 plate with holes and central circle). Below it is the FRONT view (thin rectangle, 7 thick, hidden lines for holes/recess). To its right is the RIGHT side view (60 deep, 7 thick, with 30/15 locating the recess) and a SECTION A\u2013A view (cut along the horizontal centerline A\u2013A marked in the top view), confirming a shallow central recess in the top face.\n\n**Dimension chains:**\n- X (length): OVERALL 80 given directly. Hole columns: 10 (edge) + 3\u00d7 20 pitch = columns at 10/30/50/70 from left edge \u2192 X = \u221230, \u221210, +10, +30 about center. Recess center at 40 from left = centered.\n- Y (width): OVERALL 60 (from side view). Rows: \"1\u00d7 30\" between the two hole rows, symmetric \u2192 Y = \u00b115.\n- Z (thickness): OVERALL 7 (front view).\n\n**Features:**\n- Base plate 80 \u00d7 60 \u00d7 7.\n- 8\u00d7 \u23005 THRU holes, 2 rows \u00d7 4 columns at (\u00b110, \u00b115) and (\u00b130, \u00b115).\n- Central recess \u230030, depth 2 (\u21932) from top face, centered (cross-checked: section A\u2013A shows shallow top pocket; side view dims 30/15).\n- C0.5 chamfers called out at the four corners of the top view \u2192 45\u00b0 chamfers on the four vertical corner edges.\n- Hole clearance check: nearest holes at (\u00b110,\u00b115) are 18.0 from center; recess edge at 15 + hole radius 2.5 = 17.5 \u2192 no interference, matches drawing.\n</plan>\n\n```python\nfrom build123d import *\n\n# --- Dimensions read from the drawing ---\nplate_len = 80        # mm  overall length (X), top view\nplate_wid = 60        # mm  overall width (Y), right side view\nplate_thk = 7         # mm  plate thickness (Z), front view\nedge_chamfer = 0.5    # mm  C0.5 chamfer on the four vertical corner edges\n\nhole_dia = 5          # mm  8x \u00d85 THRU (2 rows x 4 columns)\nhole_edge_dist = 10   # mm  first hole column from the left edge\nhole_pitch = 20       # mm  column spacing (3x 20)\nrow_spacing = 30      # mm  spacing between the two rows (1x 30), symmetric about centre\n\nrecess_dia = 30       # mm  \u00d830 central recess\nrecess_depth = 2      # mm  recess depth (\u21932) from the top face\n# recess centred: dimensioned 40 from left edge = half of the 80 length\n\n# --- Derived values ---\nx0 = -plate_len / 2 + hole_edge_dist                 # first column X = -30\ncol_xs = [x0 + i * hole_pitch for i in range(4)]     # -30, -10, +10, +30\nrow_ys = [-row_spacing / 2, row_spacing / 2]         # -15, +15\n\nwith BuildPart() as builder:\n    # base plate, bottom face on Z = 0\n    Box(plate_len, plate_wid, plate_thk,\n        align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # central \u00d830 x 2 deep recess in the top face\n    with Locations((0, 0, plate_thk - recess_depth)):\n        Cylinder(radius=recess_dia / 2, height=recess_depth,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # 8x \u00d85 through holes\n    hole_pts = [(x, y) for x in col_xs for y in row_ys]\n    with Locations(hole_pts):\n        Cylinder(radius=hole_dia / 2, height=plate_thk,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\n    # C0.5 chamfers on the four vertical corner edges\n    chamfer(builder.edges().filter_by(Axis.Z), length=edge_chamfer)\n\npart = builder.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     7.0
+    ],
+    "volume_mm3": 31088.6,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 20,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 9,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5,
+     15.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.5,
+   "usage": {
+    "input_tokens": 6951,
+    "output_tokens": 522
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "02b4260a-2c89-b076-eed5-bd1a05cc4df7",
+  "ss_exec_ok": true,
+  "ss_iou": 1.0,
+  "ag_exec_ok": true,
+  "ag_iou": 1.0,
+  "ag_final_cand": 1,
+  "best_iou": 1.0,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 50.4,
+  "t_agentic_s": 58.7,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 7083
+  },
+  "total_tokens": {
+   "in": 11061,
+   "out": 7605
+  }
+ },
+ "per_candidate_iou": {
+  "1": 1.0
+ }
+}

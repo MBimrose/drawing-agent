@@ -1,0 +1,90 @@
+{
+ "uid": "08ceb60e-09e1-b2d4-d0e2-af718c90dfc8",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 2511.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 17675
+   },
+   "plan": "**Views identified:** Upper-left = TOP (XY), lower-left = FRONT (XZ), middle-right = RIGHT (YZ), plus ISO.\n\n**Dimension chains:**\n- X (width): overall 80 (top/front views). Components: 20 (left face \u2192 pocket edge) + 40 (pocket width) + 20 (implicit) = 80 \u2713. Holes located at 25 and 55 from left face (the \"55\" dim goes to the right hole centre) \u2192 symmetric about centre 40, spacing 30, each 5 mm inside the pocket.\n- Y (depth): overall 60 (right view). Pocket 30 deep (top view), centred \u2192 15 + 30 + 15 = 60. Holes centred front-to-back at Y = 30.\n- Z (height): overall 30 (front view). Hidden lines in front/right views show a blind rectangular recess whose floor sits at mid-height \u2192 recess depth 15. The two \u23006 holes continue from the recess floor through the bottom (\"2\u00d7 \u23006 THRU\").\n\n**Features:**\n- Block 80 \u00d7 60 \u00d7 30.\n- Rectangular top recess 40 (X) \u00d7 30 (Y) \u00d7 15 deep, centred in plan.\n- 2\u00d7 \u23006 through-holes, vertical, at (25, 30) and (55, 30).\n- \"6\u00d7 R2\": right view shows all 4 outer corners rounded (= 4 edges parallel to X); the remaining 2 are the recess mouth edges parallel to X (front/back rims). All six edges have |z| = H/2, which is how they are selected. Top view corners stay sharp, so no other edges are filleted.",
+   "text": "<plan>\n**Views identified:** Upper-left = TOP (XY), lower-left = FRONT (XZ), middle-right = RIGHT (YZ), plus ISO.\n\n**Dimension chains:**\n- X (width): overall 80 (top/front views). Components: 20 (left face \u2192 pocket edge) + 40 (pocket width) + 20 (implicit) = 80 \u2713. Holes located at 25 and 55 from left face (the \"55\" dim goes to the right hole centre) \u2192 symmetric about centre 40, spacing 30, each 5 mm inside the pocket.\n- Y (depth): overall 60 (right view). Pocket 30 deep (top view), centred \u2192 15 + 30 + 15 = 60. Holes centred front-to-back at Y = 30.\n- Z (height): overall 30 (front view). Hidden lines in front/right views show a blind rectangular recess whose floor sits at mid-height \u2192 recess depth 15. The two \u23006 holes continue from the recess floor through the bottom (\"2\u00d7 \u23006 THRU\").\n\n**Features:**\n- Block 80 \u00d7 60 \u00d7 30.\n- Rectangular top recess 40 (X) \u00d7 30 (Y) \u00d7 15 deep, centred in plan.\n- 2\u00d7 \u23006 through-holes, vertical, at (25, 30) and (55, 30).\n- \"6\u00d7 R2\": right view shows all 4 outer corners rounded (= 4 edges parallel to X); the remaining 2 are the recess mouth edges parallel to X (front/back rims). All six edges have |z| = H/2, which is how they are selected. Top view corners stay sharp, so no other edges are filleted.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions read from the drawing ----------------\nW = 80            # mm  overall width  (X) - top & front views\nD = 60            # mm  overall depth  (Y) - right view\nH = 30            # mm  overall height (Z) - front view\n\nPOCKET_W = 40     # mm  recess width (X) - top view (20 -> 60, centred)\nPOCKET_D = 30     # mm  recess depth (Y) - top view (15 -> 45, centred)\nPOCKET_Z = 15     # mm  recess depth from top face - hidden lines in front/right views\n\nHOLE_D = 6        # mm  \"2x \u00d86 THRU\"\nHOLE_X1 = 25      # mm  left hole centre from left face  - top view\nHOLE_X2 = 55      # mm  right hole centre from left face - top view\nHOLE_Y = D / 2    # mm  holes centred front-to-back (=30)\n\nFILLET_R = 2      # mm  \"6x R2\": 4 outer edges // X + 2 recess-mouth edges // X\n\nwith BuildPart() as bp:\n    # base block, centred on origin\n    Box(W, D, H)\n\n    # blind rectangular recess in the top face, centred in X and Y\n    with Locations((0, 0, H / 2 - POCKET_Z / 2)):\n        Box(POCKET_W, POCKET_D, POCKET_Z, mode=Mode.SUBTRACT)\n\n    # two vertical through-holes\n    with Locations((HOLE_X1 - W / 2, HOLE_Y - D / 2, 0),\n                   (HOLE_X2 - W / 2, HOLE_Y - D / 2, 0)):\n        Cylinder(radius=HOLE_D / 2, height=H, mode=Mode.SUBTRACT)\n\n    # 6x R2: the four outer edges parallel to X (top/bottom x front/back)\n    # plus the two recess-mouth edges parallel to X -> all lie at |z| = H/2\n    targets = [\n        e for e in bp.edges().filter_by(Axis.X)\n        if e.geom_type() == \"LINE\" and abs(abs(e.center().Z) - H / 2) < 1e-3\n    ]\n    fillet(targets, radius=FILLET_R)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 10.5,
+   "usage": {
+    "input_tokens": 5208,
+    "output_tokens": 1522
+   },
+   "plan": "Reading unchanged: block 80 \u00d7 60 \u00d7 30; centred blind top recess 40 \u00d7 30 \u00d7 15 deep; 2\u00d7 \u23006 through-holes at (25, 30) and (55, 30); \"6\u00d7 R2\" = the six edges parallel to X lying at |z| = 15 (4 outer + 2 recess-mouth).\n\nFix: in build123d 0.10 `Edge.geom_type` is a property (GeomType enum), not a method \u2014 calling it raised the TypeError. The check is redundant anyway, since `edges().filter_by(Axis.X)` already returns only straight edges parallel to X, so it is simply removed.",
+   "text": "<plan>\nReading unchanged: block 80 \u00d7 60 \u00d7 30; centred blind top recess 40 \u00d7 30 \u00d7 15 deep; 2\u00d7 \u23006 through-holes at (25, 30) and (55, 30); \"6\u00d7 R2\" = the six edges parallel to X lying at |z| = 15 (4 outer + 2 recess-mouth).\n\nFix: in build123d 0.10 `Edge.geom_type` is a property (GeomType enum), not a method \u2014 calling it raised the TypeError. The check is redundant anyway, since `edges().filter_by(Axis.X)` already returns only straight edges parallel to X, so it is simply removed.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions read from the drawing ----------------\nW = 80            # mm  overall width  (X) - top & front views\nD = 60            # mm  overall depth  (Y) - right view\nH = 30            # mm  overall height (Z) - front view\n\nPOCKET_W = 40     # mm  recess width (X) - top view (20 -> 60, centred)\nPOCKET_D = 30     # mm  recess depth (Y) - top view (15 -> 45, centred)\nPOCKET_Z = 15     # mm  recess depth from top face - hidden lines in front/right views\n\nHOLE_D = 6        # mm  \"2x \u00d86 THRU\"\nHOLE_X1 = 25      # mm  left hole centre from left face  - top view\nHOLE_X2 = 55      # mm  right hole centre from left face - top view\nHOLE_Y = D / 2    # mm  holes centred front-to-back (=30)\n\nFILLET_R = 2      # mm  \"6x R2\": 4 outer edges // X + 2 recess-mouth edges // X\n\nwith BuildPart() as bp:\n    # base block, centred on origin\n    Box(W, D, H)\n\n    # blind rectangular recess in the top face, centred in X and Y\n    with Locations((0, 0, H / 2 - POCKET_Z / 2)):\n        Box(POCKET_W, POCKET_D, POCKET_Z, mode=Mode.SUBTRACT)\n\n    # two vertical through-holes\n    with Locations((HOLE_X1 - W / 2, HOLE_Y - D / 2, 0),\n                   (HOLE_X2 - W / 2, HOLE_Y - D / 2, 0)):\n        Cylinder(radius=HOLE_D / 2, height=H, mode=Mode.SUBTRACT)\n\n    # 6x R2: filter_by(Axis.X) yields only straight edges parallel to X;\n    # the six wanted edges (outer top/bottom front/back + recess mouth\n    # front/back) are exactly those whose centre lies at |z| = H/2\n    targets = [\n        e for e in bp.edges().filter_by(Axis.X)\n        if abs(abs(e.center().Z) - H / 2) < 1e-3\n    ]\n    fillet(targets, radius=FILLET_R)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     30.0
+    ],
+    "volume_mm3": 124809.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 19,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 8,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     3.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 25.5,
+   "usage": {
+    "input_tokens": 8141,
+    "output_tokens": 2881
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "08ceb60e-09e1-b2d4-d0e2-af718c90dfc8",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.9547,
+  "ag_final_cand": 2,
+  "best_iou": 0.9547,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 2514.0,
+  "t_agentic_s": 2556.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 17675
+  },
+  "total_tokens": {
+   "in": 17459,
+   "out": 22078
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.9547
+ }
+}

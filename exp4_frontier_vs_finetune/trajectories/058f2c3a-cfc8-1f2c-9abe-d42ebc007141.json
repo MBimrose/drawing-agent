@@ -1,0 +1,76 @@
+{
+ "uid": "058f2c3a-cfc8-1f2c-9abe-d42ebc007141",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 642.0,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11101
+   },
+   "plan": "Views (third-angle): the upper-left view with the 8 circles is the TOP (XY) view; the long thin view directly below it is the FRONT (XZ) view; the small view to its right is the RIGHT (YZ) view. ISO is pictorial only (NTS).\n\nAxis chains / extents:\n- X (length): FRONT gives overall 84. TOP shares this axis and gives the hole-column chain: edge\u2192col1 = 10, then 3\u00d7 22.7 between the 4 columns \u2192 columns at 10, 32.7, 55.4, 78.1 from the \u2212X edge (10 + 3\u00b722.7 = 78.1 \u2264 84, right margin 5.9). Consistent, no overall chain needed beyond 84.\n- Y (width): RIGHT gives overall 50. TOP gives the row spacing \"1\u00d7 38\" (component, between the 2 hole rows). Rows are centered: margin = (50 \u2212 38)/2 = 6, which is exactly the \"6\" called out in the RIGHT view (6 + 38 + 6 = 50). So rows at 6 and 44 from the \u2212Y edge.\n- Z (thickness): FRONT gives 7 (overall). RIGHT confirms the same 7 profile and shows the \u00d83 through-holes edge-on as hidden vertical lines.\n\nFeatures: rectangular plate 84 \u00d7 50 \u00d7 7; \"8\u00d7 \u23003 THRU (2\u00d74)\" = eight \u00d83 through-holes in a 2 (Y) \u00d7 4 (X) grid at the positions above. No chamfer/fillet callouts. The small edge detail/wedge visible in the NTS pictorial carries no size/height dimension anywhere on the sheet, so it is not reconstructed (only fully dimensioned geometry is built).\n\nCoordinates are centered on the origin: X \u2208 [\u221242,42], Y \u2208 [\u221225,25], Z \u2208 [\u22123.5,3.5]; hole columns X = \u221232, \u22129.3, 13.4, 36.1; hole rows Y = \u221219, +19.",
+   "text": "<plan>\nViews (third-angle): the upper-left view with the 8 circles is the TOP (XY) view; the long thin view directly below it is the FRONT (XZ) view; the small view to its right is the RIGHT (YZ) view. ISO is pictorial only (NTS).\n\nAxis chains / extents:\n- X (length): FRONT gives overall 84. TOP shares this axis and gives the hole-column chain: edge\u2192col1 = 10, then 3\u00d7 22.7 between the 4 columns \u2192 columns at 10, 32.7, 55.4, 78.1 from the \u2212X edge (10 + 3\u00b722.7 = 78.1 \u2264 84, right margin 5.9). Consistent, no overall chain needed beyond 84.\n- Y (width): RIGHT gives overall 50. TOP gives the row spacing \"1\u00d7 38\" (component, between the 2 hole rows). Rows are centered: margin = (50 \u2212 38)/2 = 6, which is exactly the \"6\" called out in the RIGHT view (6 + 38 + 6 = 50). So rows at 6 and 44 from the \u2212Y edge.\n- Z (thickness): FRONT gives 7 (overall). RIGHT confirms the same 7 profile and shows the \u00d83 through-holes edge-on as hidden vertical lines.\n\nFeatures: rectangular plate 84 \u00d7 50 \u00d7 7; \"8\u00d7 \u23003 THRU (2\u00d74)\" = eight \u00d83 through-holes in a 2 (Y) \u00d7 4 (X) grid at the positions above. No chamfer/fillet callouts. The small edge detail/wedge visible in the NTS pictorial carries no size/height dimension anywhere on the sheet, so it is not reconstructed (only fully dimensioned geometry is built).\n\nCoordinates are centered on the origin: X \u2208 [\u221242,42], Y \u2208 [\u221225,25], Z \u2208 [\u22123.5,3.5]; hole columns X = \u221232, \u22129.3, 13.4, 36.1; hole rows Y = \u221219, +19.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing ----\nL       = 84.0   # mm  overall length (X), FRONT/TOP views\nW       = 50.0   # mm  overall width  (Y), RIGHT view\nT       = 7.0    # mm  plate thickness (Z), FRONT view\nhole_d  = 3.0    # mm  \"8x \u00d83 THRU (2x4)\"\nx_edge  = 10.0   # mm  -X edge to first hole column (TOP)\nx_pitch = 22.7   # mm  column pitch, \"3x 22.7\" (TOP)\ny_pitch = 38.0   # mm  row spacing, \"1x 38\" (TOP); row margin (W-38)/2 = 6 = RIGHT-view \"6\"\n\n# ---- derived positions (from the -X / -Y edges), then centered on origin ----\nx_cols = [x_edge + i * x_pitch for i in range(4)]          # 10, 32.7, 55.4, 78.1\ny_rows = [(W - y_pitch) / 2, (W - y_pitch) / 2 + y_pitch]  # 6, 44\nxc = [x - L / 2 for x in x_cols]                           # -32, -9.3, 13.4, 36.1\nyc = [y - W / 2 for y in y_rows]                           # -19, +19\nhole_pts = [(x, y) for y in yc for x in xc]\n\nwith BuildPart() as bp:\n    Box(L, W, T)  # centered: X +/-42, Y +/-25, Z +/-3.5\n    with Locations(hole_pts):\n        Cylinder(radius=hole_d / 2, height=T, mode=Mode.SUBTRACT)  # through the 7 mm plate\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     84.0,
+     50.0,
+     7.0
+    ],
+    "volume_mm3": 29005.2,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 14,
+    "n_planar_faces": 6,
+    "n_cylindrical_faces": 8,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     1.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 7.9,
+   "usage": {
+    "input_tokens": 6792,
+    "output_tokens": 982
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "058f2c3a-cfc8-1f2c-9abe-d42ebc007141",
+  "ss_exec_ok": true,
+  "ss_iou": 0.8235,
+  "ag_exec_ok": true,
+  "ag_iou": 0.8235,
+  "ag_final_cand": 1,
+  "best_iou": 0.8235,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 645.2,
+  "t_agentic_s": 656.9,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11101
+  },
+  "total_tokens": {
+   "in": 10902,
+   "out": 12083
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.8235
+ }
+}

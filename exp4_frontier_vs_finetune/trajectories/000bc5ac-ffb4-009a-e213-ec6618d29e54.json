@@ -1,0 +1,76 @@
+{
+ "uid": "000bc5ac-ffb4-009a-e213-ec6618d29e54",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 107.9,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19904
+   },
+   "plan": "**View identification (third-angle):** top-left = TOP (plan, XY), bottom-left = FRONT (XZ), centre = RIGHT side (YZ); ISO pictorial confirms a thin tray-like plate with a side notch.\n\n**Dimension chains:**\n- X (length): overall = 60 (top view). Hole centres at 15 and 45 from the left edge (symmetric about X=30).\n- Y (depth): overall = 40 (right view). Side notch = 20 wide, centred \u2192 margins (40\u221220)/2 = 10 each side. Rim inset 2 each side.\n- Z (height): overall = 8 (front view). Top pocket floor is 2 below the top face (hidden line in front/right views), so pocket depth = 2.\n- Rim: 2 mm wide inset of the top pocket from every outer edge (front view bottom-left \"2\", right view top \"2\"/\"2\").\n\n**Feature list:**\n1. Base plate 60 (X) \u00d7 40 (Y) \u00d7 8 (Z).\n2. Rectangular notch on the +X edge: 20 wide (Y, centred) \u00d7 10 deep (X, step read in the top view), cut through the full height (visible in top, right and ISO views).\n3. Top recessed pocket: inset 2 mm from the outer outline (following the notch shape), 2 mm deep \u2192 rim 2 mm wide all around.\n4. 2\u00d7 \u23005 THRU holes at (X=15, Y=20) and (X=45, Y=20), centred in Y by symmetry.\nNo fillets/chamfers are dimensioned \u2192 none added.",
+   "text": "<plan>\n**View identification (third-angle):** top-left = TOP (plan, XY), bottom-left = FRONT (XZ), centre = RIGHT side (YZ); ISO pictorial confirms a thin tray-like plate with a side notch.\n\n**Dimension chains:**\n- X (length): overall = 60 (top view). Hole centres at 15 and 45 from the left edge (symmetric about X=30).\n- Y (depth): overall = 40 (right view). Side notch = 20 wide, centred \u2192 margins (40\u221220)/2 = 10 each side. Rim inset 2 each side.\n- Z (height): overall = 8 (front view). Top pocket floor is 2 below the top face (hidden line in front/right views), so pocket depth = 2.\n- Rim: 2 mm wide inset of the top pocket from every outer edge (front view bottom-left \"2\", right view top \"2\"/\"2\").\n\n**Feature list:**\n1. Base plate 60 (X) \u00d7 40 (Y) \u00d7 8 (Z).\n2. Rectangular notch on the +X edge: 20 wide (Y, centred) \u00d7 10 deep (X, step read in the top view), cut through the full height (visible in top, right and ISO views).\n3. Top recessed pocket: inset 2 mm from the outer outline (following the notch shape), 2 mm deep \u2192 rim 2 mm wide all around.\n4. 2\u00d7 \u23005 THRU holes at (X=15, Y=20) and (X=45, Y=20), centred in Y by symmetry.\nNo fillets/chamfers are dimensioned \u2192 none added.\n</plan>\n\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (all mm) ----\nL = 60.0        # overall length (X), top view\nW = 40.0        # overall depth (Y), right view\nH = 8.0         # overall height (Z), front view\nRIM = 2.0       # top pocket inset from outer edge (rim width), front/right views\nPOCKET_D = 2.0  # top pocket depth below top face, front view\nNOTCH_W = 20.0  # side notch width (Y, centred), right view\nNOTCH_D = 10.0  # side notch depth (X) in from +X edge, top view step\nHOLE_D = 5.0    # 2x thru-hole diameter, callout \"2x \u00d85 THRU\"\nHOLE_X1 = 15.0  # first hole centre from left edge, top view\nHOLE_X2 = 45.0  # second hole centre from left edge, top view\n# holes centred in Y (W/2) by symmetry\n\nwith BuildPart() as bp:\n    # base plate: 60 x 40 outline with the 20-wide notch on the +X edge\n    with BuildSketch(Plane.XY):\n        Rectangle(L, W)  # centred on origin\n        with Locations((L / 2 - NOTCH_D / 2, 0)):\n            Rectangle(NOTCH_D, NOTCH_W, mode=Mode.SUBTRACT)\n    extrude(amount=H)\n\n    # top pocket: outline inset by RIM (following the notch), POCKET_D deep\n    with BuildSketch(Plane.XY.offset(H)):\n        Rectangle(L - 2 * RIM, W - 2 * RIM)\n        with Locations((L / 2 - RIM - NOTCH_D / 2, 0)):\n            Rectangle(NOTCH_D, NOTCH_W + 2 * RIM, mode=Mode.SUBTRACT)\n    extrude(amount=-POCKET_D, mode=Mode.SUBTRACT)\n\n    # 2x \u00d85 through holes\n    with Locations((HOLE_X1 - L / 2, 0), (HOLE_X2 - L / 2, 0)):\n        Cylinder(radius=HOLE_D / 2, height=H + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     60.0,
+     40.0,
+     8.0
+    ],
+    "volume_mm3": 13813.0,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 21,
+    "n_planar_faces": 19,
+    "n_cylindrical_faces": 2,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 3.6,
+   "usage": {
+    "input_tokens": 7032,
+    "output_tokens": 668
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "000bc5ac-ffb4-009a-e213-ec6618d29e54",
+  "ss_exec_ok": true,
+  "ss_iou": 0.4531,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4531,
+  "ag_final_cand": 1,
+  "best_iou": 0.4531,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 110.5,
+  "t_agentic_s": 117.5,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19904
+  },
+  "total_tokens": {
+   "in": 11142,
+   "out": 20572
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.4531
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "uid": "09ca4d7a-4a0b-6027-421c-fb8a00f19097",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 78.2,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11676
+   },
+   "plan": "Views: TOP (plan, XY) shows a hexagon (vertices left/right, flats top/bottom) with a central \u230020 circle, a \u230040 bolt circle, and 6 small holes. FRONT (XZ) shows a flat plate with a centered rectangular boss. RIGHT (YZ) confirms plate + boss. ISO confirms: hex plate, central cylindrical boss, 6 holes.\n\nDimension chains:\n- X: overall corner-to-corner = 79.5 (redundant half-dim 39.8 \u2248 79.5/2 = 39.75 to centerline).\n- Y: overall flat-to-flat = 69.3 (redundant half-dim 34.6 \u2248 69.3/2 = 34.65 to centerline). Top flat edge = 39.8 \u2192 hexagon vertices (\u00b139.75, 0), (\u00b119.9, \u00b134.65); near-regular.\n- Z: plate 10 + boss step = overall 15 \u2192 boss stands 15 \u2212 10 = 5 above plate.\n\nFeatures:\n- Hexagonal plate, 10 mm thick (W 79.5 \u00d7 H 69.3, top flat 39.8).\n- Central solid boss \u230020, 5 mm tall on top face (total height 15).\n- 6\u00d7 \u23004.5 THRU holes, equally spaced (60\u00b0 apart) on \u230040 BC, one hole on +X axis (matches plan), through the plate only (BC radius 20 clears the \u230020 boss).\n- No chamfers/fillets called out.",
+   "text": "<plan>\nViews: TOP (plan, XY) shows a hexagon (vertices left/right, flats top/bottom) with a central \u230020 circle, a \u230040 bolt circle, and 6 small holes. FRONT (XZ) shows a flat plate with a centered rectangular boss. RIGHT (YZ) confirms plate + boss. ISO confirms: hex plate, central cylindrical boss, 6 holes.\n\nDimension chains:\n- X: overall corner-to-corner = 79.5 (redundant half-dim 39.8 \u2248 79.5/2 = 39.75 to centerline).\n- Y: overall flat-to-flat = 69.3 (redundant half-dim 34.6 \u2248 69.3/2 = 34.65 to centerline). Top flat edge = 39.8 \u2192 hexagon vertices (\u00b139.75, 0), (\u00b119.9, \u00b134.65); near-regular.\n- Z: plate 10 + boss step = overall 15 \u2192 boss stands 15 \u2212 10 = 5 above plate.\n\nFeatures:\n- Hexagonal plate, 10 mm thick (W 79.5 \u00d7 H 69.3, top flat 39.8).\n- Central solid boss \u230020, 5 mm tall on top face (total height 15).\n- 6\u00d7 \u23004.5 THRU holes, equally spaced (60\u00b0 apart) on \u230040 BC, one hole on +X axis (matches plan), through the plate only (BC radius 20 clears the \u230020 boss).\n- No chamfers/fillets called out.\n</plan>\n```python\nfrom build123d import *\n\n# ---- Dimensions read from the drawing ----\nhex_across_corners = 79.5   # mm  overall X, vertex-to-vertex\nhex_across_flats   = 69.3   # mm  overall Y, flat-to-flat\nhex_top_flat       = 39.8   # mm  top/bottom flat edge length\nplate_thk          = 10.0   # mm  hexagonal plate thickness\noverall_h          = 15.0   # mm  total height incl. boss\nboss_dia           = 20.0   # mm  central boss diameter\nhole_dia           = 4.5    # mm  through-hole diameter (6x)\nbolt_circle_dia    = 40.0   # mm  bolt circle diameter\nhole_count         = 6\n\nboss_h = overall_h - plate_thk          # mm  boss height above plate = 5\n\n# Hexagon vertices: points at left/right (+-X), flats top/bottom (+-Y)\nrx = hex_across_corners / 2\nry = hex_across_flats / 2\ntx = hex_top_flat / 2\nhex_pts = [\n    ( rx, 0.0),\n    ( tx,  ry),\n    (-tx,  ry),\n    (-rx, 0.0),\n    (-tx, -ry),\n    ( tx, -ry),\n]\n\nwith BuildPart() as bp:\n    # Hexagonal plate (z = 0 .. plate_thk)\n    with BuildSketch(Plane.XY):\n        with BuildLine():\n            Polyline(*hex_pts, close=True)\n        make_face()\n    extrude(amount=plate_thk)\n\n    # Central boss on the plate top face (z = plate_thk .. overall_h)\n    with BuildSketch(Plane.XY.offset(plate_thk)):\n        Circle(boss_dia / 2)\n    extrude(amount=boss_h)\n\n    # 6x dia 4.5 THRU, equally spaced on dia 40 bolt circle (through plate)\n    with BuildSketch(Plane.XY):\n        with PolarLocations(bolt_circle_dia / 2, hole_count):\n            Circle(hole_dia / 2)\n    extrude(amount=plate_thk, mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     79.5,
+     69.3,
+     15.0
+    ],
+    "volume_mm3": 41952.4,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 16,
+    "n_planar_faces": 9,
+    "n_cylindrical_faces": 7,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.25,
+     10.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 5.0,
+   "usage": {
+    "input_tokens": 6984,
+    "output_tokens": 869
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "09ca4d7a-4a0b-6027-421c-fb8a00f19097",
+  "ss_exec_ok": true,
+  "ss_iou": 0.5543,
+  "ag_exec_ok": true,
+  "ag_iou": 0.5543,
+  "ag_final_cand": 1,
+  "best_iou": 0.5543,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 81.5,
+  "t_agentic_s": 90.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11676
+  },
+  "total_tokens": {
+   "in": 11094,
+   "out": 12545
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.5543
+ }
+}

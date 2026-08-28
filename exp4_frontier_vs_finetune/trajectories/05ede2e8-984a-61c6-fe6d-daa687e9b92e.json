@@ -1,0 +1,91 @@
+{
+ "uid": "05ede2e8-984a-61c6-fe6d-daa687e9b92e",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1633.1,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19855
+   },
+   "plan": "Views: TOP (XY) is the upper-left view; FRONT (XZ) sits below it; RIGHT (YZ) sits to the right of the front view. ISO is NTS (form only).\n\nAxis chains:\n- X (top + front): margin 17.5 + \"3\u00d7 15\" (=45) + margin 17.5 = 80. Front view confirms OVERALL X = 80. So 4 hole columns at local x = \u221222.5, \u22127.5, +7.5, +22.5 (pitch 15, symmetric; edge margin = 40\u221222.5 = 17.5 \u2713).\n- Y (top + right): \"2\u00d7 15\" (=30) with equal margins: 15 + 15 + 15 + 15 = 60. Right view confirms OVERALL Y = 60. So 3 hole rows at local y = \u221215, 0, +15 (edge margin 15 \u2713).\n- Z (front): OVERALL height = 8.5 (the only vertical dimension, parallel to the 80/60 overalls). It is split into a base slab plus the small raised ribs on top: slab_t = 8.5 \u2212 rib_h.\n\nFeatures:\n- 12\u00d7 \u23004 THRU, noted \"(3\u00d74)\": through-holes on the 4-column \u00d7 3-row grid above.\n- One larger central through-hole at (0,0); it is clearly bigger than \u23004 yet fits inside the 12 mm gap between the inner rib edges \u2192 \u230010.\n- Four raised ribs around the centre (shown standing above the slab in FRONT/RIGHT/ISO): left/right ribs run along X with Y-width = 15 (dimensioned in the right view); top/bottom ribs run along Y as narrow bars. They carry R0.8 edge rounds (\"2\u00d7 R0.8\" in front, \"R0.8\" in right) applied to the raised top edges. Rib height rib_h is the small pad height (slab_t = 8.5 \u2212 rib_h by formula).\n\nFillets only where called out: R0.8 on the raised rib top edges (straight edges at z = 8.5). No chamfers are dimensioned.",
+   "text": "<plan>\nViews: TOP (XY) is the upper-left view; FRONT (XZ) sits below it; RIGHT (YZ) sits to the right of the front view. ISO is NTS (form only).\n\nAxis chains:\n- X (top + front): margin 17.5 + \"3\u00d7 15\" (=45) + margin 17.5 = 80. Front view confirms OVERALL X = 80. So 4 hole columns at local x = \u221222.5, \u22127.5, +7.5, +22.5 (pitch 15, symmetric; edge margin = 40\u221222.5 = 17.5 \u2713).\n- Y (top + right): \"2\u00d7 15\" (=30) with equal margins: 15 + 15 + 15 + 15 = 60. Right view confirms OVERALL Y = 60. So 3 hole rows at local y = \u221215, 0, +15 (edge margin 15 \u2713).\n- Z (front): OVERALL height = 8.5 (the only vertical dimension, parallel to the 80/60 overalls). It is split into a base slab plus the small raised ribs on top: slab_t = 8.5 \u2212 rib_h.\n\nFeatures:\n- 12\u00d7 \u23004 THRU, noted \"(3\u00d74)\": through-holes on the 4-column \u00d7 3-row grid above.\n- One larger central through-hole at (0,0); it is clearly bigger than \u23004 yet fits inside the 12 mm gap between the inner rib edges \u2192 \u230010.\n- Four raised ribs around the centre (shown standing above the slab in FRONT/RIGHT/ISO): left/right ribs run along X with Y-width = 15 (dimensioned in the right view); top/bottom ribs run along Y as narrow bars. They carry R0.8 edge rounds (\"2\u00d7 R0.8\" in front, \"R0.8\" in right) applied to the raised top edges. Rib height rib_h is the small pad height (slab_t = 8.5 \u2212 rib_h by formula).\n\nFillets only where called out: R0.8 on the raised rib top edges (straight edges at z = 8.5). No chamfers are dimensioned.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 80.0          # mm overall X (front view)\nD = 60.0          # mm overall Y (right view)\nH_total = 8.5     # mm overall Z (front view)\nmargin_x = 17.5   # mm edge margin to first hole column (top view)\npitch = 15.0      # mm hole pitch (\"3x 15\" in X, \"2x 15\" in Y)\nhole_d = 4.0      # mm  \"12x \u23004 THRU (3x4)\"\nn_cols = 4        # 4 columns (3 gaps of 15) in X\nn_rows = 3        # 3 rows (2 gaps of 15) in Y\ncenter_d = 10.0   # mm larger central through-hole (>\u23004, fits the 12 mm inner gap)\nrib_h = 1.5       # mm raised-rib pad height (small pads in front/right views)\nwr_w = 15.0       # mm wide-rib (X-running) width in Y \u2014 dimensioned in right view\nwr_len = 24.0     # mm wide-rib length along X (spans the two inner columns)\nwr_off = 18.0     # mm wide-rib centre offset from origin in X\nnr_w = 6.0        # mm narrow-rib (Y-running) width in X\nnr_len = 20.0     # mm narrow-rib length along Y\nnr_off = 16.0     # mm narrow-rib centre offset from origin in Y\nr_edge = 0.8      # mm \"R0.8\" / \"2x R0.8\" round on the raised rib edges\n\n# ---- derived values ----\nslab_t = H_total - rib_h                       # base slab thickness (overall H is fixed)\ncol_x = [-(n_cols - 1) * pitch / 2 + i * pitch for i in range(n_cols)]  # -22.5,-7.5,7.5,22.5\nrow_y = [-(n_rows - 1) * pitch / 2 + j * pitch for j in range(n_rows)]  # -15, 0, 15\n# checks: W/2 - max(col_x) = 17.5 = margin_x ; D/2 - max(row_y) = 15\nhole_pts = [(x, y) for x in col_x for y in row_y]   # 12 holes\ncut_h = H_total + 2.0                                # cut through slab + ribs\n\nwith BuildPart() as bp:\n    # base slab, centred in XY, bottom on z=0\n    Box(W, D, slab_t, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # four raised ribs on the top face (left/right wide along X, top/bottom narrow along Y)\n    with Locations((-wr_off, 0, slab_t), (wr_off, 0, slab_t)):\n        Box(wr_len, wr_w, rib_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    with Locations((0, -nr_off, slab_t), (0, nr_off, slab_t)):\n        Box(nr_w, nr_len, rib_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # 12x \u23004 through-holes (also clear the wide ribs they sit under)\n    with Locations(*hole_pts):\n        Cylinder(hole_d / 2, cut_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n    # central through-hole\n    Cylinder(center_d / 2, cut_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\n    # R0.8 rounds on the raised rib top edges (straight edges at z = H_total only)\n    rib_top_edges = [e for e in bp.edges()\n                     if e.center().Z > H_total - 1e-3 and e.geom_type() == GeomType.LINE]\n    fillet(rib_top_edges, r_edge)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": false
+  },
+  {
+   "turn": 2,
+   "t_call_s": 8.7,
+   "usage": {
+    "input_tokens": 5691,
+    "output_tokens": 1523
+   },
+   "plan": "Reading is unchanged: 80 \u00d7 60 plate, total height 8.5 (base slab + raised ribs), 12\u00d7 \u23004 THRU on a 4\u00d73 grid at 15 mm pitch (columns at x = \u221222.5, \u22127.5, 7.5, 22.5; rows at y = \u221215, 0, 15; margins 17.5/15 \u2713), central \u230010 through-hole, four raised ribs (wide pair along X with 15 mm Y-width, narrow pair along Y), R0.8 rounds on the raised rib top edges.\n\nFix: in build123d 0.10 `geom_type` is a property, not a method \u2014 use `e.geom_type == GeomType.LINE` (no parentheses) when filtering the straight top edges for the fillet.",
+   "text": "<plan>\nReading is unchanged: 80 \u00d7 60 plate, total height 8.5 (base slab + raised ribs), 12\u00d7 \u23004 THRU on a 4\u00d73 grid at 15 mm pitch (columns at x = \u221222.5, \u22127.5, 7.5, 22.5; rows at y = \u221215, 0, 15; margins 17.5/15 \u2713), central \u230010 through-hole, four raised ribs (wide pair along X with 15 mm Y-width, narrow pair along Y), R0.8 rounds on the raised rib top edges.\n\nFix: in build123d 0.10 `geom_type` is a property, not a method \u2014 use `e.geom_type == GeomType.LINE` (no parentheses) when filtering the straight top edges for the fillet.\n</plan>\n```python\nfrom build123d import *\n\n# ---- dimensions read from the drawing (mm) ----\nW = 80.0          # mm overall X (front view)\nD = 60.0          # mm overall Y (right view)\nH_total = 8.5     # mm overall Z (front view)\nmargin_x = 17.5   # mm edge margin to first hole column (top view)\npitch = 15.0      # mm hole pitch (\"3x 15\" in X, \"2x 15\" in Y)\nhole_d = 4.0      # mm  \"12x \u23004 THRU (3x4)\"\nn_cols = 4        # 4 columns (3 gaps of 15) in X\nn_rows = 3        # 3 rows (2 gaps of 15) in Y\ncenter_d = 10.0   # mm larger central through-hole (>\u23004, fits the 12 mm inner gap)\nrib_h = 1.5       # mm raised-rib pad height (small pads in front/right views)\nwr_w = 15.0       # mm wide-rib (X-running) width in Y \u2014 dimensioned in right view\nwr_len = 24.0     # mm wide-rib length along X (spans the two inner columns)\nwr_off = 18.0     # mm wide-rib centre offset from origin in X\nnr_w = 6.0        # mm narrow-rib (Y-running) width in X\nnr_len = 20.0     # mm narrow-rib length along Y\nnr_off = 16.0     # mm narrow-rib centre offset from origin in Y\nr_edge = 0.8      # mm \"R0.8\" / \"2x R0.8\" round on the raised rib edges\n\n# ---- derived values ----\nslab_t = H_total - rib_h                       # base slab thickness (overall H is fixed)\ncol_x = [-(n_cols - 1) * pitch / 2 + i * pitch for i in range(n_cols)]  # -22.5,-7.5,7.5,22.5\nrow_y = [-(n_rows - 1) * pitch / 2 + j * pitch for j in range(n_rows)]  # -15, 0, 15\n# checks: W/2 - max(col_x) = 17.5 = margin_x ; D/2 - max(row_y) = 15\nhole_pts = [(x, y) for x in col_x for y in row_y]   # 12 holes\ncut_h = H_total + 2.0                                # cut through slab + ribs\n\nwith BuildPart() as bp:\n    # base slab, centred in XY, bottom on z=0\n    Box(W, D, slab_t, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # four raised ribs on the top face (left/right wide along X, top/bottom narrow along Y)\n    with Locations((-wr_off, 0, slab_t), (wr_off, 0, slab_t)):\n        Box(wr_len, wr_w, rib_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n    with Locations((0, -nr_off, slab_t), (0, nr_off, slab_t)):\n        Box(nr_w, nr_len, rib_h, align=(Align.CENTER, Align.CENTER, Align.MIN))\n\n    # 12x \u23004 through-holes (also clear the wide ribs they sit under)\n    with Locations(*hole_pts):\n        Cylinder(hole_d / 2, cut_h,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n    # central through-hole\n    Cylinder(center_d / 2, cut_h,\n             align=(Align.CENTER, Align.CENTER, Align.MIN), mode=Mode.SUBTRACT)\n\n    # R0.8 rounds on the raised rib top edges (straight edges at z = H_total only)\n    # NOTE: geom_type is a property in build123d 0.10 (no parentheses)\n    rib_top_edges = [e for e in bp.edges()\n                     if abs(e.center().Z - H_total) < 1e-3\n                     and e.geom_type == GeomType.LINE]\n    fillet(rib_top_edges, r_edge)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 2,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     8.5
+    ],
+    "volume_mm3": 33331.9,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 59,
+    "n_planar_faces": 28,
+    "n_cylindrical_faces": 31,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     0.8,
+     2.0,
+     5.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 3,
+   "t_call_s": 12.2,
+   "usage": {
+    "input_tokens": 8748,
+    "output_tokens": 1064
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "05ede2e8-984a-61c6-fe6d-daa687e9b92e",
+  "ss_exec_ok": false,
+  "ss_iou": 0.0,
+  "ag_exec_ok": true,
+  "ag_iou": 0.6937,
+  "ag_final_cand": 2,
+  "best_iou": 0.6937,
+  "best_cand": 2,
+  "n_calls": 3,
+  "n_candidates": 2,
+  "stop_reason": "final",
+  "t_singleshot_s": 1636.4,
+  "t_agentic_s": 1665.0,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19855
+  },
+  "total_tokens": {
+   "in": 18549,
+   "out": 22442
+  }
+ },
+ "per_candidate_iou": {
+  "2": 0.6937
+ }
+}

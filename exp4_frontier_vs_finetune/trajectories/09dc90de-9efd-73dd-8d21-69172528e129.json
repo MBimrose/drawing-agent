@@ -1,0 +1,77 @@
+{
+ "uid": "09dc90de-9efd-73dd-8d21-69172528e129",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 70.6,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 11865
+   },
+   "plan": "**View identification (third-angle):**\n- **TOP view** (upper left, above the front view): rounded-corner rectangle, double outline (wall visible), 12 circles in a 4-column \u00d7 3-row grid, callout \"12\u00d7 \u23005 THRU (3\u00d74)\", \"4\u00d7 R2\" at a plan corner.\n- **FRONT view** (below top): 50 wide \u00d7 39 high; \"4\" dims at lower left/right = side wall thickness; vertical \"4\" = bottom floor thickness; hidden lines show the inner cavity and the holes through the floor; \"4\u00d7 R2\" at a bottom corner.\n- **RIGHT view** (right of front): 80 wide \u00d7 39 high; \"28\" locates the first hole row; \"4\" dims at both ends = wall thickness; \"4\u00d7 R2\" at a bottom corner.\n- **ISO**: open-top rectangular tray with hole pattern in the floor \u2014 confirms form.\n\n**Dimension chains:**\n- X (width): 7 (edge\u21921st column) + 3\u00d712 (column pitch) + 7 = **50** \u2713 matches overall 50 \u2192 columns at x = 7, 19, 31, 43\n- Y (depth): 28 (edge\u21921st row) + 2\u00d712 (row pitch) + 28 = **80** \u2713 matches overall 80 \u2192 rows at y = 28, 40, 52\n- Z (height): overall **39**; floor 4 + open cavity 35\n\n**Feature list:**\n- Open-top tray: 50 (X) \u00d7 80 (Y) \u00d7 39 (Z), wall thickness 4 on all four sides, floor thickness 4 \u2192 cavity 42 \u00d7 72 \u00d7 35\n- 12\u00d7 \u23005 through-holes in the floor, grid 4\u00d73 at the positions above\n- 4\u00d7 R2 fillets on the vertical outer corner edges (rounded corners in plan)\n- 4\u00d7 R2 fillets on the four bottom outer edges (rounded bottom corners in front/right views)",
+   "text": "<plan>\n**View identification (third-angle):**\n- **TOP view** (upper left, above the front view): rounded-corner rectangle, double outline (wall visible), 12 circles in a 4-column \u00d7 3-row grid, callout \"12\u00d7 \u23005 THRU (3\u00d74)\", \"4\u00d7 R2\" at a plan corner.\n- **FRONT view** (below top): 50 wide \u00d7 39 high; \"4\" dims at lower left/right = side wall thickness; vertical \"4\" = bottom floor thickness; hidden lines show the inner cavity and the holes through the floor; \"4\u00d7 R2\" at a bottom corner.\n- **RIGHT view** (right of front): 80 wide \u00d7 39 high; \"28\" locates the first hole row; \"4\" dims at both ends = wall thickness; \"4\u00d7 R2\" at a bottom corner.\n- **ISO**: open-top rectangular tray with hole pattern in the floor \u2014 confirms form.\n\n**Dimension chains:**\n- X (width): 7 (edge\u21921st column) + 3\u00d712 (column pitch) + 7 = **50** \u2713 matches overall 50 \u2192 columns at x = 7, 19, 31, 43\n- Y (depth): 28 (edge\u21921st row) + 2\u00d712 (row pitch) + 28 = **80** \u2713 matches overall 80 \u2192 rows at y = 28, 40, 52\n- Z (height): overall **39**; floor 4 + open cavity 35\n\n**Feature list:**\n- Open-top tray: 50 (X) \u00d7 80 (Y) \u00d7 39 (Z), wall thickness 4 on all four sides, floor thickness 4 \u2192 cavity 42 \u00d7 72 \u00d7 35\n- 12\u00d7 \u23005 through-holes in the floor, grid 4\u00d73 at the positions above\n- 4\u00d7 R2 fillets on the vertical outer corner edges (rounded corners in plan)\n- 4\u00d7 R2 fillets on the four bottom outer edges (rounded bottom corners in front/right views)\n</plan>\n\n```python\nfrom build123d import *\n\n# ---------------- dimensions from drawing (mm) ----------------\nW = 50            # overall width  (X) - front/top views: 7 + 3x12 + 7\nD = 80            # overall depth  (Y) - right view: 28 + 2x12 + 28\nH = 39            # overall height (Z) - front/right views\nWALL = 4          # wall thickness, all four sides (\"4\" dims)\nFLOOR = 4         # bottom floor thickness (vertical \"4\" dim)\nHOLE_D = 5        # 12x \u00d85 THRU (3x4 grid)\nHX0 = 7           # first hole column centre from left edge\nHX_PITCH = 12     # column pitch (3x 12) -> 4 columns\nHY0 = 28          # first hole row centre from front edge\nHY_PITCH = 12     # row pitch (2x 12) -> 3 rows\nNX = 4            # hole columns\nNY = 3            # hole rows\nR2 = 2            # 4x R2 vertical corners + 4x R2 bottom edges\n\nwith BuildPart() as bp:\n    # raw block, corner at origin, floor at z=0\n    Box(W, D, H, align=(Align.MIN, Align.MIN, Align.MIN))\n\n    # 4x R2 on vertical corner edges + 4x R2 on bottom edges\n    # (done on the plain block where selection is unambiguous;\n    #  the cavity and holes do not intersect these fillets)\n    target_edges = [\n        e for e in bp.edges()\n        if e.bounding_box().size.Z > H / 2   # the 4 vertical edges\n        or e.center().Z < 1e-3               # the 4 bottom edges\n    ]\n    fillet(target_edges, radius=R2)\n\n    # open-top cavity (leaves 4 mm walls and 4 mm floor)\n    with Locations((WALL, WALL, FLOOR)):\n        Box(W - 2 * WALL, D - 2 * WALL, H - FLOOR,\n            align=(Align.MIN, Align.MIN, Align.MIN),\n            mode=Mode.SUBTRACT)\n\n    # 12x \u00d85 through the floor\n    hole_pts = [(HX0 + i * HX_PITCH, HY0 + j * HY_PITCH, -1)\n                for i in range(NX) for j in range(NY)]\n    with Locations(hole_pts):\n        Cylinder(radius=HOLE_D / 2, height=FLOOR + 2,\n                 align=(Align.CENTER, Align.CENTER, Align.MIN),\n                 mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     50.0,
+     80.0,
+     39.0
+    ],
+    "volume_mm3": 48866.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 35,
+    "n_planar_faces": 11,
+    "n_cylindrical_faces": 20,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     2.5
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 4.1,
+   "usage": {
+    "input_tokens": 7894,
+    "output_tokens": 549
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "09dc90de-9efd-73dd-8d21-69172528e129",
+  "ss_exec_ok": true,
+  "ss_iou": 0.4788,
+  "ag_exec_ok": true,
+  "ag_iou": 0.4788,
+  "ag_final_cand": 1,
+  "best_iou": 0.4788,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 74.0,
+  "t_agentic_s": 82.2,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 11865
+  },
+  "total_tokens": {
+   "in": 12004,
+   "out": 12414
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.4788
+ }
+}

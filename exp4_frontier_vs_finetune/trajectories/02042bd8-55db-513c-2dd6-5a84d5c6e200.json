@@ -1,0 +1,77 @@
+{
+ "uid": "02042bd8-55db-513c-2dd6-5a84d5c6e200",
+ "model": "claude-moonshotai/Kimi-K3[1m]",
+ "temperature": 0.6,
+ "max_tokens": 16000,
+ "turns": [
+  {
+   "turn": 1,
+   "t_call_s": 1610.3,
+   "usage": {
+    "input_tokens": 4110,
+    "output_tokens": 19475
+   },
+   "plan": "Views: TOP (upper left), FRONT (below it), RIGHT (center), ISO (NTS). The part is an open-top rectangular tray.\n\nAxis chains:\n- X (top + front): overall 80 (given). Hole centers at 10 and 70 from left edge (symmetric: 80\u221270=10). Boss center at 40 (=mid), boss width 10.\n- Y (right + top): overall 60 (given). Boss center at 30 (=mid), boss depth 4 (\"4\" in top view). \u23004 hole centers at 10 and 50 from front edge (symmetric about 30).\n- Z (front): chain 30 (cavity depth) + 5 (floor) = 35 overall height. Wall thickness 2 (five \"2\" callouts on front/right views), so cavity = (80\u22124) \u00d7 (60\u22124) = 76 \u00d7 56 \u00d7 30 deep.\n\nFeatures:\n- Open-top box 80 \u00d7 60 \u00d7 35, walls 2, floor 5.\n- Boss on the floor: 10 (X) \u00d7 4 (Y) \u00d7 10 high, centered at (40, 30), base at Z=5.\n- \"2\u00d7 \u230012 THRU\": vertical holes through the floor at (10, 30) and (70, 30) \u2014 circles in top view, Y centered by symmetry.\n- \"2\u00d7 \u23004 THRU\": circles in the right view \u2192 axes along X, drilled through both side walls at Y=10 and Y=50, center height Z=10.\n- \"C1\" at the four top-view corners: 1 mm 45\u00b0 chamfers on the four vertical outer edges.",
+   "text": "<plan>\nViews: TOP (upper left), FRONT (below it), RIGHT (center), ISO (NTS). The part is an open-top rectangular tray.\n\nAxis chains:\n- X (top + front): overall 80 (given). Hole centers at 10 and 70 from left edge (symmetric: 80\u221270=10). Boss center at 40 (=mid), boss width 10.\n- Y (right + top): overall 60 (given). Boss center at 30 (=mid), boss depth 4 (\"4\" in top view). \u23004 hole centers at 10 and 50 from front edge (symmetric about 30).\n- Z (front): chain 30 (cavity depth) + 5 (floor) = 35 overall height. Wall thickness 2 (five \"2\" callouts on front/right views), so cavity = (80\u22124) \u00d7 (60\u22124) = 76 \u00d7 56 \u00d7 30 deep.\n\nFeatures:\n- Open-top box 80 \u00d7 60 \u00d7 35, walls 2, floor 5.\n- Boss on the floor: 10 (X) \u00d7 4 (Y) \u00d7 10 high, centered at (40, 30), base at Z=5.\n- \"2\u00d7 \u230012 THRU\": vertical holes through the floor at (10, 30) and (70, 30) \u2014 circles in top view, Y centered by symmetry.\n- \"2\u00d7 \u23004 THRU\": circles in the right view \u2192 axes along X, drilled through both side walls at Y=10 and Y=50, center height Z=10.\n- \"C1\" at the four top-view corners: 1 mm 45\u00b0 chamfers on the four vertical outer edges.\n</plan>\n```python\nfrom build123d import *\n\n# ================= dimensions from the drawing =================\nW = 80                       # mm  overall width (X) - top/front views\nD = 60                       # mm  overall depth (Y) - right view\ncavity_depth = 30            # mm  inside depth of the open box - front view\nfloor_t = 5                  # mm  floor thickness - front view\nH = cavity_depth + floor_t   # mm  overall height (Z) = 30 + 5 = 35\nwall_t = 2                   # mm  wall thickness, all four walls\n\nhole12_d = 12                # mm  \"2x \u230012 THRU\" through the floor\nhole12_x1 = 10               # mm  left hole center from left edge\nhole12_x2 = 70               # mm  right hole center from left edge\nhole12_y = D / 2             # mm  holes centered across depth (symmetry)\n\nhole4_d = 4                  # mm  \"2x \u23004 THRU\" through both side walls (axes along X)\nhole4_y1 = 10                # mm  first hole center from front edge\nhole4_y2 = 50                # mm  second hole center from front edge\nhole4_z = 10                 # mm  hole center height above the bottom\n\nboss_w = 10                  # mm  boss size in X\nboss_d = 4                   # mm  boss size in Y\nboss_h = 10                  # mm  boss height, standing on the floor\nboss_x = 40                  # mm  boss center X (dim 40 from left edge)\nboss_y = 30                  # mm  boss center Y (dim 30 from front edge)\n\ncham = 1                     # mm  C1 chamfer on the four vertical outer edges\n# ===============================================================\n\nwith BuildPart() as bp:\n    # outer body\n    with Locations((W / 2, D / 2, H / 2)):\n        Box(W, D, H)\n\n    # C1 chamfers on the four vertical outer edges\n    chamfer(bp.part.edges().filter_by(Axis.Z), length=cham)\n\n    # hollow out the open-top cavity\n    with Locations((W / 2, D / 2, floor_t + cavity_depth / 2)):\n        Box(W - 2 * wall_t, D - 2 * wall_t, cavity_depth, mode=Mode.SUBTRACT)\n\n    # central boss standing on the floor\n    with Locations((boss_x, boss_y, floor_t + boss_h / 2)):\n        Box(boss_w, boss_d, boss_h)\n\n    # 2x \u230012 through the floor\n    with Locations((hole12_x1, hole12_y, floor_t / 2),\n                   (hole12_x2, hole12_y, floor_t / 2)):\n        Cylinder(radius=hole12_d / 2, height=floor_t + 2, mode=Mode.SUBTRACT)\n\n    # 2x \u23004 through both side walls (axes along X)\n    with Locations((W / 2, hole4_y1, hole4_z),\n                   (W / 2, hole4_y2, hole4_z)):\n        Cylinder(radius=hole4_d / 2, height=W + 2,\n                 rotation=(0, 90, 0), mode=Mode.SUBTRACT)\n\npart = bp.part\nexport_step(part, \"output.step\")\n```",
+   "action": "candidate",
+   "cand": 1,
+   "exec_ok": true,
+   "meas": {
+    "bbox_mm": [
+     80.0,
+     60.0,
+     35.0
+    ],
+    "volume_mm3": 39421.7,
+    "watertight": true,
+    "n_mesh_components": 1,
+    "n_faces": 26,
+    "n_planar_faces": 20,
+    "n_cylindrical_faces": 6,
+    "n_solids": 1,
+    "cylindrical_radii_mm": [
+     2.0,
+     6.0
+    ],
+    "render_ok": true
+   }
+  },
+  {
+   "turn": 2,
+   "t_call_s": 7.0,
+   "usage": {
+    "input_tokens": 7507,
+    "output_tokens": 831
+   },
+   "plan": null,
+   "text": "FINAL",
+   "action": "FINAL"
+  }
+ ],
+ "summary": {
+  "uid": "02042bd8-55db-513c-2dd6-5a84d5c6e200",
+  "ss_exec_ok": true,
+  "ss_iou": 0.61,
+  "ag_exec_ok": true,
+  "ag_iou": 0.61,
+  "ag_final_cand": 1,
+  "best_iou": 0.61,
+  "best_cand": 1,
+  "n_calls": 2,
+  "n_candidates": 1,
+  "stop_reason": "final",
+  "t_singleshot_s": 1613.6,
+  "t_agentic_s": 1624.4,
+  "ss_tokens": {
+   "in": 4110,
+   "out": 19475
+  },
+  "total_tokens": {
+   "in": 11617,
+   "out": 20306
+  }
+ },
+ "per_candidate_iou": {
+  "1": 0.61
+ }
+}
