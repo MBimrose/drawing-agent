@@ -10,6 +10,7 @@ Decides whether (1) critic-reranked best-of-N and (2) an agentic data engine are
 | [exp3_reranker](exp3_reranker/) | Can selection policies close the oracle gap? | Heuristic rerank **0.876→0.898** [CI +0.009..+0.038], 0 model calls; VLM critic NOT significant |
 | [exp4_frontier_vs_finetune](exp4_frontier_vs_finetune/) | Does frontier+harness compare to the fine-tune on its own eval? | No: Kimi+loop 0.724 vs deployed 0.876 — but max(both)=0.919≈oracle → teacher for the stuck tail |
 | [exp5_champion_loop](exp5_champion_loop/) | Does the loop stack on top of fine-tuning? | No: 0.818 vs 0.876; revision mode-collapsed, fresh draws beat conditioned repair |
+| [exp6_rft3_harvest](exp6_rft3_harvest/) | Can Kimi+loop harvest an rft_v3 seed from the train-pool rejects? | Yes: 75/299 rejects pass the STaR gate (25.1%, accepted mean 0.921, 38 from gen-IoU-0.0 parts); direct vLLM endpoint ~5× faster than the hub router, 0 transport losses |
 
 **Frozen-96 ladder (centered IoU):** Kimi ss 0.549 → Kimi+loop 0.724 → champ greedy 0.787 →
 champ+loop 0.818 → champ bo4+repair 0.876 → **champ bo4+rerank 0.898 (deployable record)** → oracle 0.922.

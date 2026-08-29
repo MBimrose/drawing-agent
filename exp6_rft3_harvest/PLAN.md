@@ -85,8 +85,15 @@ defensively). Nothing from the frozen 96 / eval_cache_v15 enters the batch.
       HTTP 502 "upstream unreachable" after 4 retries (the exp3/exp4 router flakiness),
       completed parts mean 1161 s vs 228 s direct on the same keys (~5×), quality paired
       n=3: router 0.465 vs direct 0.452 (noise). → MAIN RUN ON THE DIRECT ENDPOINT.
-- [ ] main harvest: 299 parts, 6 workers, direct endpoint — launched detached (setsid,
-      log /srv/scratch/bimrose2/drawing_agent_exp6/logs/main_run.log), resume-safe;
-      smoke-based projection ~291 part-serial s → ~4–6 h wall at 6 workers
-- [ ] N/300 harvested
-- [ ] packed + RESULTS.md
+- [~] main harvest: 299 parts, direct endpoint — launched detached (setsid,
+      log /srv/scratch/bimrose2/drawing_agent_exp6/logs/main_run.log), resume-safe.
+      At 101/299 (≈4.4 h in at 6 workers): **gate 26/101 = 25.7%**, near-miss 33/101,
+      accepted mean IoU 0.917, mean 4.1 calls & 970 part-serial s → ~0.37 parts/min;
+      exec 97/101. Buckets: gen-0.0 rejects gate 13/45, gen(0,0.5) 2/22, gen[0.5,0.8)
+      11/34. Restarted resume-safe at **8 workers** 16:40 CDT to pull ETA in
+      (server had 0 queued at 6).
+- [x] 299/299 harvested (0 errors): **gate 75/299 = 25.1%**, accepted mean IoU 0.921,
+      near-miss 106; wall ≈ 8.8 h (6→8 workers), 33.2 M in / 12.5 M out tokens
+- [x] packed: accepted_rft_v3_seed.jsonl (75, pack_rft_shards-compatible) +
+      nearmiss.jsonl (106); RESULTS.md written (economics, router-vs-direct verdict,
+      handoff rsync + pack commands)

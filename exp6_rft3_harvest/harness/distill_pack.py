@@ -53,9 +53,17 @@ def distill_think(record: dict, final_cand: int, min_full: int) -> str:
     """Base = last FULL reading (>= min_full chars, not revision-voiced) among
     candidate turns up to the accepted candidate; later plans appended as
     'Revision:' paragraphs so fixes that changed the reading are kept."""
-    cand_turns = [e for e in record["turns"]
-                  if e.get("action") == "candidate" and e.get("cand", 0) <= final_cand]
-    plans = [(e["cand"], (e.get("plan") or "").strip()) for e in cand_turns]
+    final_turn = next((e["turn"] for e in record["turns"]
+                       if e.get("action") == "candidate"
+                       and e.get("cand") == final_cand), 0)
+    # plans up to the accepted candidate's turn, plus the terminal FINAL
+    # reply's plan (some runaway candidate turns carry no <plan>; the model
+    # then restates its full reading in the FINAL turn). Plans of LATER
+    # failing candidates are excluded — they describe a different reading
+    # than the accepted code.
+    use = [e for e in record["turns"]
+           if e.get("turn", 0) <= final_turn or e.get("action") == "FINAL"]
+    plans = [(e["turn"], (e.get("plan") or "").strip()) for e in use]
     plans = [(c, p) for c, p in plans if p]
     if not plans:
         return ""
